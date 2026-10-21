@@ -1,0 +1,56 @@
+{
+  "fixture_version": 1,
+  "provenance": {
+    "observed_on": "2026-09-10",
+    "surface": "ChatGPT consumer website in Codex in-app browser",
+    "method": "Authorized synthetic image generation and image-editor transformation; CDP request, SSE body and WebSocket structure inspection.",
+    "privacy": "Minimized structural replay. All identifiers and text below are invented. Auth headers, resume tokens, content URLs, prompts, image bytes and unrelated traffic are excluded.",
+    "limitations": [
+      "The initial event window was marked truncated. Selected request and image output messages were available; this is not a complete network capture.",
+      "No image model, requested image count, inference-step count or measured resource consumption is established.",
+      "The same output asset occurred in multiple tool messages. Message IDs cannot be used as image counts.",
+      "The observed output size does not establish compatibility with an image energy benchmark."
+    ]
+  },
+  "generation": {
+    "path": "/backend-api/f/conversation",
+    "request": {
+      "action": "next",
+      "messages": [{"id":"user-generate","author":{"role":"user"},"content":{"content_type":"text","parts":["Synthetic generation fixture"]},"metadata":{"submission_mode":"manual_send"}}],
+      "parent_message_id": "root-parent",
+      "model": "gpt-5-6-thinking",
+      "system_hints": [],
+      "supports_buffering": true,
+      "supported_encodings": ["v1"]
+    },
+    "handoff": {
+      "type": "stream_handoff",
+      "conversation_id": "conversation-fixture",
+      "turn_exchange_id": "turn-generation",
+      "options": [{"type":"resume_sse_endpoint","topic_id":"topic-generation"},{"type":"subscribe_ws_topic","topic_id":"topic-generation"}]
+    },
+    "updates": [
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"generation-intermediate","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[]},"status":"finished_successfully","end_turn":null,"metadata":{"ghostrider":{"status":"intermediate","is_feature_trial":false},"parent_id":"user-generate","turn_exchange_id":"turn-generation","working_turn_id":"turn-generation"},"recipient":"all","channel":"final"}]}},"metadata":null},
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"generation-intermediate","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[{"content_type":"image_asset_pointer","asset_pointer":"file-service://asset-generation","mime_type":"image/png","size_bytes":824158,"width":1254,"height":1254,"metadata":{"dalle":{"gen_id":"gen-original","prompt":"","seed":null,"parent_gen_id":null,"edit_op":null},"generation":{"gen_id":"gen-original","gen_size":"smimage","gen_size_v2":"24","seed":null,"parent_gen_id":null,"height":1254,"width":1254,"transparent_background":false,"is_sticker":false,"orientation":"square","projection":"rectilinear"}}}]},"status":"finished_successfully","end_turn":null,"metadata":{"ghostrider":{"status":"intermediate","is_feature_trial":false},"parent_id":"user-generate","turn_exchange_id":"turn-generation","working_turn_id":"turn-generation"},"recipient":"all","channel":"final"}]}},"metadata":null},
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"generation-tool-copy","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[{"content_type":"image_asset_pointer","asset_pointer":"file-service://asset-generation","mime_type":"image/png","width":1254,"height":1254,"metadata":{"dalle":{"gen_id":"gen-original","prompt":"","parent_gen_id":null,"edit_op":null},"generation":{"gen_id":"gen-original","gen_size":"smimage","gen_size_v2":"24","parent_gen_id":null,"width":1254,"height":1254,"transparent_background":false,"is_sticker":false}}},"Synthetic non-countable tool text"]},"status":"finished_successfully","metadata":{"parent_id":"tool-call-generation","turn_exchange_id":"turn-generation","working_turn_id":"turn-generation","model_slug":"gpt-5-4-thinking","is_visually_hidden_from_conversation":true},"recipient":"all","channel":"commentary"}]}},"metadata":null}
+    ]
+  },
+  "edit": {
+    "path": "/backend-api/f/conversation",
+    "request": {
+      "action":"next",
+      "conversation_id":"conversation-fixture",
+      "parent_message_id":"generation-final-assistant",
+      "model":"gpt-5-6-thinking",
+      "system_hints":["picture_v2"],
+      "messages":[{"id":"user-edit","author":{"role":"user"},"content":{"content_type":"text","parts":["Synthetic image-edit fixture"]},"metadata":{"system_hints":["picture_v2"],"submission_mode":"manual_send","dalle":{"from_client":{"operation":{"type":"transformation","original_gen_id":"gen-original","original_file_id":"file-original"}}}}}]
+    },
+    "handoff":{"type":"stream_handoff","conversation_id":"conversation-fixture","turn_exchange_id":"turn-edit","options":[{"type":"resume_sse_endpoint","topic_id":"topic-edit"},{"type":"subscribe_ws_topic","topic_id":"topic-edit"}]},
+    "updates":[
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"edit-intermediate","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[{"content_type":"image_asset_pointer","asset_pointer":"file-service://asset-edit","mime_type":"image/png","width":1254,"height":1254,"metadata":{"generation":{"gen_id":"gen-edited","gen_size":"smimage","gen_size_v2":"24","parent_gen_id":"gen-original","width":1254,"height":1254,"transparent_background":false,"is_sticker":false},"dalle":{"gen_id":"gen-edited","prompt":"","parent_gen_id":"gen-original","edit_op":"transformation"}}}]},"status":"finished_successfully","metadata":{"ghostrider":{"status":"intermediate","is_feature_trial":false},"parent_id":"user-edit","turn_exchange_id":"turn-edit","working_turn_id":"turn-edit"},"recipient":"all","channel":"final"}]}},"metadata":null},
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"edit-tool-copy","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[{"content_type":"image_asset_pointer","asset_pointer":"file-service://asset-edit","mime_type":"image/png","width":1254,"height":1254,"metadata":{"generation":{"gen_id":"gen-edited","parent_gen_id":"gen-original","width":1254,"height":1254},"dalle":{"gen_id":"gen-edited","prompt":"","parent_gen_id":"gen-original","edit_op":"transformation"}}},"Synthetic non-countable tool text"]},"status":"finished_successfully","metadata":{"parent_id":"tool-call-edit","turn_exchange_id":"turn-edit","working_turn_id":"turn-edit","model_slug":"gpt-5-4-thinking","is_visually_hidden_from_conversation":true},"recipient":"all","channel":"commentary"}]}},"metadata":null},
+      {"type":"conversation-update","payload":{"conversation_id":"conversation-fixture","update_type":"add-messages","update_content":{"messages":[{"id":"edit-intermediate","author":{"role":"tool","name":"dynamic.image_tool","metadata":{}},"content":{"content_type":"multimodal_text","parts":[{"content_type":"image_asset_pointer","asset_pointer":"file-service://asset-edit","mime_type":"image/png","width":1254,"height":1254,"metadata":{"generation":{"gen_id":"gen-edited","parent_gen_id":"gen-original","width":1254,"height":1254},"dalle":{"gen_id":"gen-edited","prompt":"","parent_gen_id":"gen-original","edit_op":"transformation"}}}]},"status":"finished_successfully","metadata":{"ghostrider":{"status":"final","is_feature_trial":false},"parent_id":"user-edit","turn_exchange_id":"turn-edit","working_turn_id":"turn-edit"},"recipient":"all","channel":"final"}]}},"metadata":null}
+    ]
+  },
+  "expected":{"generation_output_images":1,"edit_output_images":1,"known_image_model":null,"requested_image_count":null,"image_energy_reference":null}
+}

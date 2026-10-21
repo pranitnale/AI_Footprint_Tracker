@@ -1,0 +1,251 @@
+{
+  "aliases": {
+    "chrome": {
+      "bytes": 6039866,
+      "path": "/downloads/ai-footprint-tracker-chrome.zip",
+      "sha256": "d632e3b7baf85bc90552e94ed35ba7e992227824d6f0807d542f565e93928255",
+      "variant_id": "chrome-ecologits"
+    },
+    "edge": {
+      "bytes": 6039862,
+      "path": "/downloads/ai-footprint-tracker-edge.zip",
+      "sha256": "ec903768274ec703b424595c39e7b566b2576593bcfdd938fdb77c0d41f6918b",
+      "variant_id": "edge-ecologits"
+    },
+    "firefox": {
+      "bytes": 6039690,
+      "path": "/downloads/ai-footprint-tracker-firefox.zip",
+      "sha256": "30fa679ff36616d87e3294569c71e9c95050ab4882e34839274253b2a39d0a1b",
+      "variant_id": "firefox-ecologits"
+    }
+  },
+  "build_status": "release_candidate",
+  "default_selection": {
+    "effective_configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+    "engine": "ecologits",
+    "source": "config/estimation.build.json",
+    "source_input_sha256": "b5b72cdbe65eb98d835103218a9a7f0b68e2d17c829deb21cc200e7484f02c5c",
+    "source_sha256": "b46127a445409bbcfc381db8f8f5a89be8fe17c63b9a6ab609271cc8e580cfed"
+  },
+  "input_fingerprint": {
+    "algorithm": "sha256",
+    "files": 798,
+    "sha256": "b5b72cdbe65eb98d835103218a9a7f0b68e2d17c829deb21cc200e7484f02c5c"
+  },
+  "packages": {
+    "chrome-ecologits": {
+      "archive": "artifacts/browser/chrome/ecologits/ai-footprint-tracker-0.1.0-chrome-ecologits.zip",
+      "available_engines": [
+        "ecologits"
+      ],
+      "browser": "chrome",
+      "build_variant": {
+        "available_engines": [
+          "ecologits"
+        ],
+        "browser": "chrome",
+        "build_status": "release_candidate",
+        "bundled_notices": {
+          "inventory_sha256": "5df098b532cbf2901387cfd694addc6cb6174265e66841ac8f61a5d3ff00b1c6",
+          "license_path": "licenses.html",
+          "license_sha256": "8df2993c107199e3278891f333da0338249198a18d3269465828cd142e7601d2",
+          "source_path": "source/ecologits-source.zip",
+          "source_sha256": "c027f4651bceef83616e315b22e541c444f82fc6af9c7dbde92cd193fb8a44ff"
+        },
+        "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+        "default_engine": "ecologits",
+        "ecologits": {
+          "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+          "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+          "core_version": "0.11.1-port.2",
+          "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+          "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+          "upstream_version": "0.11.2"
+        },
+        "manifest_version": 3,
+        "schema_version": "1.0.0",
+        "source_date_epoch": 1788998400,
+        "user_override_enabled": false,
+        "variant_id": "chrome-ecologits"
+      },
+      "bytes": 6039866,
+      "default_engine": "ecologits",
+      "input_fingerprint": {
+        "algorithm": "sha256",
+        "inputs": {
+          "available_engines": [
+            "ecologits"
+          ],
+          "browser": "chrome",
+          "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+          "default_engine": "ecologits",
+          "ecologits": {
+            "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+            "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+            "core_version": "0.11.1-port.2",
+            "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+            "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+            "upstream_version": "0.11.2"
+          },
+          "manifest_version": 3,
+          "source": {
+            "algorithm": "sha256",
+            "files": 798,
+            "sha256": "b5b72cdbe65eb98d835103218a9a7f0b68e2d17c829deb21cc200e7484f02c5c"
+          },
+          "source_date_epoch": 1788998400
+        },
+        "sha256": "f3f41dad22e08f2cc1473ab7d73cdd572756523ba085f55d8247071c7fdf5518"
+      },
+      "path": "/downloads/ai-footprint-tracker-chrome.zip",
+      "sha256": "d632e3b7baf85bc90552e94ed35ba7e992227824d6f0807d542f565e93928255",
+      "target": "chrome-mv3"
+    },
+    "edge-ecologits": {
+      "archive": "artifacts/browser/edge/ecologits/ai-footprint-tracker-0.1.0-edge-ecologits.zip",
+      "available_engines": [
+        "ecologits"
+      ],
+      "browser": "edge",
+      "build_variant": {
+        "available_engines": [
+          "ecologits"
+        ],
+        "browser": "edge",
+        "build_status": "release_candidate",
+        "bundled_notices": {
+          "inventory_sha256": "5df098b532cbf2901387cfd694addc6cb6174265e66841ac8f61a5d3ff00b1c6",
+          "license_path": "licenses.html",
+          "license_sha256": "8df2993c107199e3278891f333da0338249198a18d3269465828cd142e7601d2",
+          "source_path": "source/ecologits-source.zip",
+          "source_sha256": "c027f4651bceef83616e315b22e541c444f82fc6af9c7dbde92cd193fb8a44ff"
+        },
+        "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+        "default_engine": "ecologits",
+        "ecologits": {
+          "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+          "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+          "core_version": "0.11.1-port.2",
+          "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+          "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+          "upstream_version": "0.11.2"
+        },
+        "manifest_version": 3,
+        "schema_version": "1.0.0",
+        "source_date_epoch": 1788998400,
+        "user_override_enabled": false,
+        "variant_id": "edge-ecologits"
+      },
+      "bytes": 6039862,
+      "default_engine": "ecologits",
+      "input_fingerprint": {
+        "algorithm": "sha256",
+        "inputs": {
+          "available_engines": [
+            "ecologits"
+          ],
+          "browser": "edge",
+          "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+          "default_engine": "ecologits",
+          "ecologits": {
+            "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+            "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+            "core_version": "0.11.1-port.2",
+            "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+            "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+            "upstream_version": "0.11.2"
+          },
+          "manifest_version": 3,
+          "source": {
+            "algorithm": "sha256",
+            "files": 798,
+            "sha256": "b5b72cdbe65eb98d835103218a9a7f0b68e2d17c829deb21cc200e7484f02c5c"
+          },
+          "source_date_epoch": 1788998400
+        },
+        "sha256": "19f5522527ce39d7f6f7a9ab4723596138d7c7fa9a23770374e1f4dd56a25a37"
+      },
+      "path": "/downloads/ai-footprint-tracker-edge.zip",
+      "sha256": "ec903768274ec703b424595c39e7b566b2576593bcfdd938fdb77c0d41f6918b",
+      "target": "edge-mv3"
+    },
+    "firefox-ecologits": {
+      "archive": "artifacts/browser/firefox/ecologits/ai-footprint-tracker-0.1.0-firefox-ecologits.zip",
+      "available_engines": [
+        "ecologits"
+      ],
+      "browser": "firefox",
+      "build_variant": {
+        "available_engines": [
+          "ecologits"
+        ],
+        "browser": "firefox",
+        "build_status": "release_candidate",
+        "bundled_notices": {
+          "inventory_sha256": "5df098b532cbf2901387cfd694addc6cb6174265e66841ac8f61a5d3ff00b1c6",
+          "license_path": "licenses.html",
+          "license_sha256": "8df2993c107199e3278891f333da0338249198a18d3269465828cd142e7601d2",
+          "source_path": "source/ecologits-source.zip",
+          "source_sha256": "c027f4651bceef83616e315b22e541c444f82fc6af9c7dbde92cd193fb8a44ff"
+        },
+        "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+        "default_engine": "ecologits",
+        "ecologits": {
+          "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+          "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+          "core_version": "0.11.1-port.2",
+          "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+          "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+          "upstream_version": "0.11.2"
+        },
+        "manifest_version": 2,
+        "schema_version": "1.0.0",
+        "source_date_epoch": 1788998400,
+        "user_override_enabled": false,
+        "variant_id": "firefox-ecologits"
+      },
+      "bytes": 6039690,
+      "default_engine": "ecologits",
+      "input_fingerprint": {
+        "algorithm": "sha256",
+        "inputs": {
+          "available_engines": [
+            "ecologits"
+          ],
+          "browser": "firefox",
+          "configuration_sha256": "ae834ebdc0ad69db6949687c2249dbd81cfa0bd102cbc507a29c2080f6a20b45",
+          "default_engine": "ecologits",
+          "ecologits": {
+            "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+            "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+            "core_version": "0.11.1-port.2",
+            "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+            "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+            "upstream_version": "0.11.2"
+          },
+          "manifest_version": 2,
+          "source": {
+            "algorithm": "sha256",
+            "files": 798,
+            "sha256": "b5b72cdbe65eb98d835103218a9a7f0b68e2d17c829deb21cc200e7484f02c5c"
+          },
+          "source_date_epoch": 1788998400
+        },
+        "sha256": "7dc5e55c4922a436400c1feaf4cb3fa37141f82341bbb5da20deab74424c00cc"
+      },
+      "path": "/downloads/ai-footprint-tracker-firefox.zip",
+      "sha256": "30fa679ff36616d87e3294569c71e9c95050ab4882e34839274253b2a39d0a1b",
+      "target": "firefox-mv2"
+    },
+    "sources": {
+      "archive": "artifacts/browser/ai-footprint-tracker-0.1.0-sources.zip",
+      "bytes": 3256324,
+      "sha256": "1cd2b5dd83ba374c45bbb5f6feedf8a8aca58cb2e51f45d027f4918b9a68095a"
+    }
+  },
+  "product": "ai-footprint-tracker",
+  "schema_version": "2.0.0",
+  "signing_status": "unsigned_manual_install",
+  "source_date_epoch": 1788998400,
+  "version": "0.1.0"
+}

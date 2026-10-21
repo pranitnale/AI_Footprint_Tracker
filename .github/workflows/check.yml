@@ -1,0 +1,52 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      AIFT_POSTGRES_PASSWORD_FILE: /tmp/aift-postgres-password
+      AIFT_SETTINGS_FILE: /tmp/aift-settings.json
+      AIFT_JOURNAL_DIRECTORY: /tmp/aift-journal
+      AIFT_TLS_DIRECTORY: /tmp/aift-tls
+      AIFT_REGISTRATION_HOST: footprint.example.org
+      AIFT_TENANT_HOST: company.footprint.example.org
+      AIFT_OPERATOR_HOST: operator.footprint.example.org
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 11.19.0
+          run_install: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
+        with:
+          version: 0.11.28
+          enable-cache: true
+          cache-dependency-glob: apps/server/uv.lock
+      - name: Install frozen dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          uv sync --project apps/server --frozen --group dev --python 3.13.15
+      - name: Verify synchronized Python reference environment
+        run: node --test tools/python-reference.test.cjs
+      - name: Run complete release check
+        run: pnpm check
+      - name: Validate and build container definitions
+        run: |
+          docker compose config --quiet
+          docker compose build --pull --no-cache api web

@@ -1,0 +1,60 @@
+/* The methodology page's top bar in the extension: the logo opens the public website and a real
+   button leads back to the dashboard (owner, 12 October 2026). The methodology page keeps its own
+   light palette in both themes, so the bar uses the same fixed colours. Selectors carry two
+   classes so the page's ".mth a" link colour does not win. */
+.mt-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(16px, 4vw, 56px);
+  border-bottom: 1px solid #dce2d6;
+  background: #f4f5ef;
+}
+.mt-bar .mt-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: #13241a;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.mt-bar .mt-brand svg {
+  color: #2e6b3f;
+}
+.mt-bar .mt-brand:hover span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.mt-bar .mt-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  min-height: 38px;
+  padding: 0 14px 0 10px;
+  border: 1px solid #c9d3c3;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #13241a;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.mt-bar .mt-back:hover {
+  background: #eef1e8;
+  color: #13241a;
+}
+.mt-bar .mt-brand:focus-visible,
+.mt-bar .mt-back:focus-visible {
+  outline: 2px solid #2e6b3f;
+  outline-offset: 2px;
+}
+@media (max-width: 420px) {
+  .mt-bar .mt-brand span {
+    display: none;
+  }
+}

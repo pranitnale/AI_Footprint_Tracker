@@ -1,0 +1,79 @@
+{
+  "date": "2026-09-15",
+  "scope": "Explicit unavailable-admission metadata exception; no formula or coefficient changes",
+  "source_sha256": {
+    "packages/estimator/src/lineage.ts": "411c38c76a28436e00dff6df5d8ce2c2dd4a99d4e65518459e1dec72517a0c91",
+    "packages/estimator/src/original.ts": "025037e7587ccfda525001d7247404ef665b0b44aac1517564da00e8dfab53d3",
+    "packages/estimator/src/engines/service.ts": "bed5b4ccaebe9f020470816dec6e863f1083dbaaf0d1749f80bb42fce4f8a7e5",
+    "packages/estimator/src/engines/original.ts": "a42295572b51a7c53dbdc9708f9eac80a196eb2cf2586ab3370f86618d63b25b",
+    "packages/estimator/src/engines/remote-admission.ts": "8ee9614565527a1302f5a9a6b904561d602b00517c023bdbbcad2ab7ca187411",
+    "packages/estimator/test/missing-original-method.test.ts": "81f59896118c645fe0643cf0aef72b80ca5c743d54f1f2f348e62ba6ca7d1402",
+    "packages/estimator/test/remote-admission.test.ts": "657a180e7864669fc38463822a179a78d39d1e893cbd0935304441dde76f7e55",
+    "packages/estimator/README.md": "0875d5c6ec01bf24afff2349cabf129370ae73d1539da6c63408db15a1e7cf08"
+  },
+  "baseline_method_hash": "7684a7960e2b21ae5082a23c50052563447bbe588d32ea052b79373525783bc9",
+  "frozen_fixture_sha256": "5c719a90ea922cc9b9be9354e765780c54296ae2b6fe6585d2f2d7c8748101be",
+  "unchanged_numerical_source_sha256": {
+    "packages/estimator/src/numeric.ts": "4d7fa1ae3e5649c30b9e581a81ad87c416512281994227a4c4d60f7684b08c31",
+    "packages/estimator/src/methods/text.ts": "fefd81357782bd5413f683af54d94935646c9da082a99f9b77f48ea7f0706686",
+    "packages/estimator/src/methods/environment.ts": "05cffa87b77f95eb7bbab6c9d19e1743c5a92b786e5241db411de57944ccd4ff",
+    "packages/estimator/data/baseline.json": "c86b32dfa3fca04eee7cd9819f7eca471506c7562496aa456bf92cde88d77c71",
+    "packages/estimator/data/image-reference.json": "8491709971b163b4950c6117eeb600bb118999e0bd93446813272dae817016cb"
+  },
+  "api": {
+    "option": "originalMethodMissing?: boolean",
+    "reserved_marker": "unavailable-admission-v1",
+    "required_view": "recalculated",
+    "prior_hash": "absent or null",
+    "target": "explicit supported methodId",
+    "scope": "validated live marker only",
+    "reason": "original_method_missing",
+    "remote_binding": "accepted.original_method_missing is locally derived"
+  },
+  "commands": [
+    {
+      "command": "pnpm --filter @footprint/estimator test",
+      "result": "PASS 69/69; includes frozen legacy and existing TS/Python parity, six new missing-lineage tests and three new remote lineage tests"
+    },
+    {
+      "command": "pnpm --filter @footprint/estimator typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm exec prettier --check packages/estimator/src/lineage.ts packages/estimator/src/original.ts packages/estimator/src/engines/service.ts packages/estimator/src/engines/original.ts packages/estimator/src/engines/remote-admission.ts packages/estimator/test/missing-original-method.test.ts packages/estimator/test/remote-admission.test.ts",
+      "result": "PASS"
+    },
+    {
+      "command": "Compare numerical source/data byte hashes to frozen characterization manifest",
+      "result": "PASS"
+    }
+  ],
+  "cross_task_evidence": {
+    "owner": "01a0a1ef-0101-7fa2-89b0-4e2fb9e56ebc",
+    "reported_result": "4 native marker/client parity tests pass including exact semantic/raw reason ordering; numeric tolerance follows existing 1e-10 policy",
+    "performed_by_this_task": false
+  },
+  "rejected_cases": [
+    "unflagged marker with explicit target",
+    "marker as formula/registered bundle",
+    "arbitrary null lineage",
+    "unknown or legacy-null proposed source with flag",
+    "known hash plus missing flag",
+    "history opt-in",
+    "nonboolean flags",
+    "response-invented missing reason",
+    "raw original relabeled as original"
+  ],
+  "caller_responsibilities": [
+    "Prove originalMethodState=not_admitted from authoritative ledger data; other missing archive states are not eligible",
+    "Enforce read/upload/publication grants; no endpoint activated"
+  ],
+  "not_changed_by_this_task": [
+    "contracts",
+    "ledger",
+    "Python/server",
+    "root manifests",
+    "MPL ecologits-core source",
+    "frozen legacy fixture"
+  ]
+}

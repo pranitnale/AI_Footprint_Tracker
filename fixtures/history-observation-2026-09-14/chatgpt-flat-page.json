@@ -1,0 +1,250 @@
+{
+  "conversation_id": "00000000-0000-4000-8000-000000000042",
+  "messages": [
+    {
+      "id": "00000000-0000-4000-8000-000000000101",
+      "author": {
+        "role": "system"
+      },
+      "create_time": 1767261601,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          ""
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000113",
+        "is_visually_hidden_from_conversation": true
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000102",
+      "author": {
+        "role": "user"
+      },
+      "create_time": 1767261600,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          "Synthetic historical prompt 1."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000113"
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000103",
+      "author": {
+        "role": "system"
+      },
+      "create_time": 1767261602,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          ""
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": true,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000113",
+        "parent_id": "00000000-0000-4000-8000-000000000114",
+        "is_visually_hidden_from_conversation": true
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000104",
+      "author": {
+        "role": "tool"
+      },
+      "create_time": 1767261601.5,
+      "content": {
+        "content_type": "tether_browsing_display"
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000115",
+        "parent_id": "00000000-0000-4000-8000-000000000103"
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000105",
+      "author": {
+        "role": "tool"
+      },
+      "create_time": 1767261602.5,
+      "content": {
+        "content_type": "multimodal_text",
+        "parts": [
+          "Synthetic ignored tool text 4-0.",
+          "Synthetic ignored tool text 4-1."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000115",
+        "parent_id": "00000000-0000-4000-8000-000000000104",
+        "is_visually_hidden_from_conversation": false
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000106",
+      "author": {
+        "role": "tool"
+      },
+      "create_time": 1767261602.7,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          "Synthetic ignored tool text 5-0."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000115",
+        "parent_id": "00000000-0000-4000-8000-000000000105",
+        "is_visually_hidden_from_conversation": false
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000107",
+      "author": {
+        "role": "assistant"
+      },
+      "create_time": 1767261609,
+      "content": {
+        "content_type": "reasoning_recap"
+      },
+      "status": "finished_successfully",
+      "end_turn": false,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000115",
+        "parent_id": "00000000-0000-4000-8000-000000000116"
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000108",
+      "author": {
+        "role": "assistant"
+      },
+      "create_time": 1767261602.9,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          "Synthetic historical answer 1."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": true,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000112",
+        "turn_id": "00000000-0000-4000-8000-000000000115",
+        "parent_id": "00000000-0000-4000-8000-000000000107",
+        "is_complete": true
+      },
+      "recipient": "all",
+      "channel": "final"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000109",
+      "author": {
+        "role": "user"
+      },
+      "create_time": 1767262200,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          "Synthetic historical prompt 2."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": null,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000117",
+        "turn_id": "00000000-0000-4000-8000-000000000118"
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000110",
+      "author": {
+        "role": "assistant"
+      },
+      "create_time": 1767262209,
+      "content": {
+        "content_type": "reasoning_recap"
+      },
+      "status": "finished_successfully",
+      "end_turn": false,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000117",
+        "turn_id": "00000000-0000-4000-8000-000000000119",
+        "parent_id": "00000000-0000-4000-8000-000000000120"
+      },
+      "recipient": "all",
+      "channel": null
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000111",
+      "author": {
+        "role": "assistant"
+      },
+      "create_time": 1767262203,
+      "content": {
+        "content_type": "text",
+        "parts": [
+          "Synthetic historical answer 2."
+        ]
+      },
+      "status": "finished_successfully",
+      "end_turn": true,
+      "metadata": {
+        "request_id": "00000000-0000-4000-8000-000000000117",
+        "turn_id": "00000000-0000-4000-8000-000000000119",
+        "parent_id": "00000000-0000-4000-8000-000000000110",
+        "is_complete": true
+      },
+      "recipient": "all",
+      "channel": "final"
+    }
+  ],
+  "current_node": "00000000-0000-4000-8000-000000000111",
+  "page_info": {
+    "start_cursor": "00000000-0000-4000-8000-000000000101",
+    "end_cursor": "00000000-0000-4000-8000-000000000111",
+    "has_previous_page": false,
+    "has_next_page": false
+  },
+  "context_truncation_continuation": null
+}

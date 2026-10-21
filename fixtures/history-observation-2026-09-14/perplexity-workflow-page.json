@@ -1,0 +1,162 @@
+{
+  "status": "success",
+  "entries": [
+    {
+      "uuid": "00000000-0000-4000-8000-000000000101",
+      "frontend_uuid": "00000000-0000-4000-8000-000000000101",
+      "backend_uuid": "00000000-0000-4000-8000-000000000042",
+      "context_uuid": "00000000-0000-4000-8000-000000000102",
+      "frontend_context_uuid": "00000000-0000-4000-8000-000000000103",
+      "thread_url_slug": "00000000-0000-4000-8000-000000000042",
+      "status": "COMPLETED",
+      "query_str": "Synthetic historical prompt 1.",
+      "entry_created_datetime": "2026-01-01T10:00:00.000001+00:00",
+      "entry_updated_datetime": "2026-01-01T10:00:01.000001+00:00",
+      "updated_datetime": "2026-01-01T10:05:01.000001",
+      "read_write_token": "SYNTHETIC_CAPABILITY_MUST_NOT_PROJECT",
+      "blocks": [
+        {
+          "intended_usage": "workflow_root",
+          "workflow_block": {
+            "version": "1.0",
+            "status": "WORKFLOW_COMPLETED",
+            "steps": [
+              {
+                "status": "WORKFLOW_COMPLETED",
+                "id": "00000000000000000000000000000001",
+                "started_at": "",
+                "completed_at": "",
+                "items": [
+                  {
+                    "id": "00000000000000000000000000000101",
+                    "type": "WORKFLOW_ITEM_TEXT",
+                    "display_mode": "WORKFLOW_ITEM_ALWAYS_EXPAND",
+                    "variant": "answer",
+                    "payload": {
+                      "text_payload": {
+                        "text": "Synthetic historical answer 1.",
+                        "chunks": [
+                          "Synthetic historical ",
+                          "answer 1."
+                        ],
+                        "variant": "answer",
+                        "is_streaming": false
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "snapshots": []
+          }
+        }
+      ]
+    },
+    {
+      "uuid": "00000000-0000-4000-8000-000000000104",
+      "frontend_uuid": "00000000-0000-4000-8000-000000000104",
+      "backend_uuid": "00000000-0000-4000-8000-000000000105",
+      "context_uuid": "00000000-0000-4000-8000-000000000102",
+      "frontend_context_uuid": "00000000-0000-4000-8000-000000000103",
+      "thread_url_slug": "00000000-0000-4000-8000-000000000042",
+      "status": "COMPLETED",
+      "query_str": "Synthetic historical prompt 2.",
+      "entry_created_datetime": "2026-01-01T10:05:00.000001+00:00",
+      "entry_updated_datetime": "2026-01-01T10:05:01.000001+00:00",
+      "updated_datetime": "2026-01-01T10:05:01.000001",
+      "read_write_token": "SYNTHETIC_CAPABILITY_MUST_NOT_PROJECT",
+      "blocks": [
+        {
+          "intended_usage": "workflow_root",
+          "workflow_block": {
+            "version": "1.0",
+            "status": "WORKFLOW_COMPLETED",
+            "steps": [
+              {
+                "status": "WORKFLOW_COMPLETED",
+                "id": "00000000000000000000000000000002",
+                "started_at": "",
+                "completed_at": "",
+                "items": [
+                  {
+                    "id": "00000000000000000000000000000102",
+                    "type": "WORKFLOW_ITEM_TEXT",
+                    "display_mode": "WORKFLOW_ITEM_ALWAYS_EXPAND",
+                    "variant": "answer",
+                    "payload": {
+                      "text_payload": {
+                        "text": "Synthetic historical answer 2.",
+                        "chunks": [
+                          "Synthetic historical ",
+                          "answer 2."
+                        ],
+                        "variant": "answer",
+                        "is_streaming": false
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "snapshots": []
+          }
+        }
+      ]
+    }
+  ],
+  "first_entry": {
+    "uuid": "00000000-0000-4000-8000-000000000101",
+    "frontend_uuid": "00000000-0000-4000-8000-000000000101",
+    "backend_uuid": "00000000-0000-4000-8000-000000000042",
+    "context_uuid": "00000000-0000-4000-8000-000000000102",
+    "frontend_context_uuid": "00000000-0000-4000-8000-000000000103",
+    "thread_url_slug": "00000000-0000-4000-8000-000000000042",
+    "status": "COMPLETED",
+    "query_str": "Synthetic historical prompt 1.",
+    "entry_created_datetime": "2026-01-01T10:00:00.000001+00:00",
+    "entry_updated_datetime": "2026-01-01T10:00:01.000001+00:00",
+    "updated_datetime": "2026-01-01T10:05:01.000001",
+    "read_write_token": "SYNTHETIC_CAPABILITY_MUST_NOT_PROJECT",
+    "blocks": [
+      {
+        "intended_usage": "workflow_root",
+        "workflow_block": {
+          "version": "1.0",
+          "status": "WORKFLOW_COMPLETED",
+          "steps": [
+            {
+              "status": "WORKFLOW_COMPLETED",
+              "id": "00000000000000000000000000000001",
+              "started_at": "",
+              "completed_at": "",
+              "items": [
+                {
+                  "id": "00000000000000000000000000000101",
+                  "type": "WORKFLOW_ITEM_TEXT",
+                  "display_mode": "WORKFLOW_ITEM_ALWAYS_EXPAND",
+                  "variant": "answer",
+                  "payload": {
+                    "text_payload": {
+                      "text": "Synthetic historical answer 1.",
+                      "chunks": [
+                        "Synthetic historical ",
+                        "answer 1."
+                      ],
+                      "variant": "answer",
+                      "is_streaming": false
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "snapshots": []
+        }
+      }
+    ]
+  },
+  "latest_entry": null,
+  "has_next_page": false,
+  "next_cursor": null,
+  "background_entries": []
+}

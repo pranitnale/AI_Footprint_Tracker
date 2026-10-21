@@ -1,0 +1,5 @@
+{
+  "description": "The public source repository address, set in one place. The website pages and the methodology builders read it. It replaced the earlier repository, which was removed, and is not public yet. When the address changes, change it here, then rebuild the website and the methodology (node tools/build-methodology.cjs).",
+  "url": "https://github.com/pranitnale/AI_Footprint_Tracker",
+  "branch": "main"
+}

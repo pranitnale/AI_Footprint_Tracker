@@ -1,0 +1,975 @@
+{
+ "comparability": {
+  "carbon_accounting": "location",
+  "carbon_boundary": "lifecycle",
+  "common_water_scope": null,
+  "direct_water_source": "unknown",
+  "energy_boundary": "facility",
+  "upstream_water_source": "all_source",
+  "water_kind": "consumption"
+ },
+ "range_end": "2026-09-10T22:00:00.000Z",
+ "range_start": "2026-08-10T22:00:00.000Z",
+ "releases": {
+  "64bfe988": {
+   "effective_method": {
+    "catalog_hash": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "engine_id": "ecologits",
+    "environment_policy_hash": "b65ede0895b04373ad1efaded6e6ee53a21ba9257bfff5fee6a07809c6ec57de",
+    "implementation_version": "0.11.1-port.2",
+    "method_hash": "64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+    "method_id": "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+    "product_scope": "operational-only",
+    "profile_policy_hash": "2f29a617deda623fe72b2747348dce3ff9012888d7ba57b67bf8b6f2a603c6f4",
+    "source_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "source_version": "0.11.2"
+   },
+   "requested_method": {
+    "catalog_hash": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "engine_id": "ecologits",
+    "environment_policy_hash": "b65ede0895b04373ad1efaded6e6ee53a21ba9257bfff5fee6a07809c6ec57de",
+    "implementation_version": "0.11.1-port.2",
+    "method_hash": "64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+    "method_id": "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+    "product_scope": "operational-only",
+    "profile_policy_hash": "2f29a617deda623fe72b2747348dce3ff9012888d7ba57b67bf8b6f2a603c6f4",
+    "source_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "source_version": "0.11.2"
+   }
+  },
+  "c1ab094f": {
+   "effective_method": {
+    "catalog_hash": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "engine_id": "ecologits",
+    "environment_policy_hash": "b65ede0895b04373ad1efaded6e6ee53a21ba9257bfff5fee6a07809c6ec57de",
+    "implementation_version": "0.11.1-port.2",
+    "method_hash": "c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe",
+    "method_id": "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe",
+    "product_scope": "operational-only",
+    "profile_policy_hash": "d9e13086d0de2dd2faaa3b0ddb70ff9d273ef0cb0a864218d980200c3bdfdd5d",
+    "source_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "source_version": "0.11.2"
+   },
+   "requested_method": {
+    "catalog_hash": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "engine_id": "ecologits",
+    "environment_policy_hash": "b65ede0895b04373ad1efaded6e6ee53a21ba9257bfff5fee6a07809c6ec57de",
+    "implementation_version": "0.11.1-port.2",
+    "method_hash": "c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe",
+    "method_id": "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe",
+    "product_scope": "operational-only",
+    "profile_policy_hash": "d9e13086d0de2dd2faaa3b0ddb70ff9d273ef0cb0a864218d980200c3bdfdd5d",
+    "source_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "source_version": "0.11.2"
+   }
+  }
+ },
+ "summary": {
+  "active_installations": "1",
+  "active_users": "1",
+  "attempt_count": "4",
+  "days": {
+   "2026-08-16": {
+    "active_installations": "0",
+    "active_users": "0",
+    "attempt_count": "0",
+    "history": {
+     "calculated_message_count": "6",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "0",
+     "prompt_count": "3",
+     "response_count": "3",
+     "status": "available",
+     "unresolved_overlap_message_count": "6"
+    },
+    "method_groups": [],
+    "mixed_methods": false,
+    "request_count": "0",
+    "rows": [
+     [
+      "saved",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00033750435486182252",
+      "0.00024081187918628238",
+      "0.0004341968305373626",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.12973667400888456",
+      "0.092568086359206950",
+      "0.16690526165856218",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0012617045004517398",
+      "0.00078296756963808592",
+      "0.0017404414312653938",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00016875217743091126",
+      "0.00012040593959314119",
+      "0.0002170984152686813",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.06486833700444228",
+      "0.046284043179603475",
+      "0.08345263082928109",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006308522502258699",
+      "0.00039148378481904296",
+      "0.0008702207156326969",
+      "anthropic/claude-opus-4-8"
+     ]
+    ]
+   },
+   "2026-09-09": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "3",
+    "history": {
+     "calculated_message_count": "0",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "4",
+     "prompt_count": "0",
+     "response_count": "0",
+     "status": "available",
+     "unresolved_overlap_message_count": "0"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": true,
+    "request_count": "3",
+    "rows": [
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00015561870500862272",
+      "0.00013265993708182273",
+      "0.00017857747293542267",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.05981983020531457",
+      "0.05099447981425266",
+      "0.06864518059637648",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0005612025485824291",
+      "0.0004784071091002746",
+      "0.0006439979880645836",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00019141400626077835",
+      "0.0001627155463522784",
+      "0.00022011246616927832",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.07357954400664321",
+      "0.06254785601781582",
+      "0.08461123199547059",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006902899503113696",
+      "0.0005867956509586765",
+      "0.0007937842496640627",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.0013442861774022236",
+      "0.000909031079634617",
+      "0.0017795412751698302",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.5167436065934148",
+      "0.3494315470115468",
+      "0.6840556661752827",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.005044367070358288",
+      "0.0029555927953056936",
+      "0.007133141345410881",
+      "anthropic/claude-opus-4-8"
+     ]
+    ]
+   },
+   "2026-09-10": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "1",
+    "history": {
+     "calculated_message_count": "0",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "0",
+     "prompt_count": "0",
+     "response_count": "0",
+     "status": "empty",
+     "unresolved_overlap_message_count": "0"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": false,
+    "request_count": "1",
+    "rows": [
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.0015644236305803719",
+      "0.0010567136901292753",
+      "0.0020721335710314685",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.601364443595095",
+      "0.40620074248569343",
+      "0.7965281447044965",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.005870867973004807",
+      "0.003435763021988587",
+      "0.008305972924021028",
+      "anthropic/claude-opus-4-8"
+     ]
+    ]
+   }
+  },
+  "history": {
+   "calculated_message_count": "6",
+   "conflicting_message_count": "0",
+   "first_request_verified": false,
+   "matched_live_message_count": "4",
+   "prompt_count": "3",
+   "response_count": "3",
+   "status": "available",
+   "unresolved_overlap_message_count": "6"
+  },
+  "method_groups": [
+   "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+   "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+  ],
+  "mixed_methods": true,
+  "models": {
+   "chatgpt-gpt-5-6-luna": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "2",
+    "history": {
+     "calculated_message_count": "0",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "1",
+     "prompt_count": "0",
+     "response_count": "0",
+     "status": "available",
+     "unresolved_overlap_message_count": "0"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": true,
+    "request_count": "2",
+    "rows": [
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00015561870500862272",
+      "0.00013265993708182273",
+      "0.00017857747293542267",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.05981983020531457",
+      "0.05099447981425266",
+      "0.06864518059637648",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0005612025485824291",
+      "0.0004784071091002746",
+      "0.0006439979880645836",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00019141400626077835",
+      "0.0001627155463522784",
+      "0.00022011246616927832",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.07357954400664321",
+      "0.06254785601781582",
+      "0.08461123199547059",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006902899503113696",
+      "0.0005867956509586765",
+      "0.0007937842496640627",
+      "openai/gpt-5.6-luna"
+     ]
+    ],
+    "site": "chatgpt"
+   },
+   "claude-opus-4-8": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "2",
+    "history": {
+     "calculated_message_count": "3",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "1",
+     "prompt_count": "0",
+     "response_count": "3",
+     "status": "available",
+     "unresolved_overlap_message_count": "3"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": true,
+    "request_count": "2",
+    "rows": [
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.0013442861774022236",
+      "0.000909031079634617",
+      "0.0017795412751698302",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.5167436065934148",
+      "0.3494315470115468",
+      "0.6840556661752827",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.005044367070358288",
+      "0.0029555927953056936",
+      "0.007133141345410881",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.0015644236305803719",
+      "0.0010567136901292753",
+      "0.0020721335710314685",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.601364443595095",
+      "0.40620074248569343",
+      "0.7965281447044965",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.005870867973004807",
+      "0.003435763021988587",
+      "0.008305972924021028",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00033750435486182252",
+      "0.00024081187918628238",
+      "0.0004341968305373626",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.12973667400888456",
+      "0.092568086359206950",
+      "0.16690526165856218",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0012617045004517398",
+      "0.00078296756963808592",
+      "0.0017404414312653938",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00016875217743091126",
+      "0.00012040593959314119",
+      "0.0002170984152686813",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.06486833700444228",
+      "0.046284043179603475",
+      "0.08345263082928109",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006308522502258699",
+      "0.00039148378481904296",
+      "0.0008702207156326969",
+      "anthropic/claude-opus-4-8"
+     ]
+    ],
+    "site": "claude"
+   }
+  },
+  "request_count": "4",
+  "rows": [
+   [
+    "live",
+    "c1ab094f",
+    "energy",
+    "kWh",
+    "0.00015561870500862272",
+    "0.00013265993708182273",
+    "0.00017857747293542267",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "c1ab094f",
+    "carbon",
+    "gCO2e",
+    "0.05981983020531457",
+    "0.05099447981425266",
+    "0.06864518059637648",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "c1ab094f",
+    "water_total",
+    "L",
+    "0.0005612025485824291",
+    "0.0004784071091002746",
+    "0.0006439979880645836",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "energy",
+    "kWh",
+    "0.00019141400626077835",
+    "0.0001627155463522784",
+    "0.00022011246616927832",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "carbon",
+    "gCO2e",
+    "0.07357954400664321",
+    "0.06254785601781582",
+    "0.08461123199547059",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "water_total",
+    "L",
+    "0.0006902899503113696",
+    "0.0005867956509586765",
+    "0.0007937842496640627",
+    "openai/gpt-5.6-luna"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "energy",
+    "kWh",
+    "0.0013442861774022236",
+    "0.000909031079634617",
+    "0.0017795412751698302",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "carbon",
+    "gCO2e",
+    "0.5167436065934148",
+    "0.3494315470115468",
+    "0.6840556661752827",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "live",
+    "64bfe988",
+    "water_total",
+    "L",
+    "0.005044367070358288",
+    "0.0029555927953056936",
+    "0.007133141345410881",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "live",
+    "c1ab094f",
+    "energy",
+    "kWh",
+    "0.0015644236305803719",
+    "0.0010567136901292753",
+    "0.0020721335710314685",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "live",
+    "c1ab094f",
+    "carbon",
+    "gCO2e",
+    "0.601364443595095",
+    "0.40620074248569343",
+    "0.7965281447044965",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "live",
+    "c1ab094f",
+    "water_total",
+    "L",
+    "0.005870867973004807",
+    "0.003435763021988587",
+    "0.008305972924021028",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "c1ab094f",
+    "energy",
+    "kWh",
+    "0.00033750435486182252",
+    "0.00024081187918628238",
+    "0.0004341968305373626",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "c1ab094f",
+    "carbon",
+    "gCO2e",
+    "0.12973667400888456",
+    "0.092568086359206950",
+    "0.16690526165856218",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "c1ab094f",
+    "water_total",
+    "L",
+    "0.0012617045004517398",
+    "0.00078296756963808592",
+    "0.0017404414312653938",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "64bfe988",
+    "energy",
+    "kWh",
+    "0.00016875217743091126",
+    "0.00012040593959314119",
+    "0.0002170984152686813",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "64bfe988",
+    "carbon",
+    "gCO2e",
+    "0.06486833700444228",
+    "0.046284043179603475",
+    "0.08345263082928109",
+    "anthropic/claude-opus-4-8"
+   ],
+   [
+    "saved",
+    "64bfe988",
+    "water_total",
+    "L",
+    "0.0006308522502258699",
+    "0.00039148378481904296",
+    "0.0008702207156326969",
+    "anthropic/claude-opus-4-8"
+   ]
+  ],
+  "sites": {
+   "chatgpt": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "2",
+    "history": {
+     "calculated_message_count": "0",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "2",
+     "prompt_count": "0",
+     "response_count": "0",
+     "status": "available",
+     "unresolved_overlap_message_count": "0"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": true,
+    "request_count": "2",
+    "rows": [
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00015561870500862272",
+      "0.00013265993708182273",
+      "0.00017857747293542267",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.05981983020531457",
+      "0.05099447981425266",
+      "0.06864518059637648",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0005612025485824291",
+      "0.0004784071091002746",
+      "0.0006439979880645836",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00019141400626077835",
+      "0.0001627155463522784",
+      "0.00022011246616927832",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.07357954400664321",
+      "0.06254785601781582",
+      "0.08461123199547059",
+      "openai/gpt-5.6-luna"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006902899503113696",
+      "0.0005867956509586765",
+      "0.0007937842496640627",
+      "openai/gpt-5.6-luna"
+     ]
+    ]
+   },
+   "claude": {
+    "active_installations": "1",
+    "active_users": "1",
+    "attempt_count": "2",
+    "history": {
+     "calculated_message_count": "6",
+     "conflicting_message_count": "0",
+     "first_request_verified": false,
+     "matched_live_message_count": "2",
+     "prompt_count": "3",
+     "response_count": "3",
+     "status": "available",
+     "unresolved_overlap_message_count": "6"
+    },
+    "method_groups": [
+     "ecologits-0.11.2-64bfe98849c588d232af27323ec94d52f3e8969ba32bf2045ede278e1a4aa18c",
+     "ecologits-0.11.2-c1ab094fd43275ec4c9b2a0d23820ccb32b89ae530c6be0f745c6f0699795cbe"
+    ],
+    "mixed_methods": true,
+    "request_count": "2",
+    "rows": [
+     [
+      "live",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.0013442861774022236",
+      "0.000909031079634617",
+      "0.0017795412751698302",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.5167436065934148",
+      "0.3494315470115468",
+      "0.6840556661752827",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.005044367070358288",
+      "0.0029555927953056936",
+      "0.007133141345410881",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.0015644236305803719",
+      "0.0010567136901292753",
+      "0.0020721335710314685",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.601364443595095",
+      "0.40620074248569343",
+      "0.7965281447044965",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "live",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.005870867973004807",
+      "0.003435763021988587",
+      "0.008305972924021028",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "energy",
+      "kWh",
+      "0.00033750435486182252",
+      "0.00024081187918628238",
+      "0.0004341968305373626",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "carbon",
+      "gCO2e",
+      "0.12973667400888456",
+      "0.092568086359206950",
+      "0.16690526165856218",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "c1ab094f",
+      "water_total",
+      "L",
+      "0.0012617045004517398",
+      "0.00078296756963808592",
+      "0.0017404414312653938",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "energy",
+      "kWh",
+      "0.00016875217743091126",
+      "0.00012040593959314119",
+      "0.0002170984152686813",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "carbon",
+      "gCO2e",
+      "0.06486833700444228",
+      "0.046284043179603475",
+      "0.08345263082928109",
+      "anthropic/claude-opus-4-8"
+     ],
+     [
+      "saved",
+      "64bfe988",
+      "water_total",
+      "L",
+      "0.0006308522502258699",
+      "0.00039148378481904296",
+      "0.0008702207156326969",
+      "anthropic/claude-opus-4-8"
+     ]
+    ]
+   }
+  }
+ }
+}

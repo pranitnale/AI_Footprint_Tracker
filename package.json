@@ -1,0 +1,52 @@
+{
+  "name": "ai-footprint-tracker",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "ecologits:update": "node tools/ecologits/update.mjs",
+    "ecologits:verify-update": "node --import tsx tools/ecologits/verify-update.mjs",
+    "ecologits:adopt": "node tools/ecologits/adopt.mjs",
+    "estimation:family-stand-ins": "node --import tsx tools/estimation-family-stand-ins.ts",
+    "compare:engines": "node --import tsx tools/refinement/compare-engines.ts",
+    "test:refinement": "node --import tsx --test tools/refinement/test/*.test.ts",
+    "test:ecologits-maintenance": "node --test tools/ecologits/test/*.test.mjs",
+    "typecheck:refinement": "node node_modules/typescript/bin/tsc -p tools/refinement/tsconfig.json",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:verification": "node --import tsx --test tests/verification/*.test.ts",
+    "test:calibration": "uv run --project calibration/anthropic --frozen --group dev ruff check calibration/anthropic && uv run --project calibration/anthropic --frozen --group dev python -m pytest -c calibration/anthropic/pyproject.toml calibration/anthropic/tests",
+    "test:python": "uv run --directory apps/server --frozen --group dev ruff check --config pyproject.toml aift tests tools migrations ../../packages/contracts/python ../../packages/estimator/python ../../deploy/initialize-journal.py ../../deploy/test_initialize_journal.py && uv run --directory apps/server --frozen --group dev python -m pytest -c pyproject.toml tests ../../deploy/test_initialize_journal.py",
+    "test:release-tools": "node --import tsx --test tools/refinement/build-variants.test.ts tools/provider-drift.test.ts && python -m unittest discover -s tools -p test_release_artifacts.py && python -m unittest discover -s tools -p test_browser_runtime.py && python -m unittest discover -s tools -p test_third_party.py",
+    "generate:sbom": "uv run --project apps/server --frozen python tools/generate-sbom.py",
+    "drift:check": "node --import tsx tools/provider-drift.ts",
+    "build:browsers": "pnpm --filter @footprint/extension build:chrome && pnpm --filter @footprint/extension build:edge && pnpm --filter @footprint/extension build:firefox",
+    "build:browser-variants": "node --import tsx tools/refinement/build-variants.ts",
+    "build:browser-variants:release": "node --import tsx tools/refinement/build-variants.ts --release-candidate",
+    "package:browsers": "pnpm generate:sbom && pnpm build:browser-variants:release && python tools/package-browser-artifacts.py",
+    "verify:source-archive": "python tools/verify-source-archive.py",
+    "test:docs": "node tools/build-methodology.cjs --check && node --test tools/python-reference.test.cjs tools/proxy-config.test.cjs tools/context-energy-study.test.cjs tools/offset-audit.test.cjs tools/methodology-reference.test.cjs tools/methodology-checks.test.cjs design-canvas/test.cjs fixtures/browser-audit-2026-09-09/reference.test.mjs tools/handoff-consistency.test.cjs",
+    "check": "pnpm test:privacy && pnpm privacy:current && pnpm typecheck && pnpm typecheck:refinement && pnpm test && pnpm test:refinement && pnpm test:ecologits-maintenance && pnpm test:verification && pnpm test:docs && pnpm test:release-tools && pnpm test:python && pnpm test:calibration && pnpm run audit && pnpm package:browsers && pnpm privacy:packages && pnpm verify:source-archive && pnpm --filter @footprint/web build",
+    "audit:js": "pnpm audit --prod --audit-level high",
+    "audit:python": "python tools/audit-python.py",
+    "audit:browser-runtime": "python tools/audit-browser-runtime.py",
+    "audit": "pnpm audit:js && pnpm audit:python && pnpm audit:browser-runtime",
+    "test:privacy": "uv run --project apps/server --frozen --group dev python -m unittest discover -s tools -p test_privacy*.py",
+    "privacy:current": "uv run --project apps/server --frozen --group dev python tools/privacy_scan.py",
+    "privacy:packages": "uv run --project apps/server --frozen --group dev python tools/privacy_scan.py --archives",
+    "privacy:history": "uv run --project apps/server --frozen --group dev python tools/privacy_scan.py --history"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.2",
+    "fake-indexeddb": "6.2.5",
+    "playwright": "1.62.1",
+    "prettier": "3.9.6",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3"
+  }
+}

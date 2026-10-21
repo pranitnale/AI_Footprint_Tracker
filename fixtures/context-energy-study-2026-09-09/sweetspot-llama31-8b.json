@@ -1,0 +1,27 @@
+{
+  "kind": "research_equation_fixture",
+  "runtime_selection_allowed": false,
+  "source": "https://arxiv.org/html/2602.05695v2#A0.T5",
+  "source_equation": "Equation 5 multiplied by output count",
+  "profile": "Llama 3.1 8B",
+  "boundary": "gpu_run_average",
+  "hardware": "single H100 execution",
+  "engine": "TensorRT-LLM throughput saturation",
+  "prefix_cache_extension_supported": false,
+  "input_domain": [64, 4096],
+  "output_domain": [64, 4096],
+  "coefficients": {
+    "theta0": "1.970934e-2",
+    "theta1": "3.329326e-7",
+    "theta2": "3.583505e-5",
+    "theta3": "1.551942e-2",
+    "theta4": "2.249613e-5",
+    "theta5": "8.939092e-1"
+  },
+  "examples": [
+    { "input": 500, "output": 500, "joules": "33.17431735" },
+    { "input": 1500, "output": 500, "joules": "67.27712755" },
+    { "input": 2500, "output": 500, "joules": "102.04580295" }
+  ],
+  "interpretation": "Arithmetic interpolation examples, not measured conversation turns, cache validation, facility electricity or Claude coefficients. No raw experimental grid or trained model was recovered by this fixture."
+}

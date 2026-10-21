@@ -1,0 +1,51 @@
+name: Self-host deployment help
+description: Ask about the documented self-host configuration using sanitized facts.
+title: "[Self-host] "
+labels: [support]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read docs/operations/SELF-HOSTING.md first. Never paste settings files, passwords, keys, certificates, private hostnames, raw IPs, database contents, real mail, authenticated HAR files or employee documents.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Sanitized platform
+      placeholder: Ubuntu 24.04, Docker Engine and Compose versions
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Failing stage
+      options:
+        - Configuration validation
+        - Image build
+        - Migration
+        - Journal initialization
+        - API or worker readiness
+        - Registration or pairing
+        - Backup or restore drill
+        - Upgrade or revocation
+    validations:
+      required: true
+  - type: textarea
+    id: sanitized_error
+    attributes:
+      label: Sanitized error and reproduction
+      description: Replace every address and identifier with an obvious synthetic value.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safe-report confirmation
+      options:
+        - label: I removed all secrets, IPs, hostnames, employee data, real files and authenticated captures.
+          required: true

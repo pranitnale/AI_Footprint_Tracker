@@ -1,0 +1,426 @@
+/*
+ * Sign-in and registration pages from the canvas boards WebLogin, WebLoginCode, WebRegister and
+ * WebRegisterVerify. Every class carries the au- prefix and every rule sits under .au, so the admin
+ * site and the website keep their own styles.
+ */
+.au {
+  min-height: 100vh;
+  background: #f4f5ef;
+  color: #13241a;
+  font-family: "Instrument Sans Variable", "Instrument Sans", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+}
+/* styles.css styles bare elements for the admin site; here they return to the defaults the boards use. */
+.au :where(h1, h2, h3, label, input, select, textarea, table, th, td, dt, dd, article, footer, p, li) {
+  all: revert;
+}
+.au *,
+.au *::before,
+.au *::after {
+  box-sizing: border-box;
+}
+.au a {
+  color: #2e6b3f;
+}
+.au a:hover {
+  color: #1c4a2a;
+}
+.au :focus-visible {
+  outline: 3px solid #b9e27c;
+  outline-offset: 2px;
+}
+.au .au-dsp {
+  font-family: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+}
+.au svg.au-i {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+.au button,
+.au input,
+.au select,
+.au textarea {
+  font-family: inherit;
+}
+.au button {
+  cursor: pointer;
+}
+.au .au-p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 23px;
+  color: #4a5a4e;
+}
+.au .au-field {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #c9d3c3;
+  background: #ffffff;
+  padding: 0 12px;
+  font-size: 15px;
+  color: #13241a;
+}
+.au .au-field:focus {
+  outline: 3px solid #b9e27c;
+  border-color: #2e6b3f;
+}
+.au .au-lab {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+.au .au-btn {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.au .au-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.au .au-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.au .au-pri {
+  background: #2e6b3f;
+  color: #ffffff;
+}
+.au .au-pri:hover:not(:disabled) {
+  background: #255a34;
+  color: #ffffff;
+}
+.au .au-sec {
+  background: #ffffff;
+  color: #13241a;
+  border: 1px solid #c9d3c3;
+}
+.au .au-sec:hover:not(:disabled) {
+  border-color: #2e6b3f;
+}
+.au .au-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  color: #2e6b3f;
+  text-decoration: underline;
+}
+.au .au-link:disabled {
+  color: #8fa897;
+  text-decoration: none;
+  cursor: default;
+}
+.au .au-hint {
+  font-size: 13px;
+  font-weight: 400;
+  color: #4a5a4e;
+  line-height: 18px;
+}
+.au .au-fs {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.au .au-lg {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4a5a4e;
+  padding: 0;
+  margin-bottom: 2px;
+}
+.au .au-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.au .au-problem {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fbe9e6;
+  color: #6b231c;
+  font-size: 14px;
+  line-height: 20px;
+}
+.au .au-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #e7eff8;
+  color: #1d3a5c;
+  font-size: 14px;
+  line-height: 20px;
+}
+.au .au-spin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  animation: au-spin 0.8s linear infinite;
+}
+@keyframes au-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The checkbox drawn on the boards: a fern outline that fills with a tick. */
+.au .au-check {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  flex: none;
+  border-radius: 6px;
+  border: 2px solid #2e6b3f;
+  background: #ffffff center / 14px 14px no-repeat;
+  cursor: pointer;
+}
+.au .au-check:checked {
+  background-color: #2e6b3f;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E");
+}
+.au .au-agree {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #dce2d6;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Sign-in and registration: the forest panel on the left and the form on the right. */
+.au-split {
+  display: flex;
+}
+.au .au-aside {
+  flex: 0 0 46%;
+  padding: 48px 56px;
+  background: #0f2a1c;
+  color: #f4f5ef;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  overflow: hidden;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+}
+.au .au-rings {
+  position: absolute;
+  right: -160px;
+  bottom: -200px;
+  width: 640px;
+  height: 640px;
+  border-radius: 50%;
+  border: 64px solid rgba(185, 226, 124, 0.08);
+  pointer-events: none;
+}
+.au .au-rings::after {
+  content: "";
+  position: absolute;
+  inset: 80px;
+  border-radius: 50%;
+  border: 64px solid rgba(185, 226, 124, 0.06);
+}
+.au .au-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+.au .au-aside .au-brand {
+  color: #f4f5ef;
+}
+.au .au-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 48px 24px;
+}
+.au .au-panel {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  /* minmax(0, 1fr): a long country name must not widen the form past a phone screen. */
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+}
+.au .au-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.au .au-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5a4e;
+}
+.au .au-dot {
+  width: 28px;
+  height: 6px;
+  border-radius: 3px;
+  background: #dce2d6;
+}
+.au .au-dot[data-on] {
+  background: #2e6b3f;
+}
+.au .au-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+}
+.au .au-title {
+  margin: 0;
+  font-size: 34px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+/* Six boxes drawn over one real input, so paste, one-time-code fill and screen readers see one field. */
+.au .au-code {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+}
+.au .au-code input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  cursor: text;
+}
+.au .au-box {
+  width: 54px;
+  height: 64px;
+  border-radius: 14px;
+  border: 1px solid #c9d3c3;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #13241a;
+  font-variant-numeric: tabular-nums;
+}
+.au .au-code:focus-within .au-box[data-current] {
+  outline: 3px solid #b9e27c;
+  border-color: #2e6b3f;
+}
+.au .au-credit {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 18px;
+  color: #4a5a4e;
+}
+.au .au-credit a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.au code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 14px;
+  background: #eef1e8;
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .au-split {
+    flex-direction: column;
+  }
+  .au .au-aside {
+    position: relative;
+    min-height: 0;
+    max-height: none;
+    padding: 24px clamp(16px, 4vw, 32px) 28px;
+    gap: 18px;
+  }
+  .au .au-aside h1 {
+    font-size: 30px !important;
+  }
+  .au .au-aside-foot {
+    display: none;
+  }
+  .au .au-main {
+    padding: 32px clamp(16px, 4vw, 32px) 20px;
+  }
+}
+@media (max-width: 520px) {
+  .au .au-grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .au .au-box {
+    width: 44px;
+    height: 56px;
+    font-size: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .au * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

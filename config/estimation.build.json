@@ -1,0 +1,848 @@
+{
+  "schema_version": "1.0.0",
+  "default_engine": "ecologits",
+  "available_engines": [
+    "ecologits"
+  ],
+  "ecologits_fallback": {
+    "policy_version": "pro-reasoning-2026-10-14",
+    "review_date": "2026-10-14",
+    "provider_defaults": {
+      "openai": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        }
+      },
+      "anthropic": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-5-5",
+          "workload": "text"
+        }
+      },
+      "google_genai": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        }
+      }
+    },
+    "model_overrides": {
+      "chatgpt-agent": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "chatgpt-deep-research": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "chatgpt-gpt-5-3-mini": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-mini",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "chatgpt-gpt-5-5-mini": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-mini",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "chatgpt-gpt-astra-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-astra-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-codex-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.3-codex",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "chatgpt-gpt-luna-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-luna",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-luna-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-luna",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-mini-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-mini",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "chatgpt-gpt-nano-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-nano",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "chatgpt-gpt-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.5-pro",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "chatgpt-gpt-sol-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-sol-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-terra-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.6-terra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-gpt-terra-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.6-terra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "chatgpt-o3": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "chatgpt-o3-pro": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "chatgpt-voice-bidi": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "claude-fable-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-fable-5-1",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "claude-haiku-3": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-haiku-3-5": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-haiku-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "claude-opus-3": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-opus-4": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-opus-4-1": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-opus-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-5-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "claude-small-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "model_kind_stand_in"
+      },
+      "claude-sonnet-3-5": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-sonnet-3-7": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-sonnet-4": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "claude-sonnet-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-5-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "gemini-3-pro": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-pro-preview",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "gemini-flash-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-flash-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "gemini-flash-lite-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.5-flash-lite",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "gemini-flash-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "gemini-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-flash-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_kind_stand_in"
+      },
+      "gemini-omni": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        },
+        "basis": "model_not_in_library"
+      },
+      "gemini-omni-video": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google",
+          "model_name": "google/veo-3.1",
+          "workload": "video"
+        },
+        "basis": "model_not_in_library"
+      },
+      "gemini-pro-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3-pro-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "gemini-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-pro-preview",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "gemini-unnamed": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "notebooklm-default": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3-flash-preview",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-agentic-research": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-best": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-claude-fable-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-fable-5-1",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-claude-haiku-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-claude-opus-4": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-claude-opus-4-1": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-claude-opus-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-5-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-claude-small-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-haiku-4-5",
+          "workload": "text"
+        },
+        "basis": "model_kind_stand_in"
+      },
+      "perplexity-claude-sonnet-4": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-4-5",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-claude-sonnet-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-sonnet-5-5",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-comet": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-create-files": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-deep-research": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-deepseek": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-gemini-3-pro": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-pro-preview",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-gemini-flash-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-flash-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gemini-flash-lite-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.5-flash-lite",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gemini-flash-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gemini-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-flash-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_kind_stand_in"
+      },
+      "perplexity-gemini-pro-image-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3-pro-image-preview",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gemini-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-pro-preview",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-astra-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-astra-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-codex-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.3-codex",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gpt-luna-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-luna",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-luna-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-luna",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-mini-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-mini",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gpt-nano-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.4-nano",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gpt-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.5-pro",
+          "workload": "text"
+        },
+        "basis": "model_variant_stand_in"
+      },
+      "perplexity-gpt-sol-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-sol-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-terra-pro-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.6-terra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-gpt-terra-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.6-terra",
+          "workload": "text"
+        },
+        "basis": "model_family_stand_in"
+      },
+      "perplexity-grok": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-grok-4-6": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-kimi": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-kimi-k3": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-nemotron": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-nemotron-3-ultra": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-o3-pro": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-qwen": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-sonar-2": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "family_benchmark"
+      },
+      "perplexity-study": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "model_not_named"
+      },
+      "perplexity-unlisted-anthropic": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-5-5",
+          "workload": "text"
+        },
+        "basis": "model_not_in_library"
+      },
+      "perplexity-unlisted-google": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.8-flash",
+          "workload": "text"
+        },
+        "basis": "model_not_in_library"
+      },
+      "perplexity-video-unlisted": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "google",
+          "model_name": "google/veo-3.1",
+          "workload": "video"
+        },
+        "basis": "model_not_in_library"
+      }
+    },
+    "unknown_provider": {
+      "strategy": "upstream_provider_flagship",
+      "profile": {
+        "provider": "openai",
+        "model_name": "gpt-6.1-sol",
+        "workload": "text"
+      }
+    }
+  }
+}

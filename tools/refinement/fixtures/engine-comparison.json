@@ -1,0 +1,462 @@
+{
+  "format": "engine-comparison-fixtures-1",
+  "provenance": "synthetic_numeric_only",
+  "controlled_cases": [
+    {
+      "id": "shared-8b-baseline",
+      "profile_id": "llama-3.1-8b-h100-reference",
+      "output_tokens": "500",
+      "environment": "baseline-reference"
+    },
+    {
+      "id": "shared-70b-baseline",
+      "profile_id": "llama-3.1-70b-h100-reference",
+      "output_tokens": "500",
+      "environment": "baseline-reference"
+    },
+    {
+      "id": "shared-104b-baseline",
+      "profile_id": "command-r-plus-08-2024-h100-reference",
+      "output_tokens": "500",
+      "environment": "baseline-reference"
+    },
+    {
+      "id": "shared-111b-baseline",
+      "profile_id": "command-a-03-2025-h100-reference",
+      "output_tokens": "500",
+      "environment": "baseline-reference"
+    },
+    {
+      "id": "shared-111b-unity",
+      "profile_id": "command-a-03-2025-h100-reference",
+      "output_tokens": "500",
+      "environment": "synthetic-unity"
+    },
+    {
+      "id": "shared-zero",
+      "profile_id": "command-a-03-2025-h100-reference",
+      "output_tokens": "0",
+      "environment": "synthetic-unity"
+    },
+    {
+      "id": "shared-unsafe-count",
+      "profile_id": "command-a-03-2025-h100-reference",
+      "output_tokens": "9007199254740992",
+      "environment": "baseline-reference"
+    }
+  ],
+  "cases": [
+    {
+      "id": "direct-openai",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "direct-anthropic",
+      "family": "live",
+      "site": "claude",
+      "model_id": "claude-haiku-4-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "direct-google",
+      "family": "live",
+      "site": "gemini",
+      "model_id": "gemini-3-1-pro",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "unmapped-openai",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-unlisted",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "unknown-model",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": null,
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "unknown-underlying-provider",
+      "family": "live",
+      "site": "perplexity",
+      "model_id": "perplexity-unlisted",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "zero-output",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "0",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "missing-output",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": null,
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "unsafe-binary64-count",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "9007199254740992",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "int64-limit",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "9223372036854775807",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "no-execution",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "500",
+        "output_total": null,
+        "visible_thinking": null
+      },
+      "execution": "none"
+    },
+    {
+      "id": "numeric-language-en",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "numeric-language-de",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "de",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "numeric-language-hi",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "hi",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "numeric-language-zh",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "zh",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "numeric-language-mixed",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "mixed",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "inclusive-output-with-thinking",
+      "family": "live",
+      "site": "chatgpt",
+      "model_id": "chatgpt-gpt-5-5",
+      "language": "en",
+      "tokens": {
+        "input": "128",
+        "answer": "100",
+        "output_total": "300",
+        "visible_thinking": "200"
+      }
+    },
+    {
+      "id": "history-response",
+      "family": "history",
+      "site": "claude",
+      "model_id": "claude-haiku-4-5",
+      "language": "de",
+      "tokens": {
+        "input": null,
+        "answer": "320",
+        "output_total": null,
+        "visible_thinking": null
+      }
+    },
+    {
+      "id": "history-prompt",
+      "family": "history",
+      "site": "claude",
+      "model_id": "claude-haiku-4-5",
+      "language": "zh",
+      "tokens": {
+        "input": null,
+        "answer": "50",
+        "output_total": null,
+        "visible_thinking": null
+      },
+      "history_role": "prompt"
+    }
+  ],
+  "policy_variants": [
+    {
+      "id": "model-override",
+      "policy": {
+        "policy_version": "comparison-model-override",
+        "review_date": "2026-09-14",
+        "provider_defaults": {
+          "openai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "openai",
+              "model_name": "gpt-5.2-chat-latest",
+              "workload": "text"
+            }
+          },
+          "anthropic": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "anthropic",
+              "model_name": "claude-opus-4-8",
+              "workload": "text"
+            }
+          },
+          "google_genai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "google_genai",
+              "model_name": "gemini-3.1-pro-preview",
+              "workload": "text"
+            }
+          }
+        },
+        "model_overrides": {
+          "chatgpt-gpt-5-5": {
+            "strategy": "upstream_profile",
+            "profile": {
+              "provider": "openai",
+              "model_name": "gpt-5.5-pro",
+              "workload": "text"
+            },
+            "basis": "nearest_record"
+          }
+        },
+        "unknown_provider": {
+          "strategy": "original_engine"
+        }
+      }
+    },
+    {
+      "id": "original-model-override",
+      "policy": {
+        "policy_version": "comparison-original-model-override",
+        "review_date": "2026-09-14",
+        "provider_defaults": {
+          "openai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "openai",
+              "model_name": "gpt-5.2-chat-latest",
+              "workload": "text"
+            }
+          },
+          "anthropic": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "anthropic",
+              "model_name": "claude-opus-4-8",
+              "workload": "text"
+            }
+          },
+          "google_genai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "google_genai",
+              "model_name": "gemini-3.1-pro-preview",
+              "workload": "text"
+            }
+          }
+        },
+        "model_overrides": {
+          "chatgpt-gpt-5-5": {
+            "strategy": "original_engine"
+          }
+        },
+        "unknown_provider": {
+          "strategy": "original_engine"
+        }
+      }
+    },
+    {
+      "id": "unavailable-policy",
+      "policy": {
+        "policy_version": "comparison-unavailable-policy",
+        "review_date": "2026-09-14",
+        "provider_defaults": {
+          "openai": {
+            "strategy": "unavailable"
+          },
+          "anthropic": {
+            "strategy": "unavailable"
+          },
+          "google_genai": {
+            "strategy": "unavailable"
+          }
+        },
+        "model_overrides": {
+          "chatgpt-gpt-5-5": {
+            "strategy": "unavailable"
+          }
+        },
+        "unknown_provider": {
+          "strategy": "unavailable"
+        }
+      }
+    },
+    {
+      "id": "unsupported-video-profile",
+      "policy": {
+        "policy_version": "comparison-unsupported-video-profile",
+        "review_date": "2026-09-14",
+        "provider_defaults": {
+          "openai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "openai",
+              "model_name": "gpt-5.2-chat-latest",
+              "workload": "text"
+            }
+          },
+          "anthropic": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "anthropic",
+              "model_name": "claude-opus-4-8",
+              "workload": "text"
+            }
+          },
+          "google_genai": {
+            "strategy": "upstream_provider_flagship",
+            "profile": {
+              "provider": "google_genai",
+              "model_name": "gemini-3.1-pro-preview",
+              "workload": "text"
+            }
+          }
+        },
+        "model_overrides": {
+          "chatgpt-gpt-5-5": {
+            "strategy": "upstream_profile",
+            "profile": {
+              "provider": "openai",
+              "model_name": "openai/sora-2-pro",
+              "workload": "video"
+            },
+            "basis": "nearest_record"
+          }
+        },
+        "unknown_provider": {
+          "strategy": "original_engine"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "date": "2026-09-15",
+  "method": "Four authorized synthetic prompts in the Codex in-app browser. CDP Network.enable succeeded before sending each prompt. Request text was verified from observed POST bodies. Live identifiers were compared in memory with the same conversation's history after reload.",
+  "privacy": "Only booleans, field paths and synthetic markers are retained. No provider IDs, authentication data, private conversation content or authenticated response bodies are retained in this artifact.",
+  "native_extension_installed": false,
+  "cases": [
+    {
+      "site": "claude",
+      "marker": "IDENTITY-CHECK-CLAUDE-915",
+      "synthetic_request_verified": true,
+      "provider_completion_observed": true,
+      "completion_signal": "message_stop after message_delta stop_reason end_turn",
+      "history_answer_preserved": true,
+      "response_identity": {
+        "live_field": "message_start.message.uuid",
+        "history_field": "chat_messages[assistant].uuid",
+        "equal": true
+      },
+      "incorrect_prior_mapping": {
+        "live_field": "message_start.message.id",
+        "history_field": "chat_messages[assistant].uuid",
+        "equal": false
+      },
+      "prompt_parent_identity": {
+        "live_field": "message_start.message.parent_uuid",
+        "history_field": "chat_messages[human].uuid",
+        "equal": true
+      },
+      "request_identity": {
+        "live_field": "completion POST completion_request_id",
+        "history_field": "chat_messages[human].uuid",
+        "equal": false
+      },
+      "history_text_block_start_and_stop_present": true
+    },
+    {
+      "site": "chatgpt",
+      "marker": "IDENTITY-CHECK-CHATGPT-915",
+      "synthetic_request_verified": true,
+      "provider_completion_observed": true,
+      "completion_signal": "message_stream_complete",
+      "history_answer_preserved": true,
+      "response_identity": {
+        "live_field": "delta message.id where author.role=assistant and channel=final",
+        "history_field": "messages[assistant final].id",
+        "equal": true
+      },
+      "ordinary_send_prompt_identity": {
+        "live_field": "conversation POST messages[user].id",
+        "history_field": "messages[user].id",
+        "equal": true
+      },
+      "metadata_request_id_equals_submitted_user_id": false,
+      "history_update_time_greater_than_create_time": true
+    },
+    {
+      "site": "perplexity",
+      "marker": "IDENTITY-CHECK-PERPLEXITY-915",
+      "synthetic_request_verified": true,
+      "provider_completion_observed": true,
+      "completion_signal": "final=true, final_sse_message=true, text_completed=true, status=COMPLETED",
+      "history_answer_preserved": true,
+      "unique_live_answer_item": true,
+      "unique_history_answer_item": true,
+      "response_identity": {
+        "live_field": "final blocks[workflow_root].workflow_block.steps[].items[WORKFLOW_ITEM_TEXT answer].id",
+        "history_field": "entries[].blocks[workflow_root].workflow_block.steps[].items[WORKFLOW_ITEM_TEXT answer].id",
+        "equal": true
+      },
+      "request_identity": {
+        "live_field": "perplexity_ask POST params.frontend_uuid",
+        "history_field": "entries[].frontend_uuid",
+        "equal": true
+      },
+      "history_entry_updated_greater_than_created": true
+    },
+    {
+      "site": "gemini",
+      "marker": "IDENTITY-CHECK-GEMINI-915",
+      "synthetic_request_verified": true,
+      "history_prompt_preserved": true,
+      "history_answer_preserved": true,
+      "unique_live_candidate": true,
+      "unique_selected_history_candidate": true,
+      "response_identity": {
+        "live_field": "StreamGenerate decoded inner[4][0][0]",
+        "history_field": "hNvQHb turn[3][3] selected candidate and matching turn[3][0][] candidate[0]",
+        "equal": true
+      },
+      "turn_identity": {
+        "live_field": "StreamGenerate decoded inner[1][1]",
+        "history_field": "hNvQHb turn[0][1]",
+        "equal": true
+      },
+      "provider_completion_semantics_verified": false,
+      "historical_duration_verified": false
+    }
+  ],
+  "limitations": [
+    "One ordinary synthetic generation per provider. This establishes the observed field equalities, not all retry, edit, image, tool, branch or handoff modes.",
+    "Some browser event buffers reported truncation during reload; successful comparisons used individually retrieved response bodies for the exact synthetic conversations. No complete network-capture claim is made.",
+    "Claude and Perplexity completed streams were recovered from CDP buffered stream content. ChatGPT and Gemini used completed response-body retrieval.",
+    "Perplexity performed search despite the synthetic prompt requesting no search; entry timing remains workflow timing.",
+    "This was provider protocol inspection in the in-app browser. Native Chrome, Edge and Firefox extension installation, capture overhead and lifecycle release checks remain pending."
+  ]
+}

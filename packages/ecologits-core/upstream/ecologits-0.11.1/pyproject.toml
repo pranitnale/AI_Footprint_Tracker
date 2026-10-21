@@ -1,0 +1,222 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ecologits"
+version = "0.11.1"
+description = "EcoLogits tracks and estimates the energy consumption and environmental impacts of using generative AI models through APIs."
+authors = [
+    {name = "Samuel Rincé"},
+    {name = "Adrien Banse"},
+]
+license = "MPL-2.0"
+readme = "README.md"
+homepage = "https://ecologits.ai"
+repository = "https://github.com/mlco2/ecologits"
+documentation = "https://ecologits.ai"
+classifiers = [
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Topic :: Internet",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+requires-python = ">=3.10,<4"
+dependencies = [
+    "wrapt>=1.14.1,<2.0.0",
+    "pydantic>=1.9.0,<3",
+    "packaging>=24.2",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.66.0,<3.0.0"]
+mistralai = ["mistralai>=1.5.0,<2.0.0"]
+anthropic = ["anthropic>=0.45.2,<1.0.0"]
+cohere = ["cohere>=5.13.12,<6.0.0"]
+huggingface-hub = [
+    "huggingface-hub>=0.28.1,<2.0.0",
+    "tiktoken>=0.8.0,<0.13.0",
+    "minijinja>=2.7.0,<3.0.0",
+]
+google-genai = ["google-genai>=1.26.0,<2.0.0"]
+litellm = [
+    "litellm>=1.83.10,<2.0.0",
+    "aiohttp>=3.14.0",
+    "rapidfuzz>=3.12.1,<4.0.0",
+]
+opentelemetry = [
+    "opentelemetry-api>=1.32.1,<2.0.0",
+    "opentelemetry-sdk>=1.32.1,<2.0.0",
+    "opentelemetry-exporter-otlp>=1.32.1,<2.0.0",
+    "tiktoken>=0.8.0,<0.13.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pytest>=7.2.0",
+    "pytest-recording>=0.13.1",
+    "vcrpy>=8.2.1",
+    "pytest-dotenv>=0.5.2",
+    "pytest-asyncio>=0.23.6",
+    "numpy>=2.0.0",
+    "toml>=0.10.2",
+    "mypy>=1.13.0",
+    "setuptools>=80.9.0",
+]
+docs = [
+    "mkdocs>=1.5.3,<2.0.0",
+    "mkdocs-material[imaging]>=9.7.2",
+    "mkdocstrings[python]>=0.25.0",
+    "mkdocs-gen-files>=0.5.0",
+    "mkdocs-autorefs>=1.0.1",
+    "mkdocs-literate-nav>=0.6.1",
+    "mike>=2.1.2",
+]
+
+[tool.uv]
+exclude-newer = "2 days"
+
+[pytest]
+env_files = [".env"]
+
+[tool.mypy]
+exclude = [
+    "ecologits/impacts/*",
+    "ecologits/tracers/*"
+]
+
+[[tool.mypy.overrides]]
+module = "docs.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+
+[tool.ruff]
+select = [
+    "A",
+    "ANN",
+    "ARG",
+    "B",
+    "C",
+    "COM",
+    "C90",
+    "E",
+    "ERA",
+    "F",
+    "I",
+    "N",
+    "PGH",
+    "PL",
+    "PLE",
+    "PLR",
+    "PLW",
+    "PT",
+    "PTH",
+    "Q",
+    "RET",
+    "RUF",
+    "SLF",
+    "SIM",
+    "TID",
+    "TRY",
+    "UP",
+    "W",
+    "YTT"
+]
+
+ignore = [
+    "A003",
+    "ANN401",
+    "N805",
+    "N818",
+    "PLR0913",
+    "RET504",
+    "RET505",
+    "COM812",
+    "PTH",
+    "TRY003"
+]
+
+fixable = [
+    "A",
+    "ANN",
+    "ARG",
+    "B",
+    "C",
+    "COM",
+    "C90",
+    "E",
+    "ERA",
+    "F",
+    "I",
+    "PGH",
+    "PL",
+    "PLE",
+    "PLR",
+    "PLW",
+    "PT",
+    "PTH",
+    "Q",
+    "RET",
+    "RUF",
+    "SLF",
+    "SIM",
+    "TID",
+    "TRY",
+    "UP",
+    "W",
+    "YTT"
+]
+unfixable = []
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "venv",
+    "pages",
+    "tests"
+]
+
+line-length = 120
+
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+target-version = "py39"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.pydocstyle]
+convention = "google"

@@ -1,0 +1,10 @@
+{
+  "catalog_schema": "1",
+  "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+  "converter_version": "2",
+  "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+  "core_version": "0.11.1-port.2",
+  "requested_git_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+  "upstream_version": "0.11.2"
+}

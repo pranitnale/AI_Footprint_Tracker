@@ -1,0 +1,859 @@
+{
+  "distribution": "retained-source-subset",
+  "excluded_files": {
+    ".github/ISSUE_TEMPLATE/bug_report.yml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "eca5b277232168ffbf495cb1b508acd4e04b7c491df889b4c73613f98e912673",
+      "size": 888
+    },
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "aba6613ded7388672b949dc7050c5b8619bb5189dba236ab7568a265d7b9eef4",
+      "size": 225
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.yml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "9cde4b0cce14d6e4cfcf46ac0c90e2ee2dcce4e7264daf10a06f0922f0fa923d",
+      "size": 698
+    },
+    ".github/PULL_REQUEST_TEMPLATE/pull_request_template.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "38ae9dabb74a61813c38faa595ae0ea38f1d3033cd4a2fc024920d2db77e2c48",
+      "size": 720
+    },
+    ".github/workflows/pre-commit.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "5e34a386ba384bec7cc2b201b5a31f82e1d0c9be2f840e9bef7d1d80770c9513",
+      "size": 760
+    },
+    ".github/workflows/publish-docs.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "c911092302fa5806f85ca223856225192ff925c0b6a710b398910145baaf7ad1",
+      "size": 1419
+    },
+    ".github/workflows/publish-pypi.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "94248b9d3be327849981bc4458b9483281e3f03ae25253bad886c0dcd4f31d67",
+      "size": 461
+    },
+    ".github/workflows/publish-testpypi.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "cb29b6461bf8a2ec9a8974a0d7e1a259875ca74ecc504843d7d22dc815665cf1",
+      "size": 525
+    },
+    ".github/workflows/pytest.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "18e21eed427d78d0d717087a65f210ef04d8d77978d8e698532303c292b61bc1",
+      "size": 765
+    },
+    ".gitignore": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "33f97d6e400077a5e06f5e088d37ca788bd98f30ea8fc0d1bd491577b662205e",
+      "size": 2824
+    },
+    ".pre-commit-config.yaml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "d4160c57cfe05a729bff1e1ceccab0fac2ac7a44ffdbada93fae257dcdeb79db",
+      "size": 661
+    },
+    "Makefile": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "8422dda216ac2fd61624b7c26a566107e6892109565db544623289b49289a4ca",
+      "size": 318
+    },
+    "RELEASE.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b7e30e1b639dfa0668200f300bc41f9ae68fbb125f9c0bb14803fe690d770410",
+      "size": 1428
+    },
+    "docs/_abbreviations": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "3b68b9c35d9bdf595d95d3ddc1d7cb77cd53d11797861bde722b3c1724e7a695",
+      "size": 482
+    },
+    "docs/assets/badges/contributor.json": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "8e773e32ab431c4b433fd8fcaff40e9532e856d11049c2328bc6b01e0961df5d",
+      "size": 997
+    },
+    "docs/assets/badges/enabled.json": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "d3b270b9f5a8b1b99146ff729d1a36c75cb2d169608d03f242121c27e70c9f0d",
+      "size": 993
+    },
+    "docs/assets/badges/sponsor.json": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "df3f9f1e780fc81d7166e93c70fa7d19f7238af6896d971ea251e48b380feb64",
+      "size": 993
+    },
+    "docs/assets/calculator_screenshot.png": {
+      "reason": "documentation-image",
+      "sha256": "5a09d05d8a26a485cacd480e8a49d921a25381742adf8aa0b8521818160354c5",
+      "size": 53757
+    },
+    "docs/assets/leaf.svg": {
+      "reason": "documentation-image",
+      "sha256": "377954875c72588d4d3978d18f6e0b4dba5b791bee8af6f15fb9ac86d785a3c1",
+      "size": 834
+    },
+    "docs/assets/logo_calculator.png": {
+      "reason": "documentation-image",
+      "sha256": "8e66421d7eca497ee41e84e13efa3a942f0966218a440d752fec1927563c0835",
+      "size": 41210
+    },
+    "docs/assets/logo_dark.png": {
+      "reason": "documentation-image",
+      "sha256": "01c3b164cc3508735fcaac800b65c30bdb07a93c32fa583b052da74b9a6f8f22",
+      "size": 22125
+    },
+    "docs/assets/logo_light.png": {
+      "reason": "documentation-image",
+      "sha256": "e3c3cb5def4206d3bcdfb5ac024bb3755fe6db8e95c9a662d4b6bfb22d50e44d",
+      "size": 27590
+    },
+    "docs/assets/methodology/llm/figure_boundaries.png": {
+      "reason": "documentation-image",
+      "sha256": "c2bff4664b86a2f93833fab5c0124ee9f8301a25aa656cf3d81cedfffc6e51fa",
+      "size": 237416
+    },
+    "docs/assets/methodology/llm/figure_energy.png": {
+      "reason": "documentation-image",
+      "sha256": "a6677a0cdaf6b2cf60720def10d74fb98140bee01a5b0ca8e51d65a98cc009f1",
+      "size": 79505
+    },
+    "docs/assets/methodology/llm/figure_latency.png": {
+      "reason": "documentation-image",
+      "sha256": "8ccf5f31dd2365ad3c970f72380ecb11b984deae637e2dd9c39990847ae39570",
+      "size": 69730
+    },
+    "docs/assets/posts/2025_11_methodology_update/plot.png": {
+      "reason": "documentation-image",
+      "sha256": "7c5971a47d906bbf39aaeb4a3e7d873c7b836f03a419c4fa694292ebe43258f2",
+      "size": 106016
+    },
+    "docs/assets/posts/2026_06_video_impacts/plot.jpg": {
+      "reason": "documentation-image",
+      "sha256": "f20dae8d9b1c8177ec775dc967b6fc624290d06596d267da859941659dc6f130",
+      "size": 66790
+    },
+    "docs/assets/sponsors/avanade.png": {
+      "reason": "documentation-image",
+      "sha256": "e504ea8f3722f6b02e0d52a6617079309902777d241c8eba296f03db1082c370",
+      "size": 8014
+    },
+    "docs/assets/sponsors/ministere_culture.png": {
+      "reason": "documentation-image",
+      "sha256": "81011868d9415d2c1459763d412b66bf506b2d797ae946c5cb5dd0de4b259a59",
+      "size": 21485
+    },
+    "docs/assets/sponsors/resilio.png": {
+      "reason": "documentation-image",
+      "sha256": "54ce4b9b259284ba62ec93d9c7d98d24481af5ed95a712854f0216d1fed18b6f",
+      "size": 4627
+    },
+    "docs/assets/sponsors/sopht.png": {
+      "reason": "documentation-image",
+      "sha256": "81f1ce6c612f0704af8752985ddfc86aa5c16ff8b9b103a8404a5306b9005b5d",
+      "size": 4103
+    },
+    "docs/assets/sponsors/terra_cognita.png": {
+      "reason": "documentation-image",
+      "sha256": "7fcad0ff6501cf41f55b76042f45b9a6203d6e39b4c88525149b3e989b0d7238",
+      "size": 5565
+    },
+    "docs/assets/sponsors/theodo.png": {
+      "reason": "documentation-image",
+      "sha256": "5ad560d8a61d0eb4f9962772bafd7c638b6fbf6747a8235fd7198f63acf62873",
+      "size": 4013
+    },
+    "docs/blog/.authors.yml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0996022136c177d7a9443a71999190b9315b8a90041260490d56572bea41fe56",
+      "size": 551
+    },
+    "docs/blog/index.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "809747d4b311fc0f5de1cc670fd27cb636ad54cdb21f28c441bf929e7f9eaee6",
+      "size": 7
+    },
+    "docs/blog/posts/2025_11_methodology_update.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "a266cb86ac751901e0bd5dffb2bdbe8163379789886cfc61c738c891e5acb025",
+      "size": 13316
+    },
+    "docs/blog/posts/2026_01_joining_codecarbon.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0e70b345cb463251d31cc1f95f4083047b18713a3dfbbebe839292457450414d",
+      "size": 1361
+    },
+    "docs/blog/posts/2026_03_improve_latency_estimation.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "d00cc02a92e939638ac26991d03489448884cbad8a7ce066d0ff5d26cacb34f6",
+      "size": 2125
+    },
+    "docs/blog/posts/2026_06_video_impacts.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "d435a7979e523acbf3566b2b6075af45a065a80b9d01e3e247bdb455becca0ec",
+      "size": 5525
+    },
+    "docs/contributing.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "7cfa4c1fc1840516c4dfe2d62c0cebefba0ed0ffa54951580479afdccf9f5d6b",
+      "size": 4672
+    },
+    "docs/css/extra.css": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "275dd852a68606387ff68efe398788b96872935f61df02cc3c9a7290581c1034",
+      "size": 6298
+    },
+    "docs/faq.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "31fec60493a446fa4a7ad8022a2199a82ff48bad06864ee21a009d8d205c4cbb",
+      "size": 5549
+    },
+    "docs/get_started.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "fb7ba2f556999e7d9042959d49ad5dc1bcb7e72f7d31a6974360755a1ea79e9a",
+      "size": 9029
+    },
+    "docs/index.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "8bae74bd9c2778a73d83a1a71badd4ee6f1e880429f5cffa8911eab09bf5135f",
+      "size": 12546
+    },
+    "docs/js/clipboard_copy.js": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "455c3a67c3381f7e02cc41cecf5475043a3375c7fa37007be1af62046690037d",
+      "size": 1053
+    },
+    "docs/js/installer.js": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "7d4927636a0f573b49a8556e025d3b94cdc5b080f69fb4114d48b6412801b7c6",
+      "size": 745
+    },
+    "docs/js/katex.js": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "6f95f1847cf831f0e7393ea90843128161736f13246d9b84c1ee745e5594c956",
+      "size": 308
+    },
+    "docs/methodology/index.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "484c28d07f65c9b7c381057192a6aa324c1d625c14af2dc5dcc246907fdbb022",
+      "size": 4484
+    },
+    "docs/methodology/llm_inference.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "43848120806d4154051ac219eebcfc9a77f578591af896e5275fcca4242c63bd",
+      "size": 25404
+    },
+    "docs/methodology/proprietary_models.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "5a4331e56bb7846ae7bfa8895258856dd1f780cd5a9d9d7d2f8a3c4fb1f621db",
+      "size": 4692
+    },
+    "docs/methodology/video_generation.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0a1438ee928a1a7177aa93b37187bd425cc057447f652e8a099ad33c05e7470d",
+      "size": 11368
+    },
+    "docs/scripts/gen_references.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b2a5f4e6e58ba37f58eb67ec97d788874cf0d24031a48b05a1ff834665b1b7b7",
+      "size": 831
+    },
+    "docs/theme/announce.html": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "a70c186722ed5cd4b516adcee4d0bec684969cf97c9d8b6c83172ca30c4bbcb8",
+      "size": 152
+    },
+    "docs/theme/main.html": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "bff6466baba882661b486203a3a89d8a2a3988c9c3123bc0b75575b08901136d",
+      "size": 166
+    },
+    "docs/tutorial/impacts.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "2ee139965c83236819934cc128c51f5af217660c674a44df5f913cdc88c0b28e",
+      "size": 10311
+    },
+    "docs/tutorial/index.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "e8eb30b4c531086c500675845fdf3d9f88f1d535612d94638889a4bb735da715",
+      "size": 3577
+    },
+    "docs/tutorial/opentelemetry.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "a082a750dcb652cf07c07ac9b3c26506ba161d30b065fc696cee771d47ec555e",
+      "size": 4116
+    },
+    "docs/tutorial/providers.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "53acc8f0bac1f9d40b2d94f56d73aa6174eaf505f814dab32facb97078e3f920",
+      "size": 4459
+    },
+    "docs/tutorial/providers/anthropic.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "4ee428ec7e294a423afba02391ddc24f4af6f88d04bcc05de748ee2925e0f4ce",
+      "size": 3884
+    },
+    "docs/tutorial/providers/bytedance.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "06b16821bca8c20044a8b9e2fd7994208a5dd4d4bac0ddbbc6571415d825d342",
+      "size": 1112
+    },
+    "docs/tutorial/providers/cohere.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "5499daeb1057c595c4ceddc7f94c24772045957aaf496bb606e2916272e16ef7",
+      "size": 3498
+    },
+    "docs/tutorial/providers/google_genai.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "32e0c6d65c8d7585ca7b66fdbc70213ec98ceaec1601b6fc712db482678ddfa1",
+      "size": 5861
+    },
+    "docs/tutorial/providers/huggingface_hub.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "f767a982b95a1f129b5e23394e8a9876d15d8f37216b303acd096cf0d78f4bf0",
+      "size": 4065
+    },
+    "docs/tutorial/providers/klingai.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "6581583675f6437d7189bd1be66146ffd599893bcbfebaa9bfa73e07e2e6f8c5",
+      "size": 1074
+    },
+    "docs/tutorial/providers/litellm.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "40fff297e3c0d8431b9bf293cbb019e58b5def63d25e4f9ac1fec5e2996d3910",
+      "size": 3785
+    },
+    "docs/tutorial/providers/mistralai.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "7e789a371a7f744c2c8f0b969c7e50128a7da062e41220bebdf1eff5132028f3",
+      "size": 3957
+    },
+    "docs/tutorial/providers/openai.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "e233845b6a9121b12adc580034ec730dbd54bec283183d3ad94796ff610c9393",
+      "size": 8027
+    },
+    "docs/tutorial/providers/runway.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "7254737dc6c4a90417c45d7780f923e2e2ef4dc63819509b3b56f792c511428c",
+      "size": 1116
+    },
+    "docs/tutorial/video_generation.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "6ce57cf8a991591e93d21e5ab367cca44abf605535c897f145b2093a22bc86d2",
+      "size": 6799
+    },
+    "docs/tutorial/warnings_and_errors.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "fdc456014e7bd8acec7d5f8347f6d1cadf98cd499d1cf32d5a2082c98d2eaa39",
+      "size": 3397
+    },
+    "docs/why.md": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "c3e0ef372e9f0967c03236600f8c9aabbbdbe57aca6e9e7c7c7625079567a76d",
+      "size": 3257
+    },
+    "ecologits/py.typed": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "ecologits/tracers/anthropic_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "748c32bd503f338ad57fc964f90a5a460537d0e6e418ccab7cb91578c5805b14",
+      "size": 12078
+    },
+    "ecologits/tracers/cohere_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "297243be3cbaed33d1b117e76aa74916a78e7cc1d0f53319997573615f1ddf1d",
+      "size": 9319
+    },
+    "ecologits/tracers/google_genai_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "91dacd014171c0447ac58a6ccdee3ae3cfae542c693113488b6f5e2cb4b8bf03",
+      "size": 9911
+    },
+    "ecologits/tracers/huggingface_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "11a7eac61de94d53fbf273e8892c0ef212b7fe02319a0db1613dd18b1f208f89",
+      "size": 10253
+    },
+    "ecologits/tracers/litellm_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "dafd516ffe647e00a70cb9d9b23b9dfdfe6019a8e8371e19feee5175d3506e2d",
+      "size": 10001
+    },
+    "ecologits/tracers/mistralai_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "f3cbdecd04cbbe74ceceec7a03e71fb0c6fd4ff83a3cc2c9ed2b7d3d5b00dbc1",
+      "size": 8968
+    },
+    "ecologits/tracers/openai_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "9de8e95573e460d7d291b835cb7afdc3d8fb7bd681db8c351ba5fab406a17e5a",
+      "size": 16813
+    },
+    "ecologits/utils/opentelemetry.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "ec4a312ab027cb5886035e3ff6bd1035a417fea5062e74823d7d98104b8e7c76",
+      "size": 6181
+    },
+    "mkdocs.yml": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "8c8062d924134c1ca26f3d547e3a88a463ec17e4d16149ba75290b512c92a343",
+      "size": 4307
+    },
+    "tests/__init__.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/cassettes/test_anthropic/test_anthropic_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "c6420bb7cd4d824cae296d34cff5de37c3e208f75d703039fd8fcb456deaedf9",
+      "size": 2893
+    },
+    "tests/cassettes/test_anthropic/test_anthropic_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "e38aa483ca440ef050ba84d6a2bc7c3db07b339c6b480074cba04f3d123ddd9e",
+      "size": 4493
+    },
+    "tests/cassettes/test_anthropic/test_anthropic_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "fee882ce1a9fdbb606f1fd64eef15f9a62957d34b646eedbd7684242f293eff9",
+      "size": 2882
+    },
+    "tests/cassettes/test_anthropic/test_anthropic_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "2b15354ae7c51c56f53c32a876ab136d6b715ba0e508c52cd8f72992ad2d5dfb",
+      "size": 4422
+    },
+    "tests/cassettes/test_cohere/test_cohere_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "f4be0b4d1dcbbdf9ca16fd07b2e51b3c73693b827c79e94a5e695111758d1c68",
+      "size": 2173
+    },
+    "tests/cassettes/test_cohere/test_cohere_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "d531a366bdcfa3a815569870e573793a68937d70465adfedd24c6fd586689181",
+      "size": 10840
+    },
+    "tests/cassettes/test_cohere/test_cohere_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "8e67c16b7f3930988ee54ac5e2f8dca8f851df528e56f8bd2bb1e214402b848d",
+      "size": 2174
+    },
+    "tests/cassettes/test_cohere/test_cohere_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "d794b61271959c273a0c205663d1a3648f91720c78a2b75269adc8534437315e",
+      "size": 10883
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "eac05c166ef3ebd741f6bc2cf29d100bd486641014c26fa072d62838ea9cfcbc",
+      "size": 1793
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_async_content.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "3d67246bfd7f5cdbeb16c5dfe410e4776a718be99a31b7643641213fb5b6d8fb",
+      "size": 1793
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "2a98279f06e1586f86acf04cb246da98da397d31070f8c16c91e5ce1db3fa580",
+      "size": 1788
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_chat_stream.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "5cb70f3f3ed1ac87b1674cb8ead75346d637bee4c0b1a39ecbeedb51ed6c6021",
+      "size": 2190
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_content.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "21f34b010affbdf360f4ca8bcd3caf1ec17779efdde04989af03a9848a0caff5",
+      "size": 1788
+    },
+    "tests/cassettes/test_google_genai/test_google_genai_content_stream.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "931c61218e46f0fd9cec31fbf85dd68b056f45db4cd428d5f50d351fbf99e114",
+      "size": 2181
+    },
+    "tests/cassettes/test_huggingface_hub/test_huggingface_hub_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "0c54a994154abd1b74a44aa1185032724dc435d301e426f1c6d1e9c33fd2648d",
+      "size": 1207
+    },
+    "tests/cassettes/test_huggingface_hub/test_huggingface_hub_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "6691dd37fbf052864c564d8e1b692f3e31b469008a2f3dd60b408ab16cfac6ac",
+      "size": 4919
+    },
+    "tests/cassettes/test_huggingface_hub/test_huggingface_hub_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "c5ae6b4345e25af922c634be62e3d5fb64d4ce39cd8c77322250449c5a346a0a",
+      "size": 2003
+    },
+    "tests/cassettes/test_huggingface_hub/test_huggingface_hub_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "7d6c23b80f0a904adafad545039731ed0519e7c40244f8aeea0dd6356b5d2f86",
+      "size": 5539
+    },
+    "tests/cassettes/test_litellm/test_litellm_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "e25f6a50f9d916a3faf43a318f8be2415a1818a002a15528cd8a722eae9c88f7",
+      "size": 7212
+    },
+    "tests/cassettes/test_litellm/test_litellm_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "fae2c2d3a45184b20779f2977ef6bb0556032cce4061c6c42cbff4d27607e025",
+      "size": 2771
+    },
+    "tests/cassettes/test_litellm/test_litellm_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "5d7534d9c77ff486f3a8f35dc98b030c33e830a00b140907881aa97232027f39",
+      "size": 5048
+    },
+    "tests/cassettes/test_mistralai/test_mistralai_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "0a448af66205a14f1917b56568c7a9318c3df8507867f1ae4474f03dba0d22c4",
+      "size": 2679
+    },
+    "tests/cassettes/test_mistralai/test_mistralai_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "d4eada4e1bd7f08565692bd6aa75bed580b9a0eeedb48329412d12edaf2071f5",
+      "size": 7698
+    },
+    "tests/cassettes/test_mistralai/test_mistralai_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "f2c67d89052aba7468cee14658af31b3b2c973d75474be1f4646773a308539f5",
+      "size": 2680
+    },
+    "tests/cassettes/test_mistralai/test_mistralai_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "ba592a5ef801f14c8cf977afd7ca70745d83a8492de1c431315444029bfe7f3a",
+      "size": 4594
+    },
+    "tests/cassettes/test_openai/test_azure_openai_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "d4b094471a610448f0007cb9e603efbefad9ccd6fce5ae297b7eb4fc8e93b4e9",
+      "size": 3084
+    },
+    "tests/cassettes/test_openai/test_azure_openai_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "9b2a50d64ea32b315a5362eb957bc1384361fe4eedf662eae4888557be6b7e10",
+      "size": 7358
+    },
+    "tests/cassettes/test_openai/test_azure_openai_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "4fa9db529d6c2bb4e285497d6ba22efc9364ad5085f372a9287a77f0f58a7f33",
+      "size": 3073
+    },
+    "tests/cassettes/test_openai/test_azure_openai_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "a0fd352dd638f7dfbea286c476d5bcb0c6363718a8cca356f23a929f7f3b1024",
+      "size": 7347
+    },
+    "tests/cassettes/test_openai/test_openai_async_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "79fd8491f8a3acf85c9bc8c94eafb972887ff08439fe07b62f2013dca44b25fd",
+      "size": 3563
+    },
+    "tests/cassettes/test_openai/test_openai_async_responses.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "1f1aa1084728d2cfda1db4bda40f4b7e4e976f080bbcd9f64dca7275337b1c16",
+      "size": 3765
+    },
+    "tests/cassettes/test_openai/test_openai_async_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "fb7c78112af280d0e493714774dfdeef2468f596584d16e02de68d5c2d54fe03",
+      "size": 32207
+    },
+    "tests/cassettes/test_openai/test_openai_async_stream_chat_with_options.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "c95f855ae87961a8b19f4b5ec1f7ed53b5b5c935935e2994828b4a4f9135ef2e",
+      "size": 63238
+    },
+    "tests/cassettes/test_openai/test_openai_async_stream_responses.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "577f7162cef678dab7fe2afe3f45a773245211a3e502e3b2de24a2fd654b53ab",
+      "size": 35141
+    },
+    "tests/cassettes/test_openai/test_openai_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "c278ec2575f66e7f9608095f31fb1b29ff03d8c7b0f9858bb6ec8d968afc6a19",
+      "size": 3483
+    },
+    "tests/cassettes/test_openai/test_openai_responses.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "38b78946e04d5de7e3d0d2454ece9ad933bdf7a4dc8f48f5b26891b92e3b6b1f",
+      "size": 3835
+    },
+    "tests/cassettes/test_openai/test_openai_stream_chat.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "8c3f906814ca7794682c9139c88c25092d4449838d20bc79e906635dbda90e2f",
+      "size": 63299
+    },
+    "tests/cassettes/test_openai/test_openai_stream_chat_with_options.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "de5c1f93b8cb6000f1b231bf328d38b9401b8fbfcca232e7c57d51c4a9e16f63",
+      "size": 57439
+    },
+    "tests/cassettes/test_openai/test_openai_stream_responses.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "dca86309eb68bc3c0cc119c3d7c2a881e6dace823ff465ade67115f65b612ed2",
+      "size": 42660
+    },
+    "tests/cassettes/test_tracer/test_double_init.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "6db0a47db8ce171ffe9c61c08b674f8df9f87015ee112904e093ceb9399045bc",
+      "size": 2935
+    },
+    "tests/cassettes/test_tracer/test_init_with_different_mixes.yaml": {
+      "reason": "sdk-cassette",
+      "sha256": "542f70abd0dc9ad7630a4393cfde9c0294a9f35d6686e66320b58e928ca73c0d",
+      "size": 9821
+    },
+    "tests/conftest.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "a5f8b311ebd5307fb666a87421242b700abc6d9a4517c352f9d441f754c2c7d0",
+      "size": 1410
+    },
+    "tests/test_anthropic.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b19d193ea44005b89aec71b5db5c9b0afb8cf27c1a71897a134cfec8351b4947",
+      "size": 1702
+    },
+    "tests/test_cohere.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "319167a46bed0264a466cf37c7d056b736bff23f906503a3bfc3190f0baee5b4",
+      "size": 1523
+    },
+    "tests/test_electricity_mix_repository.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "c687656a0f45bdf0427b511458d5f921ea45efe0b0956bc4d2603ae20ba98b26",
+      "size": 2299
+    },
+    "tests/test_google_genai.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0d6c2ee31e101a75e9d542ce9cd6cb220003acccba9587aac93e963bdfe75d78",
+      "size": 3058
+    },
+    "tests/test_huggingface_hub.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0b8effca4d797680c4e94fe5e36e7c33eaaf27c10393c3ee96661b24652269cd",
+      "size": 1667
+    },
+    "tests/test_litellm.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "cae1080c2cf1f3a9aad05372121220925b495d11560a511ec46fe8ba6d3aeccd",
+      "size": 2121
+    },
+    "tests/test_llm_impacts.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "5efcfa4e1d1bb56fca387fe50b1f3528a880a897bdfd03993075ff8658d6bc3b",
+      "size": 7222
+    },
+    "tests/test_logger.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "0208e5fae1a5a71c8159b017f759cfae671df5ed17f01989dca09631a44b5379",
+      "size": 953
+    },
+    "tests/test_mistralai.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "4fb3b60a3145eb9fa6f93dd002ed42eb4b08d208cbe3f228bc891c30bd722f10",
+      "size": 2002
+    },
+    "tests/test_model_repository.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "fdd7166f3503eee62b678b7afe72f65daa4a66c69f9c3319571649ce855d908f",
+      "size": 1561
+    },
+    "tests/test_modeling_impacts.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "e951f89dd7bf2e9ef35f1bf382b32c7673304ace89df8214f1c2ff2b6a52bde1",
+      "size": 5600
+    },
+    "tests/test_openai.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b23f9ec717910af8d5c5e390bda7967d95266874f9c4dc0caf92eebc47919819",
+      "size": 5443
+    },
+    "tests/test_opentelemetry.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "da2b5f06a7e872bd9c1aae04078c7395920704872eaff3a35f26c0b07bed39aa",
+      "size": 16199
+    },
+    "tests/test_range_value.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "a7e1b9ba95f00c201541950232ba0311bfcba3b0cfe2de43a17f22df89716b5b",
+      "size": 3710
+    },
+    "tests/test_status_messages.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "d5023b396c36e5564df50d66627bccaee50555f9f86ebf736b0b4721f10916cc",
+      "size": 2817
+    },
+    "tests/test_tracer.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "4c6cc7dd222bafb85e2c7b13b04ffe5a36bcaea9cef367ee0a1c2ef4581f294b",
+      "size": 3171
+    },
+    "tests/test_version.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b4f45b51a78d191b21caf45544bf34b163fd1aad1eaf58282370e460b9f3d32f",
+      "size": 448
+    },
+    "tests/test_video_estimations.py": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "b2e8baff16aa79a7233d9ef3bdf715bca7ad961988f5580cbcffb0dbd662eb6a",
+      "size": 5759
+    },
+    "uv.lock": {
+      "reason": "outside-core-oracle-surface",
+      "sha256": "397b4e77f092e2b489e2c005ea4497a56474ce8669ba17047383d9e108e74254",
+      "size": 827270
+    }
+  },
+  "original_file_count": 168,
+  "private_preservation": "The complete selected source and package archives are preserved in the developer Git metadata directory. Public build and test verification use only this retained manifest and the locked package environment.",
+  "requested_git_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "retained_files": {
+    "CITATION.cff": {
+      "reason": "license-citation-metadata",
+      "sha256": "537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf",
+      "size": 1002
+    },
+    "LICENSE": {
+      "reason": "license-citation-metadata",
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+      "size": 16725
+    },
+    "README.md": {
+      "reason": "license-citation-metadata",
+      "sha256": "ba109db1a04305a9758f3e820afccc270b033b1d48905c5dc4dc8cf9f04ebe5a",
+      "size": 5138
+    },
+    "ecologits/__init__.py": {
+      "reason": "core-oracle-source",
+      "sha256": "2c038b9bd5a47a2126bb3257a7fb42d7ca20978f1fa43a871c2899da8ad7c227",
+      "size": 107
+    },
+    "ecologits/_ecologits.py": {
+      "reason": "core-oracle-source",
+      "sha256": "dff27b28c69dfa1d775d00e8030f7edee05029b4818b5233c132867f27652386",
+      "size": 7760
+    },
+    "ecologits/data/electricity_mixes.json": {
+      "reason": "core-data",
+      "sha256": "993c9b4bc8aede3e8aa6a32af9dbe705a8a7d22d495c4ae36fe5861ff931394f",
+      "size": 56492
+    },
+    "ecologits/data/models.json": {
+      "reason": "core-data",
+      "sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0",
+      "size": 202764
+    },
+    "ecologits/data/video_models.json": {
+      "reason": "core-data",
+      "sha256": "809f02e0beea9413b452c28b97e1e1ebd47a5cd89f8a0dd1b734998a38ef7bef",
+      "size": 14061
+    },
+    "ecologits/electricity_mix_repository.py": {
+      "reason": "core-oracle-source",
+      "sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "size": 2937
+    },
+    "ecologits/estimations/__init__.py": {
+      "reason": "core-oracle-source",
+      "sha256": "ec372fcfa377da01559d373f13394317cc0b03b648b20e1808716025263d7a85",
+      "size": 68
+    },
+    "ecologits/estimations/video.py": {
+      "reason": "core-oracle-source",
+      "sha256": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+      "size": 7293
+    },
+    "ecologits/exceptions.py": {
+      "reason": "core-oracle-source",
+      "sha256": "516cdc714c98a8a426dcb542cca34caca9225d3a94135b409d9b2980afcd0f2f",
+      "size": 235
+    },
+    "ecologits/impacts/__init__.py": {
+      "reason": "core-oracle-source",
+      "sha256": "e4ef9abef7506805932f034e810dc7d715c3d39e0f6012110f5067e6cc181d2b",
+      "size": 123
+    },
+    "ecologits/impacts/dag.py": {
+      "reason": "core-oracle-source",
+      "sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "size": 1585
+    },
+    "ecologits/impacts/llm.py": {
+      "reason": "core-oracle-source",
+      "sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "size": 23623
+    },
+    "ecologits/impacts/modeling.py": {
+      "reason": "core-oracle-source",
+      "sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "size": 5941
+    },
+    "ecologits/impacts/video.py": {
+      "reason": "core-oracle-source",
+      "sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "size": 11709
+    },
+    "ecologits/log.py": {
+      "reason": "core-oracle-source",
+      "sha256": "1813129df10ae98809902592679f6f369fb9b0b1d559131b6f23192ca57407d2",
+      "size": 1342
+    },
+    "ecologits/model_repository.py": {
+      "reason": "core-oracle-source",
+      "sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "size": 4788
+    },
+    "ecologits/status_messages.py": {
+      "reason": "core-oracle-source",
+      "sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "size": 3219
+    },
+    "ecologits/tracers/__init__.py": {
+      "reason": "core-oracle-source",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "ecologits/tracers/utils.py": {
+      "reason": "core-oracle-source",
+      "sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "size": 6158
+    },
+    "ecologits/utils/__init__.py": {
+      "reason": "core-oracle-source",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "ecologits/utils/range_value.py": {
+      "reason": "core-oracle-source",
+      "sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "size": 2808
+    },
+    "pyproject.toml": {
+      "reason": "license-citation-metadata",
+      "sha256": "26dd8b2218ab543012f58d97dbc10dcefa1d53aa935aab903c69360b185ff846",
+      "size": 4188
+    }
+  },
+  "schema_version": 1,
+  "snapshot_directory": "ecologits-0.11.2",
+  "source_artifact": {
+    "filename": "ecologits-0.11.2.tar.gz",
+    "origin": "https://files.pythonhosted.org/packages/f5/45/c7cd0930cc93dbf3a9f2f76fe8dd4c8b7e7662c6b76d6d25f4d7c4a37e9d/ecologits-0.11.2.tar.gz",
+    "sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c"
+  },
+  "upstream_version": "0.11.2",
+  "verification": "Every retained file hash and size were calculated from the exact staged candidate before this manifest was sealed. Excluded files retain hashes and classifications only. No complete Git tag attestation is asserted."
+}

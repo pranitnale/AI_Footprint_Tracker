@@ -1,0 +1,94 @@
+{
+  "date": "2026-09-15",
+  "scope": "Offline developer comparisons and future injected remote response admission. No endpoint/authentication/caller activation.",
+  "source_and_artifact_sha256": {
+    "tools/refinement/compare-engines.ts": "7af7157600a31f90b4f86413b11899ca8fd3db96ea36b9221838db36868fdde0",
+    "tools/refinement/comparison-fixtures.ts": "deef0f9861fa1f80f05b2d4cf1684c87957f4ad593f395cd0e2dcf3797ae327c",
+    "tools/refinement/fixtures/engine-comparison.json": "d3c8f23caf364192bb64bcc592505107742bb492f3ed505fc993d707f0cab49c",
+    "tools/refinement/test/compare-engines.test.ts": "e55a7db9fe8e9a717789d8a51fa288c840384b638708c62c1c8251ff2a8fbf7b",
+    "packages/estimator/src/engines/remote-admission.ts": "2367d20fc296e921780c542c88450020b793681697e17ff9fc7eeecf918c14e0",
+    "packages/estimator/test/remote-admission.test.ts": "668ac50d5cfc6c65f586b3cc78ad930216b7fac1a06a9f5ca6491f2ed2a4ce5b",
+    "tools/refinement/reports/engine-comparison-2026-09-15.json": "8e98e3f583a17f1869bb501e5b302ce1183d2cca5ef0da2b7fe59a8cd1f95d20",
+    "tools/refinement/reports/engine-comparison-2026-09-15.md": "bb9bcd292bc49d916bf4c16826b3369f0767fe9b7b6f59fa83aafac887702735",
+    "tools/refinement/tsconfig.json": "e80b7b5688fa42d616e9823eecd74f76afc952c7248c45511546105fa1154415",
+    "tools/refinement/README.md": "dea797d9918bc7273918996a82bbe6e71e6aa284263d412761d01bb2aeca4c36"
+  },
+  "comparison_cases": 19,
+  "comparison_variants": 7,
+  "executor_results": 133,
+  "commands": [
+    {
+      "command": "node --import tsx tools/refinement/compare-engines.ts --fixtures tools/refinement/fixtures/engine-comparison.json --output tools/refinement/reports/engine-comparison-2026-09-15",
+      "result": "PASS; full real executor JSON and readable Markdown; Markdown overview regenerated from the same JSON after presentation refinement"
+    },
+    {
+      "command": "node --import tsx --test tools/refinement/test/*.test.ts",
+      "result": "PASS 5 tests"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p tools/refinement/tsconfig.json",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm --filter @footprint/estimator typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm --filter @footprint/estimator test",
+      "result": "PASS 60 tests including 7 new real-helper/fake-transport tests and original TS/Python parity"
+    }
+  ],
+  "new_api": [
+    "createRemoteEstimateExecutor",
+    "admitRemoteEstimationResponse",
+    "RemoteEstimationFailure",
+    "RemoteCorrelation",
+    "AcceptedRemoteBinding",
+    "RemoteEstimateRequest",
+    "RemoteExecutorConfiguration"
+  ],
+  "limitations": [
+    "Digest consistency is not authentication or proof of numerical accuracy.",
+    "Company context and current-generation guard are supplied by a trusted caller; authorization/capability checks and final storage publication guards remain with that caller.",
+    "No real remote endpoint, transport, retries, credentials, UI activation or installed-browser checks.",
+    "Comparison fixtures contain numeric observations only; no tokenization or physical measurement performed."
+  ],
+  "parent_wiring": {
+    "compare:engines": "node --import tsx tools/refinement/compare-engines.ts",
+    "test:refinement": "node --import tsx --test tools/refinement/test/*.test.ts",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tools/refinement/tsconfig.json",
+    "estimator_barrel": "export * from \"./engines/remote-admission\";"
+  },
+  "formatting_followup": {
+    "status": "PASS",
+    "commands": [
+      "pnpm exec prettier --check packages/estimator/src/engines/remote-admission.ts packages/estimator/test/remote-admission.test.ts tools/refinement/compare-engines.ts tools/refinement/comparison-fixtures.ts tools/refinement/test/compare-engines.test.ts tools/refinement/tsconfig.json",
+      "pnpm --filter @footprint/estimator typecheck",
+      "node node_modules/typescript/bin/tsc -p tools/refinement/tsconfig.json",
+      "node --import tsx --test packages/estimator/test/remote-admission.test.ts tools/refinement/test/compare-engines.test.ts"
+    ],
+    "focused_tests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "test_adjustment": "The parent contract now requires equal full requested/effective identities for the same engine. The tampering fixture changes both identities consistently and asserts envelope-schema success before expecting response-admission mismatch.",
+    "core_oracle_rerun": false,
+    "unchanged_mpl_core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810"
+  },
+  "execution_origin_followup": {
+    "status": "PASS",
+    "executionOrigin": "organization",
+    "immutable": true,
+    "purpose": "Trusted composition metadata for routing local-only archived grants; not authentication or upload permission.",
+    "commands": [
+      "pnpm exec prettier --write packages/estimator/src/engines/remote-admission.ts packages/estimator/test/remote-admission.test.ts",
+      "pnpm --filter @footprint/estimator typecheck",
+      "node --import tsx --test packages/estimator/test/remote-admission.test.ts"
+    ],
+    "focused_tests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "parent_service_edited": false
+  }
+}

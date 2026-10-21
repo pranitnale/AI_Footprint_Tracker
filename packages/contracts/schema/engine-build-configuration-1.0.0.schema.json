@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "default_engine": {
+      "type": "string",
+      "enum": [
+        "original",
+        "ecologits"
+      ]
+    },
+    "available_engines": {
+      "anyOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "ecologits"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "original"
+            },
+            {
+              "type": "string",
+              "const": "ecologits"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      ]
+    },
+    "ecologits_fallback": {
+      "type": "object",
+      "properties": {
+        "policy_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "provider_defaults": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "upstream_provider_flagship"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                      },
+                      "model_name": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                      },
+                      "workload": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "video"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "provider",
+                      "model_name",
+                      "workload"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "strategy",
+                  "profile"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "original_engine"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "unavailable"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "model_overrides": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+          },
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "upstream_profile"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                      },
+                      "model_name": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                      },
+                      "workload": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "video"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "provider",
+                      "model_name",
+                      "workload"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "nearest_record",
+                      "family_benchmark",
+                      "model_not_named",
+                      "model_not_in_library",
+                      "model_family_stand_in",
+                      "model_variant_stand_in",
+                      "model_kind_stand_in"
+                    ]
+                  }
+                },
+                "required": [
+                  "strategy",
+                  "profile",
+                  "basis"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "original_engine"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "unavailable"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "unknown_provider": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "upstream_provider_flagship"
+                },
+                "profile": {
+                  "type": "object",
+                  "properties": {
+                    "provider": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                    },
+                    "model_name": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                    },
+                    "workload": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "video"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "provider",
+                    "model_name",
+                    "workload"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "strategy",
+                "profile"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "original_engine"
+                }
+              },
+              "required": [
+                "strategy"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "unavailable"
+                }
+              },
+              "required": [
+                "strategy"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "policy_version",
+        "review_date",
+        "provider_defaults",
+        "model_overrides",
+        "unknown_provider"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "default_engine",
+    "available_engines",
+    "ecologits_fallback"
+  ],
+  "additionalProperties": false
+}

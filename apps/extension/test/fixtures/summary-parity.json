@@ -1,0 +1,598 @@
+{
+  "personal-ecologits": {
+    "breakdown UTC today": {
+      "hash": "e168421e64c9e52fb4952d82b298ecec7dc2af4bfe460df751c4ad565ee09ef9",
+      "figures": {
+        "requests": 5,
+        "attempts": 5,
+        "energy": "0.0289203120410308985",
+        "historyPrompts": "6",
+        "chats": 5
+      }
+    },
+    "breakdown UTC today previous": {
+      "hash": "44bb7fa0f76b0a0377aee434f64837e5b67e088832b46f609e0524bf361e54f5",
+      "figures": {
+        "requests": 67,
+        "attempts": 67,
+        "energy": "0.351209176957744259394",
+        "historyPrompts": "30",
+        "chats": 18
+      }
+    },
+    "breakdown UTC 30d": {
+      "hash": "61937d7fc389a1b81a66aecfc0570e6dd1037faa7e2a35214f39e404e7f9394b",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.31470610821410052743",
+        "historyPrompts": "24",
+        "chats": 16
+      }
+    },
+    "breakdown UTC 30d previous": {
+      "hash": "214086cd786eb5482c63bc9d86f87266074f19fa4f9c93d4ec24566750976473",
+      "figures": {
+        "requests": 51,
+        "attempts": 51,
+        "energy": "0.275930999253392329764",
+        "historyPrompts": "20",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 30d": {
+      "hash": "d513e614e8ae835971fd5bf4b6cd05814e4b88029c7bad9e864dcbcc2bd34acd",
+      "figures": {
+        "requests": 63,
+        "attempts": 63,
+        "energy": "0.3475989198792483263",
+        "historyPrompts": "27",
+        "chats": 16
+      }
+    },
+    "breakdown Europe/Berlin 30d previous": {
+      "hash": "2854470fd0d6226c158623abdf8e927162bfb514267b4c5872a000689388ef60",
+      "figures": {
+        "requests": 51,
+        "attempts": 51,
+        "energy": "0.250785935331567663274",
+        "historyPrompts": "20",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 7d": {
+      "hash": "bebd76036fc1bf0db0d3f5417dc377b70a425c709ef9331a22c6a5e028dfb14e",
+      "figures": {
+        "requests": 23,
+        "attempts": 23,
+        "energy": "0.1573847834126612839",
+        "historyPrompts": "14",
+        "chats": 14
+      }
+    },
+    "breakdown Europe/Berlin 7d previous": {
+      "hash": "ef301ea10bf92416727a630969ac8df60b100ecb526c3bb9502b0775e5ae9978",
+      "figures": {
+        "requests": 13,
+        "attempts": 13,
+        "energy": "0.05177365188743035781",
+        "historyPrompts": "6",
+        "chats": 9
+      }
+    },
+    "breakdown Pacific/Chatham 7d": {
+      "hash": "a8dd699be0b4bd3082c71ea75ce168bfb6199583522c9f7d76711581c9298a62",
+      "figures": {
+        "requests": 19,
+        "attempts": 19,
+        "energy": "0.1190137123640818253",
+        "historyPrompts": "10",
+        "chats": 12
+      }
+    },
+    "breakdown Pacific/Chatham 7d previous": {
+      "hash": "5bcad2cea8147b4f79da5f7f2471c8d8677dbc49bc8ec258ea83c2c5aef4124a",
+      "figures": {
+        "requests": 13,
+        "attempts": 13,
+        "energy": "0.08335491753197695781",
+        "historyPrompts": "7",
+        "chats": 10
+      }
+    },
+    "breakdown America/St_Johns today": {
+      "hash": "12f6095215e2baa4c485e63501bc107cb92b8ddc6e0a1e263be3d18084affb9e",
+      "figures": {
+        "requests": 2,
+        "attempts": 2,
+        "energy": "0.0120767055952121485",
+        "historyPrompts": "3",
+        "chats": 2
+      }
+    },
+    "breakdown America/St_Johns today previous": {
+      "hash": "c305262c6f9bb7cb494484ab0a2789af0259ffb5876135760875c33f89a72a92",
+      "figures": {
+        "requests": 67,
+        "attempts": 67,
+        "energy": "0.3569450573452557188",
+        "historyPrompts": "30",
+        "chats": 17
+      }
+    },
+    "breakdown Asia/Kolkata 30d": {
+      "hash": "c59a94ed7cb5193e037907063763e85f66f2cd4be7295527f536f6b5c2441ffc",
+      "figures": {
+        "requests": 66,
+        "attempts": 66,
+        "energy": "0.3632096641878996321",
+        "historyPrompts": "30",
+        "chats": 16
+      }
+    },
+    "breakdown Asia/Kolkata 30d previous": {
+      "hash": "184f3953bb2eee3a7ed7d2428586a644074ce2c6796dbed5f648f4386b4656fe",
+      "figures": {
+        "requests": 51,
+        "attempts": 51,
+        "energy": "0.243750209688111434074",
+        "historyPrompts": "20",
+        "chats": 19
+      }
+    },
+    "breakdown all time": {
+      "hash": "66e9258afaa6b5188b260f71e082f88e1da901704843000175f23378caed9079",
+      "figures": {
+        "requests": 137,
+        "attempts": 137,
+        "energy": "0.804461384304367816474",
+        "historyPrompts": "54",
+        "chats": 20
+      }
+    },
+    "dashboard default": {
+      "hash": "c62a27f6aff0a25cc051381f0032ef188339eef824728bf47f978010a590da7d",
+      "figures": {
+        "requests": 137,
+        "attempts": 137,
+        "energy": "0.804461384304367816474",
+        "historyPrompts": "54",
+        "chats": null
+      }
+    },
+    "dashboard original": {
+      "hash": "ec3aac6f844802a3be660e8490b01a9a6bfefd085fa8569aa99fccb2b2345fe6",
+      "figures": {
+        "requests": 137,
+        "attempts": 137,
+        "energy": "0.136456541351693476",
+        "historyPrompts": "54",
+        "chats": null
+      }
+    },
+    "dashboard recalculated": {
+      "hash": "c62a27f6aff0a25cc051381f0032ef188339eef824728bf47f978010a590da7d",
+      "figures": {
+        "requests": 137,
+        "attempts": 137,
+        "energy": "0.804461384304367816474",
+        "historyPrompts": "54",
+        "chats": null
+      }
+    },
+    "dashboard 30 d": {
+      "hash": "d7c8288e0e7069c7a1644d1f9cd7de11815f403019d8cce258216aa73830b6fc",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.31470610821410052743",
+        "historyPrompts": "24",
+        "chats": null
+      }
+    },
+    "dashboard claude": {
+      "hash": "58e57c628cfe405c949e1fc88fad8bf7657e090850b722dbfaef4e69deaadcc5",
+      "figures": {
+        "requests": 69,
+        "attempts": 69,
+        "energy": "0.30400876355104515383",
+        "historyPrompts": "24",
+        "chats": null
+      }
+    }
+  },
+  "company-ecologits": {
+    "breakdown UTC today": {
+      "hash": "cc7e15e457903bb223e2230a5b7def286a5dc1dda6d3cb5cc8f2ba78c595ea50",
+      "figures": {
+        "requests": 4,
+        "attempts": 4,
+        "energy": "0.01101230613598666984",
+        "historyPrompts": "5",
+        "chats": 3
+      }
+    },
+    "breakdown UTC today previous": {
+      "hash": "5e781d982c974059d32f743510b32d46495b31530ca84f4f5f538abbc9a6c704",
+      "figures": {
+        "requests": 70,
+        "attempts": 70,
+        "energy": "0.532972175260895361218",
+        "historyPrompts": "31",
+        "chats": 19
+      }
+    },
+    "breakdown UTC 30d": {
+      "hash": "9f2476c98952d8b6108c12dfe9d7a67acf6b3a0b129659a4c3caa0cfdc209141",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.403571327819865656618",
+        "historyPrompts": "23",
+        "chats": 19
+      }
+    },
+    "breakdown UTC 30d previous": {
+      "hash": "81027e4e189a0d95a402585d471e18c884e4d555a8a230cb9a595e4b8909c434",
+      "figures": {
+        "requests": 50,
+        "attempts": 50,
+        "energy": "0.43374357272340920894",
+        "historyPrompts": "18",
+        "chats": 19
+      }
+    },
+    "breakdown Europe/Berlin 30d": {
+      "hash": "a341419bd9950f087715ec36a99ea5c65f30f47c113299831d2f97e47ae29503",
+      "figures": {
+        "requests": 63,
+        "attempts": 63,
+        "energy": "0.427638395065354391558",
+        "historyPrompts": "26",
+        "chats": 19
+      }
+    },
+    "breakdown Europe/Berlin 30d previous": {
+      "hash": "37b842a0eb5a9781486784cf4c502f30fc675649672ed363d979e4264bdcbcff",
+      "figures": {
+        "requests": 50,
+        "attempts": 50,
+        "energy": "0.4337209369561250624",
+        "historyPrompts": "18",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 7d": {
+      "hash": "3c7be7655a0c9e97b43d4870ef3bae34d3109ee3a6b85c0fe83fbb495217f36f",
+      "figures": {
+        "requests": 17,
+        "attempts": 17,
+        "energy": "0.11009225554482305104",
+        "historyPrompts": "11",
+        "chats": 13
+      }
+    },
+    "breakdown Europe/Berlin 7d previous": {
+      "hash": "0d92f334ba6cd7f0e9d677d66e6a80ba890c45dc5e118411af8587e69a23a6d0",
+      "figures": {
+        "requests": 19,
+        "attempts": 19,
+        "energy": "0.099604894486428162258",
+        "historyPrompts": "7",
+        "chats": 12
+      }
+    },
+    "breakdown Pacific/Chatham 7d": {
+      "hash": "2f017c0ce989ee494275112f43e63bcbbbfaedbd5f6b9141267d584b5aa9aca7",
+      "figures": {
+        "requests": 12,
+        "attempts": 12,
+        "energy": "0.08617441991803130954",
+        "historyPrompts": "8",
+        "chats": 11
+      }
+    },
+    "breakdown Pacific/Chatham 7d previous": {
+      "hash": "97266b14bf83d948fc9cfb380e21fac3c407011af13062b0d2905bc722f4fdaa",
+      "figures": {
+        "requests": 21,
+        "attempts": 21,
+        "energy": "0.114922270042886696858",
+        "historyPrompts": "7",
+        "chats": 15
+      }
+    },
+    "breakdown America/St_Johns today": {
+      "hash": "77232821c12c483b64e8b3f0aebfa1c95f33411055bdf4117ee1546e1b86e445",
+      "figures": {
+        "requests": 1,
+        "attempts": 1,
+        "energy": "0.007845032337509768",
+        "historyPrompts": "2",
+        "chats": 1
+      }
+    },
+    "breakdown America/St_Johns today previous": {
+      "hash": "644d0da554af2fe65d24987ee4f1e2c0c6e266afa6d0a466acf7d47deba0e733",
+      "figures": {
+        "requests": 70,
+        "attempts": 70,
+        "energy": "0.453216570239952048058",
+        "historyPrompts": "30",
+        "chats": 19
+      }
+    },
+    "breakdown Asia/Kolkata 30d": {
+      "hash": "8f520620f329e54473c32bd206c1fb0ed394de5fa1c8980f4514194e9e208b7d",
+      "figures": {
+        "requests": 66,
+        "attempts": 66,
+        "energy": "0.432738287010315843458",
+        "historyPrompts": "29",
+        "chats": 19
+      }
+    },
+    "breakdown Asia/Kolkata 30d previous": {
+      "hash": "ec1398d720d69e839a328107e1bd0ebfb49a67cd6f6a611ac280db19b18cd285",
+      "figures": {
+        "requests": 49,
+        "attempts": 49,
+        "energy": "0.5024073111410980875",
+        "historyPrompts": "18",
+        "chats": 20
+      }
+    },
+    "breakdown all time": {
+      "hash": "823a92d6d1ae1ab034a04da59d0b065204a17698d89ad7b247cc10d80088e3ba",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "1.143317364964199741388",
+        "historyPrompts": "53",
+        "chats": 20
+      }
+    },
+    "dashboard default": {
+      "hash": "3c8b26341525ddd0d1d7e844fa2652bac2defbc8517d6e28eac1ccf03a9ec04c",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "1.143317364964199741388",
+        "historyPrompts": "53",
+        "chats": null
+      }
+    },
+    "dashboard original": {
+      "hash": "e31e7f149976f49351e9cbd135fc7cab52f897262e0946913222e854873f3d03",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "0.14040104660081023",
+        "historyPrompts": "53",
+        "chats": null
+      }
+    },
+    "dashboard recalculated": {
+      "hash": "3c8b26341525ddd0d1d7e844fa2652bac2defbc8517d6e28eac1ccf03a9ec04c",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "1.143317364964199741388",
+        "historyPrompts": "53",
+        "chats": null
+      }
+    },
+    "dashboard 30 d": {
+      "hash": "6ae7d9fe5e8a2303e0ffce75f2bb24c0adc15b4bcbbf8a22bf464eb0f0774c0c",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.403571327819865656618",
+        "historyPrompts": "23",
+        "chats": null
+      }
+    },
+    "dashboard claude": {
+      "hash": "6e370dad7730f8d8ee74b6d96ece861f5d666bdd2bd6cce8d3fed9a7fe71fbfc",
+      "figures": {
+        "requests": 14,
+        "attempts": 14,
+        "energy": "0.068540178822673580368",
+        "historyPrompts": "6",
+        "chats": null
+      }
+    }
+  },
+  "personal-original": {
+    "breakdown UTC today": {
+      "hash": "d527bc8fc81ee11d9f502a8c8bedabcc63f95ca69ed7ed9191cb0e9b76d84a45",
+      "figures": {
+        "requests": 5,
+        "attempts": 5,
+        "energy": "0.0355924596399492325",
+        "historyPrompts": "5",
+        "chats": 3
+      }
+    },
+    "breakdown UTC today previous": {
+      "hash": "a0b314e517e4d261863581d31306742acd7215014d16360da989273a3245bb2c",
+      "figures": {
+        "requests": 64,
+        "attempts": 64,
+        "energy": "0.75368134081462312413",
+        "historyPrompts": "30",
+        "chats": 20
+      }
+    },
+    "breakdown UTC 30d": {
+      "hash": "d6a4a662208fde5ef5c9dbcd6ca5ebab40abd86b0a3347703fb1bdfbc3064a58",
+      "figures": {
+        "requests": 54,
+        "attempts": 54,
+        "energy": "0.61658482671975091973",
+        "historyPrompts": "23",
+        "chats": 20
+      }
+    },
+    "breakdown UTC 30d previous": {
+      "hash": "1606834a498192111cb3f0d650c94b084722d78a9c01f4393a62cb751dffa2ce",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.48367993249807459464",
+        "historyPrompts": "22",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 30d": {
+      "hash": "b4418eb16635057c68de84ec1798b8cf24f019398263a36a22d71306d95e95b1",
+      "figures": {
+        "requests": 58,
+        "attempts": 58,
+        "energy": "0.65568340443740295673",
+        "historyPrompts": "26",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 30d previous": {
+      "hash": "bd70f9eb918188893c430b0594a2655e942508e88d023032608d3cfc205e4f45",
+      "figures": {
+        "requests": 59,
+        "attempts": 59,
+        "energy": "0.50434761288829123664",
+        "historyPrompts": "22",
+        "chats": 20
+      }
+    },
+    "breakdown Europe/Berlin 7d": {
+      "hash": "442a9da9b79915cf5126d28bed0f11b036c404260a73238380944a3faaa77b92",
+      "figures": {
+        "requests": 20,
+        "attempts": 20,
+        "energy": "0.1463249846299030677",
+        "historyPrompts": "11",
+        "chats": 12
+      }
+    },
+    "breakdown Europe/Berlin 7d previous": {
+      "hash": "3cba807f898d35b080daf6399f617cfc1b2f474863ce50184c734266c265eb97",
+      "figures": {
+        "requests": 15,
+        "attempts": 15,
+        "energy": "0.32274979570120730417",
+        "historyPrompts": "7",
+        "chats": 8
+      }
+    },
+    "breakdown Pacific/Chatham 7d": {
+      "hash": "a0301af20e5ad96bc8336b910701be5fe724fd95ee81feaf23b10a9709c92a3b",
+      "figures": {
+        "requests": 16,
+        "attempts": 16,
+        "energy": "0.1217137725791370952",
+        "historyPrompts": "8",
+        "chats": 11
+      }
+    },
+    "breakdown Pacific/Chatham 7d previous": {
+      "hash": "db2c65941781d46bf2a84484f3a83a2cb33cf79387ad8dcbb19f5cd990b135f5",
+      "figures": {
+        "requests": 16,
+        "attempts": 16,
+        "energy": "0.21046427465041236667",
+        "historyPrompts": "7",
+        "chats": 9
+      }
+    },
+    "breakdown America/St_Johns today": {
+      "hash": "b0179fd75f8e6e6932d1f1d7ca102b72c26b14b54a0a1b1b470813833df186f9",
+      "figures": {
+        "requests": 2,
+        "attempts": 2,
+        "energy": "0.011256388882133966",
+        "historyPrompts": "2",
+        "chats": 1
+      }
+    },
+    "breakdown America/St_Johns today previous": {
+      "hash": "fb0215ba4db1e20fa9ffba6fa9fc8e91ae3a006dd279759f04dd8d1efdf519c6",
+      "figures": {
+        "requests": 65,
+        "attempts": 65,
+        "energy": "0.70989717732557258963",
+        "historyPrompts": "30",
+        "chats": 20
+      }
+    },
+    "breakdown Asia/Kolkata 30d": {
+      "hash": "83391186900d5917c2a9526e5ac9c6013d5a3d4cb1fa1d105223c465630ba6e1",
+      "figures": {
+        "requests": 61,
+        "attempts": 61,
+        "energy": "0.67382004306229134043",
+        "historyPrompts": "29",
+        "chats": 20
+      }
+    },
+    "breakdown Asia/Kolkata 30d previous": {
+      "hash": "30906c9eb4f11aa2d7fd8925a601478d938b9239d6f8949176da895b4b30f08e",
+      "figures": {
+        "requests": 60,
+        "attempts": 60,
+        "energy": "0.50497312605000639494",
+        "historyPrompts": "22",
+        "chats": 20
+      }
+    },
+    "breakdown all time": {
+      "hash": "06fe56d509efcb4f59212b235a8c787af3b3fa9bef07fb6a75cf99ba73b31fcf",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "1.4176825460211599009",
+        "historyPrompts": "54",
+        "chats": 20
+      }
+    },
+    "dashboard default": {
+      "hash": "673258158c5d3bd0037cceeb85e6e8fc38680edd50752e607ee5e6c3072a0fb4",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "1.4176825460211599009",
+        "historyPrompts": "54",
+        "chats": null
+      }
+    },
+    "dashboard original": {
+      "hash": "a7409a978024fb029b4882314afa23ddb3ab62c908f7c3651a3d475f6543c757",
+      "figures": {
+        "requests": 139,
+        "attempts": 139,
+        "energy": "0.14573818782545342",
+        "historyPrompts": "54",
+        "chats": null
+      }
+    },
+    "dashboard 30 d": {
+      "hash": "0fead9312f80f71eada7f37e25271b87e0b6bc6eba497dd36e993a988b7f75e4",
+      "figures": {
+        "requests": 54,
+        "attempts": 54,
+        "energy": "0.61658482671975091973",
+        "historyPrompts": "23",
+        "chats": null
+      }
+    },
+    "dashboard claude": {
+      "hash": "09793fd6ae133de59c045f9bd72d2198f26986ea66ea46126a8ff0a2826c5b59",
+      "figures": {
+        "requests": 28,
+        "attempts": 28,
+        "energy": "0.1335643646694175751",
+        "historyPrompts": "21",
+        "chats": null
+      }
+    }
+  }
+}

@@ -1,0 +1,428 @@
+/*
+ * Public website styles from the canvas web boards (Living Gauge). Every rule is scoped under .site,
+ * so the admin site, sign-in and developer panel keep their own styles. Fonts are the bundled
+ * Bricolage Grotesque and Instrument Sans (SIL Open Font License), never a font service.
+ */
+.site {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f5ef;
+  color: #13241a;
+  font-family: "Instrument Sans Variable", "Instrument Sans", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  /* The boards use the browser defaults for size and line height; each block sets its own. */
+  font-size: 16px;
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+ * styles.css styles bare elements for the admin site. Inside .site they return to the browser
+ * defaults the boards were drawn with. :where keeps this at the lowest specificity, so every
+ * board rule below still wins, and it comes before the box-sizing rule so that rule survives.
+ */
+.site :where(h1, h2, h3, label, input, select, textarea, table, th, td, dt, dd, article) {
+  all: revert;
+}
+.site *,
+.site *::before,
+.site *::after {
+  box-sizing: border-box;
+}
+.site h1,
+.site h2,
+.site h3,
+.site h4 {
+  letter-spacing: normal;
+}
+.site p,
+.site li {
+  max-width: none;
+}
+.site .skip {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 10;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #0f2a1c;
+  color: #f4f5ef;
+}
+.site .skip:focus {
+  left: 16px;
+}
+.site :focus-visible {
+  outline: 2px solid #2e6b3f;
+  outline-offset: 2px;
+}
+.site-top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: rgba(244, 245, 239, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #dce2d6;
+}
+.site .site-top-row {
+  min-height: 68px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+.site .site-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #13241a;
+}
+.site .site-brand b {
+  font-size: 18px;
+}
+.site .site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  flex: 1;
+  min-width: 0;
+}
+.site .site-nav .wl[aria-current="page"] {
+  color: #13241a;
+  box-shadow: inset 0 -2px 0 #2e6b3f;
+}
+.site .site-signin {
+  height: 40px;
+  font-size: 14px;
+}
+/*
+ * The header button for a signed-in administrator: two lines in the usual button height, capped in
+ * width so a long organization name ends in an ellipsis instead of widening the header. The
+ * doubled class outranks the board's .btn rule further down, which sets padding and alignment.
+ */
+.site .site-signin.site-panel {
+  max-width: 220px;
+  min-width: 0;
+  padding: 0 14px;
+  justify-content: flex-start;
+}
+.site .site-panel-lines {
+  display: grid;
+  min-width: 0;
+  text-align: left;
+}
+.site .site-panel-action {
+  font-size: 14px;
+  line-height: 17px;
+  white-space: nowrap;
+}
+.site .site-panel-org {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 500;
+  color: #4a5a4e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+/* Auto side margins switch off stretching in a flex column, so sections would shrink to their content. */
+.site-main > * {
+  width: 100%;
+}
+/* The admin stylesheet styles bare footer elements; the site footer replaces all of it. */
+.site .site-foot {
+  display: block;
+  padding: 0;
+  border-top: 0;
+  background: #0f2a1c;
+  color: #dde8df;
+}
+.site .site-foot > div {
+  font-size: inherit;
+  color: inherit;
+}
+.site .site-foot-row {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px clamp(16px, 3vw, 32px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px 56px;
+  justify-content: space-between;
+}
+.site .site-foot-about {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 360px;
+}
+.site .site-foot-about > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.site .site-foot-about b {
+  font-size: 18px;
+  color: #f4f5ef;
+}
+.site .site-foot-about > span:last-child {
+  font-size: 14px;
+  line-height: 21px;
+  color: #b9cdbe;
+}
+.site .site-foot-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px 56px;
+}
+.site .site-foot-cols > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+}
+.site .site-foot-cols b {
+  color: #f4f5ef;
+}
+.site .site-credit {
+  display: block;
+  border-top: 1px solid rgba(244, 245, 239, 0.12);
+  padding: 16px clamp(16px, 3vw, 32px) 20px;
+}
+.site .site-credit p {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 19px;
+  color: #8fa897;
+}
+.site .site-credit a {
+  color: #b9e27c;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+@media (max-width: 720px) {
+  .site .site-nav {
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    gap: 0 18px;
+  }
+  .site .site-nav .wl {
+    padding: 10px 0 12px;
+    white-space: nowrap;
+  }
+  .site .site-signin {
+    margin-left: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Rules from the canvas boards, scoped under .site. */
+.site{margin:0;background:#F4F5EF}
+.site a{color:#2E6B3F}
+.site a:hover{color:#1C4A2A}
+.site .dsp{font-family:'Bricolage Grotesque Variable','Bricolage Grotesque','Segoe UI Variable Display','Segoe UI',system-ui,sans-serif}
+.site .num{font-variant-numeric:tabular-nums}
+.site svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.site button,.site input,.site select,.site textarea{font-family:inherit}
+.site button{cursor:pointer}
+.site .card{background:#FFFFFF;border:1px solid #DCE2D6;border-radius:20px}
+.site .grp{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8FA897;padding:16px 12px 6px}
+.site .nav{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border-radius:10px;color:#DDE8DF;text-decoration:none;font-size:15px;font-weight:600}
+.site .nav:hover{background:#1B3A27;color:#F4F5EF}
+.site .chip{height:40px;padding:0 12px 0 14px;border-radius:12px;border:1px solid #C9D3C3;background:#FFFFFF;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#13241A}
+.site th{font-size:13px;font-weight:600;color:#4A5A4E;text-align:left;padding:10px 14px;border-bottom:1px solid #DCE2D6;white-space:nowrap}
+.site td{font-size:14px;padding:12px 14px;border-bottom:1px solid #EEF1E8;white-space:nowrap}
+.site .st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600}
+.site .field{height:44px;box-sizing:border-box;border-radius:12px;border:1px solid #C9D3C3;background:#FFFFFF;padding:0 12px;font-size:15px;color:#13241A}
+.site .lab{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}
+.site .btn{height:44px;padding:0 18px;border-radius:12px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;text-decoration:none}
+.site .pri{background:#2E6B3F;color:#FFFFFF}
+.site .pri:hover{background:#255A34;color:#FFFFFF}
+.site .sec{background:#FFFFFF;color:#13241A;border:1px solid #C9D3C3}
+.site .dan{background:#A3352B;color:#FFFFFF}
+.site .p{margin:0;font-size:15px;line-height:23px;color:#4A5A4E}
+.site .wl{font-size:15px;font-weight:600;color:#4A5A4E;text-decoration:none;padding:22px 0 20px}
+.site .wl:hover{color:#13241A}
+.site .fl{color:#DDE8DF;text-decoration:none}
+.site .fl:hover{color:#B9E27C}
+.site .wrap{max-width:1200px;margin:0 auto;box-sizing:border-box;padding:0 clamp(16px,3vw,32px)}
+.site .eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E6B3F}
+.site .h2w{margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:700;letter-spacing:-.01em}
+.site .stepc{padding:26px;display:flex;flex-direction:column;gap:12px}
+.site .stepn{width:40px;height:40px;border-radius:20px;background:#0F2A1C;color:#B9E27C;display:grid;place-items:center;font-weight:700}
+.site .never{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(244,245,239,.12);font-size:16px}
+.site .svc{font-size:17px;font-weight:600;color:#4A5A4E}
+.site .hx{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center}
+@media (max-width:980px){.site .hx,.site .mx,.site .gx{grid-template-columns:minmax(0,1fr)!important}.site .bento>*{grid-column:1/-1!important}}
+.site .h1x{margin:0;font-size:clamp(40px,5vw,64px);line-height:1.04;font-weight:800;letter-spacing:-.025em;max-width:620px}
+.site .lead{margin:0;font-size:19px;line-height:29px;color:#4A5A4E;max-width:540px}
+.site .btn{transition:transform .15s ease,background-color .15s ease}
+.site .btn:active{transform:translateY(1px)}
+.site .sec:hover{border-color:#2E6B3F;color:#13241A}
+.site .pv{position:relative;border-radius:24px;background:#0F2A1C;color:#F4F5EF;padding:26px 26px 96px;box-shadow:0 30px 60px rgba(15,42,28,.22)}
+.site .mt{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:rgba(244,245,239,.07);min-width:0}
+.site .mt span:first-child{font-size:12px;font-weight:600;color:#B9CDBE}
+.site .mt b{font-size:20px;font-weight:700}
+.site .rng{position:absolute;left:0;bottom:-6px;width:300px;box-sizing:border-box;padding:16px 18px;border-radius:18px;background:#FFFFFF;border:1px solid #DCE2D6;color:#13241A;box-shadow:0 18px 40px rgba(15,42,28,.16)}
+.site .svc{font-size:16px;font-weight:600;color:#2E3F33}
+.site .h2x{margin:0;font-size:clamp(30px,3.4vw,42px);line-height:1.12;font-weight:700;letter-spacing:-.015em;max-width:760px}
+.site .stat{display:flex;flex-direction:column;gap:6px;padding-top:18px;border-top:2px solid #13241A}
+.site .stat b{font-size:clamp(40px,4.4vw,56px);line-height:1;font-weight:800;letter-spacing:-.02em}
+.site .bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.site .cell{border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px;min-width:0;box-sizing:border-box}
+.site .cell h3{margin:0;font-size:22px;line-height:28px;font-weight:700}
+.site .cell p{margin:0;font-size:15px;line-height:23px}
+.site .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.site .tb{display:grid;grid-template-columns:96px minmax(0,1fr) 64px;gap:12px;align-items:center;font-size:14px}
+.site .tb i{display:block;height:12px;border-radius:6px}
+.site .mx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.site .wx{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 16px;align-items:baseline;padding:16px 0;border-top:1px solid #E3E8DD}
+.site .wx span:last-child{grid-column:2}
+.site .wx:first-of-type{border-top:0}
+.site .gx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.site .lst{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px}
+.site .li2{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:22px}
+.site .fact{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:#FFFFFF;border:1px solid #DCE2D6;font-size:15px;line-height:22px;text-decoration:none;color:#13241A}
+.site a.fact:hover{border-color:#2E6B3F}
+.site .tl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;position:relative}
+@media (max-width:980px){.site .tl{grid-template-columns:minmax(0,1fr)}.site .tl:before{display:none}}
+.site .tl:before{content:"";position:absolute;left:22px;right:22px;top:21px;height:2px;background:#C9D3C3}
+.site .tls{position:relative;display:flex;flex-direction:column;gap:10px;padding-right:32px}
+.site .tld{width:44px;height:44px;border-radius:22px;background:#F4F5EF;border:2px solid #2E6B3F;color:#2E6B3F;display:grid;place-items:center}
+.site .tls h3{margin:6px 0 0;font-size:21px;font-weight:700}
+.site .plan{padding:28px;display:flex;flex-direction:column;gap:16px;border-radius:26px}
+.site .li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:22px}
+.site .jn{display:flex;flex-direction:column;gap:10px;padding:24px}
+.site .jnn{width:40px;height:40px;border-radius:20px;background:#0F2A1C;color:#B9E27C;display:grid;place-items:center;font-weight:700}
+.site .lane{padding:24px;border-radius:24px;display:flex;flex-direction:column;gap:14px}
+.site .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;font-size:14px;font-weight:600}
+.site .pc{padding:26px;display:flex;flex-direction:column;gap:12px}
+.site .never{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #EEF1E8;font-size:15px}
+.site .rr{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid #EEF1E8;font-size:15px}
+.site .rr span:first-child{color:#4A5A4E}
+.site .pc{padding:26px;display:flex;flex-direction:column;gap:14px}
+.site .tagl{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:10px;background:#EEF1E8;font-size:14px;font-weight:600;color:#2E3F33}
+.site .node{padding:18px;border-radius:20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.site .arrow{display:grid;place-items:center;color:#8FA897}
+.site .ck{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid #EEF1E8;text-align:left;background:transparent;border-left:0;border-right:0;border-bottom:0;width:100%;color:#13241A}
+.site .box{width:24px;height:24px;border-radius:7px;box-sizing:border-box;display:grid;place-items:center;flex:none;color:#FFFFFF}
+.site .bc{padding:26px;display:flex;flex-direction:column;gap:14px}
+.site .bi{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-family:'Bricolage Grotesque Variable','Bricolage Grotesque',system-ui;font-size:22px;font-weight:800}
+.site .tab{height:42px;padding:0 18px;border-radius:12px;border:0;font-size:15px;font-weight:600}
+.site .is{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid #EEF1E8}
+.site .isn{width:36px;height:36px;border-radius:18px;background:#E3F0E1;color:#1F5A2E;display:grid;place-items:center;font-weight:700}
+.site code{font-family:ui-monospace,'Cascadia Mono',Consolas,monospace;font-size:14px;background:#EEF1E8;padding:2px 6px;border-radius:6px}
+.site .topic{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;padding:14px 16px;border-radius:16px;border:1px solid #C9D3C3;color:#13241A}
+.site .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px}
+.site .fs{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;min-width:0}
+.site .lg{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A5A4E;padding:0;margin-bottom:2px}
+.site .hint{font-size:13px;font-weight:400;color:#4A5A4E;line-height:19px}
+.site .side{padding:24px;display:flex;flex-direction:column;gap:12px}
+.site .doc{display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:900px){.site .doc{grid-template-columns:minmax(0,1fr)}.site .toc{position:static!important}}
+.site .toc{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:19px}
+.site .toc a{color:#4A5A4E;text-decoration:none;padding:6px 10px;border-radius:8px}
+.site .toc a:hover{background:#E6EBE0;color:#13241A}
+.site .art{max-width:760px;font-size:16px;line-height:26px;color:#2E3F33}
+.site .art h2{font-family:'Bricolage Grotesque Variable','Bricolage Grotesque','Segoe UI',system-ui,sans-serif;font-size:24px;line-height:30px;color:#13241A;margin:40px 0 10px;scroll-margin-top:24px}
+.site .art h2:first-child{margin-top:0}
+.site .art h3{font-size:17px;line-height:24px;color:#13241A;margin:24px 0 6px}
+.site .art p{margin:0 0 12px}
+.site .art ul,.site .art ol{margin:0 0 14px;padding-left:22px}
+.site .art li{margin:4px 0}
+.site .art b{color:#13241A}
+.site .lead{margin:0;font-size:18px;line-height:28px;color:#4A5A4E;max-width:760px}
+.site .ph{background:#FFF1CC;color:#6E4700;border-radius:5px;padding:1px 6px;font-weight:600}
+.site .note{display:block;padding:12px 16px;border-radius:14px;background:#FFF6DB;border:1px solid #F0D68A;color:#6E4700;font-size:14px;line-height:21px;margin:0 0 16px;max-width:760px}
+.site .tw{overflow-x:auto;margin:0 0 16px;border:1px solid #DCE2D6;border-radius:14px;background:#FFFFFF}
+.site .art table{border-collapse:collapse;width:100%;font-size:14px;line-height:20px}
+.site .art th{text-align:left;background:#F4F5EF;color:#13241A;font-weight:700;padding:10px 12px;border-bottom:1px solid #DCE2D6}
+.site .art td{padding:10px 12px;border-top:1px solid #EEF1E8;vertical-align:top}
+.site .art tr:first-child td{border-top:0}
+/* Licence texts keep their original line breaks but must not widen the page on a phone. */
+.site .notices details{margin:0 0 8px;border:1px solid #DCE2D6;border-radius:14px;background:#FFFFFF;padding:10px 14px}
+.site .notices summary{cursor:pointer;font-weight:600;color:#13241A}
+.site .notices pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:19px;margin:0 0 12px;color:#2E3F33}
+/* The self-hosting diagram runs top to bottom on narrow screens, so each box keeps a readable width. */
+@media (max-width: 720px) {
+  .site .flow {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .site .flow .arrow {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+}
+
+/*
+ * "Runs entirely on your computer" and "Where your data goes" on the home page (canvas WebHomeNew,
+ * owner decision of 17 October 2026). The box is .lg-local from the shared Living Gauge styles; the
+ * public website is drawn light only, so it keeps the light colours whatever the device's setting.
+ */
+.site {
+  --lg-local-tint: #eef6e4;
+  --lg-local-line: #8fbf7a;
+  --lg-local-ink: #1d4a2a;
+  --lg-local-text: #24362a;
+  --lg-local-chip: #ffffff;
+}
+.site .lg-local {
+  padding: 22px 24px;
+  gap: 10px;
+  border-radius: 18px;
+}
+.site .lg-local-title {
+  font-size: 26px;
+  line-height: 1.15;
+}
+.site .lg-local-text {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.site .wd {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.site .wdh {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4a5a4e;
+}
+.site .wdc {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #dce2d6;
+}
+.site .wdc h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+.site .wdc p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #4a5a4e;
+}

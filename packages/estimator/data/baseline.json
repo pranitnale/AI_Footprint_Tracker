@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "method_id": "ecologits-reference-2026-09-10-v1",
+  "equation_id": "ecologits-output-v1",
+  "runtime_selection_allowed": true,
+  "validation_state": "unvalidated_reference",
+  "reviewer": "Implementation source-fidelity review against pinned registry and methodology; no empirical promotion",
+  "review_date": "2026-09-10",
+  "release_validation": "pending",
+  "coefficients": {
+    "energyAlpha": "0.0000011665273170451914",
+    "energyBeta": "-0.011205921025579175",
+    "energyGamma": "0.00004052928146734005",
+    "latencyAlpha": "0.0006785088094353663",
+    "latencyBeta": "0.0003119310311688259",
+    "latencyGamma": "0.019473717579473387"
+  },
+  "settings": {
+    "gpuMemoryGb": "80",
+    "precisionBits": "16",
+    "batchSize": "64",
+    "memoryMultiplier": "1.2",
+    "hostPowerKw": "1.2",
+    "serverGpuCount": "8"
+  },
+  "profiles": [
+    {
+      "id": "llama-3.1-8b-h100-reference",
+      "model": "Meta-Llama-3.1-8B-Instruct",
+      "activeBillions": "8.03",
+      "totalBillions": "8.03",
+      "architecture_source": "https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct"
+    },
+    {
+      "id": "llama-3.1-70b-h100-reference",
+      "model": "Meta-Llama-3.1-70B-Instruct",
+      "activeBillions": "70.55",
+      "totalBillions": "70.55",
+      "architecture_source": "https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct"
+    },
+    {
+      "id": "command-r-plus-08-2024-h100-reference",
+      "model": "command-r-plus-08-2024",
+      "activeBillions": "104",
+      "totalBillions": "104",
+      "architecture_source": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024#model-summary"
+    },
+    {
+      "id": "command-a-03-2025-h100-reference",
+      "model": "command-a-03-2025",
+      "activeBillions": "111",
+      "totalBillions": "111",
+      "architecture_source": "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025#model-summary"
+    }
+  ],
+  "scenario": {
+    "id": "ecologits-0.11.1-cohere-usa-reference",
+    "pue": "1.09",
+    "carbon": "384.4",
+    "carbon_gas": "CO2e",
+    "carbon_boundary": "lifecycle",
+    "carbon_accounting": "location",
+    "gases": [
+      "all_GHG_source_family_exact_record_composition_unknown"
+    ],
+    "gwp": "Source family: 100-year CO2e; pinned record method/version unresolved",
+    "direct_water": "0.999",
+    "direct_denominator": "it",
+    "upstream_water": "3.1321",
+    "water_kind": "consumption",
+    "direct_water_source": "unknown",
+    "upstream_water_source": "all_source",
+    "common_water_scope": null,
+    "upstream_exclusions": [
+      "Fuel extraction and processing excluded",
+      "All water sources including seawater; not freshwater-only",
+      "Electricity imports included; exact 3.1321 literal derivation unresolved"
+    ],
+    "provenance": {
+      "publisher": "EcoLogits contributors",
+      "title": "EcoLogits operational text inference reference",
+      "url": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/data/electricity_mixes.json",
+      "section": "OWID lifecycle CO2e and WRI electricity generation water source families; exact pinned vintages unresolved",
+      "source_revision": "886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+      "license": "MPL-2.0 reference; independently authored equation implementation",
+      "access_date": "2026-09-09",
+      "activity_period": null,
+      "factor_data_period": null,
+      "publication_date": "2026-07-07",
+      "software_snapshot": "EcoLogits 0.11.1 886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+      "review_date": "2026-09-10",
+      "unknown_period_reason": "Original measurement and factor data years not encoded in pinned records",
+      "population": "Analytical H100 dense-model scenario; USA library environment; undisclosed consumer deployment not measured",
+      "statistic": "scenario_example"
+    }
+  },
+  "provenance": {
+    "publisher": "EcoLogits contributors",
+    "title": "EcoLogits operational text inference reference",
+    "url": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/impacts/llm.py",
+    "section": "Operational usage equations; excludes embodied impacts",
+    "source_revision": "886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+    "license": "MPL-2.0 reference; independently authored equation implementation",
+    "access_date": "2026-09-09",
+    "activity_period": null,
+    "factor_data_period": null,
+    "publication_date": "2026-07-07",
+    "software_snapshot": "EcoLogits 0.11.1 886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+    "review_date": "2026-09-10",
+    "unknown_period_reason": "Original measurement and factor data years not encoded in pinned records",
+    "population": "Analytical H100 dense-model scenario; USA library environment; undisclosed consumer deployment not measured",
+    "statistic": "scenario_example"
+  },
+  "missing_components": [
+    "extra_input_length_effect",
+    "hidden_reasoning",
+    "search_and_tools",
+    "document_and_image_processing",
+    "training",
+    "hardware_manufacturing",
+    "employee_device_and_network",
+    "direct_refrigerant_and_fuel",
+    "compatible_total_water_scope"
+  ]
+}

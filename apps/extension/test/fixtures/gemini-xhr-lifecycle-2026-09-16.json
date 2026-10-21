@@ -1,0 +1,52 @@
+{
+  "provenance": {
+    "observed_at": "2026-09-16",
+    "site": "gemini.google.com",
+    "transport": "XMLHttpRequest",
+    "endpoint_path": "/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate",
+    "scope": "Reduced structural fixtures from authorized native Chrome tests. All identifiers and text are synthetic; unneeded values are omitted. These fixtures preserve only the observed lifecycle markers and their positions, not complete provider responses.",
+    "finding": "Natural completion and a UI-confirmed stopped response both ended with loadingFinished and the same final candidate and inner-array markers. These markers do not establish successful completion."
+  },
+  "cases": [
+    {
+      "name": "natural_completion",
+      "ui_outcome": "response_finished",
+      "transport_outcome": "loadingFinished",
+      "content_frames": [
+        {
+          "inner_length": 60,
+          "inner_14": false,
+          "candidate_8": [1],
+          "text": "Synthetic answer"
+        },
+        {
+          "inner_length": 64,
+          "inner_14": true,
+          "candidate_8": [2],
+          "text": "Synthetic answer complete."
+        }
+      ],
+      "tail_row_types": ["wrb.fr", "di", "af.httprm", "e"]
+    },
+    {
+      "name": "user_stopped",
+      "ui_outcome": "You stopped this response",
+      "transport_outcome": "loadingFinished",
+      "content_frames": [
+        {
+          "inner_length": 60,
+          "inner_14": false,
+          "candidate_8": [1],
+          "text": "Synthetic unfinished answer"
+        },
+        {
+          "inner_length": 64,
+          "inner_14": true,
+          "candidate_8": [2],
+          "text": "Synthetic unfinished answer"
+        }
+      ],
+      "tail_row_types": ["wrb.fr", "di", "af.httprm", "e"]
+    }
+  ]
+}

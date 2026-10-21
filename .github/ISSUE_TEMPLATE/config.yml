@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security report
+    url: https://github.com/pranitnale/AI_Footprint_Tracker/security/policy
+    about: Read the private vulnerability-reporting instructions. Do not post a vulnerability publicly.
+  - name: Support guide
+    url: https://github.com/pranitnale/AI_Footprint_Tracker/blob/main/SUPPORT.md
+    about: Choose the correct safe support channel and prepare a synthetic reproduction.

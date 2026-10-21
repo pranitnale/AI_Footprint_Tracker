@@ -1,0 +1,207 @@
+{
+  "format_version": 1,
+  "observed_on": "2026-09-10",
+  "authorization": "The user approved the previously proposed bounded synthetic provider tests and requested continuation.",
+  "privacy": "Provider identifiers and signed upload URLs are replaced with synthetic values. No credentials, authenticated headers, account identifiers or raw captures are included.",
+  "synthetic_file": {
+    "name": "synthetic-attachment.txt",
+    "bytes": 158,
+    "sha256": "65db80d10c295d53f93db94b057f1ef1b52469cfdb8ef9903c3c1da38bcba01e",
+    "marker": "FERN-ATTACHMENT-042",
+    "local_reference": {
+      "implementation": "official tiktoken",
+      "version": "0.14.0",
+      "encoding": "o200k_base",
+      "operation": "encode_ordinary",
+      "tokens": 33,
+      "asset_access": "Existing cache read only, checked against the library's expected asset SHA-256; downloads disabled",
+      "provider_tokenizer_mapping": "unverified"
+    }
+  },
+  "new_test_budget": {"maximum_generation_prompts": 6, "generation_prompts_sent": 5, "file_uploads_observed": 3},
+  "chatgpt": {
+    "environment": "Codex in-app browser; no tracker extension installed",
+    "reservation": {
+      "method": "POST",
+      "path": "/backend-api/files/upload_reservations",
+      "transport": "Fetch",
+      "status": 200,
+      "request_keys": ["intended_use_case", "entry_surface", "requires_gizmo_id", "store_in_library", "library_persistence_mode"],
+      "response_keys": ["eligible", "reservation_id", "upload_url", "upload_url_expires_at", "reservation_expires_at"],
+      "eligible": true,
+      "synthetic_reservation_id": "file_00000000000000000000000000000001"
+    },
+    "storage_upload": {
+      "method": "PUT",
+      "transport": "XHR",
+      "url_exactly_matches_reservation_upload_url": true,
+      "raw_request_body_available_through_cdp": false
+    },
+    "claim": {
+      "method": "POST",
+      "path": "/backend-api/files/upload_reservations/file_00000000000000000000000000000001/claim_and_finish",
+      "transport": "Fetch",
+      "status": 200,
+      "request_keys": ["file_name", "file_size", "use_case", "index_for_retrieval", "store_in_library", "library_persistence_mode", "mime_type", "entry_surface", "metadata"],
+      "file_size": 158,
+      "mime_type": "text/plain",
+      "use_case": "my_files",
+      "response_framing": "newline-delimited JSON",
+      "response_line_keys": ["file_id", "event", "message", "progress", "extra"],
+      "event_path": "event",
+      "file_id_path": "file_id",
+      "events": ["file.processing.started", "file.processing.file_ready", "file.indexing.completed", "file.processing.completed"],
+      "all_response_file_ids_match_reservation": true
+    },
+    "generation": {
+      "method": "POST",
+      "path": "/backend-api/f/conversation",
+      "transport": "Fetch",
+      "content_type": "application/json",
+      "message_count": 1,
+      "content_part_kinds": ["string"],
+      "attachment_path": "messages[0].metadata.attachments",
+      "attachment": {
+        "id": "file_00000000000000000000000000000001",
+        "size": 158,
+        "name": "synthetic-attachment.txt",
+        "mime_type": "text/plain",
+        "source": "local",
+        "library_file_id": "synthetic-library-id",
+        "is_big_paste": false
+      },
+      "attachment_id_matches_reservation_and_claim": true,
+      "visible_answer_matches_file_marker": true,
+      "decoded_sse_data_frames": 26,
+      "done_marker_present": true,
+      "numeric_fields_with_token_or_usage_in_key": []
+    },
+    "retained_followup": {
+      "new_upload_performed": false,
+      "visible_answer_matches_file_marker": true,
+      "generation_message_count": 1,
+      "content_part_kinds": ["string"],
+      "metadata_attachments_field_present": false,
+      "metadata_keys": ["selected_sources", "serialization_metadata", "submission_mode"],
+      "event_capture_truncated": false
+    },
+    "limitations": [
+      "This is one text-file upload and one follow-up, not proof of other formats or native extension behavior.",
+      "CDP did not provide the XHR request body. Original JavaScript body type was not established.",
+      "The numeric-key inspection is not proof that all provider token usage is absent.",
+      "Current text generation attachment identity is in metadata even though content.parts contains only text.",
+      "The follow-up omitted attachment metadata but still returned the marker. This does not establish which prior text, file retrieval or internal provider context produced the answer."
+    ]
+  },
+  "perplexity": {
+    "environment": "Codex in-app browser; no tracker extension installed",
+    "reservation": {
+      "method": "POST",
+      "path": "/rest/uploads/batch_create_upload_urls",
+      "transport": "Fetch",
+      "status": 200,
+      "request_shape": {"files": {"00000000-0000-4000-8000-000000000001": {"filename": "synthetic-attachment.txt", "content_type": "text/plain", "source": "default", "file_size": 158, "force_image": false, "skip_parsing": false}}},
+      "response_results_key_matches_client_uuid": true,
+      "response_result_keys": ["s3_bucket_url", "s3_object_url", "fields", "rate_limited", "file_uuid", "error"],
+      "synthetic_file_uuid": "00000000-0000-4000-8000-000000000002",
+      "returned_file_uuid_differs_from_client_uuid": true,
+      "object_url_contains_returned_file_uuid": true,
+      "object_url_contains_client_uuid": false
+    },
+    "storage_upload": {
+      "method": "POST",
+      "transport": "Fetch",
+      "origin": "https://ppl-ai-file-upload.s3.amazonaws.com",
+      "status": 204,
+      "url_exactly_matches_returned_bucket_url": true,
+      "multipart_field_names": ["acl", "Content-Type", "tagging", "x-amz-meta-is_text_only", "key", "AWSAccessKeyId", "x-amz-security-token", "policy", "signature", "file"],
+      "file_part_has_expected_filename": true,
+      "cdp_post_data_contains_file_marker": false
+    },
+    "processing_subscription": {
+      "method": "POST",
+      "path": "/rest/sse/attachment_processing/subscribe",
+      "transport": "Fetch",
+      "status": 200,
+      "request_shape": {"file_uuids": ["00000000-0000-4000-8000-000000000002"]},
+      "file_uuid_matches_reservation_result": true,
+      "response_body_available_through_cdp": false
+    },
+    "generation": {
+      "method": "POST",
+      "path": "/rest/sse/perplexity_ask",
+      "transport": "Fetch",
+      "status": 200,
+      "attachment_path": "params.attachments",
+      "attachment_count": 1,
+      "attachment_kind": "string",
+      "attachment_exactly_equals_returned_s3_object_url": true,
+      "visible_answer_matches_file_marker": true,
+      "response_body_available_through_cdp": false,
+      "loading_finished_observed": false
+    },
+    "retained_followup": {
+      "new_upload_performed": false,
+      "visible_answer_matches_file_marker": true,
+      "params_attachments": [],
+      "last_backend_uuid_present": true,
+      "event_capture_truncated": false
+    },
+    "limitations": [
+      "One text-file upload establishes the observed reservation, multipart upload and sent attachment equality, not other formats or native extension behavior.",
+      "CDP exposed multipart field names and the filename but omitted the file marker; this is not a wire-byte hash or original JavaScript body-type proof.",
+      "The processing and generation response bodies were unavailable through CDP. A visible completed answer does not prove all stream fields or token usage were captured.",
+      "Request/response event reads for the selected upload and generation were not truncated. No loadingFinished event was observed for the generation in the selected capture.",
+      "The follow-up had an empty attachment array and still returned the marker. Prior-answer context, retained-file retrieval and internal processing cannot be distinguished by that reply."
+    ]
+  },
+  "claude": {
+    "environment": "Codex in-app browser; no tracker extension installed",
+    "upload": {
+      "method": "POST",
+      "path_pattern": "/api/organizations/<organization_uuid>/conversations/<conversation_uuid>/wiggle/upload-file",
+      "transport": "Fetch",
+      "status": 200,
+      "multipart_field_names": ["file"],
+      "file_part_has_expected_filename": true,
+      "cdp_post_data_contains_file_marker": false,
+      "response_keys": ["success", "path", "sanitized_name", "file_kind", "file_uuid", "file_name", "created_at", "user_uuid", "size_bytes", "uuid"],
+      "success": true,
+      "file_kind": "blob",
+      "size_bytes": 158,
+      "file_uuid_equals_uuid": true,
+      "path_contains_file_uuid": false,
+      "path_contains_approved_filename": true
+    },
+    "generation": {
+      "method": "POST",
+      "path_pattern": "/api/organizations/<organization_uuid>/chat_conversations/<conversation_uuid>/completion",
+      "transport": "Fetch",
+      "status": 200,
+      "content_type": "application/json",
+      "content_encoding": "gzip",
+      "cdp_returned_base64_encoded_binary": true,
+      "attachment_path": "attachments",
+      "attachment": {"file_name": "synthetic-attachment.txt", "file_type": "text/plain", "file_size": 158, "extracted_content_equals_prepared_file": true, "origin": "user_upload", "kind": "file"},
+      "attachment_carries_upload_file_uuid": false,
+      "files_array_length": 0,
+      "visible_answer_matches_file_marker": true,
+      "decoded_sse_data_frames": 10,
+      "event_types": ["conversation_ready", "message_start", "content_block_start", "content_block_delta", "content_block_delta", "content_block_delta", "content_block_stop", "message_delta", "message_limit", "message_stop"],
+      "loading_finished_observed": true,
+      "numeric_or_null_fields_with_token_or_usage_in_key": []
+    },
+    "limitations": [
+      "The sent inline extracted_content exactly equaled the prepared 158-byte text file in this one flow. This is not proof of extraction fidelity for PDF, Office, retained or other files.",
+      "The upload response's file_kind value blob is provider metadata, not proof of the original JavaScript request body type.",
+      "The generation attachment contains no upload UUID. Correlation by a filename alone is not permitted; the inline attachment text is itself directly observed dispatch data.",
+      "No tracker extension was installed. The bounded numeric-key inspection is not proof that all provider token usage is absent."
+    ]
+  },
+  "gemini": {
+    "status": "waiting_for_user_agreement",
+    "file_uploaded": false,
+    "generation_prompt_sent": false,
+    "reason": "The upload control opened a new Creating content from images and files agreement. The conductor requested permission before accepting it."
+  }
+}

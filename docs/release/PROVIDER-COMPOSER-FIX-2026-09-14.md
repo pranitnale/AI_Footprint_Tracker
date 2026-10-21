@@ -1,0 +1,33 @@
+# Provider composer and compact metric correction, 14 September 2026
+
+This record covers a bounded source correction and local verification checkpoint. It is not a release certificate or native provider-capture result.
+
+## Observed failure
+
+Read-only inspection in the user's installed Chrome profile found one visible Claude ProseMirror editor inside a semantic composer fieldset and one visible Perplexity Lexical `#ask-input` editor with its Submit control inside the provider's grid and wrapper. Neither editor had a form ancestor. Both pages had zero AI Footprint Tracker hosts before the correction. Diagnostic evidence retains composer metadata and minimized identity relationships. A normal synthetic Perplexity GET response was inspected transiently and minimized, and the browser accessibility tree included visible conversation content; no raw authenticated response body or conversation content was saved to the repository.
+
+The previous resolver required a form ancestor. It therefore rejected both current provider layouts even though their native composers were visible and usable.
+
+## Corrected behavior
+
+[Composer placement](../../apps/extension/lib/content-placement.ts) now resolves one unique eligible composer. Claude uses its semantic composer fieldset. Perplexity requires the exact observed Lexical editor and Submit control, a visible one-column native grid, its visible relative wrapper and a normal-flow insertion parent. Ambiguous, hidden, excessive or structurally incompatible candidates fail closed without placing UI over provider controls.
+
+[The content entrypoint](../../apps/extension/entrypoints/content.content.ts) places the context notice before and the compact bar after the safe composer unit without wrapping or changing native nodes. It tracks the mounted editor, anchor and insertion parent so provider visibility changes move only extension-owned hosts. Each mount disposes its document listeners when replaced. Mutation batches deduplicate and cap unowned work, while overflow schedules one conservative coalesced check. Ordinary typing takes the cheap send-key path before any composer geometry work.
+
+Verified membership from an observed normal Perplexity history GET can update the currently selected active capture without treating provider history as complete. It does not establish immediate generation SSE identity or associate a request from a shared or context UUID. A committed relation invalidation clears only the exact current matched view, closes its owned advice and Details state, rejects stale replies and reloads saved data through a fresh guarded route binding. Repeated invalidations remain effective after a saved-route refresh. Active display promotion preserves the original capture binding, persisted observation and provisional conversation key; ordinary relation commits and invalidations still update their own ledger records.
+
+[Compact metric presentation](../../apps/extension/lib/conversation-bar.ts) keeps a valid combined water value when available. When the combined quantity is unavailable, it shows direct water and electricity-supply water separately when those components are known. It never adds incompatible components, converts unknown values to zero or infers a water-source category. Multiple groups and partial coverage remain explicit, with method and scope provenance available in Details.
+
+## Bounded verification
+
+The complete extension suite reported 406 passes, one existing Windows symlink skip and zero failures across 407 tests. The ledger suite passed 19 of 19 tests, workspace typechecking passed and independent source review returned CLEAN.
+
+Root exercised the actual content entrypoint with stubbed identity and transport in the local in-app browser. Claude fixture viewports were 519 by 631, 2,752 by 999, 3,440 by 1,440 and 320 by 700 pixels. Perplexity fixture viewports were 519 by 631, 2,293 by 833, 3,440 by 1,440 and 320 by 700 pixels. Across 12 samples per size, each fixture retained one bar, no horizontal page overflow and unchanged native subtrees. Details, internal scrolling, focus, Back, Snooze and Escape controls were exercised. Both fixtures also showed a simulated totals-load failure, then restored values after the user activated Retry; each sequence made three summary calls for initial load, failure and retry and retained one bar. The normal viewport was visually inspected. Wider emulated screenshots were tiled, so their large-size evidence is DOM geometry rather than one complete visual frame. Fixture numerical values were synthetic and do not establish provider capture or physical accuracy.
+
+[The focused packaging report](../../artifacts/browser/provider-bars-release-20260914.json) records the current 214-file source fingerprint `9e051df487fca13451613f54013066296d1b0dbda6eda3a3fd91c39c645ce639`. Clean extracted source matched all 77 files for Chrome, Edge and Firefox. The unsigned package hashes are Chrome `816a5cf334a65dc39138c483353c05f84e6acb110ba26bec3ab382970cbb6c75`, Edge `5f3093194346461b49c2acff7598981c9ee9138be1cc161cfa14006fedc04370` and Firefox `d00f3214023c4b71d541b86c9a9fa2eaf2b1b14b1d73d6168cb82771fedc723c`. The source archive hash is `d1c5a4c993e9a96e423ec620fb7d6fde34c580b43d26b0ea61a9bf29fdb3f8ef`. Public and built website copies matched. Root independently checked archive paths, CRC integrity, notices, permissions, source bytes and website copies.
+
+[The conductor verification record](../../artifacts/browser/provider-bars-conductor-verification-20260914.json) independently checks the package artifacts, command logs, focused source review and synthetic fixture interactions. It retains the current fresh-Claude zero-host observation and the unconfirmed installed-folder/reload state; native installed-extension verification remains pending.
+
+## Remaining boundary
+
+A fresh authorized native Claude tab inspected after the rebuild still had one semantic no-form composer and zero tracker hosts. The installed folder and reload state have not been confirmed, so this does not establish that the rebuilt correction was running or that it failed. The rebuilt extension has not yet been reloaded and confirmed on the native Claude or Perplexity pages. No new provider prompt or file was submitted in this checkpoint. Native capture, generation estimates, file association, diagnostic degradation, host noninterference and the complete browser/provider matrix remain unverified for these rebuilt packages. Signing, store publication, source publication, hosting, production services, external mail, PostgreSQL operations, load tests and pilot evidence also remain open.

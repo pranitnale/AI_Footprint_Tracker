@@ -1,0 +1,22 @@
+{
+  "algorithm": "sha256-file-bytes",
+  "review_date": "2026-09-10",
+  "artifacts": [
+    {
+      "path": "packages/estimator/data/baseline.json",
+      "sha256": "c86b32dfa3fca04eee7cd9819f7eca471506c7562496aa456bf92cde88d77c71"
+    },
+    {
+      "path": "packages/tokenizers/src/assets.json",
+      "sha256": "44bb1bc74359d4245552642a7c355e7ba9c6f4dc3a0d620d468334db020dd01c"
+    },
+    {
+      "path": "calibration/tokenizer-golden.json",
+      "sha256": "5e11e36e4a0b7f11dc300ded8f5b69dc75002f9fe5607740230773b1ca033258"
+    },
+    {
+      "path": "calibration/numeric-fixtures.json",
+      "sha256": "c336da94eaee3b29d1f1cfcd228b6d0f5c9f8511207b0a05e485f80d5b50b0c0"
+    }
+  ]
+}

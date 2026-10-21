@@ -1,0 +1,35 @@
+.firecrawl/
+/.context/
+/.gstack/
+/tmp/
+artifacts-release-check*.log
+node_modules/
+.venv/
+.local-calibration-deps/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+*.egg-info/
+.wxt/
+.output/
+artifacts/
+dist/
+coverage/
+test-results/
+.test-runtime/
+.ecologits-maintenance/
+.env
+.env.local
+*.tsbuildinfo
+
+# Owner decisions record, kept local by the owner's choice
+/OWNER-DECISIONS.md
+
+# Session handoff notes, kept local
+/handoff/
+
+# Local agent settings and raw AI review transcripts: kept on the machine, never published
+/.claude/
+/research/*.jsonl
+/research/*.log

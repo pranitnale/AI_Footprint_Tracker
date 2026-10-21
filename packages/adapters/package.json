@@ -1,0 +1,1 @@
+{"name":"@footprint/adapters","version":"0.1.0","license":"MIT","type":"module","exports":"./src/index.ts","dependencies":{"@footprint/capture-core":"workspace:*"},"scripts":{"test":"tsx --test test/*.test.ts"}}

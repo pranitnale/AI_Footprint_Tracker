@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "cohort_id": "text-reference-2026-09-09",
+  "method": "ecologits-0.11.1-equation-reference",
+  "upstream_commit": "886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+  "calibration_status": "published_surrogate_not_calibrated_to_consumer_services",
+  "scope": "modelled_text_reference",
+  "production_promotion_requires": ["equation_parity", "workload_domain_review", "factor_provenance_review", "browser_capture_validation", "tokenizer_validation_or_explicit_unvalidated_scope", "held_out_energy_validation_before_calibrated_claims", "closed_service_transfer_disclosure"],
+  "promotion_policy_revision": "2026-09-09-source-review",
+  "promotion_policy_note": "Reference estimates may remain explicitly unvalidated. The added gates do not change numerical coefficients or constitute calibration evidence.",
+  "limitations": [
+    "No explicit input-length variable; not a pure physical decode-energy measurement",
+    "No verified proprietary deployment, hidden reasoning or reserved-idle allocation",
+    "Cohort maximum is not a physical upper bound",
+    "Original measurement years of bundled environmental factors are not encoded"
+  ],
+  "sources": {
+    "kernel": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/impacts/llm.py",
+    "models": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/data/models.json",
+    "environment": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/tracers/utils.py",
+    "electricity": "https://github.com/mlco2/ecologits/blob/886d1ebfadb51a2d6407fcea6d9778c997c85c35/ecologits/data/electricity_mixes.json"
+  },
+  "coefficients": {
+    "energyAlpha": "1.1665273170451914e-6",
+    "energyBeta": "-0.011205921025579175",
+    "energyGamma": "4.052928146734005e-5",
+    "latencyAlpha": "0.0006785088094353663",
+    "latencyBeta": "0.0003119310311688259",
+    "latencyGamma": "0.019473717579473387"
+  },
+  "reference_settings": {
+    "gpu": "H100 80 GB", "gpuMemoryGb": "80", "precisionBits": "16", "batchSize": "64",
+    "memoryMultiplier": "1.2", "hostPowerKw": "1.2", "serverGpuCount": "8",
+    "durationStrategy": "regression_uncapped_reference",
+    "environmentScenario": "ecologits-0.11.1-cohere-usa-reference"
+  },
+  "environment_scenario": {
+    "id": "ecologits-0.11.1-cohere-usa-reference",
+    "status": "bundled_library_assumption_not_verified_target_location",
+    "original_measurement_year": null,
+    "library_release_date": "2026-07-07",
+    "pue": "1.09", "directWueLitresPerItKwh": "0.999",
+    "carbonGramsPerKwh": "384.4", "electricityWaterLitresPerKwh": "3.1321"
+  },
+  "candidates": [
+    {
+      "id": "llama-3.1-8b-h100-reference", "model": "Meta-Llama-3.1-8B-Instruct",
+      "activeBillions": "8.03", "totalBillions": "8.03",
+      "architecture_source": "https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct",
+      "parameter_precision_note": "Vendor card names the 8B family; 8.03 is the pinned library value."
+    },
+    {
+      "id": "llama-3.1-70b-h100-reference", "model": "Meta-Llama-3.1-70B-Instruct",
+      "activeBillions": "70.55", "totalBillions": "70.55",
+      "architecture_source": "https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct",
+      "parameter_precision_note": "Vendor card names the 70B family; 70.55 is the pinned library value."
+    },
+    {
+      "id": "command-r-plus-08-2024-h100-reference", "model": "command-r-plus-08-2024",
+      "activeBillions": "104", "totalBillions": "104",
+      "architecture_source": "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024#model-summary"
+    },
+    {
+      "id": "command-a-03-2025-h100-reference", "model": "command-a-03-2025",
+      "activeBillions": "111", "totalBillions": "111",
+      "architecture_source": "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025#model-summary"
+    }
+  ],
+  "quarantined_upstream_entries": [
+    {
+      "id": "mistral-large-2512",
+      "reason": "Pinned library describes dense 123B; official documentation identifies MoE 675B total and 41B active. Requires an explicit correction, not an automatic alias.",
+      "official_source": "https://docs.mistral.ai/models/mistral-large-3-25-12"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-09-22",
+  "mapping_basis": "consumer_to_api_assumption",
+  "source": "https://github.com/mlco2/ecologits/blob/2b3630389e31414155328d1e6d0a91faa36e9409/ecologits/data/models.json",
+  "bindings": {
+    "chatgpt-gpt-5-5": {
+      "provider": "openai",
+      "model_name": "gpt-5.5",
+      "workload": "text"
+    },
+    "claude-haiku-4-5": {
+      "provider": "anthropic",
+      "model_name": "claude-haiku-4-5",
+      "workload": "text"
+    },
+    "claude-opus-4-8": {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-8",
+      "workload": "text"
+    },
+    "claude-opus-4-7": {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-7",
+      "workload": "text"
+    },
+    "claude-opus-4-6": {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-6",
+      "workload": "text"
+    },
+    "claude-sonnet-4-6": {
+      "provider": "anthropic",
+      "model_name": "claude-sonnet-4-6",
+      "workload": "text"
+    },
+    "gemini-3-1-pro": {
+      "provider": "google_genai",
+      "model_name": "gemini-3.1-pro-preview",
+      "workload": "text"
+    },
+    "chatgpt-gpt-5-6-sol": {
+      "provider": "openai",
+      "model_name": "gpt-5.6-sol",
+      "workload": "text"
+    },
+    "chatgpt-gpt-5-6-luna": {
+      "provider": "openai",
+      "model_name": "gpt-5.6-luna",
+      "workload": "text"
+    },
+    "claude-fable-5": {
+      "provider": "anthropic",
+      "model_name": "claude-fable-5",
+      "workload": "text"
+    },
+    "claude-fable-5-1": {
+      "provider": "anthropic",
+      "model_name": "claude-fable-5-1",
+      "workload": "text"
+    },
+    "claude-opus-5": {
+      "provider": "anthropic",
+      "model_name": "claude-opus-5",
+      "workload": "text"
+    },
+    "claude-sonnet-5": {
+      "provider": "anthropic",
+      "model_name": "claude-sonnet-5",
+      "workload": "text"
+    },
+    "gemini-3-6-flash": {
+      "provider": "google_genai",
+      "model_name": "gemini-3.6-flash",
+      "workload": "text"
+    },
+    "perplexity-gpt-5-6-terra": {
+      "provider": "openai",
+      "model_name": "gpt-5.6-terra",
+      "workload": "text"
+    },
+    "perplexity-gpt-5-6-sol": {
+      "provider": "openai",
+      "model_name": "gpt-5.6-sol",
+      "workload": "text"
+    },
+    "perplexity-claude-sonnet-5": {
+      "provider": "anthropic",
+      "model_name": "claude-sonnet-5",
+      "workload": "text"
+    },
+    "perplexity-claude-opus-5": {
+      "provider": "anthropic",
+      "model_name": "claude-opus-5",
+      "workload": "text"
+    },
+    "perplexity-gemini-3-8-flash": {
+      "provider": "google_genai",
+      "model_name": "gemini-3.8-flash",
+      "workload": "text"
+    },
+    "perplexity-gemini-3-7-flash": {
+      "provider": "google_genai",
+      "model_name": "gemini-3.7-flash",
+      "workload": "text"
+    }
+  }
+}

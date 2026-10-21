@@ -1,0 +1,13 @@
+{
+  "version": "4.0.0",
+  "profiles": {
+    "o200k_base": {
+      "profile_id": "o200k-base-4.0.0-reference",
+      "asset_hash": "4cd35a52f4ece645422670151ccbdbd6afd2bcb47b83efd13e47e5d8942aecb4"
+    },
+    "cl100k_base": {
+      "profile_id": "cl100k-base-4.0.0-reference",
+      "asset_hash": "b56372fb0b95dbd370f9de6f44b6c15006a8a36980fbc6c0568a0108971aea45"
+    }
+  }
+}

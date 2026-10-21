@@ -1,0 +1,17 @@
+{
+  "name": "@footprint/ledger",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@footprint/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "6.2.5"
+  },
+  "scripts": {
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

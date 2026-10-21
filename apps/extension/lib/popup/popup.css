@@ -1,0 +1,713 @@
+/* Toolbar popup (canvas boards Popup*). Chrome caps popups at 800 x 600, so the main area scrolls inside that height. */
+html,
+body {
+  width: 400px;
+}
+.pp {
+  width: 400px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  background: var(--lg-paper);
+}
+.pp-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px 6px 16px;
+}
+.pp-brand {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 6px;
+}
+.pp-brand:hover .pp-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pp-title {
+  font-size: 15px;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pp-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--lg-ink-2);
+}
+.pp-icon-btn:hover {
+  background: var(--lg-chip);
+}
+.pp-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: 0 6px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pp-loading {
+  padding: 32px 12px;
+  text-align: center;
+  color: var(--lg-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.pp-loading p {
+  margin: 0;
+}
+
+/* Hero */
+.pp-hero {
+  border-radius: 8px;
+  background: var(--lg-hero);
+  border: 1px solid var(--lg-hero-line);
+  color: var(--lg-hero-ink);
+  padding: 12px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pp-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.pp-hero-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-hero-soft);
+  min-width: 0;
+}
+/*
+ * Beside the period buttons "Electricity · last 30 days" wrapped its last word at 400 px (19 Oct 2026).
+ * Slightly narrower buttons leave room for the longest label; past that it shortens, never wraps.
+ */
+.pp-hero-label-one-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pp-hero-top > .lg-seg button {
+  padding: 0 7px;
+}
+.pp-hero-meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--lg-hero-muted);
+}
+.pp-hero-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.pp-hero-figure .lg-scw {
+  margin-left: auto;
+}
+.pp-approx {
+  font-size: 22px;
+  color: var(--lg-hero-muted);
+}
+.pp-hero-value .lg-figure-num {
+  font-family: var(--lg-font-display);
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.pp-hero-value .lg-figure-unit {
+  font-family: var(--lg-font-display);
+  font-size: 22px;
+  font-weight: 600;
+}
+.pp-hero-energy .lg-figure-unit {
+  color: #f3c54b;
+}
+.pp-hero-carbon .lg-figure-unit {
+  color: #d8d2c4;
+}
+.pp-hero-water .lg-figure-unit {
+  color: #7db9ec;
+}
+.pp-hero-value .lg-unknown {
+  color: var(--lg-hero-soft);
+  font-size: 22px;
+}
+.pp-hero-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  color: var(--lg-hero-text);
+}
+.pp-compare {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-lime);
+}
+.pp-hero .lg-bars {
+  margin-top: 4px;
+}
+.pp-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--lg-hero-muted);
+}
+.pp-hero-org .lg-seg {
+  align-self: flex-start;
+}
+
+/* Cards */
+.pp-card {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pp-card h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+.pp-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--lg-soft);
+}
+.pp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+}
+.pp-small {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--lg-soft);
+}
+.pp-meter {
+  height: 10px;
+  border-radius: 2px;
+  background: var(--lg-track);
+  overflow: hidden;
+}
+.pp-meter span {
+  display: block;
+  height: 10px;
+  background: var(--lg-accent);
+}
+.pp-subhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-soft);
+  padding: 0 2px;
+}
+
+/* One-line problem notice (canvas PopupProblem) */
+.pp-problem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 5px 5px 12px;
+  border-radius: 8px;
+  background: var(--lg-energy-tint);
+  border: 1px solid var(--lg-warn-line);
+  color: var(--lg-warn);
+  font-size: 13px;
+  line-height: 18px;
+}
+.pp-problem > svg {
+  color: var(--lg-energy-ink);
+}
+.pp-problem > span {
+  flex: 1;
+  min-width: 0;
+}
+.pp-problem-btn {
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 5px;
+  border: 0;
+  background: var(--lg-warn);
+  color: var(--lg-surface);
+  font-size: 13px;
+  font-weight: 600;
+  flex: none;
+}
+.pp-notice-card b {
+  font-size: 15px;
+}
+.pp-error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--lg-danger);
+}
+
+/* Before the person agreed (canvas PopupNew, owner decisions of 17 and 18 October 2026) */
+.pp-consent .pp-main {
+  gap: 10px;
+  padding-bottom: 8px;
+}
+.pp-consent .lg-local {
+  padding: 16px;
+  gap: 6px;
+}
+.pp-consent .lg-local-title {
+  font-size: 20px;
+}
+.pp-consent .lg-local-text {
+  font-size: 14px;
+}
+.pp-consent-lead {
+  margin: 0;
+  font-size: 14px;
+  color: var(--lg-ink-2);
+}
+.pp-consent-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--lg-line-strong);
+  border-radius: 14px;
+  background: var(--lg-surface);
+  font-size: 14px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.pp-consent-check input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--lg-primary);
+}
+.pp-consent-agree {
+  min-height: 46px;
+  font-size: 15px;
+}
+button.pp-consent-more,
+button.pp-tour-link {
+  align-self: center;
+  border: 0;
+  background: none;
+  padding: 4px 8px;
+  color: var(--lg-link);
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+/* Paused (canvas PopupPaused) */
+.pp-paused {
+  border-radius: 8px;
+  background: var(--lg-chip);
+  border: 1px dashed var(--lg-dash);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+.pp-paused-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: var(--lg-surface);
+  color: var(--lg-ink-2);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--lg-shadow-chip);
+}
+.pp-paused-icon svg {
+  stroke-width: 2.4;
+}
+.pp-paused h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 700;
+}
+.pp-paused p {
+  margin: 0;
+  max-width: 300px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--lg-soft);
+}
+.pp-paused-since {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-soft);
+}
+.pp-paused .lg-btn {
+  padding: 0 18px;
+}
+.pp-paused-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0.72;
+}
+
+/* First run (canvas PopupFirstRun) */
+.pp-first .pp-main {
+  gap: 10px;
+}
+.pp-welcome {
+  border-radius: 8px;
+  background: var(--lg-hero);
+  border: 1px solid var(--lg-hero-line);
+  color: var(--lg-hero-ink);
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.pp-welcome-mark {
+  width: 76px;
+  height: 76px;
+  border-radius: 38px;
+  background: radial-gradient(circle at 50% 45%, #22472f 0%, var(--lg-hero) 70%);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--lg-lime);
+}
+.pp-welcome-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--lg-hero-text);
+}
+.pp-welcome h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 700;
+  color: var(--lg-hero-ink);
+}
+.pp-steps {
+  list-style: none;
+  margin: 0;
+  padding: 14px 16px;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.pp-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.pp-step {
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--lg-ok-tint);
+  color: var(--lg-ok);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex: none;
+}
+.pp-works {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-soft);
+}
+.pp-works ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pp-works li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+  color: var(--lg-ink);
+}
+.pp-link-lg {
+  font-size: 14px;
+}
+
+/* Dark setup panel for connect and pending (canvas PopupConnect, PopupPending) */
+.pp-panel {
+  border-radius: 8px;
+  background: var(--lg-hero);
+  border: 1px solid var(--lg-hero-line);
+  color: var(--lg-hero-ink);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pp-panel h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 700;
+}
+.pp-panel-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lg-hero-soft);
+}
+.pp-panel-status-wait {
+  color: var(--lg-lime);
+}
+.pp-panel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: currentColor;
+}
+.pp-panel-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--lg-hero-text);
+}
+.pp-panel-btn {
+  min-height: 46px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--lg-lime);
+  color: var(--lg-forest);
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.pp-panel-btn:hover {
+  background: #d6f2a8;
+}
+.pp-panel-small {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--lg-hero-soft);
+  text-align: center;
+}
+.pp-after {
+  padding: 14px;
+  gap: 8px;
+}
+.pp-after b {
+  font-size: 14px;
+}
+.pp-after ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pp-after li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 18px;
+}
+.pp-after li svg {
+  flex: none;
+  margin-top: 2px;
+}
+.pp-yes {
+  color: var(--lg-accent);
+}
+.pp-no {
+  color: var(--lg-danger);
+}
+.pp-kv {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.pp-kv div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(244, 245, 239, 0.12);
+}
+.pp-kv .pp-kv-stack {
+  flex-direction: column;
+  gap: 2px;
+}
+.pp-kv dt {
+  color: var(--lg-hero-soft);
+}
+.pp-kv dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.pp-actions {
+  display: flex;
+  gap: 8px;
+}
+.pp-actions .lg-btn {
+  min-height: 44px;
+}
+.pp-grow {
+  flex: 1;
+}
+
+/* Footer */
+/* Footer and credit strip together stay at 76 px, the height before the 16 October changes:
+   a 30-day view with four tools and a comparison line fills Chrome's 600 px popup almost
+   exactly, and any extra height makes the figures scroll. */
+.pp-foot {
+  padding: 8px 12px 8px 16px;
+  border-top: 1px solid var(--lg-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+}
+.pp-foot .lg-btn {
+  min-height: 36px;
+}
+.pp-link {
+  font-size: 13px;
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+/* The status in small type beside the Dashboard button (owner, 16 October 2026). */
+.pp-foot-status {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--lg-soft);
+}
+.pp-foot-status .lg-status {
+  gap: 4px;
+  font-size: 12px;
+  color: var(--lg-soft);
+}
+.pp-foot-status .lg-status svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+/* The credit in its own thin strip below a divider, centred both ways (owner, 16 October
+   2026, option D). */
+.pp-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-top: 1px solid var(--lg-line);
+  flex: none;
+}
+.pp-meta .lg-credit {
+  padding: 0;
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+}
+.pp-hero-pill {
+  height: 26px;
+  padding: 0 10px;
+  gap: 6px;
+  border-radius: 999px;
+  background: var(--lg-hero-chip);
+  color: var(--lg-hero-text);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.pp-sync-pill {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--lg-info-tint);
+  color: var(--lg-info);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Small radii throughout the popup, including the shared controls it uses (owner, 12 October 2026). */
+.pp .lg-btn,
+.pp .lg-seg,
+.pp .pp-note,
+.pp .pp-phrase,
+.pp .pp-info,
+.pp .lg-scenario,
+.pp .pp-hero-pill,
+.pp .pp-sync-pill,
+.pp .pp-works li,
+.pp .pp-step,
+.pp .pp-panel-btn,
+.pp .pp-welcome-mark,
+.pp .pp-paused-icon,
+.pp .lg-tip {
+  border-radius: 6px;
+}
+.pp .lg-tile {
+  border-radius: 8px;
+}
+.pp .lg-seg button {
+  border-radius: 4px;
+}

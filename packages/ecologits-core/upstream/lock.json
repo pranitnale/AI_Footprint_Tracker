@@ -1,0 +1,116 @@
+{
+  "artifacts": {
+    "package": {
+      "bytes": 1083066,
+      "filename": "downloads/ecologits-0.11.2.tar.gz",
+      "origin": "https://files.pythonhosted.org/packages/f5/45/c7cd0930cc93dbf3a9f2f76fe8dd4c8b7e7662c6b76d6d25f4d7c4a37e9d/ecologits-0.11.2.tar.gz",
+      "sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c"
+    },
+    "pypi_metadata": {
+      "bytes": 9695,
+      "filename": "downloads/pypi-0.11.2.json",
+      "origin": "https://pypi.org/pypi/ecologits/0.11.2/json",
+      "sha256": "2d41ed3ad873c1423e63db09bca3cc5279b17dcf7a158881a528f6f6a7003294"
+    },
+    "source_catalog": {
+      "bytes": 1091800,
+      "filename": "downloads/ecologits-core-c739e8d61f6a12a85864adb698ab85623fe70f3c.tar.gz",
+      "origin": "https://codeload.github.com/mlco2/ecologits/tar.gz/c739e8d61f6a12a85864adb698ab85623fe70f3c",
+      "sha256": "20f151ab3577ab02d470a6ba479c168ca2d2872d3ba1340fbb13592957562492"
+    },
+    "source_core": {
+      "bytes": 1091800,
+      "filename": "downloads/ecologits-core-c739e8d61f6a12a85864adb698ab85623fe70f3c.tar.gz",
+      "origin": "https://codeload.github.com/mlco2/ecologits/tar.gz/c739e8d61f6a12a85864adb698ab85623fe70f3c",
+      "sha256": "20f151ab3577ab02d470a6ba479c168ca2d2872d3ba1340fbb13592957562492"
+    }
+  },
+  "catalog_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "catalog_overlay_files": [],
+  "catalog_schema": "1",
+  "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+  "citation_sha256": "537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf",
+  "commit_evidence": "The immutable commit and package artifact are separately pinned. Adoption requires content comparison; this manifest does not claim tag-to-commit linkage by itself.",
+  "converter_version": "2",
+  "core_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "core_files": {
+    "src/admission.ts": "8bd0597ee877a89dab207be6766b7be37560ae1dcefd07f4c2c17f01cfb84f35",
+    "src/catalog.ts": "377b3af6c53ae94f4ee345793db55315fa9e7a474fc4c98a756523e25de22145",
+    "src/dag.ts": "f0ab0574b69ae280c95566e77ae09123bcba139b83a393c4eac15b24d6bf03cc",
+    "src/identity.ts": "a16218ce6a745c7b0b5dd6d9d4fb6cdba916a18000f00d507188ba62f6358f45",
+    "src/index.ts": "7c14fd0bba85772faec8c8f88cd01c5641b98142c271e8ad6f6edd63c65b89bc",
+    "src/llm.ts": "3e2ac14576757e40870a425b038c202892d8a3952466657e426d5c8fcf78d1e9",
+    "src/modeling.ts": "e18cceaf076c6042168c79549cc9929854fc4f4b2220f25e1373fe7233063730",
+    "src/values.ts": "dc7dea096482f6c9924476bee28be6a2074e52da19b6fa948319ba65d770fd67",
+    "src/video.ts": "8348b6396885c017f2e49207e95d8f40933625619913ba7471f151bdf21a5e7b"
+  },
+  "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+  "core_version": "0.11.1-port.2",
+  "counts": {
+    "aliases": 9,
+    "electricity_mixes": 215,
+    "hardware_configurations": 4,
+    "models": 339,
+    "resolved_models": 348,
+    "video_models": 17
+  },
+  "files": {
+    "CITATION.cff": "537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf",
+    "LICENSE": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+    "README.md": "ba109db1a04305a9758f3e820afccc270b033b1d48905c5dc4dc8cf9f04ebe5a",
+    "ecologits/__init__.py": "2c038b9bd5a47a2126bb3257a7fb42d7ca20978f1fa43a871c2899da8ad7c227",
+    "ecologits/_ecologits.py": "dff27b28c69dfa1d775d00e8030f7edee05029b4818b5233c132867f27652386",
+    "ecologits/data/electricity_mixes.json": "993c9b4bc8aede3e8aa6a32af9dbe705a8a7d22d495c4ae36fe5861ff931394f",
+    "ecologits/data/models.json": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0",
+    "ecologits/data/video_models.json": "809f02e0beea9413b452c28b97e1e1ebd47a5cd89f8a0dd1b734998a38ef7bef",
+    "ecologits/electricity_mix_repository.py": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+    "ecologits/estimations/__init__.py": "ec372fcfa377da01559d373f13394317cc0b03b648b20e1808716025263d7a85",
+    "ecologits/estimations/video.py": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+    "ecologits/exceptions.py": "516cdc714c98a8a426dcb542cca34caca9225d3a94135b409d9b2980afcd0f2f",
+    "ecologits/impacts/__init__.py": "e4ef9abef7506805932f034e810dc7d715c3d39e0f6012110f5067e6cc181d2b",
+    "ecologits/impacts/dag.py": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+    "ecologits/impacts/llm.py": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+    "ecologits/impacts/modeling.py": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+    "ecologits/impacts/video.py": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+    "ecologits/log.py": "1813129df10ae98809902592679f6f369fb9b0b1d559131b6f23192ca57407d2",
+    "ecologits/model_repository.py": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+    "ecologits/status_messages.py": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+    "ecologits/tracers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ecologits/tracers/utils.py": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+    "ecologits/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ecologits/utils/range_value.py": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+    "pyproject.toml": "26dd8b2218ab543012f58d97dbc10dcefa1d53aa935aab903c69360b185ff846"
+  },
+  "license_sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+  "maintenance_tool_version": "1",
+  "official_release_claim": false,
+  "oracle_lock_sha256": "5252ec735b5d65065d3494f674c057f3bc25313ffbfc62ecd5a6d9f405b766dc",
+  "oracle_project_sha256": "ff7c2223b88d3879cb0568ec2586bdbe46486a688a9d68d3e18ab969148fe036",
+  "overlay_sha256": null,
+  "port_files": {
+    "src/catalog.ts": "377b3af6c53ae94f4ee345793db55315fa9e7a474fc4c98a756523e25de22145",
+    "src/dag.ts": "f0ab0574b69ae280c95566e77ae09123bcba139b83a393c4eac15b24d6bf03cc",
+    "src/llm.ts": "3e2ac14576757e40870a425b038c202892d8a3952466657e426d5c8fcf78d1e9",
+    "src/modeling.ts": "e18cceaf076c6042168c79549cc9929854fc4f4b2220f25e1373fe7233063730",
+    "src/values.ts": "dc7dea096482f6c9924476bee28be6a2074e52da19b6fa948319ba65d770fd67",
+    "src/video.ts": "8348b6396885c017f2e49207e95d8f40933625619913ba7471f151bdf21a5e7b",
+    "tools/generate_catalog.py": "f869863feecfd61c3a43ea356409c17fd392c622a45c8d9ec367f62df1b671d7"
+  },
+  "private_artifact_directory": ".git/refinement-artifacts/vendor-source/ecologits-0.11.2-c739e8d61f6a-c739e8d61f6a",
+  "provenance_note": "The immutable commit and package artifact are separately pinned. Adoption requires content comparison; this manifest does not claim tag-to-commit linkage by itself.",
+  "python_lock_sha256": "5252ec735b5d65065d3494f674c057f3bc25313ffbfc62ecd5a6d9f405b766dc",
+  "qualified_label": null,
+  "release_kind": "release_candidate",
+  "requested_git_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "retained_source_manifest_sha256": "cb4d0176d9dd7ba4eed13db948bc493e7f058b7e370255930b5a2679378e327a",
+  "schema_version": "2",
+  "snapshot_directory": "ecologits-0.11.2",
+  "source_artifact": {
+    "filename": "ecologits-0.11.2.tar.gz",
+    "origin": "https://files.pythonhosted.org/packages/f5/45/c7cd0930cc93dbf3a9f2f76fe8dd4c8b7e7662c6b76d6d25f4d7c4a37e9d/ecologits-0.11.2.tar.gz",
+    "sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c"
+  },
+  "source_distribution": "retained-source-subset",
+  "source_map_sha256": "3e3ae56239b2f1cbd799defff54dc72442de47783ee9f225d28faace02265b8f",
+  "upstream_version": "0.11.2"
+}

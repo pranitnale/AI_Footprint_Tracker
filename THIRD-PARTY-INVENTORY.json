@@ -1,0 +1,754 @@
+{
+  "components": [
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://fontsource.org/fonts/bricolage-grotesque",
+      "license": "OFL-1.1",
+      "name": "@fontsource-variable/bricolage-grotesque",
+      "scope": "runtime",
+      "version": "5.3.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://fontsource.org/fonts/instrument-sans",
+      "license": "OFL-1.1",
+      "name": "@fontsource-variable/instrument-sans",
+      "scope": "runtime",
+      "version": "5.3.0"
+    },
+    {
+      "ecosystem": "npm",
+      "homepage": "https://github.com/Brooooooklyn/canvas#readme",
+      "license": "MIT",
+      "name": "@napi-rs/canvas",
+      "scope": "optional_not_shipped",
+      "version": "1.0.8"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://paulmillr.com/noble/",
+      "license": "MIT",
+      "name": "@noble/hashes",
+      "scope": "runtime",
+      "version": "2.4.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://github.com/juanjoDiaz/jsonparse2#readme",
+      "license": "MIT",
+      "name": "@streamparser/json",
+      "scope": "runtime",
+      "version": "0.0.24"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "license": "MIT",
+      "name": "@wxt-dev/browser",
+      "scope": "runtime",
+      "version": "0.1.43"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "license": "MPL-2.0",
+      "name": "EcoLogits independent TypeScript port",
+      "scope": "runtime",
+      "version": "0.11.1-port.2"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "license": "MIT",
+      "name": "core-js",
+      "scope": "runtime",
+      "version": "3.50.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://github.com/MikeMcl/decimal.js#readme",
+      "license": "MIT",
+      "name": "decimal.js",
+      "scope": "runtime",
+      "version": "10.6.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://101arrowz.github.io/fflate",
+      "license": "MIT",
+      "name": "fflate",
+      "scope": "runtime",
+      "version": "0.8.3"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://github.com/niieani/gpt-tokenizer#readme",
+      "license": "MIT",
+      "name": "gpt-tokenizer",
+      "scope": "runtime",
+      "version": "4.0.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://mozilla.github.io/pdf.js/",
+      "license": "Apache-2.0",
+      "name": "pdfjs-dist",
+      "scope": "runtime",
+      "version": "6.3.289"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://react.dev/",
+      "license": "MIT",
+      "name": "react",
+      "scope": "runtime",
+      "version": "19.3.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://react.dev/",
+      "license": "MIT",
+      "name": "react-dom",
+      "scope": "runtime",
+      "version": "19.3.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://github.com/lddubeau/saxes#readme",
+      "license": "ISC",
+      "name": "saxes",
+      "scope": "runtime",
+      "version": "6.0.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://react.dev/",
+      "license": "MIT",
+      "name": "scheduler",
+      "scope": "runtime",
+      "version": "0.28.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "license": "MIT",
+      "name": "vite",
+      "scope": "runtime",
+      "version": "7.3.6"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "license": "MIT",
+      "name": "wxt",
+      "scope": "runtime",
+      "version": "0.21.4"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://github.com/lddubeau/xmlchars#readme",
+      "license": "MIT",
+      "name": "xmlchars",
+      "scope": "runtime",
+      "version": "2.2.0"
+    },
+    {
+      "browser_runtime": true,
+      "ecosystem": "npm",
+      "homepage": "https://zod.dev",
+      "license": "MIT",
+      "name": "zod",
+      "scope": "runtime",
+      "version": "4.6.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://alembic.sqlalchemy.org",
+      "license": "MIT",
+      "name": "alembic",
+      "scope": "runtime",
+      "version": "1.19.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/fastapi/annotated-doc",
+      "license": "MIT",
+      "name": "annotated-doc",
+      "scope": "runtime",
+      "version": "0.0.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/annotated-types/annotated-types",
+      "license": "MIT",
+      "name": "annotated-types",
+      "scope": "runtime",
+      "version": "0.8.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://anyio.readthedocs.io/en/latest/",
+      "license": "MIT",
+      "name": "anyio",
+      "scope": "runtime",
+      "version": "4.15.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://www.attrs.org/",
+      "license": "MIT",
+      "name": "attrs",
+      "scope": "runtime",
+      "version": "26.1.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/certifi/python-certifi",
+      "license": "MPL-2.0",
+      "name": "certifi",
+      "scope": "runtime",
+      "version": "2026.7.22"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://cffi.readthedocs.io/",
+      "license": "MIT-0",
+      "name": "cffi",
+      "scope": "runtime",
+      "version": "2.1.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://click.palletsprojects.com/page/changes/",
+      "license": "BSD-3-Clause",
+      "name": "click",
+      "scope": "runtime",
+      "version": "8.5.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/tartley/colorama",
+      "license": "BSD-3-Clause",
+      "name": "colorama",
+      "scope": "development",
+      "version": "0.4.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://cryptography.io/en/latest/changelog/",
+      "license": "Apache-2.0 OR BSD-3-Clause",
+      "name": "cryptography",
+      "scope": "runtime",
+      "version": "50.0.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "license": "MPL-2.0",
+      "name": "ecologits",
+      "scope": "runtime",
+      "version": "0.11.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/fastapi/fastapi",
+      "license": "MIT",
+      "name": "fastapi",
+      "scope": "runtime",
+      "version": "0.141.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://greenlet.readthedocs.io",
+      "license": "MIT AND PSF-2.0",
+      "name": "greenlet",
+      "scope": "runtime",
+      "version": "3.5.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "license": "MIT",
+      "name": "h11",
+      "scope": "runtime",
+      "version": "0.16.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://www.encode.io/httpcore",
+      "license": "BSD-3-Clause",
+      "name": "httpcore",
+      "scope": "runtime",
+      "version": "1.0.9"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/encode/httpx/blob/master/CHANGELOG.md",
+      "license": "BSD-3-Clause",
+      "name": "httpx",
+      "scope": "runtime",
+      "version": "0.28.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/kjd/idna/blob/master/HISTORY.md",
+      "license": "BSD-3-Clause",
+      "name": "idna",
+      "scope": "runtime",
+      "version": "3.19"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/pytest-dev/iniconfig",
+      "license": "MIT",
+      "name": "iniconfig",
+      "scope": "development",
+      "version": "2.3.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/python-jsonschema/jsonschema",
+      "license": "MIT",
+      "name": "jsonschema",
+      "scope": "runtime",
+      "version": "4.26.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://jsonschema-specifications.readthedocs.io/",
+      "license": "MIT",
+      "name": "jsonschema-specifications",
+      "scope": "runtime",
+      "version": "2025.9.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://www.makotemplates.org/",
+      "license": "MIT",
+      "name": "mako",
+      "scope": "runtime",
+      "version": "1.4.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://palletsprojects.com/donate",
+      "license": "BSD-3-Clause",
+      "name": "markupsafe",
+      "scope": "runtime",
+      "version": "3.0.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://packaging.pypa.io/",
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "name": "packaging",
+      "scope": "runtime",
+      "version": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "license": "MIT",
+      "name": "pluggy",
+      "scope": "development",
+      "version": "1.6.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/wolph/portalocker/issues",
+      "license": "BSD-3-Clause",
+      "name": "portalocker",
+      "scope": "runtime",
+      "version": "3.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://psycopg.org/",
+      "license": "LGPL-3.0-only",
+      "name": "psycopg",
+      "scope": "runtime",
+      "version": "3.3.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://psycopg.org/",
+      "license": "LGPL-3.0-only",
+      "name": "psycopg-binary",
+      "scope": "development",
+      "version": "3.3.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/eliben/pycparser",
+      "license": "BSD-3-Clause",
+      "name": "pycparser",
+      "scope": "runtime",
+      "version": "3.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/pydantic/pydantic",
+      "license": "MIT",
+      "name": "pydantic",
+      "scope": "runtime",
+      "version": "2.13.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/sponsors/samuelcolvin",
+      "license": "MIT",
+      "name": "pydantic-core",
+      "scope": "runtime",
+      "version": "2.46.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://pygments.org",
+      "license": "BSD-2-Clause",
+      "name": "pygments",
+      "scope": "development",
+      "version": "2.21.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://docs.pytest.org/en/stable/changelog.html",
+      "license": "MIT",
+      "name": "pytest",
+      "scope": "development",
+      "version": "9.1.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://dateutil.readthedocs.io/en/stable/",
+      "license": "Apache-2.0 AND BSD-3-Clause",
+      "name": "python-dateutil",
+      "scope": "runtime",
+      "version": "2.9.0.post0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/mhammond/pywin32",
+      "license": "NOASSERTION",
+      "name": "pywin32",
+      "scope": "optional_not_shipped",
+      "version": "312"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://referencing.readthedocs.io/",
+      "license": "MIT",
+      "name": "referencing",
+      "scope": "runtime",
+      "version": "0.37.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://rpds.readthedocs.io/",
+      "license": "MIT",
+      "name": "rpds-py",
+      "scope": "runtime",
+      "version": "2026.6.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md",
+      "license": "MIT",
+      "name": "ruff",
+      "scope": "development",
+      "version": "0.16.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "license": "MIT",
+      "name": "six",
+      "scope": "runtime",
+      "version": "1.17.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://docs.sqlalchemy.org",
+      "license": "MIT",
+      "name": "sqlalchemy",
+      "scope": "runtime",
+      "version": "2.0.52"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/Kludex/starlette",
+      "license": "BSD-3-Clause",
+      "name": "starlette",
+      "scope": "runtime",
+      "version": "1.6.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/python/typing_extensions/issues",
+      "license": "PSF-2.0",
+      "name": "typing-extensions",
+      "scope": "runtime",
+      "version": "4.16.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/pydantic/typing-inspection",
+      "license": "MIT",
+      "name": "typing-inspection",
+      "scope": "runtime",
+      "version": "0.4.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/python/tzdata",
+      "license": "Apache-2.0",
+      "name": "tzdata",
+      "scope": "optional_not_shipped",
+      "version": "2026.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://uvicorn.dev/release-notes",
+      "license": "BSD-3-Clause",
+      "name": "uvicorn",
+      "scope": "runtime",
+      "version": "0.52.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "homepage": "https://github.com/GrahamDumpleton/wrapt/issues/",
+      "license": "BSD-2-Clause",
+      "name": "wrapt",
+      "scope": "runtime",
+      "version": "1.17.3"
+    }
+  ],
+  "data": [
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "ADEME Base Empreinte electricity factors",
+      "note": "Abiotic resource depletion and primary energy factors of electricity. Licence not recorded here; check the Base Empreinte terms of use.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://base-empreinte.ademe.fr/",
+      "supplier": "ADEME",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "BoaviztAPI server impact data",
+      "note": "Server embodied impacts and non-GPU server power, as values in the EcoLogits data. No BoaviztAPI software is included. Licence of the values not recorded here.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://github.com/Boavizta/boaviztapi",
+      "supplier": "Boavizta",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "license": "OFL-1.1",
+      "license_status": "declared",
+      "name": "Bricolage Grotesque font files",
+      "note": "WOFF2 subsets bundled into the extension and the website. The OFL copyright notice and licence travel with them: in licenses/ of each browser package and in the website's open-source page.",
+      "part_of": "@fontsource-variable/bricolage-grotesque",
+      "shipped_in": [
+        "browser_extension",
+        "website"
+      ],
+      "source": "https://github.com/ateliertriay/bricolage",
+      "supplier": "The Bricolage Grotesque Project Authors, packaged by Fontsource",
+      "version": "@fontsource-variable/bricolage-grotesque 5.3.0"
+    },
+    {
+      "files": [
+        "packages/ecologits-core/data/catalog.json"
+      ],
+      "license": "MPL-2.0",
+      "license_status": "declared",
+      "name": "EcoLogits model, provider and electricity data",
+      "note": "Converted from the pinned EcoLogits release (packages/ecologits-core/upstream/lock.json) and distributed under MPL-2.0 with the port. The server uses the same data through the EcoLogits Python package. The entries marked as part of this data name the sources EcoLogits credits.",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://github.com/mlco2/ecologits",
+      "supplier": "EcoLogits contributors (CodeCarbon)",
+      "version": "EcoLogits 0.11.2"
+    },
+    {
+      "files": [
+        "packages/estimator/data/baseline.json"
+      ],
+      "license": "MPL-2.0",
+      "license_status": "declared",
+      "name": "EcoLogits reference coefficients for the archived Original method",
+      "note": "Coefficients and default settings copied from the pinned EcoLogits source for the archived Original method, which the product no longer offers. The data still ships in the estimator bundle.",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "source": "https://github.com/mlco2/ecologits/tree/886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+      "supplier": "EcoLogits contributors (CodeCarbon)",
+      "version": "EcoLogits commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35"
+    },
+    {
+      "license": "OFL-1.1",
+      "license_status": "declared",
+      "name": "Instrument Sans font files",
+      "note": "WOFF2 subsets bundled into the extension and the website. The OFL copyright notice and licence travel with them: in licenses/ of each browser package and in the website's open-source page.",
+      "part_of": "@fontsource-variable/instrument-sans",
+      "shipped_in": [
+        "browser_extension",
+        "website"
+      ],
+      "source": "https://github.com/Instrument/instrument-sans",
+      "supplier": "The Instrument Sans Project Authors, packaged by Fontsource",
+      "version": "@fontsource-variable/instrument-sans 5.3.0"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "Jegham et al. video generation figures",
+      "note": "Video generation durations and server power. Published figures cited by EcoLogits; licence not recorded here.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://arxiv.org/abs/2607.04553",
+      "supplier": "Jegham et al.",
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "Lees-Perasso et al. GPU life-cycle study",
+      "note": "GPU embodied impacts. Published figures cited by EcoLogits; licence not recorded here.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html",
+      "supplier": "ADEME",
+      "version": "2026, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "ML.ENERGY Leaderboard measurements behind the EcoLogits regressions",
+      "note": "EcoLogits ships regression coefficients fitted to these measurements, not the measurements themselves. Licence not recorded here: the leaderboard repository (https://github.com/ml-energy/leaderboard) had no licence file when checked on 9 September 2026.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://ml.energy/leaderboard/",
+      "supplier": "ML.ENERGY",
+      "version": "As used by EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "OpenRouter model statistics",
+      "note": "Time to first token and output speed in the EcoLogits model records. Licence not recorded here.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://openrouter.ai",
+      "supplier": "OpenRouter",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "license": "CC-BY-4.0",
+      "license_status": "declared",
+      "name": "Our World in Data electricity mix",
+      "note": "Electricity-mix carbon intensity. Our World in Data states that data it republishes from third parties stays under the original authors' terms.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://ourworldindata.org/electricity-mix",
+      "supplier": "Our World in Data (Hannah Ritchie and Pablo Rosado)",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "Schneider et al. TPU embodied carbon figures",
+      "note": "TPU embodied carbon. Published figures cited by EcoLogits; licence not recorded here.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://arxiv.org/abs/2502.01671",
+      "supplier": "Schneider et al.",
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "name": "World Resources Institute electricity water data",
+      "note": "Water consumed to generate electricity (off-site WUE). Licence not recorded here; check the WRI publication terms.",
+      "part_of": "EcoLogits model, provider and electricity data",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "source": "https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity",
+      "supplier": "World Resources Institute",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "license": "MIT",
+      "license_status": "declared",
+      "name": "cl100k_base BPE ranks",
+      "note": "Vocabulary shipped inside the MIT-licensed gpt-tokenizer package. It reproduces the cl100k_base encoding that OpenAI publishes with tiktoken (MIT); that notice is kept in packages/tokenizers/LICENSES. No separate licence for the rank files themselves is recorded.",
+      "part_of": "gpt-tokenizer",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "source": "https://github.com/niieani/gpt-tokenizer",
+      "supplier": "OpenAI (tiktoken), packaged by gpt-tokenizer",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 b56372fb0b95dbd370f9de6f44b6c15006a8a36980fbc6c0568a0108971aea45)"
+    },
+    {
+      "license": "MIT",
+      "license_status": "declared",
+      "name": "o200k_base BPE ranks",
+      "note": "Vocabulary shipped inside the MIT-licensed gpt-tokenizer package. It reproduces the o200k_base encoding that OpenAI publishes with tiktoken (MIT); that notice is kept in packages/tokenizers/LICENSES. No separate licence for the rank files themselves is recorded.",
+      "part_of": "gpt-tokenizer",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "source": "https://github.com/niieani/gpt-tokenizer",
+      "supplier": "OpenAI (tiktoken), packaged by gpt-tokenizer",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 4cd35a52f4ece645422670151ccbdbd6afd2bcb47b83efd13e47e5d8942aecb4)"
+    }
+  ],
+  "generated_from": [
+    "pnpm-lock.yaml",
+    "apps/server/uv.lock",
+    "apps/extension/build/notices.ts",
+    "tools/third-party-curation.json"
+  ],
+  "schema_version": "1.1.0"
+}

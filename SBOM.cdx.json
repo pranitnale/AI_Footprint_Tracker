@@ -1,0 +1,2164 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://fontsource.org/fonts/bricolage-grotesque"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "name": "@fontsource-variable/bricolage-grotesque",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/@fontsource-variable/bricolage-grotesque@5.3.0",
+      "type": "library",
+      "version": "5.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://fontsource.org/fonts/instrument-sans"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "name": "@fontsource-variable/instrument-sans",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/@fontsource-variable/instrument-sans@5.3.0",
+      "type": "library",
+      "version": "5.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/Brooooooklyn/canvas#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "@napi-rs/canvas",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "optional_not_shipped"
+        }
+      ],
+      "purl": "pkg:npm/@napi-rs/canvas@1.0.8",
+      "type": "library",
+      "version": "1.0.8"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://paulmillr.com/noble/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "@noble/hashes",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/@noble/hashes@2.4.0",
+      "type": "library",
+      "version": "2.4.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/juanjoDiaz/jsonparse2#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "@streamparser/json",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/@streamparser/json@0.0.24",
+      "type": "library",
+      "version": "0.0.24"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "@wxt-dev/browser",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/@wxt-dev/browser@0.1.43",
+      "type": "library",
+      "version": "0.1.43"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ],
+      "name": "EcoLogits independent TypeScript port",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "type": "library",
+      "version": "0.11.1-port.2"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "core-js",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/core-js@3.50.0",
+      "type": "library",
+      "version": "3.50.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/MikeMcl/decimal.js#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "decimal.js",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/decimal.js@10.6.0",
+      "type": "library",
+      "version": "10.6.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://101arrowz.github.io/fflate"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "fflate",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/fflate@0.8.3",
+      "type": "library",
+      "version": "0.8.3"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/niieani/gpt-tokenizer#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "gpt-tokenizer",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/gpt-tokenizer@4.0.0",
+      "type": "library",
+      "version": "4.0.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://mozilla.github.io/pdf.js/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "pdfjs-dist",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/pdfjs-dist@6.3.289",
+      "type": "library",
+      "version": "6.3.289"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://react.dev/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "react",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/react@19.3.0",
+      "type": "library",
+      "version": "19.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://react.dev/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "react-dom",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/react-dom@19.3.0",
+      "type": "library",
+      "version": "19.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/lddubeau/saxes#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "name": "saxes",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/saxes@6.0.0",
+      "type": "library",
+      "version": "6.0.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://react.dev/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "scheduler",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/scheduler@0.28.0",
+      "type": "library",
+      "version": "0.28.0"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "vite",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/vite@7.3.6",
+      "type": "library",
+      "version": "7.3.6"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "wxt",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/wxt@0.21.4",
+      "type": "library",
+      "version": "0.21.4"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/lddubeau/xmlchars#readme"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "xmlchars",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/xmlchars@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://zod.dev"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "zod",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        },
+        {
+          "name": "aift:browser_runtime",
+          "value": "true"
+        }
+      ],
+      "purl": "pkg:npm/zod@4.6.1",
+      "type": "library",
+      "version": "4.6.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://alembic.sqlalchemy.org"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "alembic",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/alembic@1.19.2",
+      "type": "library",
+      "version": "1.19.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/fastapi/annotated-doc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "annotated-doc",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/annotated-doc@0.0.5",
+      "type": "library",
+      "version": "0.0.5"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/annotated-types/annotated-types"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "annotated-types",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "type": "library",
+      "version": "0.8.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://anyio.readthedocs.io/en/latest/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "anyio",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/anyio@4.15.1",
+      "type": "library",
+      "version": "4.15.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.attrs.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "attrs",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/attrs@26.1.0",
+      "type": "library",
+      "version": "26.1.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/certifi/python-certifi"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ],
+      "name": "certifi",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/certifi@2026.7.22",
+      "type": "library",
+      "version": "2026.7.22"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://cffi.readthedocs.io/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT-0"
+          }
+        }
+      ],
+      "name": "cffi",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/cffi@2.1.1",
+      "type": "library",
+      "version": "2.1.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://click.palletsprojects.com/page/changes/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "click",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/click@8.5.0",
+      "type": "library",
+      "version": "8.5.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/tartley/colorama"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "colorama",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "type": "library",
+      "version": "0.4.6"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://cryptography.io/en/latest/changelog/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-3-Clause"
+        }
+      ],
+      "name": "cryptography",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/cryptography@50.0.1",
+      "type": "library",
+      "version": "50.0.1"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ],
+      "name": "ecologits",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/ecologits@0.11.2",
+      "type": "library",
+      "version": "0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/fastapi/fastapi"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "fastapi",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/fastapi@0.141.1",
+      "type": "library",
+      "version": "0.141.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://greenlet.readthedocs.io"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT AND PSF-2.0"
+        }
+      ],
+      "name": "greenlet",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/greenlet@3.5.5",
+      "type": "library",
+      "version": "3.5.5"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "h11",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/h11@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.encode.io/httpcore"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "httpcore",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/httpcore@1.0.9",
+      "type": "library",
+      "version": "1.0.9"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/encode/httpx/blob/master/CHANGELOG.md"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "httpx",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/httpx@0.28.1",
+      "type": "library",
+      "version": "0.28.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/kjd/idna/blob/master/HISTORY.md"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "idna",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/idna@3.19",
+      "type": "library",
+      "version": "3.19"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/pytest-dev/iniconfig"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "iniconfig",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/iniconfig@2.3.0",
+      "type": "library",
+      "version": "2.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/python-jsonschema/jsonschema"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "jsonschema",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/jsonschema@4.26.0",
+      "type": "library",
+      "version": "4.26.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://jsonschema-specifications.readthedocs.io/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "jsonschema-specifications",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/jsonschema-specifications@2025.9.1",
+      "type": "library",
+      "version": "2025.9.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.makotemplates.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "mako",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/mako@1.4.1",
+      "type": "library",
+      "version": "1.4.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://palletsprojects.com/donate"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "markupsafe",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/markupsafe@3.0.3",
+      "type": "library",
+      "version": "3.0.3"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://packaging.pypa.io/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-2-Clause"
+        }
+      ],
+      "name": "packaging",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/packaging@26.3",
+      "type": "library",
+      "version": "26.3"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "pluggy",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/pluggy@1.6.0",
+      "type": "library",
+      "version": "1.6.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/wolph/portalocker/issues"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "portalocker",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/portalocker@3.2.0",
+      "type": "library",
+      "version": "3.2.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://psycopg.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "LGPL-3.0-only"
+          }
+        }
+      ],
+      "name": "psycopg",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/psycopg@3.3.5",
+      "type": "library",
+      "version": "3.3.5"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://psycopg.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "LGPL-3.0-only"
+          }
+        }
+      ],
+      "name": "psycopg-binary",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/psycopg-binary@3.3.5",
+      "type": "library",
+      "version": "3.3.5"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/eliben/pycparser"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "pycparser",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/pycparser@3.0",
+      "type": "library",
+      "version": "3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/pydantic/pydantic"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "pydantic",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/pydantic@2.13.5",
+      "type": "library",
+      "version": "2.13.5"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/sponsors/samuelcolvin"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "pydantic-core",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/pydantic-core@2.46.5",
+      "type": "library",
+      "version": "2.46.5"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://pygments.org"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "name": "pygments",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/pygments@2.21.0",
+      "type": "library",
+      "version": "2.21.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://docs.pytest.org/en/stable/changelog.html"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "pytest",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/pytest@9.1.1",
+      "type": "library",
+      "version": "9.1.1"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://dateutil.readthedocs.io/en/stable/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 AND BSD-3-Clause"
+        }
+      ],
+      "name": "python-dateutil",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/python-dateutil@2.9.0.post0",
+      "type": "library",
+      "version": "2.9.0.post0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/mhammond/pywin32"
+        }
+      ],
+      "licenses": [],
+      "name": "pywin32",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "optional_not_shipped"
+        }
+      ],
+      "purl": "pkg:pypi/pywin32@312",
+      "type": "library",
+      "version": "312"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://referencing.readthedocs.io/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "referencing",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/referencing@0.37.0",
+      "type": "library",
+      "version": "0.37.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://rpds.readthedocs.io/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "rpds-py",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/rpds-py@2026.6.3",
+      "type": "library",
+      "version": "2026.6.3"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "ruff",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "development"
+        }
+      ],
+      "purl": "pkg:pypi/ruff@0.16.6",
+      "type": "library",
+      "version": "0.16.6"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "six",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/six@1.17.0",
+      "type": "library",
+      "version": "1.17.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://docs.sqlalchemy.org"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "sqlalchemy",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/sqlalchemy@2.0.52",
+      "type": "library",
+      "version": "2.0.52"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/Kludex/starlette"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "starlette",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/starlette@1.6.0",
+      "type": "library",
+      "version": "1.6.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/python/typing_extensions/issues"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "PSF-2.0"
+          }
+        }
+      ],
+      "name": "typing-extensions",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "type": "library",
+      "version": "4.16.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/pydantic/typing-inspection"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "typing-inspection",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/typing-inspection@0.4.4",
+      "type": "library",
+      "version": "0.4.4"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/python/tzdata"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "tzdata",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "optional_not_shipped"
+        }
+      ],
+      "purl": "pkg:pypi/tzdata@2026.3",
+      "type": "library",
+      "version": "2026.3"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://uvicorn.dev/release-notes"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "uvicorn",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/uvicorn@0.52.4",
+      "type": "library",
+      "version": "0.52.4"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/GrahamDumpleton/wrapt/issues/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "name": "wrapt",
+      "properties": [
+        {
+          "name": "aift:scope",
+          "value": "runtime"
+        }
+      ],
+      "purl": "pkg:pypi/wrapt@1.17.3",
+      "type": "library",
+      "version": "1.17.3"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://base-empreinte.ademe.fr/"
+        }
+      ],
+      "licenses": [],
+      "name": "ADEME Base Empreinte electricity factors",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "ADEME"
+      },
+      "type": "data",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/Boavizta/boaviztapi"
+        }
+      ],
+      "licenses": [],
+      "name": "BoaviztAPI server impact data",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "Boavizta"
+      },
+      "type": "data",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/ateliertriay/bricolage"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "name": "Bricolage Grotesque font files",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "website"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "@fontsource-variable/bricolage-grotesque"
+        }
+      ],
+      "supplier": {
+        "name": "The Bricolage Grotesque Project Authors, packaged by Fontsource"
+      },
+      "type": "data",
+      "version": "@fontsource-variable/bricolage-grotesque 5.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/mlco2/ecologits"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ],
+      "name": "EcoLogits model, provider and electricity data",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        }
+      ],
+      "supplier": {
+        "name": "EcoLogits contributors (CodeCarbon)"
+      },
+      "type": "data",
+      "version": "EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/mlco2/ecologits/tree/886d1ebfadb51a2d6407fcea6d9778c997c85c35"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ],
+      "name": "EcoLogits reference coefficients for the archived Original method",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        }
+      ],
+      "supplier": {
+        "name": "EcoLogits contributors (CodeCarbon)"
+      },
+      "type": "data",
+      "version": "EcoLogits commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/Instrument/instrument-sans"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "name": "Instrument Sans font files",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "website"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "@fontsource-variable/instrument-sans"
+        }
+      ],
+      "supplier": {
+        "name": "The Instrument Sans Project Authors, packaged by Fontsource"
+      },
+      "type": "data",
+      "version": "@fontsource-variable/instrument-sans 5.3.0"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://arxiv.org/abs/2607.04553"
+        }
+      ],
+      "licenses": [],
+      "name": "Jegham et al. video generation figures",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "Jegham et al."
+      },
+      "type": "data",
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html"
+        }
+      ],
+      "licenses": [],
+      "name": "Lees-Perasso et al. GPU life-cycle study",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "ADEME"
+      },
+      "type": "data",
+      "version": "2026, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://ml.energy/leaderboard/"
+        }
+      ],
+      "licenses": [],
+      "name": "ML.ENERGY Leaderboard measurements behind the EcoLogits regressions",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "ML.ENERGY"
+      },
+      "type": "data",
+      "version": "As used by EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://openrouter.ai"
+        }
+      ],
+      "licenses": [],
+      "name": "OpenRouter model statistics",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "OpenRouter"
+      },
+      "type": "data",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://ourworldindata.org/electricity-mix"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "CC-BY-4.0"
+          }
+        }
+      ],
+      "name": "Our World in Data electricity mix",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "Our World in Data (Hannah Ritchie and Pablo Rosado)"
+      },
+      "type": "data",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://arxiv.org/abs/2502.01671"
+        }
+      ],
+      "licenses": [],
+      "name": "Schneider et al. TPU embodied carbon figures",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "Schneider et al."
+      },
+      "type": "data",
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity"
+        }
+      ],
+      "licenses": [],
+      "name": "World Resources Institute electricity water data",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "unverified"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "server"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "EcoLogits model, provider and electricity data"
+        }
+      ],
+      "supplier": {
+        "name": "World Resources Institute"
+      },
+      "type": "data",
+      "version": "As bundled in EcoLogits 0.11.2"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/niieani/gpt-tokenizer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "cl100k_base BPE ranks",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "gpt-tokenizer"
+        }
+      ],
+      "supplier": {
+        "name": "OpenAI (tiktoken), packaged by gpt-tokenizer"
+      },
+      "type": "data",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 b56372fb0b95dbd370f9de6f44b6c15006a8a36980fbc6c0568a0108971aea45)"
+    },
+    {
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://github.com/niieani/gpt-tokenizer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "o200k_base BPE ranks",
+      "properties": [
+        {
+          "name": "aift:license_status",
+          "value": "declared"
+        },
+        {
+          "name": "aift:shipped_in",
+          "value": "browser_extension"
+        },
+        {
+          "name": "aift:part_of",
+          "value": "gpt-tokenizer"
+        }
+      ],
+      "supplier": {
+        "name": "OpenAI (tiktoken), packaged by gpt-tokenizer"
+      },
+      "type": "data",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 4cd35a52f4ece645422670151ccbdbd6afd2bcb47b83efd13e47e5d8942aecb4)"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "name": "AI Footprint Tracker",
+      "type": "application",
+      "version": "0.1.0"
+    }
+  },
+  "serialNumber": "urn:uuid:1c42db36-b862-5bb1-839e-632e380e9b56",
+  "specVersion": "1.6",
+  "version": 1
+}

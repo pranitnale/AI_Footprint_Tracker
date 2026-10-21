@@ -1,0 +1,147 @@
+{
+  "info": {
+    "author": "Samuel Rinc\u00e9, Adrien Banse",
+    "author_email": null,
+    "bugtrack_url": null,
+    "classifiers": [
+      "Intended Audience :: Developers",
+      "Intended Audience :: Information Technology",
+      "Intended Audience :: Science/Research",
+      "Intended Audience :: System Administrators",
+      "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+      "Operating System :: MacOS",
+      "Operating System :: Microsoft :: Windows",
+      "Operating System :: OS Independent",
+      "Operating System :: POSIX",
+      "Operating System :: POSIX :: Linux",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+      "Programming Language :: Python :: 3.12",
+      "Programming Language :: Python :: 3.13",
+      "Programming Language :: Python :: 3.14",
+      "Topic :: Internet",
+      "Topic :: Scientific/Engineering :: Artificial Intelligence",
+      "Topic :: Software Development :: Libraries :: Python Modules"
+    ],
+    "description": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/logo_dark.png\">\n    <img alt=\"EcoLogits\" src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/logo_light.png\">\n  </picture>\n</p>\n\n\ud83c\udf31 **EcoLogits** tracks the energy consumption and environmental impacts of using generative AI models through APIs.\n\n[![PyPI version](https://img.shields.io/pypi/v/ecologits?color=00bf63)](https://pypi.org/project/ecologits/)\n[![PyPI downloads](https://static.pepy.tech/badge/ecologits/month)](https://pepy.tech/projects/ecologits)\n[![Python version](https://img.shields.io/pypi/pyversions/ecologits)](https://pypi.org/project/ecologits/)\n[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1VxrpJ5xuWZKQLsSN12kdqUqkppHRct3G?usp=sharing)\n[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15601289.svg)](https://doi.org/10.5281/zenodo.15601289)\n[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/CAecQ2zM4n)\n\nRead the full **documentation on [ecologits.ai](https://ecologits.ai/)**.\n\nEcoLogits is part of the **[CodeCarbon](https://codecarbon.io/) non-profit, chat with us on [Discord](https://discord.gg/CAecQ2zM4n)**.\n\n\n## \u2699\ufe0f Installation\n\n```shell\npip install ecologits\n```\n\nFor integration with a specific provider, use `pip install ecologits[openai]`. We are currently supporting the following providers: `anthropic`, `cohere`, `google-genai`, `huggingface-hub`, `mistralai` and `openai`. See the full [list of providers](https://ecologits.ai/latest/tutorial/providers/).\n\n\n## \ud83d\ude80 Usage\n\n```python\nfrom ecologits import EcoLogits\nfrom openai import OpenAI\n\n# Initialize EcoLogits\nEcoLogits.init(providers=[\"openai\"])\n\nclient = OpenAI(api_key=\"<OPENAI_API_KEY>\")\n\nresponse = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=[\n        {\"role\": \"user\", \"content\": \"Tell me a funny joke!\"}\n    ]\n)\n\n# Get estimated environmental impacts of the inference\nprint(f\"Energy consumption: {response.impacts.energy.value.mean} kWh\")\nprint(f\"GHG emissions: {response.impacts.gwp.value.mean} kgCO2eq\")\n```\n\nSee package documentation on [EcoLogits](https://ecologits.ai/)\n\n\n## \ud83d\udc9a Sponsors\n\n<a href=\"https://resilio-solutions.com/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/resilio.png\" alt=\"Resilio\" height=\"100\" width=\"250\">\n</a>\n\n<a href=\"https://www.terra-cognita.ai/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/terra_cognita.png\" alt=\"Terra Cognita\" height=\"100\" width=\"250\">\n</a>\n\n<a href=\"https://sopht.com/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/sopht.png\" alt=\"Sopht\" height=\"100\" width=\"250\">\n</a>\n\n<a href=\"https://www.avanade.com/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/avanade.png\" alt=\"Avanade\" height=\"100\" width=\"250\">\n</a>\n\n<a href=\"https://www.theodo.com/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/theodo.png\" alt=\"Theodo\" height=\"100\" width=\"250\">\n</a>\n\n<a href=\"https://www.culture.gouv.fr/\" target=\"_blank\">\n<img src=\"https://raw.githubusercontent.com/mlco2/ecologits/main/docs/assets/sponsors/ministere_culture.png\" alt=\"Minist\u00e8re de la Culture\" height=\"100\" width=\"132\">\n</a>\n\n\n## \ud83d\udcaa Contributing\n\nTo get started with setting up a development environment and making a contribution to EcoLogits, see [Contributing to EcoLogits](https://ecologits.ai/latest/contributing/).\n\n\n## \u2696\ufe0f License\n\nThis project is licensed under the terms of the [Mozilla Public License Version 2.0 (MPL-2.0)](https://www.mozilla.org/en-US/MPL/2.0/).\n",
+    "description_content_type": "text/markdown",
+    "docs_url": null,
+    "download_url": null,
+    "downloads": {
+      "last_day": -1,
+      "last_month": -1,
+      "last_week": -1
+    },
+    "dynamic": null,
+    "home_page": null,
+    "keywords": null,
+    "license": null,
+    "license_expression": "MPL-2.0",
+    "license_files": [
+      "LICENSE"
+    ],
+    "maintainer": null,
+    "maintainer_email": null,
+    "name": "ecologits",
+    "package_url": "https://pypi.org/project/ecologits/",
+    "platform": null,
+    "project_url": "https://pypi.org/project/ecologits/",
+    "project_urls": null,
+    "provides_extra": [
+      "anthropic",
+      "cohere",
+      "google-genai",
+      "huggingface-hub",
+      "litellm",
+      "mistralai",
+      "openai",
+      "opentelemetry"
+    ],
+    "release_url": "https://pypi.org/project/ecologits/0.11.1/",
+    "requires_dist": [
+      "packaging>=24.2",
+      "pydantic<3,>=1.9.0",
+      "wrapt<2.0.0,>=1.14.1",
+      "anthropic<1.0.0,>=0.45.2; extra == \"anthropic\"",
+      "cohere<6.0.0,>=5.13.12; extra == \"cohere\"",
+      "google-genai<2.0.0,>=1.26.0; extra == \"google-genai\"",
+      "huggingface-hub<2.0.0,>=0.28.1; extra == \"huggingface-hub\"",
+      "minijinja<3.0.0,>=2.7.0; extra == \"huggingface-hub\"",
+      "tiktoken<0.13.0,>=0.8.0; extra == \"huggingface-hub\"",
+      "aiohttp>=3.14.0; extra == \"litellm\"",
+      "litellm<2.0.0,>=1.83.10; extra == \"litellm\"",
+      "rapidfuzz<4.0.0,>=3.12.1; extra == \"litellm\"",
+      "mistralai<2.0.0,>=1.5.0; extra == \"mistralai\"",
+      "openai<3.0.0,>=1.66.0; extra == \"openai\"",
+      "opentelemetry-api<2.0.0,>=1.32.1; extra == \"opentelemetry\"",
+      "opentelemetry-exporter-otlp<2.0.0,>=1.32.1; extra == \"opentelemetry\"",
+      "opentelemetry-sdk<2.0.0,>=1.32.1; extra == \"opentelemetry\"",
+      "tiktoken<0.13.0,>=0.8.0; extra == \"opentelemetry\""
+    ],
+    "requires_python": "<4,>=3.10",
+    "summary": "EcoLogits tracks and estimates the energy consumption and environmental impacts of using generative AI models through APIs.",
+    "version": "0.11.1",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  "last_serial": 38754632,
+  "ownership": {
+    "organization": null,
+    "roles": [
+      {
+        "role": "Owner",
+        "user": "samuelrince"
+      }
+    ]
+  },
+  "urls": [
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "6a203ca33ab1df53eea664f0819ab1cd443a2ed6cf24e526815a9eb9269db403"
+      },
+      "digests": {
+        "blake2b_256": "c026a84f8507ece76bf8beba850b5dd634dcf8446b5a95125c83ece205c8cc01",
+        "md5": "9408516c92f56ed9ba6fcfd70185919f",
+        "sha256": "a5d6b64f62a15a7c637b7cd195e1709f872e729bef020c2b64005a1a999973f2"
+      },
+      "downloads": -1,
+      "filename": "ecologits-0.11.1-py3-none-any.whl",
+      "has_sig": false,
+      "md5_digest": "9408516c92f56ed9ba6fcfd70185919f",
+      "packagetype": "bdist_wheel",
+      "python_version": "py3",
+      "requires_python": "<4,>=3.10",
+      "size": 57085,
+      "upload_time": "2026-07-07T17:30:17",
+      "upload_time_iso_8601": "2026-07-07T17:30:17.268471Z",
+      "url": "https://files.pythonhosted.org/packages/c0/26/a84f8507ece76bf8beba850b5dd634dcf8446b5a95125c83ece205c8cc01/ecologits-0.11.1-py3-none-any.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": false,
+      "digests": {
+        "blake2b_256": "4b4ca7850b2dca7f148599aa4c55c049fc54244edff69b190b1d0c7a9e97ec8c",
+        "md5": "309587b9bf226cadc684433a44f03260",
+        "sha256": "d24df5c0202bd5925376143f5b78d7273cb015d17323e660723e07e6fad223c0"
+      },
+      "downloads": -1,
+      "filename": "ecologits-0.11.1.tar.gz",
+      "has_sig": false,
+      "md5_digest": "309587b9bf226cadc684433a44f03260",
+      "packagetype": "sdist",
+      "python_version": "source",
+      "requires_python": "<4,>=3.10",
+      "size": 1082759,
+      "upload_time": "2026-07-07T17:30:18",
+      "upload_time_iso_8601": "2026-07-07T17:30:18.570576Z",
+      "url": "https://files.pythonhosted.org/packages/4b/4c/a7850b2dca7f148599aa4c55c049fc54244edff69b190b1d0c7a9e97ec8c/ecologits-0.11.1.tar.gz",
+      "yanked": false,
+      "yanked_reason": null
+    }
+  ],
+  "vulnerabilities": []
+}

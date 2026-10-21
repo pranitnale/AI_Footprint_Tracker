@@ -1,0 +1,17 @@
+{
+  "catalog_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "citation_filename": "CITATION.cff",
+  "citation_sha256": "537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf",
+  "citation_text_sha256": "537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf",
+  "commit_attestation": "requested-identifiers-only",
+  "compliance_approved": true,
+  "core_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "license_filename": "LICENSE",
+  "license_sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+  "license_text_sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+  "project_license": "MPL-2.0",
+  "provenance_note": "The immutable commit and package artifact are separately pinned. Adoption requires content comparison; this manifest does not claim tag-to-commit linkage by itself.",
+  "release_kind": "release_candidate",
+  "schema_version": "1",
+  "upstream_version": "0.11.2"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-10-15",
+  "image": {
+    "method_id": "image-luccioni-2024-mean-v1",
+    "it_energy_wh_per_image": "2.907",
+    "source": "https://arxiv.org/abs/2311.16863",
+    "model_providers": {
+      "chatgpt-images-2-5": "openai",
+      "chatgpt-images-thinking": "openai",
+      "gemini-nano-banana": "google_genai",
+      "gemini-nano-banana-2": "google_genai",
+      "gemini-nano-banana-2-lite": "google_genai",
+      "gemini-nano-banana-pro": "google_genai",
+      "gemini-pro-image-unlisted": "google_genai",
+      "gemini-flash-image-unlisted": "google_genai",
+      "gemini-image-unlisted": "google_genai",
+      "perplexity-gpt-image-1": "openai",
+      "perplexity-nano-banana": "google_genai",
+      "perplexity-nano-banana-2": "google_genai",
+      "perplexity-nano-banana-pro": "google_genai",
+      "perplexity-gemini-pro-image-unlisted": "google_genai",
+      "perplexity-gemini-flash-image-unlisted": "google_genai",
+      "perplexity-gemini-image-unlisted": "google_genai",
+      "notebooklm-image": "google_genai"
+    },
+    "site_providers": {
+      "chatgpt": "openai",
+      "claude": "anthropic",
+      "gemini": "google_genai",
+      "notebooklm": "google_genai",
+      "perplexity": "openai"
+    }
+  },
+  "speech": {
+    "method_id": "speech-tts-audio-tokens-v1",
+    "profile": { "provider": "openai", "model_name": "gpt-4o-mini-tts", "workload": "text" },
+    "tokens_per_second": { "openai": "20", "anthropic": "20", "google_genai": "25" },
+    "characters_per_second": "17",
+    "site_providers": {
+      "chatgpt": "openai",
+      "claude": "anthropic",
+      "gemini": "google_genai",
+      "notebooklm": "google_genai",
+      "perplexity": "openai"
+    },
+    "source": "https://developers.openai.com/api/docs/guides/realtime-costs"
+  },
+  "video": {
+    "method_id": "ecologits-video-0-11",
+    "site_models": { "gemini": "gemini-omni-video", "perplexity": "perplexity-video-unlisted" },
+    "site_defaults": {
+      "perplexity": { "width": 1280, "height": 720, "duration_seconds": "8", "with_audio": false },
+      "gemini": { "width": 1280, "height": 720, "duration_seconds": "10", "with_audio": true }
+    },
+    "model_defaults": {
+      "google/veo-3.0": { "width": 1280, "height": 720, "duration_seconds": "8", "with_audio": true },
+      "google/veo-3.0-fast": { "width": 1280, "height": 720, "duration_seconds": "8", "with_audio": true },
+      "google/veo-3.1": { "width": 1280, "height": 720, "duration_seconds": "8", "with_audio": true },
+      "google/veo-3.1-fast": { "width": 1280, "height": 720, "duration_seconds": "8", "with_audio": true }
+    },
+    "source": "https://ecologits.ai/0.11/methodology/video_generation/"
+  },
+  "overview": {
+    "method_id": "notebooklm-overview-illustrations-v1",
+    "seconds_per_illustration": "10"
+  },
+  "environment_overrides": {
+    "perplexity-glm-5-2": {
+      "electricity_mix_zone": "USA",
+      "datacenter_pue": { "min": "1.09", "max": "1.14" },
+      "datacenter_wue": { "min": "0.13", "max": "0.99" }
+    },
+    "perplexity-glm-5-3": {
+      "electricity_mix_zone": "USA",
+      "datacenter_pue": { "min": "1.09", "max": "1.14" },
+      "datacenter_wue": { "min": "0.13", "max": "0.99" }
+    }
+  },
+  "claude_token_factor": {
+    "factor": "1.56",
+    "tokenizer_profile_id": "o200k-base-4.0.0-reference",
+    "measured_on": "2026-10-15",
+    "source": "https://platform.claude.com/docs/en/build-with-claude/token-counting"
+  }
+}

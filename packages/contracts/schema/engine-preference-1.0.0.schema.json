@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "preference": {
+      "type": "string",
+      "enum": [
+        "build_default",
+        "original",
+        "ecologits"
+      ]
+    },
+    "selection_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "updated_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "preference",
+    "selection_revision",
+    "updated_at"
+  ],
+  "additionalProperties": false
+}

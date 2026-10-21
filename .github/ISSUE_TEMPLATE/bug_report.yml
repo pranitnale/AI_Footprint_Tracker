@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a reproducible defect using synthetic data.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, signed URLs, raw IP addresses, private hostnames, employee content, real prompts or answers, authenticated HAR files, browser profiles, production logs, exports or real documents. Use a synthetic reproduction. Report vulnerabilities privately through SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: 0.1.0 candidate or commit ID
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Edge
+        - Firefox
+        - Website only
+        - Server only
+        - Not applicable
+    validations:
+      required: true
+  - type: dropdown
+    id: site
+    attributes:
+      label: Supported site
+      options:
+        - ChatGPT
+        - Claude
+        - Gemini
+        - Perplexity
+        - Not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction
+      description: Give minimal steps and synthetic inputs. State local-only or connected mode without naming an organization.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safe-report confirmation
+      options:
+        - label: I used synthetic data and removed every prohibited secret, identifier, employee-content and authenticated-capture field listed above.
+          required: true

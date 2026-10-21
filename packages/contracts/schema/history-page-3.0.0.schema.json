@@ -1,0 +1,3398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0.0"
+    },
+    "site": {
+      "type": "string",
+      "enum": [
+        "chatgpt",
+        "claude",
+        "gemini",
+        "perplexity",
+        "notebooklm"
+      ]
+    },
+    "conversation_key": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "observed_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "deletion_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "messages": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "3.0.0"
+          },
+          "kind": {
+            "type": "string",
+            "const": "history_message"
+          },
+          "message_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "prompt",
+              "response"
+            ]
+          },
+          "conversation_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "key_version": {
+            "type": "string",
+            "const": "1"
+          },
+          "site": {
+            "type": "string",
+            "enum": [
+              "chatgpt",
+              "claude",
+              "gemini",
+              "perplexity",
+              "notebooklm"
+            ]
+          },
+          "parent_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompt_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider_request_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider_attempt_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "occurred_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3,6}Z$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date_basis": {
+            "type": "string",
+            "enum": [
+              "message_created",
+              "entry_created",
+              "turn_created",
+              "unknown"
+            ]
+          },
+          "observed_at": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+          },
+          "proposed_method_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+          },
+          "proposed_method_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "chatgpt-latest",
+                  "chatgpt-gpt-5-6-sol",
+                  "chatgpt-gpt-5-5",
+                  "chatgpt-gpt-5-6-luna",
+                  "chatgpt-gpt-5-6-sol-pro",
+                  "chatgpt-gpt-6-pro",
+                  "chatgpt-reasoning-effort",
+                  "chatgpt-pro-option",
+                  "chatgpt-think",
+                  "chatgpt-images-2-5",
+                  "chatgpt-images-thinking",
+                  "chatgpt-gpt-live-1",
+                  "chatgpt-gpt-live-1-mini",
+                  "chatgpt-voice-live",
+                  "chatgpt-voice-advanced",
+                  "chatgpt-voice-standard",
+                  "chatgpt-gpt-6-1-sol",
+                  "chatgpt-gpt-6-sol",
+                  "chatgpt-gpt-6-luna",
+                  "chatgpt-gpt-6-astra",
+                  "chatgpt-gpt-6-1-sol-pro",
+                  "chatgpt-gpt-6-sol-pro",
+                  "chatgpt-gpt-6-luna-pro",
+                  "chatgpt-gpt-5-6-luna-pro",
+                  "chatgpt-gpt-5-6-terra-pro",
+                  "chatgpt-gpt-5-6-terra",
+                  "chatgpt-gpt-5-5-pro",
+                  "chatgpt-gpt-5-5-mini",
+                  "chatgpt-gpt-5-4",
+                  "chatgpt-gpt-5-4-pro",
+                  "chatgpt-gpt-5-4-mini",
+                  "chatgpt-gpt-5-3-mini",
+                  "chatgpt-gpt-5-2",
+                  "chatgpt-gpt-5-2-pro",
+                  "chatgpt-gpt-5-1",
+                  "chatgpt-gpt-5",
+                  "chatgpt-gpt-5-mini",
+                  "chatgpt-gpt-5-pro",
+                  "chatgpt-gpt-4-1",
+                  "chatgpt-gpt-4-1-mini",
+                  "chatgpt-gpt-4o",
+                  "chatgpt-gpt-4o-mini",
+                  "chatgpt-gpt-4",
+                  "chatgpt-gpt-3-5",
+                  "chatgpt-o4-mini",
+                  "chatgpt-o3",
+                  "chatgpt-o3-pro",
+                  "chatgpt-o3-mini",
+                  "chatgpt-o1",
+                  "chatgpt-voice-bidi",
+                  "chatgpt-deep-research",
+                  "chatgpt-agent",
+                  "chatgpt-unlisted",
+                  "chatgpt-gpt-sol-unlisted",
+                  "chatgpt-gpt-astra-unlisted",
+                  "chatgpt-gpt-luna-unlisted",
+                  "chatgpt-gpt-terra-unlisted",
+                  "chatgpt-gpt-pro-unlisted",
+                  "chatgpt-gpt-mini-unlisted",
+                  "chatgpt-gpt-nano-unlisted",
+                  "chatgpt-gpt-codex-unlisted",
+                  "chatgpt-gpt-sol-pro-unlisted",
+                  "chatgpt-gpt-astra-pro-unlisted",
+                  "chatgpt-gpt-luna-pro-unlisted",
+                  "chatgpt-gpt-terra-pro-unlisted",
+                  "claude-fable-5-1",
+                  "claude-opus-5",
+                  "claude-sonnet-5",
+                  "claude-haiku-4-5",
+                  "claude-fable-5",
+                  "claude-opus-4-8",
+                  "claude-opus-4-7",
+                  "claude-opus-4-6",
+                  "claude-opus-3",
+                  "claude-sonnet-4-6",
+                  "claude-effort",
+                  "claude-thinking",
+                  "claude-opus-5-5",
+                  "claude-sonnet-5-5",
+                  "claude-opus-4-5",
+                  "claude-sonnet-4-5",
+                  "claude-opus-4-1",
+                  "claude-opus-4",
+                  "claude-sonnet-4",
+                  "claude-sonnet-3-7",
+                  "claude-sonnet-3-5",
+                  "claude-haiku-3-5",
+                  "claude-haiku-3",
+                  "claude-unlisted",
+                  "claude-haiku-unlisted",
+                  "claude-sonnet-unlisted",
+                  "claude-opus-unlisted",
+                  "claude-fable-unlisted",
+                  "claude-small-unlisted",
+                  "gemini-3-6-flash",
+                  "gemini-3-6-thinking",
+                  "gemini-3-1-pro",
+                  "gemini-public-flash-lite",
+                  "gemini-public-flash",
+                  "gemini-public-pro",
+                  "gemini-thinking-level",
+                  "gemini-deep-think",
+                  "gemini-deep-research",
+                  "gemini-nano-banana-2-lite",
+                  "gemini-nano-banana-2",
+                  "gemini-nano-banana-pro",
+                  "gemini-omni",
+                  "gemini-lyria",
+                  "gemini-3-8-flash",
+                  "gemini-3-7-flash",
+                  "gemini-3-5-flash",
+                  "gemini-3-5-flash-lite",
+                  "gemini-3-flash",
+                  "gemini-3-pro",
+                  "gemini-2-5-flash",
+                  "gemini-2-5-flash-lite",
+                  "gemini-2-5-pro",
+                  "gemini-nano-banana",
+                  "gemini-omni-video",
+                  "gemini-unnamed",
+                  "gemini-unlisted",
+                  "gemini-flash-unlisted",
+                  "gemini-flash-lite-unlisted",
+                  "gemini-pro-unlisted",
+                  "gemini-pro-image-unlisted",
+                  "gemini-flash-image-unlisted",
+                  "gemini-image-unlisted",
+                  "perplexity-best",
+                  "perplexity-sonar-2",
+                  "perplexity-gpt-5-6-terra",
+                  "perplexity-gpt-5-6-sol",
+                  "perplexity-gemini-3-8-flash",
+                  "perplexity-claude-sonnet-5",
+                  "perplexity-claude-opus-5",
+                  "perplexity-kimi-k3",
+                  "perplexity-glm-5-3",
+                  "perplexity-grok-4-6",
+                  "perplexity-nemotron-3-ultra",
+                  "perplexity-gemini-3-7-flash",
+                  "perplexity-thinking",
+                  "perplexity-search",
+                  "perplexity-deep-research",
+                  "perplexity-learn",
+                  "perplexity-council",
+                  "perplexity-computer",
+                  "perplexity-comet",
+                  "perplexity-image-default",
+                  "perplexity-gpt-image-1",
+                  "perplexity-nano-banana",
+                  "perplexity-nano-banana-pro",
+                  "perplexity-seedream-4-5",
+                  "perplexity-veo-3-1",
+                  "perplexity-gpt-6-1-sol",
+                  "perplexity-gpt-6-sol",
+                  "perplexity-gpt-6-astra",
+                  "perplexity-gpt-6-1-sol-pro",
+                  "perplexity-gpt-6-sol-pro",
+                  "perplexity-gpt-6-astra-pro",
+                  "perplexity-gpt-5-6-sol-pro",
+                  "perplexity-gpt-5-6-terra-pro",
+                  "perplexity-gpt-5-5",
+                  "perplexity-gpt-5-4",
+                  "perplexity-gpt-5-2",
+                  "perplexity-gpt-5-2-pro",
+                  "perplexity-gpt-5-1",
+                  "perplexity-gpt-5",
+                  "perplexity-gpt-5-mini",
+                  "perplexity-gpt-5-nano",
+                  "perplexity-gpt-5-pro",
+                  "perplexity-gpt-4-1",
+                  "perplexity-gpt-4o",
+                  "perplexity-o4-mini",
+                  "perplexity-o3-pro",
+                  "perplexity-claude-fable-5-1",
+                  "perplexity-claude-opus-5-5",
+                  "perplexity-claude-sonnet-5-5",
+                  "perplexity-claude-opus-4-8",
+                  "perplexity-claude-opus-4-7",
+                  "perplexity-claude-opus-4-6",
+                  "perplexity-claude-opus-4-5",
+                  "perplexity-claude-opus-4-1",
+                  "perplexity-claude-opus-4",
+                  "perplexity-claude-sonnet-4-6",
+                  "perplexity-claude-sonnet-4-5",
+                  "perplexity-claude-sonnet-4",
+                  "perplexity-claude-haiku-4-5",
+                  "perplexity-gemini-3-5-flash",
+                  "perplexity-gemini-3-1-pro",
+                  "perplexity-gemini-3-flash",
+                  "perplexity-gemini-3-pro",
+                  "perplexity-gemini-2-5-pro",
+                  "perplexity-glm-5-2",
+                  "perplexity-deepseek",
+                  "perplexity-qwen",
+                  "perplexity-kimi",
+                  "perplexity-grok",
+                  "perplexity-nemotron",
+                  "perplexity-agentic-research",
+                  "perplexity-create-files",
+                  "perplexity-study",
+                  "perplexity-nano-banana-2",
+                  "perplexity-veo-3-1-fast",
+                  "perplexity-veo-3-0",
+                  "perplexity-veo-3-0-fast",
+                  "perplexity-sora-2-pro",
+                  "perplexity-video-unlisted",
+                  "perplexity-unlisted",
+                  "perplexity-unlisted-anthropic",
+                  "perplexity-unlisted-google",
+                  "perplexity-claude-haiku-unlisted",
+                  "perplexity-claude-sonnet-unlisted",
+                  "perplexity-claude-opus-unlisted",
+                  "perplexity-claude-fable-unlisted",
+                  "perplexity-gpt-sol-unlisted",
+                  "perplexity-gpt-astra-unlisted",
+                  "perplexity-gpt-luna-unlisted",
+                  "perplexity-gpt-terra-unlisted",
+                  "perplexity-gemini-flash-unlisted",
+                  "perplexity-gemini-flash-lite-unlisted",
+                  "perplexity-gemini-pro-unlisted",
+                  "perplexity-claude-small-unlisted",
+                  "perplexity-gpt-pro-unlisted",
+                  "perplexity-gpt-mini-unlisted",
+                  "perplexity-gpt-nano-unlisted",
+                  "perplexity-gpt-codex-unlisted",
+                  "perplexity-gpt-sol-pro-unlisted",
+                  "perplexity-gpt-astra-pro-unlisted",
+                  "perplexity-gpt-luna-pro-unlisted",
+                  "perplexity-gpt-terra-pro-unlisted",
+                  "perplexity-gemini-pro-image-unlisted",
+                  "perplexity-gemini-flash-image-unlisted",
+                  "perplexity-gemini-image-unlisted",
+                  "notebooklm-default",
+                  "notebooklm-image"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tokens": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "evidence": {
+                "type": "string",
+                "enum": [
+                  "provider_reported",
+                  "official_tokenizer",
+                  "calibrated_estimate",
+                  "heuristic_estimate",
+                  "unknown",
+                  "not_applicable"
+                ]
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "provider_request",
+                  "observed_text",
+                  "reconstructed_context",
+                  "provider_defined_subset"
+                ]
+              },
+              "completeness": {
+                "type": "string",
+                "enum": [
+                  "complete_for_scope",
+                  "partial",
+                  "unknown"
+                ]
+              },
+              "profile_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "o200k-base-4.0.0-reference",
+                      "cl100k-base-4.0.0-reference",
+                      "observed-text-v1",
+                      "vendor-image-rules-1"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reason": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "capture_hook_missing",
+                      "protocol_unsupported",
+                      "composer_anchor_missing",
+                      "capture_limit_exceeded",
+                      "model_unverified",
+                      "tokenizer_unavailable",
+                      "storage_write_failed",
+                      "ledger_integrity_failed",
+                      "auth_reconnect_required",
+                      "enrollment_revoked",
+                      "sync_delayed",
+                      "payload_rejected",
+                      "revision_conflict",
+                      "request_identity_ambiguous",
+                      "dependency_missing",
+                      "clock_skew",
+                      "estimate_pending",
+                      "estimate_unavailable",
+                      "method_update_invalid",
+                      "aggregate_inconsistent",
+                      "ip_unresolved",
+                      "ip_history_expired",
+                      "retention_expired",
+                      "deletion_in_progress",
+                      "policy_unavailable",
+                      "guidance_budget_unavailable",
+                      "host_interference_detected",
+                      "conversation_identity_local_only",
+                      "cross_device_dedup_unverified",
+                      "hidden_reasoning_unobserved",
+                      "context_unobserved",
+                      "cache_semantics_unknown",
+                      "tool_work_unobserved",
+                      "media_processing_unobserved",
+                      "media_metadata_limit_exceeded",
+                      "image_dimensions_unknown",
+                      "image_settings_unknown",
+                      "image_execution_incomplete",
+                      "tokenizer_mapping_unverified",
+                      "observed_text_only",
+                      "not_applicable",
+                      "provider_usage_unavailable",
+                      "malformed_frame",
+                      "unsupported_operation",
+                      "conflicting_duplicate_identity",
+                      "capture_body_missing",
+                      "buffer_overflow",
+                      "stale_tokenizer_response",
+                      "tokenizer_timeout",
+                      "unknown_model",
+                      "profile_absent",
+                      "no_comparable_profile",
+                      "input_length_not_modelled",
+                      "unvalidated_reference",
+                      "factor_unavailable",
+                      "factor_incompatible",
+                      "method_unsupported",
+                      "partial_capture",
+                      "history_only",
+                      "historical_timing_conflict",
+                      "unknown_terminal_state",
+                      "media_direction_unknown",
+                      "provider_selection_unverified",
+                      "reasoning_overlap_unknown",
+                      "record_erased",
+                      "reasoning_summary_only",
+                      "research_work_unobserved",
+                      "side_calls_unobserved",
+                      "unknown_event_observed",
+                      "model_not_in_library",
+                      "model_not_named",
+                      "model_stand_in",
+                      "component_unavailable",
+                      "media_default_assumed",
+                      "speech_length_estimated",
+                      "file_size_estimated",
+                      "content_not_opened",
+                      "environment_override",
+                      "no_live_request"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "evidence",
+              "scope",
+              "completeness",
+              "profile_id",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "parts": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "answer_output": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "visible_thinking": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "tool_input": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "intermediate_output": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "reported_reasoning": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "tool_output": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "image_input_tokens": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "pattern": "^(0|[1-9][0-9]{0,18})$"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "evidence": {
+                        "type": "string",
+                        "enum": [
+                          "provider_reported",
+                          "official_tokenizer",
+                          "calibrated_estimate",
+                          "heuristic_estimate",
+                          "unknown",
+                          "not_applicable"
+                        ]
+                      },
+                      "scope": {
+                        "type": "string",
+                        "enum": [
+                          "provider_request",
+                          "observed_text",
+                          "reconstructed_context",
+                          "provider_defined_subset"
+                        ]
+                      },
+                      "completeness": {
+                        "type": "string",
+                        "enum": [
+                          "complete_for_scope",
+                          "partial",
+                          "unknown"
+                        ]
+                      },
+                      "profile_id": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "o200k-base-4.0.0-reference",
+                              "cl100k-base-4.0.0-reference",
+                              "observed-text-v1",
+                              "vendor-image-rules-1"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "capture_hook_missing",
+                              "protocol_unsupported",
+                              "composer_anchor_missing",
+                              "capture_limit_exceeded",
+                              "model_unverified",
+                              "tokenizer_unavailable",
+                              "storage_write_failed",
+                              "ledger_integrity_failed",
+                              "auth_reconnect_required",
+                              "enrollment_revoked",
+                              "sync_delayed",
+                              "payload_rejected",
+                              "revision_conflict",
+                              "request_identity_ambiguous",
+                              "dependency_missing",
+                              "clock_skew",
+                              "estimate_pending",
+                              "estimate_unavailable",
+                              "method_update_invalid",
+                              "aggregate_inconsistent",
+                              "ip_unresolved",
+                              "ip_history_expired",
+                              "retention_expired",
+                              "deletion_in_progress",
+                              "policy_unavailable",
+                              "guidance_budget_unavailable",
+                              "host_interference_detected",
+                              "conversation_identity_local_only",
+                              "cross_device_dedup_unverified",
+                              "hidden_reasoning_unobserved",
+                              "context_unobserved",
+                              "cache_semantics_unknown",
+                              "tool_work_unobserved",
+                              "media_processing_unobserved",
+                              "media_metadata_limit_exceeded",
+                              "image_dimensions_unknown",
+                              "image_settings_unknown",
+                              "image_execution_incomplete",
+                              "tokenizer_mapping_unverified",
+                              "observed_text_only",
+                              "not_applicable",
+                              "provider_usage_unavailable",
+                              "malformed_frame",
+                              "unsupported_operation",
+                              "conflicting_duplicate_identity",
+                              "capture_body_missing",
+                              "buffer_overflow",
+                              "stale_tokenizer_response",
+                              "tokenizer_timeout",
+                              "unknown_model",
+                              "profile_absent",
+                              "no_comparable_profile",
+                              "input_length_not_modelled",
+                              "unvalidated_reference",
+                              "factor_unavailable",
+                              "factor_incompatible",
+                              "method_unsupported",
+                              "partial_capture",
+                              "history_only",
+                              "historical_timing_conflict",
+                              "unknown_terminal_state",
+                              "media_direction_unknown",
+                              "provider_selection_unverified",
+                              "reasoning_overlap_unknown",
+                              "record_erased",
+                              "reasoning_summary_only",
+                              "research_work_unobserved",
+                              "side_calls_unobserved",
+                              "unknown_event_observed",
+                              "model_not_in_library",
+                              "model_not_named",
+                              "model_stand_in",
+                              "component_unavailable",
+                              "media_default_assumed",
+                              "speech_length_estimated",
+                              "file_size_estimated",
+                              "content_not_opened",
+                              "environment_override",
+                              "no_live_request"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "evidence",
+                      "scope",
+                      "completeness",
+                      "profile_id",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "answer_output",
+                  "visible_thinking",
+                  "tool_input",
+                  "intermediate_output",
+                  "reported_reasoning",
+                  "tool_output",
+                  "image_input_tokens"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generation": {
+            "type": "object",
+            "properties": {
+              "text_components": {
+                "maxItems": 16,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "type": "string",
+                      "enum": [
+                        "side_calls",
+                        "research",
+                        "storyboard"
+                      ]
+                    },
+                    "model_id": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "chatgpt-latest",
+                            "chatgpt-gpt-5-6-sol",
+                            "chatgpt-gpt-5-5",
+                            "chatgpt-gpt-5-6-luna",
+                            "chatgpt-gpt-5-6-sol-pro",
+                            "chatgpt-gpt-6-pro",
+                            "chatgpt-reasoning-effort",
+                            "chatgpt-pro-option",
+                            "chatgpt-think",
+                            "chatgpt-images-2-5",
+                            "chatgpt-images-thinking",
+                            "chatgpt-gpt-live-1",
+                            "chatgpt-gpt-live-1-mini",
+                            "chatgpt-voice-live",
+                            "chatgpt-voice-advanced",
+                            "chatgpt-voice-standard",
+                            "chatgpt-gpt-6-1-sol",
+                            "chatgpt-gpt-6-sol",
+                            "chatgpt-gpt-6-luna",
+                            "chatgpt-gpt-6-astra",
+                            "chatgpt-gpt-6-1-sol-pro",
+                            "chatgpt-gpt-6-sol-pro",
+                            "chatgpt-gpt-6-luna-pro",
+                            "chatgpt-gpt-5-6-luna-pro",
+                            "chatgpt-gpt-5-6-terra-pro",
+                            "chatgpt-gpt-5-6-terra",
+                            "chatgpt-gpt-5-5-pro",
+                            "chatgpt-gpt-5-5-mini",
+                            "chatgpt-gpt-5-4",
+                            "chatgpt-gpt-5-4-pro",
+                            "chatgpt-gpt-5-4-mini",
+                            "chatgpt-gpt-5-3-mini",
+                            "chatgpt-gpt-5-2",
+                            "chatgpt-gpt-5-2-pro",
+                            "chatgpt-gpt-5-1",
+                            "chatgpt-gpt-5",
+                            "chatgpt-gpt-5-mini",
+                            "chatgpt-gpt-5-pro",
+                            "chatgpt-gpt-4-1",
+                            "chatgpt-gpt-4-1-mini",
+                            "chatgpt-gpt-4o",
+                            "chatgpt-gpt-4o-mini",
+                            "chatgpt-gpt-4",
+                            "chatgpt-gpt-3-5",
+                            "chatgpt-o4-mini",
+                            "chatgpt-o3",
+                            "chatgpt-o3-pro",
+                            "chatgpt-o3-mini",
+                            "chatgpt-o1",
+                            "chatgpt-voice-bidi",
+                            "chatgpt-deep-research",
+                            "chatgpt-agent",
+                            "chatgpt-unlisted",
+                            "chatgpt-gpt-sol-unlisted",
+                            "chatgpt-gpt-astra-unlisted",
+                            "chatgpt-gpt-luna-unlisted",
+                            "chatgpt-gpt-terra-unlisted",
+                            "chatgpt-gpt-pro-unlisted",
+                            "chatgpt-gpt-mini-unlisted",
+                            "chatgpt-gpt-nano-unlisted",
+                            "chatgpt-gpt-codex-unlisted",
+                            "chatgpt-gpt-sol-pro-unlisted",
+                            "chatgpt-gpt-astra-pro-unlisted",
+                            "chatgpt-gpt-luna-pro-unlisted",
+                            "chatgpt-gpt-terra-pro-unlisted",
+                            "claude-fable-5-1",
+                            "claude-opus-5",
+                            "claude-sonnet-5",
+                            "claude-haiku-4-5",
+                            "claude-fable-5",
+                            "claude-opus-4-8",
+                            "claude-opus-4-7",
+                            "claude-opus-4-6",
+                            "claude-opus-3",
+                            "claude-sonnet-4-6",
+                            "claude-effort",
+                            "claude-thinking",
+                            "claude-opus-5-5",
+                            "claude-sonnet-5-5",
+                            "claude-opus-4-5",
+                            "claude-sonnet-4-5",
+                            "claude-opus-4-1",
+                            "claude-opus-4",
+                            "claude-sonnet-4",
+                            "claude-sonnet-3-7",
+                            "claude-sonnet-3-5",
+                            "claude-haiku-3-5",
+                            "claude-haiku-3",
+                            "claude-unlisted",
+                            "claude-haiku-unlisted",
+                            "claude-sonnet-unlisted",
+                            "claude-opus-unlisted",
+                            "claude-fable-unlisted",
+                            "claude-small-unlisted",
+                            "gemini-3-6-flash",
+                            "gemini-3-6-thinking",
+                            "gemini-3-1-pro",
+                            "gemini-public-flash-lite",
+                            "gemini-public-flash",
+                            "gemini-public-pro",
+                            "gemini-thinking-level",
+                            "gemini-deep-think",
+                            "gemini-deep-research",
+                            "gemini-nano-banana-2-lite",
+                            "gemini-nano-banana-2",
+                            "gemini-nano-banana-pro",
+                            "gemini-omni",
+                            "gemini-lyria",
+                            "gemini-3-8-flash",
+                            "gemini-3-7-flash",
+                            "gemini-3-5-flash",
+                            "gemini-3-5-flash-lite",
+                            "gemini-3-flash",
+                            "gemini-3-pro",
+                            "gemini-2-5-flash",
+                            "gemini-2-5-flash-lite",
+                            "gemini-2-5-pro",
+                            "gemini-nano-banana",
+                            "gemini-omni-video",
+                            "gemini-unnamed",
+                            "gemini-unlisted",
+                            "gemini-flash-unlisted",
+                            "gemini-flash-lite-unlisted",
+                            "gemini-pro-unlisted",
+                            "gemini-pro-image-unlisted",
+                            "gemini-flash-image-unlisted",
+                            "gemini-image-unlisted",
+                            "perplexity-best",
+                            "perplexity-sonar-2",
+                            "perplexity-gpt-5-6-terra",
+                            "perplexity-gpt-5-6-sol",
+                            "perplexity-gemini-3-8-flash",
+                            "perplexity-claude-sonnet-5",
+                            "perplexity-claude-opus-5",
+                            "perplexity-kimi-k3",
+                            "perplexity-glm-5-3",
+                            "perplexity-grok-4-6",
+                            "perplexity-nemotron-3-ultra",
+                            "perplexity-gemini-3-7-flash",
+                            "perplexity-thinking",
+                            "perplexity-search",
+                            "perplexity-deep-research",
+                            "perplexity-learn",
+                            "perplexity-council",
+                            "perplexity-computer",
+                            "perplexity-comet",
+                            "perplexity-image-default",
+                            "perplexity-gpt-image-1",
+                            "perplexity-nano-banana",
+                            "perplexity-nano-banana-pro",
+                            "perplexity-seedream-4-5",
+                            "perplexity-veo-3-1",
+                            "perplexity-gpt-6-1-sol",
+                            "perplexity-gpt-6-sol",
+                            "perplexity-gpt-6-astra",
+                            "perplexity-gpt-6-1-sol-pro",
+                            "perplexity-gpt-6-sol-pro",
+                            "perplexity-gpt-6-astra-pro",
+                            "perplexity-gpt-5-6-sol-pro",
+                            "perplexity-gpt-5-6-terra-pro",
+                            "perplexity-gpt-5-5",
+                            "perplexity-gpt-5-4",
+                            "perplexity-gpt-5-2",
+                            "perplexity-gpt-5-2-pro",
+                            "perplexity-gpt-5-1",
+                            "perplexity-gpt-5",
+                            "perplexity-gpt-5-mini",
+                            "perplexity-gpt-5-nano",
+                            "perplexity-gpt-5-pro",
+                            "perplexity-gpt-4-1",
+                            "perplexity-gpt-4o",
+                            "perplexity-o4-mini",
+                            "perplexity-o3-pro",
+                            "perplexity-claude-fable-5-1",
+                            "perplexity-claude-opus-5-5",
+                            "perplexity-claude-sonnet-5-5",
+                            "perplexity-claude-opus-4-8",
+                            "perplexity-claude-opus-4-7",
+                            "perplexity-claude-opus-4-6",
+                            "perplexity-claude-opus-4-5",
+                            "perplexity-claude-opus-4-1",
+                            "perplexity-claude-opus-4",
+                            "perplexity-claude-sonnet-4-6",
+                            "perplexity-claude-sonnet-4-5",
+                            "perplexity-claude-sonnet-4",
+                            "perplexity-claude-haiku-4-5",
+                            "perplexity-gemini-3-5-flash",
+                            "perplexity-gemini-3-1-pro",
+                            "perplexity-gemini-3-flash",
+                            "perplexity-gemini-3-pro",
+                            "perplexity-gemini-2-5-pro",
+                            "perplexity-glm-5-2",
+                            "perplexity-deepseek",
+                            "perplexity-qwen",
+                            "perplexity-kimi",
+                            "perplexity-grok",
+                            "perplexity-nemotron",
+                            "perplexity-agentic-research",
+                            "perplexity-create-files",
+                            "perplexity-study",
+                            "perplexity-nano-banana-2",
+                            "perplexity-veo-3-1-fast",
+                            "perplexity-veo-3-0",
+                            "perplexity-veo-3-0-fast",
+                            "perplexity-sora-2-pro",
+                            "perplexity-video-unlisted",
+                            "perplexity-unlisted",
+                            "perplexity-unlisted-anthropic",
+                            "perplexity-unlisted-google",
+                            "perplexity-claude-haiku-unlisted",
+                            "perplexity-claude-sonnet-unlisted",
+                            "perplexity-claude-opus-unlisted",
+                            "perplexity-claude-fable-unlisted",
+                            "perplexity-gpt-sol-unlisted",
+                            "perplexity-gpt-astra-unlisted",
+                            "perplexity-gpt-luna-unlisted",
+                            "perplexity-gpt-terra-unlisted",
+                            "perplexity-gemini-flash-unlisted",
+                            "perplexity-gemini-flash-lite-unlisted",
+                            "perplexity-gemini-pro-unlisted",
+                            "perplexity-claude-small-unlisted",
+                            "perplexity-gpt-pro-unlisted",
+                            "perplexity-gpt-mini-unlisted",
+                            "perplexity-gpt-nano-unlisted",
+                            "perplexity-gpt-codex-unlisted",
+                            "perplexity-gpt-sol-pro-unlisted",
+                            "perplexity-gpt-astra-pro-unlisted",
+                            "perplexity-gpt-luna-pro-unlisted",
+                            "perplexity-gpt-terra-pro-unlisted",
+                            "perplexity-gemini-pro-image-unlisted",
+                            "perplexity-gemini-flash-image-unlisted",
+                            "perplexity-gemini-image-unlisted",
+                            "notebooklm-default",
+                            "notebooklm-image"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "model_evidence": {
+                      "type": "string",
+                      "enum": [
+                        "response_field",
+                        "request_field",
+                        "ui_selection",
+                        "unknown"
+                      ]
+                    },
+                    "tokens": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]{0,18})$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "evidence": {
+                          "type": "string",
+                          "enum": [
+                            "provider_reported",
+                            "official_tokenizer",
+                            "calibrated_estimate",
+                            "heuristic_estimate",
+                            "unknown",
+                            "not_applicable"
+                          ]
+                        },
+                        "scope": {
+                          "type": "string",
+                          "enum": [
+                            "provider_request",
+                            "observed_text",
+                            "reconstructed_context",
+                            "provider_defined_subset"
+                          ]
+                        },
+                        "completeness": {
+                          "type": "string",
+                          "enum": [
+                            "complete_for_scope",
+                            "partial",
+                            "unknown"
+                          ]
+                        },
+                        "profile_id": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "o200k-base-4.0.0-reference",
+                                "cl100k-base-4.0.0-reference",
+                                "observed-text-v1",
+                                "vendor-image-rules-1"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "reason": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "capture_hook_missing",
+                                "protocol_unsupported",
+                                "composer_anchor_missing",
+                                "capture_limit_exceeded",
+                                "model_unverified",
+                                "tokenizer_unavailable",
+                                "storage_write_failed",
+                                "ledger_integrity_failed",
+                                "auth_reconnect_required",
+                                "enrollment_revoked",
+                                "sync_delayed",
+                                "payload_rejected",
+                                "revision_conflict",
+                                "request_identity_ambiguous",
+                                "dependency_missing",
+                                "clock_skew",
+                                "estimate_pending",
+                                "estimate_unavailable",
+                                "method_update_invalid",
+                                "aggregate_inconsistent",
+                                "ip_unresolved",
+                                "ip_history_expired",
+                                "retention_expired",
+                                "deletion_in_progress",
+                                "policy_unavailable",
+                                "guidance_budget_unavailable",
+                                "host_interference_detected",
+                                "conversation_identity_local_only",
+                                "cross_device_dedup_unverified",
+                                "hidden_reasoning_unobserved",
+                                "context_unobserved",
+                                "cache_semantics_unknown",
+                                "tool_work_unobserved",
+                                "media_processing_unobserved",
+                                "media_metadata_limit_exceeded",
+                                "image_dimensions_unknown",
+                                "image_settings_unknown",
+                                "image_execution_incomplete",
+                                "tokenizer_mapping_unverified",
+                                "observed_text_only",
+                                "not_applicable",
+                                "provider_usage_unavailable",
+                                "malformed_frame",
+                                "unsupported_operation",
+                                "conflicting_duplicate_identity",
+                                "capture_body_missing",
+                                "buffer_overflow",
+                                "stale_tokenizer_response",
+                                "tokenizer_timeout",
+                                "unknown_model",
+                                "profile_absent",
+                                "no_comparable_profile",
+                                "input_length_not_modelled",
+                                "unvalidated_reference",
+                                "factor_unavailable",
+                                "factor_incompatible",
+                                "method_unsupported",
+                                "partial_capture",
+                                "history_only",
+                                "historical_timing_conflict",
+                                "unknown_terminal_state",
+                                "media_direction_unknown",
+                                "provider_selection_unverified",
+                                "reasoning_overlap_unknown",
+                                "record_erased",
+                                "reasoning_summary_only",
+                                "research_work_unobserved",
+                                "side_calls_unobserved",
+                                "unknown_event_observed",
+                                "model_not_in_library",
+                                "model_not_named",
+                                "model_stand_in",
+                                "component_unavailable",
+                                "media_default_assumed",
+                                "speech_length_estimated",
+                                "file_size_estimated",
+                                "content_not_opened",
+                                "environment_override",
+                                "no_live_request"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "evidence",
+                        "scope",
+                        "completeness",
+                        "profile_id",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "timing": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "duration_seconds": {
+                              "type": "string",
+                              "maxLength": 96,
+                              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?(e[+-]?[0-9]{1,3})?$"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "browser_request",
+                                "chatgpt_history",
+                                "claude_history",
+                                "perplexity_history",
+                                "gemini_history",
+                                "cowork_history",
+                                "notebooklm_history"
+                              ]
+                            },
+                            "scope": {
+                              "type": "string",
+                              "enum": [
+                                "request",
+                                "provider_message",
+                                "content_blocks",
+                                "workflow",
+                                "research_task"
+                              ]
+                            },
+                            "completeness": {
+                              "type": "string",
+                              "enum": [
+                                "complete_for_scope",
+                                "partial",
+                                "unknown"
+                              ]
+                            },
+                            "profile_version": {
+                              "type": "string",
+                              "const": "timing-observation-1"
+                            }
+                          },
+                          "required": [
+                            "duration_seconds",
+                            "source",
+                            "scope",
+                            "completeness",
+                            "profile_version"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "role",
+                    "model_id",
+                    "model_evidence",
+                    "tokens",
+                    "timing"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "media": {
+                "maxItems": 64,
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "image"
+                        },
+                        "model_id": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "chatgpt-latest",
+                                "chatgpt-gpt-5-6-sol",
+                                "chatgpt-gpt-5-5",
+                                "chatgpt-gpt-5-6-luna",
+                                "chatgpt-gpt-5-6-sol-pro",
+                                "chatgpt-gpt-6-pro",
+                                "chatgpt-reasoning-effort",
+                                "chatgpt-pro-option",
+                                "chatgpt-think",
+                                "chatgpt-images-2-5",
+                                "chatgpt-images-thinking",
+                                "chatgpt-gpt-live-1",
+                                "chatgpt-gpt-live-1-mini",
+                                "chatgpt-voice-live",
+                                "chatgpt-voice-advanced",
+                                "chatgpt-voice-standard",
+                                "chatgpt-gpt-6-1-sol",
+                                "chatgpt-gpt-6-sol",
+                                "chatgpt-gpt-6-luna",
+                                "chatgpt-gpt-6-astra",
+                                "chatgpt-gpt-6-1-sol-pro",
+                                "chatgpt-gpt-6-sol-pro",
+                                "chatgpt-gpt-6-luna-pro",
+                                "chatgpt-gpt-5-6-luna-pro",
+                                "chatgpt-gpt-5-6-terra-pro",
+                                "chatgpt-gpt-5-6-terra",
+                                "chatgpt-gpt-5-5-pro",
+                                "chatgpt-gpt-5-5-mini",
+                                "chatgpt-gpt-5-4",
+                                "chatgpt-gpt-5-4-pro",
+                                "chatgpt-gpt-5-4-mini",
+                                "chatgpt-gpt-5-3-mini",
+                                "chatgpt-gpt-5-2",
+                                "chatgpt-gpt-5-2-pro",
+                                "chatgpt-gpt-5-1",
+                                "chatgpt-gpt-5",
+                                "chatgpt-gpt-5-mini",
+                                "chatgpt-gpt-5-pro",
+                                "chatgpt-gpt-4-1",
+                                "chatgpt-gpt-4-1-mini",
+                                "chatgpt-gpt-4o",
+                                "chatgpt-gpt-4o-mini",
+                                "chatgpt-gpt-4",
+                                "chatgpt-gpt-3-5",
+                                "chatgpt-o4-mini",
+                                "chatgpt-o3",
+                                "chatgpt-o3-pro",
+                                "chatgpt-o3-mini",
+                                "chatgpt-o1",
+                                "chatgpt-voice-bidi",
+                                "chatgpt-deep-research",
+                                "chatgpt-agent",
+                                "chatgpt-unlisted",
+                                "chatgpt-gpt-sol-unlisted",
+                                "chatgpt-gpt-astra-unlisted",
+                                "chatgpt-gpt-luna-unlisted",
+                                "chatgpt-gpt-terra-unlisted",
+                                "chatgpt-gpt-pro-unlisted",
+                                "chatgpt-gpt-mini-unlisted",
+                                "chatgpt-gpt-nano-unlisted",
+                                "chatgpt-gpt-codex-unlisted",
+                                "chatgpt-gpt-sol-pro-unlisted",
+                                "chatgpt-gpt-astra-pro-unlisted",
+                                "chatgpt-gpt-luna-pro-unlisted",
+                                "chatgpt-gpt-terra-pro-unlisted",
+                                "claude-fable-5-1",
+                                "claude-opus-5",
+                                "claude-sonnet-5",
+                                "claude-haiku-4-5",
+                                "claude-fable-5",
+                                "claude-opus-4-8",
+                                "claude-opus-4-7",
+                                "claude-opus-4-6",
+                                "claude-opus-3",
+                                "claude-sonnet-4-6",
+                                "claude-effort",
+                                "claude-thinking",
+                                "claude-opus-5-5",
+                                "claude-sonnet-5-5",
+                                "claude-opus-4-5",
+                                "claude-sonnet-4-5",
+                                "claude-opus-4-1",
+                                "claude-opus-4",
+                                "claude-sonnet-4",
+                                "claude-sonnet-3-7",
+                                "claude-sonnet-3-5",
+                                "claude-haiku-3-5",
+                                "claude-haiku-3",
+                                "claude-unlisted",
+                                "claude-haiku-unlisted",
+                                "claude-sonnet-unlisted",
+                                "claude-opus-unlisted",
+                                "claude-fable-unlisted",
+                                "claude-small-unlisted",
+                                "gemini-3-6-flash",
+                                "gemini-3-6-thinking",
+                                "gemini-3-1-pro",
+                                "gemini-public-flash-lite",
+                                "gemini-public-flash",
+                                "gemini-public-pro",
+                                "gemini-thinking-level",
+                                "gemini-deep-think",
+                                "gemini-deep-research",
+                                "gemini-nano-banana-2-lite",
+                                "gemini-nano-banana-2",
+                                "gemini-nano-banana-pro",
+                                "gemini-omni",
+                                "gemini-lyria",
+                                "gemini-3-8-flash",
+                                "gemini-3-7-flash",
+                                "gemini-3-5-flash",
+                                "gemini-3-5-flash-lite",
+                                "gemini-3-flash",
+                                "gemini-3-pro",
+                                "gemini-2-5-flash",
+                                "gemini-2-5-flash-lite",
+                                "gemini-2-5-pro",
+                                "gemini-nano-banana",
+                                "gemini-omni-video",
+                                "gemini-unnamed",
+                                "gemini-unlisted",
+                                "gemini-flash-unlisted",
+                                "gemini-flash-lite-unlisted",
+                                "gemini-pro-unlisted",
+                                "gemini-pro-image-unlisted",
+                                "gemini-flash-image-unlisted",
+                                "gemini-image-unlisted",
+                                "perplexity-best",
+                                "perplexity-sonar-2",
+                                "perplexity-gpt-5-6-terra",
+                                "perplexity-gpt-5-6-sol",
+                                "perplexity-gemini-3-8-flash",
+                                "perplexity-claude-sonnet-5",
+                                "perplexity-claude-opus-5",
+                                "perplexity-kimi-k3",
+                                "perplexity-glm-5-3",
+                                "perplexity-grok-4-6",
+                                "perplexity-nemotron-3-ultra",
+                                "perplexity-gemini-3-7-flash",
+                                "perplexity-thinking",
+                                "perplexity-search",
+                                "perplexity-deep-research",
+                                "perplexity-learn",
+                                "perplexity-council",
+                                "perplexity-computer",
+                                "perplexity-comet",
+                                "perplexity-image-default",
+                                "perplexity-gpt-image-1",
+                                "perplexity-nano-banana",
+                                "perplexity-nano-banana-pro",
+                                "perplexity-seedream-4-5",
+                                "perplexity-veo-3-1",
+                                "perplexity-gpt-6-1-sol",
+                                "perplexity-gpt-6-sol",
+                                "perplexity-gpt-6-astra",
+                                "perplexity-gpt-6-1-sol-pro",
+                                "perplexity-gpt-6-sol-pro",
+                                "perplexity-gpt-6-astra-pro",
+                                "perplexity-gpt-5-6-sol-pro",
+                                "perplexity-gpt-5-6-terra-pro",
+                                "perplexity-gpt-5-5",
+                                "perplexity-gpt-5-4",
+                                "perplexity-gpt-5-2",
+                                "perplexity-gpt-5-2-pro",
+                                "perplexity-gpt-5-1",
+                                "perplexity-gpt-5",
+                                "perplexity-gpt-5-mini",
+                                "perplexity-gpt-5-nano",
+                                "perplexity-gpt-5-pro",
+                                "perplexity-gpt-4-1",
+                                "perplexity-gpt-4o",
+                                "perplexity-o4-mini",
+                                "perplexity-o3-pro",
+                                "perplexity-claude-fable-5-1",
+                                "perplexity-claude-opus-5-5",
+                                "perplexity-claude-sonnet-5-5",
+                                "perplexity-claude-opus-4-8",
+                                "perplexity-claude-opus-4-7",
+                                "perplexity-claude-opus-4-6",
+                                "perplexity-claude-opus-4-5",
+                                "perplexity-claude-opus-4-1",
+                                "perplexity-claude-opus-4",
+                                "perplexity-claude-sonnet-4-6",
+                                "perplexity-claude-sonnet-4-5",
+                                "perplexity-claude-sonnet-4",
+                                "perplexity-claude-haiku-4-5",
+                                "perplexity-gemini-3-5-flash",
+                                "perplexity-gemini-3-1-pro",
+                                "perplexity-gemini-3-flash",
+                                "perplexity-gemini-3-pro",
+                                "perplexity-gemini-2-5-pro",
+                                "perplexity-glm-5-2",
+                                "perplexity-deepseek",
+                                "perplexity-qwen",
+                                "perplexity-kimi",
+                                "perplexity-grok",
+                                "perplexity-nemotron",
+                                "perplexity-agentic-research",
+                                "perplexity-create-files",
+                                "perplexity-study",
+                                "perplexity-nano-banana-2",
+                                "perplexity-veo-3-1-fast",
+                                "perplexity-veo-3-0",
+                                "perplexity-veo-3-0-fast",
+                                "perplexity-sora-2-pro",
+                                "perplexity-video-unlisted",
+                                "perplexity-unlisted",
+                                "perplexity-unlisted-anthropic",
+                                "perplexity-unlisted-google",
+                                "perplexity-claude-haiku-unlisted",
+                                "perplexity-claude-sonnet-unlisted",
+                                "perplexity-claude-opus-unlisted",
+                                "perplexity-claude-fable-unlisted",
+                                "perplexity-gpt-sol-unlisted",
+                                "perplexity-gpt-astra-unlisted",
+                                "perplexity-gpt-luna-unlisted",
+                                "perplexity-gpt-terra-unlisted",
+                                "perplexity-gemini-flash-unlisted",
+                                "perplexity-gemini-flash-lite-unlisted",
+                                "perplexity-gemini-pro-unlisted",
+                                "perplexity-claude-small-unlisted",
+                                "perplexity-gpt-pro-unlisted",
+                                "perplexity-gpt-mini-unlisted",
+                                "perplexity-gpt-nano-unlisted",
+                                "perplexity-gpt-codex-unlisted",
+                                "perplexity-gpt-sol-pro-unlisted",
+                                "perplexity-gpt-astra-pro-unlisted",
+                                "perplexity-gpt-luna-pro-unlisted",
+                                "perplexity-gpt-terra-pro-unlisted",
+                                "perplexity-gemini-pro-image-unlisted",
+                                "perplexity-gemini-flash-image-unlisted",
+                                "perplexity-gemini-image-unlisted",
+                                "notebooklm-default",
+                                "notebooklm-image"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "count": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]{0,18})$"
+                        },
+                        "width": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 65536
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "height": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 65536
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "outcome": {
+                          "type": "string",
+                          "enum": [
+                            "returned",
+                            "started_not_returned"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "model_id",
+                        "count",
+                        "width",
+                        "height",
+                        "outcome"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "video"
+                        },
+                        "model_id": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "chatgpt-latest",
+                                "chatgpt-gpt-5-6-sol",
+                                "chatgpt-gpt-5-5",
+                                "chatgpt-gpt-5-6-luna",
+                                "chatgpt-gpt-5-6-sol-pro",
+                                "chatgpt-gpt-6-pro",
+                                "chatgpt-reasoning-effort",
+                                "chatgpt-pro-option",
+                                "chatgpt-think",
+                                "chatgpt-images-2-5",
+                                "chatgpt-images-thinking",
+                                "chatgpt-gpt-live-1",
+                                "chatgpt-gpt-live-1-mini",
+                                "chatgpt-voice-live",
+                                "chatgpt-voice-advanced",
+                                "chatgpt-voice-standard",
+                                "chatgpt-gpt-6-1-sol",
+                                "chatgpt-gpt-6-sol",
+                                "chatgpt-gpt-6-luna",
+                                "chatgpt-gpt-6-astra",
+                                "chatgpt-gpt-6-1-sol-pro",
+                                "chatgpt-gpt-6-sol-pro",
+                                "chatgpt-gpt-6-luna-pro",
+                                "chatgpt-gpt-5-6-luna-pro",
+                                "chatgpt-gpt-5-6-terra-pro",
+                                "chatgpt-gpt-5-6-terra",
+                                "chatgpt-gpt-5-5-pro",
+                                "chatgpt-gpt-5-5-mini",
+                                "chatgpt-gpt-5-4",
+                                "chatgpt-gpt-5-4-pro",
+                                "chatgpt-gpt-5-4-mini",
+                                "chatgpt-gpt-5-3-mini",
+                                "chatgpt-gpt-5-2",
+                                "chatgpt-gpt-5-2-pro",
+                                "chatgpt-gpt-5-1",
+                                "chatgpt-gpt-5",
+                                "chatgpt-gpt-5-mini",
+                                "chatgpt-gpt-5-pro",
+                                "chatgpt-gpt-4-1",
+                                "chatgpt-gpt-4-1-mini",
+                                "chatgpt-gpt-4o",
+                                "chatgpt-gpt-4o-mini",
+                                "chatgpt-gpt-4",
+                                "chatgpt-gpt-3-5",
+                                "chatgpt-o4-mini",
+                                "chatgpt-o3",
+                                "chatgpt-o3-pro",
+                                "chatgpt-o3-mini",
+                                "chatgpt-o1",
+                                "chatgpt-voice-bidi",
+                                "chatgpt-deep-research",
+                                "chatgpt-agent",
+                                "chatgpt-unlisted",
+                                "chatgpt-gpt-sol-unlisted",
+                                "chatgpt-gpt-astra-unlisted",
+                                "chatgpt-gpt-luna-unlisted",
+                                "chatgpt-gpt-terra-unlisted",
+                                "chatgpt-gpt-pro-unlisted",
+                                "chatgpt-gpt-mini-unlisted",
+                                "chatgpt-gpt-nano-unlisted",
+                                "chatgpt-gpt-codex-unlisted",
+                                "chatgpt-gpt-sol-pro-unlisted",
+                                "chatgpt-gpt-astra-pro-unlisted",
+                                "chatgpt-gpt-luna-pro-unlisted",
+                                "chatgpt-gpt-terra-pro-unlisted",
+                                "claude-fable-5-1",
+                                "claude-opus-5",
+                                "claude-sonnet-5",
+                                "claude-haiku-4-5",
+                                "claude-fable-5",
+                                "claude-opus-4-8",
+                                "claude-opus-4-7",
+                                "claude-opus-4-6",
+                                "claude-opus-3",
+                                "claude-sonnet-4-6",
+                                "claude-effort",
+                                "claude-thinking",
+                                "claude-opus-5-5",
+                                "claude-sonnet-5-5",
+                                "claude-opus-4-5",
+                                "claude-sonnet-4-5",
+                                "claude-opus-4-1",
+                                "claude-opus-4",
+                                "claude-sonnet-4",
+                                "claude-sonnet-3-7",
+                                "claude-sonnet-3-5",
+                                "claude-haiku-3-5",
+                                "claude-haiku-3",
+                                "claude-unlisted",
+                                "claude-haiku-unlisted",
+                                "claude-sonnet-unlisted",
+                                "claude-opus-unlisted",
+                                "claude-fable-unlisted",
+                                "claude-small-unlisted",
+                                "gemini-3-6-flash",
+                                "gemini-3-6-thinking",
+                                "gemini-3-1-pro",
+                                "gemini-public-flash-lite",
+                                "gemini-public-flash",
+                                "gemini-public-pro",
+                                "gemini-thinking-level",
+                                "gemini-deep-think",
+                                "gemini-deep-research",
+                                "gemini-nano-banana-2-lite",
+                                "gemini-nano-banana-2",
+                                "gemini-nano-banana-pro",
+                                "gemini-omni",
+                                "gemini-lyria",
+                                "gemini-3-8-flash",
+                                "gemini-3-7-flash",
+                                "gemini-3-5-flash",
+                                "gemini-3-5-flash-lite",
+                                "gemini-3-flash",
+                                "gemini-3-pro",
+                                "gemini-2-5-flash",
+                                "gemini-2-5-flash-lite",
+                                "gemini-2-5-pro",
+                                "gemini-nano-banana",
+                                "gemini-omni-video",
+                                "gemini-unnamed",
+                                "gemini-unlisted",
+                                "gemini-flash-unlisted",
+                                "gemini-flash-lite-unlisted",
+                                "gemini-pro-unlisted",
+                                "gemini-pro-image-unlisted",
+                                "gemini-flash-image-unlisted",
+                                "gemini-image-unlisted",
+                                "perplexity-best",
+                                "perplexity-sonar-2",
+                                "perplexity-gpt-5-6-terra",
+                                "perplexity-gpt-5-6-sol",
+                                "perplexity-gemini-3-8-flash",
+                                "perplexity-claude-sonnet-5",
+                                "perplexity-claude-opus-5",
+                                "perplexity-kimi-k3",
+                                "perplexity-glm-5-3",
+                                "perplexity-grok-4-6",
+                                "perplexity-nemotron-3-ultra",
+                                "perplexity-gemini-3-7-flash",
+                                "perplexity-thinking",
+                                "perplexity-search",
+                                "perplexity-deep-research",
+                                "perplexity-learn",
+                                "perplexity-council",
+                                "perplexity-computer",
+                                "perplexity-comet",
+                                "perplexity-image-default",
+                                "perplexity-gpt-image-1",
+                                "perplexity-nano-banana",
+                                "perplexity-nano-banana-pro",
+                                "perplexity-seedream-4-5",
+                                "perplexity-veo-3-1",
+                                "perplexity-gpt-6-1-sol",
+                                "perplexity-gpt-6-sol",
+                                "perplexity-gpt-6-astra",
+                                "perplexity-gpt-6-1-sol-pro",
+                                "perplexity-gpt-6-sol-pro",
+                                "perplexity-gpt-6-astra-pro",
+                                "perplexity-gpt-5-6-sol-pro",
+                                "perplexity-gpt-5-6-terra-pro",
+                                "perplexity-gpt-5-5",
+                                "perplexity-gpt-5-4",
+                                "perplexity-gpt-5-2",
+                                "perplexity-gpt-5-2-pro",
+                                "perplexity-gpt-5-1",
+                                "perplexity-gpt-5",
+                                "perplexity-gpt-5-mini",
+                                "perplexity-gpt-5-nano",
+                                "perplexity-gpt-5-pro",
+                                "perplexity-gpt-4-1",
+                                "perplexity-gpt-4o",
+                                "perplexity-o4-mini",
+                                "perplexity-o3-pro",
+                                "perplexity-claude-fable-5-1",
+                                "perplexity-claude-opus-5-5",
+                                "perplexity-claude-sonnet-5-5",
+                                "perplexity-claude-opus-4-8",
+                                "perplexity-claude-opus-4-7",
+                                "perplexity-claude-opus-4-6",
+                                "perplexity-claude-opus-4-5",
+                                "perplexity-claude-opus-4-1",
+                                "perplexity-claude-opus-4",
+                                "perplexity-claude-sonnet-4-6",
+                                "perplexity-claude-sonnet-4-5",
+                                "perplexity-claude-sonnet-4",
+                                "perplexity-claude-haiku-4-5",
+                                "perplexity-gemini-3-5-flash",
+                                "perplexity-gemini-3-1-pro",
+                                "perplexity-gemini-3-flash",
+                                "perplexity-gemini-3-pro",
+                                "perplexity-gemini-2-5-pro",
+                                "perplexity-glm-5-2",
+                                "perplexity-deepseek",
+                                "perplexity-qwen",
+                                "perplexity-kimi",
+                                "perplexity-grok",
+                                "perplexity-nemotron",
+                                "perplexity-agentic-research",
+                                "perplexity-create-files",
+                                "perplexity-study",
+                                "perplexity-nano-banana-2",
+                                "perplexity-veo-3-1-fast",
+                                "perplexity-veo-3-0",
+                                "perplexity-veo-3-0-fast",
+                                "perplexity-sora-2-pro",
+                                "perplexity-video-unlisted",
+                                "perplexity-unlisted",
+                                "perplexity-unlisted-anthropic",
+                                "perplexity-unlisted-google",
+                                "perplexity-claude-haiku-unlisted",
+                                "perplexity-claude-sonnet-unlisted",
+                                "perplexity-claude-opus-unlisted",
+                                "perplexity-claude-fable-unlisted",
+                                "perplexity-gpt-sol-unlisted",
+                                "perplexity-gpt-astra-unlisted",
+                                "perplexity-gpt-luna-unlisted",
+                                "perplexity-gpt-terra-unlisted",
+                                "perplexity-gemini-flash-unlisted",
+                                "perplexity-gemini-flash-lite-unlisted",
+                                "perplexity-gemini-pro-unlisted",
+                                "perplexity-claude-small-unlisted",
+                                "perplexity-gpt-pro-unlisted",
+                                "perplexity-gpt-mini-unlisted",
+                                "perplexity-gpt-nano-unlisted",
+                                "perplexity-gpt-codex-unlisted",
+                                "perplexity-gpt-sol-pro-unlisted",
+                                "perplexity-gpt-astra-pro-unlisted",
+                                "perplexity-gpt-luna-pro-unlisted",
+                                "perplexity-gpt-terra-pro-unlisted",
+                                "perplexity-gemini-pro-image-unlisted",
+                                "perplexity-gemini-flash-image-unlisted",
+                                "perplexity-gemini-image-unlisted",
+                                "notebooklm-default",
+                                "notebooklm-image"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "width": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 65536
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "height": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 65536
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "duration_seconds": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 96,
+                              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?(e[+-]?[0-9]{1,3})?$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "with_audio": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "model_id",
+                        "width",
+                        "height",
+                        "duration_seconds",
+                        "with_audio"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "speech"
+                        },
+                        "length_basis": {
+                          "type": "string",
+                          "enum": [
+                            "audio_frames",
+                            "stored_length",
+                            "characters"
+                          ]
+                        },
+                        "seconds": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 96,
+                              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?(e[+-]?[0-9]{1,3})?$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "characters": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]{0,18})$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "length_basis",
+                        "seconds",
+                        "characters"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "video_overview"
+                        },
+                        "duration_seconds": {
+                          "type": "string",
+                          "maxLength": 96,
+                          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?(e[+-]?[0-9]{1,3})?$"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "duration_seconds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "text_components",
+              "media"
+            ],
+            "additionalProperties": false
+          },
+          "inline_file_text": {
+            "anyOf": [
+              {
+                "maxItems": 16,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "new_upload",
+                        "retained_context",
+                        "unknown_origin"
+                      ]
+                    },
+                    "extraction_profile_id": {
+                      "type": "string",
+                      "enum": [
+                        "local-file-text-utf8-pdfjs6.3.289-opc-v1",
+                        "observed-inline-file-text-v1"
+                      ]
+                    },
+                    "page_count": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 200
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "tokens": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]{0,18})$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "evidence": {
+                          "type": "string",
+                          "enum": [
+                            "heuristic_estimate",
+                            "unknown"
+                          ]
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "extracted_file_text"
+                        },
+                        "completeness": {
+                          "type": "string",
+                          "enum": [
+                            "complete_for_scope",
+                            "partial",
+                            "unknown"
+                          ]
+                        },
+                        "profile_id": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "o200k-base-4.0.0-reference",
+                                "cl100k-base-4.0.0-reference",
+                                "observed-text-v1",
+                                "vendor-image-rules-1"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "reason": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "capture_hook_missing",
+                                "protocol_unsupported",
+                                "composer_anchor_missing",
+                                "capture_limit_exceeded",
+                                "model_unverified",
+                                "tokenizer_unavailable",
+                                "storage_write_failed",
+                                "ledger_integrity_failed",
+                                "auth_reconnect_required",
+                                "enrollment_revoked",
+                                "sync_delayed",
+                                "payload_rejected",
+                                "revision_conflict",
+                                "request_identity_ambiguous",
+                                "dependency_missing",
+                                "clock_skew",
+                                "estimate_pending",
+                                "estimate_unavailable",
+                                "method_update_invalid",
+                                "aggregate_inconsistent",
+                                "ip_unresolved",
+                                "ip_history_expired",
+                                "retention_expired",
+                                "deletion_in_progress",
+                                "policy_unavailable",
+                                "guidance_budget_unavailable",
+                                "host_interference_detected",
+                                "conversation_identity_local_only",
+                                "cross_device_dedup_unverified",
+                                "hidden_reasoning_unobserved",
+                                "context_unobserved",
+                                "cache_semantics_unknown",
+                                "tool_work_unobserved",
+                                "media_processing_unobserved",
+                                "media_metadata_limit_exceeded",
+                                "image_dimensions_unknown",
+                                "image_settings_unknown",
+                                "image_execution_incomplete",
+                                "tokenizer_mapping_unverified",
+                                "observed_text_only",
+                                "not_applicable",
+                                "provider_usage_unavailable",
+                                "malformed_frame",
+                                "unsupported_operation",
+                                "conflicting_duplicate_identity",
+                                "capture_body_missing",
+                                "buffer_overflow",
+                                "stale_tokenizer_response",
+                                "tokenizer_timeout",
+                                "unknown_model",
+                                "profile_absent",
+                                "no_comparable_profile",
+                                "input_length_not_modelled",
+                                "unvalidated_reference",
+                                "factor_unavailable",
+                                "factor_incompatible",
+                                "method_unsupported",
+                                "partial_capture",
+                                "history_only",
+                                "historical_timing_conflict",
+                                "unknown_terminal_state",
+                                "media_direction_unknown",
+                                "provider_selection_unverified",
+                                "reasoning_overlap_unknown",
+                                "record_erased",
+                                "reasoning_summary_only",
+                                "research_work_unobserved",
+                                "side_calls_unobserved",
+                                "unknown_event_observed",
+                                "model_not_in_library",
+                                "model_not_named",
+                                "model_stand_in",
+                                "component_unavailable",
+                                "media_default_assumed",
+                                "speech_length_estimated",
+                                "file_size_estimated",
+                                "content_not_opened",
+                                "environment_override",
+                                "no_live_request"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "evidence",
+                        "scope",
+                        "completeness",
+                        "profile_id",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "missing": {
+                      "minItems": 1,
+                      "maxItems": 8,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "provider_processing",
+                          "ocr",
+                          "image_encoding",
+                          "retrieval_selection",
+                          "layout_and_drawing_text",
+                          "rendered_visibility",
+                          "formula_recalculation",
+                          "external_font_mapping"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "origin",
+                    "extraction_profile_id",
+                    "page_count",
+                    "tokens",
+                    "missing"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timing": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "duration_seconds": {
+                    "type": "string",
+                    "maxLength": 96,
+                    "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?(e[+-]?[0-9]{1,3})?$"
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "browser_request",
+                      "chatgpt_history",
+                      "claude_history",
+                      "perplexity_history",
+                      "gemini_history",
+                      "cowork_history",
+                      "notebooklm_history"
+                    ]
+                  },
+                  "scope": {
+                    "type": "string",
+                    "enum": [
+                      "request",
+                      "provider_message",
+                      "content_blocks",
+                      "workflow",
+                      "research_task"
+                    ]
+                  },
+                  "completeness": {
+                    "type": "string",
+                    "enum": [
+                      "complete_for_scope",
+                      "partial",
+                      "unknown"
+                    ]
+                  },
+                  "profile_version": {
+                    "type": "string",
+                    "const": "timing-observation-1"
+                  }
+                },
+                "required": [
+                  "duration_seconds",
+                  "source",
+                  "scope",
+                  "completeness",
+                  "profile_version"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text_complete": {
+            "type": "boolean"
+          },
+          "coverage_reasons": {
+            "maxItems": 33,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "capture_hook_missing",
+                "protocol_unsupported",
+                "composer_anchor_missing",
+                "capture_limit_exceeded",
+                "model_unverified",
+                "tokenizer_unavailable",
+                "storage_write_failed",
+                "ledger_integrity_failed",
+                "auth_reconnect_required",
+                "enrollment_revoked",
+                "sync_delayed",
+                "payload_rejected",
+                "revision_conflict",
+                "request_identity_ambiguous",
+                "dependency_missing",
+                "clock_skew",
+                "estimate_pending",
+                "estimate_unavailable",
+                "method_update_invalid",
+                "aggregate_inconsistent",
+                "ip_unresolved",
+                "ip_history_expired",
+                "retention_expired",
+                "deletion_in_progress",
+                "policy_unavailable",
+                "guidance_budget_unavailable",
+                "host_interference_detected",
+                "conversation_identity_local_only",
+                "cross_device_dedup_unverified",
+                "hidden_reasoning_unobserved",
+                "context_unobserved",
+                "cache_semantics_unknown",
+                "tool_work_unobserved",
+                "media_processing_unobserved",
+                "media_metadata_limit_exceeded",
+                "image_dimensions_unknown",
+                "image_settings_unknown",
+                "image_execution_incomplete",
+                "tokenizer_mapping_unverified",
+                "observed_text_only",
+                "not_applicable",
+                "provider_usage_unavailable",
+                "malformed_frame",
+                "unsupported_operation",
+                "conflicting_duplicate_identity",
+                "capture_body_missing",
+                "buffer_overflow",
+                "stale_tokenizer_response",
+                "tokenizer_timeout",
+                "unknown_model",
+                "profile_absent",
+                "no_comparable_profile",
+                "input_length_not_modelled",
+                "unvalidated_reference",
+                "factor_unavailable",
+                "factor_incompatible",
+                "method_unsupported",
+                "partial_capture",
+                "history_only",
+                "historical_timing_conflict",
+                "unknown_terminal_state",
+                "media_direction_unknown",
+                "provider_selection_unverified",
+                "reasoning_overlap_unknown",
+                "record_erased",
+                "reasoning_summary_only",
+                "research_work_unobserved",
+                "side_calls_unobserved",
+                "unknown_event_observed",
+                "model_not_in_library",
+                "model_not_named",
+                "model_stand_in",
+                "component_unavailable",
+                "media_default_assumed",
+                "speech_length_estimated",
+                "file_size_estimated",
+                "content_not_opened",
+                "environment_override",
+                "no_live_request"
+              ]
+            }
+          },
+          "company_dedup_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "schema_version",
+          "kind",
+          "message_key",
+          "role",
+          "conversation_key",
+          "key_version",
+          "site",
+          "parent_key",
+          "prompt_key",
+          "provider_request_key",
+          "provider_attempt_key",
+          "occurred_at",
+          "date_basis",
+          "observed_at",
+          "proposed_method_id",
+          "proposed_method_hash",
+          "model_id",
+          "tokens",
+          "parts",
+          "generation",
+          "inline_file_text",
+          "timing",
+          "text_complete",
+          "coverage_reasons",
+          "company_dedup_key"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "branch_scope": {
+      "type": "string",
+      "enum": [
+        "selected_branch",
+        "loaded_messages",
+        "unknown"
+      ]
+    },
+    "selected_leaf_key": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "branch_message_keys": {
+      "anyOf": [
+        {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "root_message_key": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "first_request_verified": {
+      "type": "boolean"
+    },
+    "has_earlier": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "has_later": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "company_dedup_keys": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "message_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "company_dedup_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "message_key",
+          "company_dedup_key"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "site",
+    "conversation_key",
+    "observed_at",
+    "deletion_epoch",
+    "messages",
+    "branch_scope",
+    "selected_leaf_key",
+    "branch_message_keys",
+    "root_message_key",
+    "first_request_verified",
+    "has_earlier",
+    "has_later"
+  ],
+  "additionalProperties": false
+}

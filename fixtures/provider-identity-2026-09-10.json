@@ -1,0 +1,45 @@
+{
+  "format_version": 1,
+  "observed_on": "2026-09-10",
+  "source": "Read-only reopening of the previously authorized synthetic test conversations in the in-app browser",
+  "privacy": "All provider identifiers were replaced with synthetic values preserving equality and inequality. No account, authentication, prompt, answer or raw capture data is included.",
+  "gemini": {
+    "route": "/app/0123456789abcdef",
+    "history_path": "/_/BardChatUi/data/batchexecute",
+    "rpc_id": "hNvQHb",
+    "argument_count": 8,
+    "conversation_argument_index": 0,
+    "conversation_argument": "c_0123456789abcdef",
+    "same_identifier_present_in_response": true,
+    "synthetic_marker_confirmed_in_page_and_response": true,
+    "event_buffer_truncated": false,
+    "loading_finished_observed": true
+  },
+  "perplexity": {
+    "route": "/search/00000000-0000-4000-8000-000000000001",
+    "history_path": "/rest/thread/00000000-0000-4000-8000-000000000001",
+    "has_next_page": false,
+    "event_buffer_truncated": true,
+    "selected_response_body_retrieved_and_parsed": true,
+    "synthetic_marker_confirmed_in_page_and_response": true,
+    "recheck_transport_type": "Fetch",
+    "recheck_http_status": 200,
+    "response_envelope_keys": ["background_entries", "entries", "first_entry", "has_next_page", "latest_entry", "next_cursor", "status", "thread_metadata"],
+    "query_key_names": ["with_parent_info", "with_schematized_response", "version", "source", "limit", "offset", "from_first", "with_first_entry", "with_latest_entry", "supported_block_use_cases"],
+    "entries": [
+      {"backend_uuid":"00000000-0000-4000-8000-000000000001","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000003","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000003","thread_url_slug":"00000000-0000-4000-8000-000000000001"},
+      {"backend_uuid":"00000000-0000-4000-8000-000000000005","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000006","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000006","thread_url_slug":"00000000-0000-4000-8000-000000000001"},
+      {"backend_uuid":"00000000-0000-4000-8000-000000000007","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000008","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000008","thread_url_slug":"00000000-0000-4000-8000-000000000001"},
+      {"backend_uuid":"00000000-0000-4000-8000-000000000009","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000010","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000010","thread_url_slug":"00000000-0000-4000-8000-000000000001"},
+      {"backend_uuid":"00000000-0000-4000-8000-000000000011","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000012","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000012","thread_url_slug":"00000000-0000-4000-8000-000000000001"},
+      {"backend_uuid":"00000000-0000-4000-8000-000000000013","context_uuid":"00000000-0000-4000-8000-000000000002","uuid":"00000000-0000-4000-8000-000000000014","frontend_context_uuid":"00000000-0000-4000-8000-000000000004","frontend_uuid":"00000000-0000-4000-8000-000000000014","thread_url_slug":"00000000-0000-4000-8000-000000000001"}
+    ],
+    "limitations": [
+      "This is a retrieved history response, not a generation SSE capture.",
+      "The route identifier differs from both context identifiers.",
+      "Availability of these fields in generation requests or SSE frames was not established by this check."
+    ]
+  },
+  "new_generation_actions": 0,
+  "new_upload_actions": 0
+}

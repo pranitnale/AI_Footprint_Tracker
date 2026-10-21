@@ -1,0 +1,16 @@
+{
+  "name": "@footprint/ecologits-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MPL-2.0",
+  "exports": { ".": "./src/index.ts", "./identity": "./src/identity.ts" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:release": "node --import tsx tools/differential.ts --cases 10000",
+    "test:clean-source": "python -X utf8 tools/verify_clean_source.py",
+    "catalog:generate": "uv run --project oracle --frozen python tools/generate_catalog.py",
+    "catalog:check": "uv run --project oracle --frozen python tools/generate_catalog.py --check"
+  }
+}

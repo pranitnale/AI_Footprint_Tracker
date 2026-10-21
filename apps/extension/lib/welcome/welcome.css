@@ -1,0 +1,651 @@
+/* The welcome page (canvas WelcomeNew, owner decisions of 17 and 18 October 2026). Tokens: packages/ui/src/living-gauge.css. */
+.wl {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.wl-head {
+  padding: 20px clamp(16px, 4vw, 56px);
+  border-bottom: 1px solid var(--lg-line);
+}
+.wl-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--lg-ink);
+  text-decoration: none;
+  font-family: var(--lg-font-display);
+  font-size: 19px;
+  font-weight: 700;
+}
+.wl-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px clamp(16px, 4vw, 56px) 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: start;
+}
+.wl-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 540px;
+}
+.wl-title {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+.wl-lead {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--lg-ink-2);
+}
+.wl-intro .lg-local {
+  padding: 24px;
+}
+.wl-intro .lg-local-title {
+  font-size: clamp(24px, 3vw, 28px);
+}
+.wl-intro .lg-local-text {
+  font-size: 16px;
+}
+.wl-how {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px;
+  border-radius: var(--lg-radius-lg);
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+}
+.wl-how h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+.wl-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.wl-points li {
+  display: flex;
+  gap: 14px;
+}
+.wl-step {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--lg-ok-tint);
+  color: var(--lg-ok);
+  font-weight: 700;
+  font-size: 14px;
+}
+.wl-point {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--lg-ink-2);
+}
+.wl-point b {
+  font-size: 16px;
+  color: var(--lg-ink);
+}
+.wl-check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid var(--lg-line-strong);
+  border-radius: 14px;
+  cursor: pointer;
+}
+.wl-check input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--lg-primary);
+}
+.wl-check > span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--lg-ink-2);
+}
+.wl-check b {
+  font-size: 15px;
+  color: var(--lg-ink);
+}
+.wl-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.wl-btn {
+  min-height: 48px;
+  padding: 0 22px;
+  font-size: 16px;
+}
+.wl-actions a {
+  font-size: 14px;
+}
+.wl-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--lg-soft);
+}
+.wl-error {
+  margin: 0;
+  color: var(--lg-danger);
+  font-weight: 600;
+}
+.wl-done {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--lg-ok-tint);
+  color: var(--lg-ink);
+}
+.wl-done b {
+  color: var(--lg-ok);
+  font-size: 16px;
+}
+.wl > .lg-credit {
+  padding-bottom: 16px;
+}
+
+/* The tour after agreeing (owner request of 21 October 2026). */
+.wl-main-tour {
+  display: block;
+  max-width: 1180px;
+}
+.wl-tour {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.wl-paused {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.wl-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.wl-count {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lg-soft);
+}
+.wl-dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+.wl-dots li {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--lg-line-strong);
+}
+.wl-dots li[data-state="done"] {
+  background: var(--lg-ok);
+}
+.wl-dots li[data-state="on"] {
+  width: 22px;
+  background: var(--lg-primary);
+}
+.wl-tour-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 40px;
+  align-items: start;
+  padding: 28px;
+  border-radius: var(--lg-radius-lg);
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+}
+.wl-tour-text {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--lg-ink-2);
+}
+.wl-tour-text p {
+  margin: 0;
+}
+.wl-tour-text b,
+.wl-tour-text dt {
+  color: var(--lg-ink);
+}
+.wl-tour-title {
+  margin: 0;
+  font-size: clamp(26px, 3.2vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: var(--lg-ink);
+}
+.wl-tour-figure {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.wl-sites {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wl-sites li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wl-sites a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--lg-line-strong);
+  background: var(--lg-paper);
+  color: var(--lg-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.wl-sites a:hover {
+  background: var(--lg-tint);
+}
+.wl-terms {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+}
+.wl-terms dt {
+  font-weight: 700;
+}
+.wl-terms dd {
+  margin: 0;
+}
+/* Items with a badge that matches a picture (A to D, or a number), and plain items aligned with them. */
+.wl-lettered {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wl-lettered li {
+  display: flex;
+  align-items: flex-start;
+}
+.wl-lettered .wl-inline-badge {
+  margin-top: 1px;
+}
+.wl-lettered .wl-plain {
+  display: block;
+  position: relative;
+  padding-left: 32px;
+}
+.wl-lettered .wl-plain::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.wl-inline-badge {
+  margin-right: 10px;
+}
+.wl-badged {
+  display: flex;
+  align-items: flex-start;
+}
+.wl-badged .wl-inline-badge {
+  margin-top: 1px;
+}
+.wl-numbered {
+  list-style: none;
+  counter-reset: wl-step;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wl-numbered li {
+  counter-increment: wl-step;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+/*
+ * Badges match the numbers on the pictures. The screenshots are light in both themes, so the
+ * highlight keeps the light theme's green with a white edge instead of following the page theme.
+ */
+.wl-tour {
+  --wl-mark: #2e6b3f;
+}
+.wl-numbered li::before,
+.wl-ring-badge,
+.wl-sk-badge {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--wl-mark);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+.wl-numbered li::before {
+  content: counter(wl-step);
+  margin-top: 1px;
+}
+.wl-shot {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wl-shot-frame {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid var(--lg-line-strong);
+  background: #ffffff;
+}
+.wl-shot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 11px;
+}
+.wl-ring {
+  position: absolute;
+  border: 3px solid var(--wl-mark);
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px #ffffff;
+  pointer-events: none;
+}
+/* A numbered shot leaves a margin on its left for the badges, outside the screenshot. */
+.wl-shot-numbered {
+  margin-left: 32px;
+}
+.wl-shot-badge {
+  position: absolute;
+  left: -32px;
+  transform: translateY(-50%);
+}
+.wl-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 14px;
+  color: var(--lg-soft);
+}
+.wl-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.wl-caption {
+  font-size: 14px;
+  color: var(--lg-soft);
+}
+.wl-sketch {
+  border: 1px solid var(--lg-line-strong);
+  border-radius: 12px;
+  background: var(--lg-paper);
+  font-size: 13px;
+  color: var(--lg-ink-2);
+}
+.wl-sk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--lg-line);
+  border-radius: 11px 11px 0 0;
+  background: var(--lg-tint);
+}
+.wl-sk-nav,
+.wl-sk-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lg-soft);
+}
+.wl-sk-tools {
+  gap: 16px;
+}
+.wl-sk-address {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--lg-line);
+  background: var(--lg-surface);
+  color: var(--lg-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wl-sk-btn {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+.wl-sk-on {
+  background: var(--lg-surface);
+  color: var(--lg-ink);
+  box-shadow: 0 0 0 3px var(--lg-primary);
+}
+.wl-sk-pinned {
+  color: var(--lg-ok);
+}
+.wl-sk-badge {
+  position: absolute;
+  right: -12px;
+  bottom: -14px;
+}
+.wl-sk-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 170px;
+  padding: 20px 18px 16px;
+}
+.wl-sk-line {
+  width: 80%;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--lg-line);
+}
+.wl-sk-line-short {
+  width: 55%;
+}
+.wl-sk-composer {
+  margin-top: auto;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--lg-line-strong);
+  background: var(--lg-surface);
+  color: var(--lg-soft);
+}
+.wl-sk-tracker {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--lg-soft);
+}
+.wl-sk-tracker > span:first-child {
+  min-width: 0;
+}
+.wl-sk-details {
+  flex: none;
+  text-decoration: underline;
+}
+.wl-sk-body-menu {
+  align-items: flex-end;
+  min-height: 0;
+  padding-top: 8px;
+}
+.wl-sk-menu {
+  width: min(280px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--lg-line-strong);
+  background: var(--lg-surface);
+}
+.wl-sk-menu-title {
+  font-weight: 700;
+  color: var(--lg-ink);
+}
+.wl-sk-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lg-ink);
+}
+.wl-sk-menu-row > span:nth-child(2) {
+  flex: 1;
+}
+.wl-sk-mark {
+  color: var(--lg-ok);
+}
+.wl-private {
+  display: grid;
+  gap: 12px;
+}
+.wl-pv-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--lg-line-strong);
+  background: var(--lg-paper);
+}
+.wl-pv-device {
+  border-color: var(--lg-local-line);
+  background: var(--lg-local-tint);
+}
+.wl-pv-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--lg-font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--lg-local-ink);
+}
+.wl-pv-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--lg-ink-2);
+}
+.wl-pv-row b {
+  color: var(--lg-ink);
+}
+.wl-tour-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.wl-next {
+  margin-left: auto;
+}
+@media (max-width: 900px) {
+  .wl-tour-step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px;
+  }
+  .wl-tour-nav .wl-btn {
+    flex: 1 1 140px;
+  }
+}
+@media (max-width: 560px) {
+  .wl-terms {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .wl-terms dd + dt {
+    margin-top: 8px;
+  }
+}
+@media (max-width: 900px) {
+  .wl-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-top: 28px;
+  }
+  .wl-intro {
+    max-width: none;
+  }
+  .wl-how {
+    padding: 20px;
+  }
+  .wl-actions .wl-btn {
+    flex: 1 1 160px;
+  }
+}

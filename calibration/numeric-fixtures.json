@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "base_unit_decimal_places": 18,
+  "decimal_working_precision": 48,
+  "rounding": "ROUND_HALF_EVEN",
+  "source": "Pinned published methodology example and independently implemented Python Decimal equations",
+  "output_counts": ["1", "500", "32768", "9223372036854775807"],
+  "published_command_a_1000": {
+    "host_Wh": "0.2988327641",
+    "it_Wh": "0.7137696558",
+    "facility_Wh": "0.7780089249",
+    "electricity_carbon_gCO2e": "0.2990666307",
+    "absolute_tolerance_published_Wh": "0.000000001",
+    "water_total_runtime": null,
+    "water_total_reason": "Pinned direct-water source category unresolved; retain direct and upstream separately"
+  }
+}

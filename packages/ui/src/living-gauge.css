@@ -1,0 +1,296 @@
+/*
+ * Living Gauge design tokens, shared by the extension pages and the websites (canvas approved on 12 October 2026).
+ * Fonts are bundled from the package (SIL Open Font License), never loaded from a font service.
+ * Light values follow the canvas boards; dark values follow the dark popup and Details boards.
+ */
+@import "@fontsource-variable/bricolage-grotesque/opsz.css";
+@import "@fontsource-variable/instrument-sans/index.css";
+
+:root {
+  color-scheme: light dark;
+  --lg-font-display: "Bricolage Grotesque Variable", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --lg-font-text: "Instrument Sans Variable", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+
+  --lg-paper: #f4f5ef;
+  --lg-surface: #ffffff;
+  --lg-ink: #13241a;
+  --lg-ink-2: #2e3f33;
+  --lg-soft: #4a5a4e;
+  --lg-muted: #8fa897;
+  --lg-line: #dce2d6;
+  --lg-line-strong: #c9d3c3;
+  --lg-field: #ffffff;
+  --lg-chip: #e6ebe0;
+  --lg-chip-on: #ffffff;
+  --lg-tint: #eef1e8;
+  --lg-selected: #f3f8ef;
+  --lg-forest: #0f2a1c;
+  --lg-forest-2: #1b3a27;
+  --lg-fern: #2e6b3f;
+  --lg-fern-hover: #255a34;
+  --lg-fern-ink: #1c4a2a;
+  --lg-lime: #b9e27c;
+  --lg-link: #2e6b3f;
+  --lg-on-fern: #ffffff;
+  --lg-primary: #2e6b3f;
+  --lg-primary-ink: #ffffff;
+  --lg-primary-hover: #255a34;
+  --lg-focus: #2e6b3f;
+  /* Marks, meters and selected outlines: Fern on paper, Lime on the dark scheme. */
+  --lg-accent: #2e6b3f;
+  --lg-tile-on: #13241a;
+
+  /* Hero panel: Forest in both schemes, slightly lifted in dark so it reads as a card. */
+  --lg-hero: #0f2a1c;
+  --lg-hero-line: transparent;
+  --lg-hero-ink: #f4f5ef;
+  --lg-hero-soft: #b9cdbe;
+  --lg-hero-text: #dde8df;
+  --lg-hero-muted: #8fa897;
+  --lg-hero-chip: rgba(244, 245, 239, 0.08);
+  --lg-hero-chip-line: rgba(244, 245, 239, 0.18);
+
+  /* Resources: told apart by lightness and icon, each with an ink colour that passes 4.5:1 on its tint. */
+  --lg-energy: #f3c54b;
+  --lg-energy-ink: #8a5a00;
+  --lg-energy-tint: #fff6db;
+  --lg-carbon: #b8b2a3;
+  --lg-carbon-ink: #5b564c;
+  --lg-carbon-tint: #f1efea;
+  --lg-water: #3f8fd6;
+  --lg-water-ink: #1d69ae;
+  --lg-water-tint: #e7f1fa;
+  --lg-track: #eef1e8;
+
+  /* Tools: one Fern ramp so charts stay calm. */
+  --lg-tool-claude: #183d24;
+  --lg-tool-chatgpt: #2e6b3f;
+  --lg-tool-perplexity: #5a9654;
+  --lg-tool-notebooklm: #8dbb6e;
+  --lg-tool-gemini: #bfd99a;
+
+  --lg-ok: #1f5a2e;
+  --lg-ok-tint: #e3f0e1;
+  --lg-warn: #6e4700;
+  --lg-warn-tint: #fff1cc;
+  --lg-warn-line: #e9b949;
+  --lg-info: #1d4f80;
+  --lg-info-tint: #e7eff8;
+  --lg-info-line: #c3d7ee;
+  --lg-dash: #a9b8a3;
+  --lg-danger: #a3352b;
+  --lg-danger-tint: #fbe9e6;
+  /* "Runs on your computer": a faint green box with a visible green border (owner, 17 Oct 2026). */
+  --lg-local-tint: #eef6e4;
+  --lg-local-line: #8fbf7a;
+  --lg-local-ink: #1d4a2a;
+  --lg-local-text: #24362a;
+  --lg-local-chip: #ffffff;
+
+  --lg-radius-sm: 10px;
+  --lg-radius: 12px;
+  --lg-radius-card: 16px;
+  --lg-radius-lg: 20px;
+  --lg-shadow-pop: 0 24px 64px rgba(15, 42, 28, 0.22), 0 0 0 1px rgba(15, 42, 28, 0.08);
+  --lg-shadow-chip: 0 1px 2px rgba(19, 36, 26, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lg-paper: #0b1c13;
+    --lg-surface: #13291d;
+    --lg-ink: #e8efe6;
+    --lg-ink-2: #dde8df;
+    --lg-soft: #b9cdbe;
+    --lg-muted: #8fa897;
+    --lg-line: #2e4a38;
+    --lg-line-strong: #3a5a46;
+    --lg-field: #102419;
+    --lg-chip: #13291d;
+    --lg-chip-on: #24402f;
+    --lg-tint: #1f3a2a;
+    --lg-selected: #1a3524;
+    --lg-link: #b9e27c;
+    --lg-primary: #b9e27c;
+    --lg-primary-ink: #0f2a1c;
+    --lg-primary-hover: #d6f2a8;
+    --lg-focus: #b9e27c;
+    --lg-accent: #b9e27c;
+    --lg-tile-on: #b9e27c;
+    --lg-hero: #163824;
+    --lg-hero-line: rgba(185, 226, 124, 0.18);
+    --lg-energy-ink: #f3c54b;
+    --lg-energy-tint: rgba(243, 197, 75, 0.14);
+    --lg-carbon-ink: #d8d2c4;
+    --lg-carbon-tint: rgba(184, 178, 163, 0.16);
+    --lg-water: #7db9ec;
+    --lg-water-ink: #8ec2f0;
+    --lg-water-tint: rgba(63, 143, 214, 0.18);
+    --lg-track: #24402f;
+    /*
+     * Tools: the same order, deep green to pale lime, lifted so each is at least 3:1 on the dark
+     * cards (theme.test.ts checks). ChatGPT turns teal so neighbours differ in hue as well.
+     */
+    --lg-tool-claude: #4c9a5e;
+    --lg-tool-chatgpt: #3fb39b;
+    --lg-tool-perplexity: #86c96f;
+    --lg-tool-notebooklm: #b9e27c;
+    --lg-tool-gemini: #eef8da;
+    --lg-ok: #b9e27c;
+    --lg-ok-tint: rgba(185, 226, 124, 0.14);
+    --lg-warn: #f3c54b;
+    --lg-warn-tint: rgba(243, 197, 75, 0.14);
+    --lg-warn-line: rgba(243, 197, 75, 0.45);
+    --lg-info: #8ec2f0;
+    --lg-info-tint: rgba(63, 143, 214, 0.18);
+    --lg-info-line: rgba(63, 143, 214, 0.4);
+    --lg-dash: #4d6b57;
+    --lg-danger: #f2a49a;
+    --lg-danger-tint: rgba(163, 53, 43, 0.22);
+    --lg-local-tint: rgba(185, 226, 124, 0.1);
+    --lg-local-line: rgba(185, 226, 124, 0.55);
+    --lg-local-ink: #d6f2a8;
+    --lg-local-text: #dde8df;
+    --lg-local-chip: rgba(185, 226, 124, 0.12);
+    --lg-shadow-pop: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(232, 239, 230, 0.14);
+    --lg-shadow-chip: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Dark chosen in Settings: the same rules as the block above (theme.test.ts keeps them equal). */
+:root[data-theme="dark"] {
+  --lg-paper: #0b1c13;
+  --lg-surface: #13291d;
+  --lg-ink: #e8efe6;
+  --lg-ink-2: #dde8df;
+  --lg-soft: #b9cdbe;
+  --lg-muted: #8fa897;
+  --lg-line: #2e4a38;
+  --lg-line-strong: #3a5a46;
+  --lg-field: #102419;
+  --lg-chip: #13291d;
+  --lg-chip-on: #24402f;
+  --lg-tint: #1f3a2a;
+  --lg-selected: #1a3524;
+  --lg-link: #b9e27c;
+  --lg-primary: #b9e27c;
+  --lg-primary-ink: #0f2a1c;
+  --lg-primary-hover: #d6f2a8;
+  --lg-focus: #b9e27c;
+  --lg-accent: #b9e27c;
+  --lg-tile-on: #b9e27c;
+  --lg-hero: #163824;
+  --lg-hero-line: rgba(185, 226, 124, 0.18);
+  --lg-energy-ink: #f3c54b;
+  --lg-energy-tint: rgba(243, 197, 75, 0.14);
+  --lg-carbon-ink: #d8d2c4;
+  --lg-carbon-tint: rgba(184, 178, 163, 0.16);
+  --lg-water: #7db9ec;
+  --lg-water-ink: #8ec2f0;
+  --lg-water-tint: rgba(63, 143, 214, 0.18);
+  --lg-track: #24402f;
+  /*
+   * Tools: the same order, deep green to pale lime, lifted so each is at least 3:1 on the dark
+   * cards (theme.test.ts checks). ChatGPT turns teal so neighbours differ in hue as well.
+   */
+  --lg-tool-claude: #4c9a5e;
+  --lg-tool-chatgpt: #3fb39b;
+  --lg-tool-perplexity: #86c96f;
+  --lg-tool-notebooklm: #b9e27c;
+  --lg-tool-gemini: #eef8da;
+  --lg-ok: #b9e27c;
+  --lg-ok-tint: rgba(185, 226, 124, 0.14);
+  --lg-warn: #f3c54b;
+  --lg-warn-tint: rgba(243, 197, 75, 0.14);
+  --lg-warn-line: rgba(243, 197, 75, 0.45);
+  --lg-info: #8ec2f0;
+  --lg-info-tint: rgba(63, 143, 214, 0.18);
+  --lg-info-line: rgba(63, 143, 214, 0.4);
+  --lg-dash: #4d6b57;
+  --lg-danger: #f2a49a;
+  --lg-danger-tint: rgba(163, 53, 43, 0.22);
+  --lg-local-tint: rgba(185, 226, 124, 0.1);
+  --lg-local-line: rgba(185, 226, 124, 0.55);
+  --lg-local-ink: #d6f2a8;
+  --lg-local-text: #dde8df;
+  --lg-local-chip: rgba(185, 226, 124, 0.12);
+  --lg-shadow-pop: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(232, 239, 230, 0.14);
+  --lg-shadow-chip: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* A theme chosen in Settings also sets the browser's own scrollbars and form controls. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+.lg-display {
+  font-family: var(--lg-font-display);
+}
+.lg-num {
+  font-variant-numeric: tabular-nums;
+}
+.lg-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * The "runs on your computer" box, the most prominent message on the welcome page, the popup before
+ * agreeing, the dashboard and the website (owner, 17 October 2026). Title and text sit inside one
+ * faint green box with a visible green border; the badges and the Read the code link are optional.
+ */
+.lg-local {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 2px solid var(--lg-local-line);
+  border-radius: var(--lg-radius-card);
+  background: var(--lg-local-tint);
+  color: var(--lg-local-text);
+}
+.lg-local-title {
+  margin: 0;
+  font-family: var(--lg-font-display);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--lg-local-ink);
+}
+.lg-local-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.lg-local-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.lg-local-badges li {
+  padding: 5px 12px;
+  border: 1px solid var(--lg-local-line);
+  border-radius: 999px;
+  background: var(--lg-local-chip);
+  color: var(--lg-local-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.lg-local a {
+  color: var(--lg-local-ink);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}

@@ -1,0 +1,19 @@
+<!doctype html>
+<html class="popup-surface" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AI Footprint Tracker</title>
+    <meta name="manifest.type" content="browser_action" />
+    <!-- Pins the toolbar sizes, including 24 px for 1.5x displays. Drawn by
+         tools/generate-extension-icons.py. JSON5 needs the size keys quoted. -->
+    <meta
+      name="manifest.default_icon"
+      content="{ '16': 'icon/16.png', '24': 'icon/24.png', '32': 'icon/32.png' }"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

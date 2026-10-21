@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "compare-engines.ts",
+    "comparison-fixtures.ts",
+    "test/**/*.ts",
+    "../provider-drift.ts",
+    "../provider-drift.test.ts"
+  ]
+}

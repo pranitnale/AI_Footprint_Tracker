@@ -1,0 +1,1627 @@
+{
+  "schema_version": "1.0.0",
+  "verified_on": "2026-09-09",
+  "scope_note": "Dated evidence catalog, not a production capability or calibration registry. Exhaustive within the text-model menus inspected on four signed-in accounts on 2026-09-09, including visible gated choices. Public documentation adds scoped plan, routing and media information; it does not exhaust every region, rollout, private Enterprise configuration, agent submodel or hidden fallback. Gemini's inspected account was a work account. Media and separate agent-model menus were not inspected. ui_observed means the label or option was seen, not that it was runnable, selected or tested. API IDs remain empty unless explicitly documented and matched to the observed model. Every energy profile is not_calibrated.",
+  "sources": [
+    {
+      "id": "ui-chatgpt",
+      "title": "ChatGPT text model and effort menus, one signed-in account",
+      "url": "https://chatgpt.com/",
+      "updated_or_published": "Observed 2026-09-09",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "ui-claude",
+      "title": "Claude text model and effort menus, one signed-in account",
+      "url": "https://claude.ai/",
+      "updated_or_published": "Observed 2026-09-09",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "ui-gemini-work",
+      "title": "Gemini Apps text model menu, one work account",
+      "url": "https://gemini.google.com/",
+      "updated_or_published": "Observed 2026-09-09",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "ui-perplexity",
+      "title": "Perplexity Search model menu, one signed-in account",
+      "url": "https://www.perplexity.ai/",
+      "updated_or_published": "Observed 2026-09-09",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "openai-chat-models",
+      "title": "GPT-5.6 and GPT-6 Pro in ChatGPT",
+      "url": "https://help.openai.com/en/articles/20001354-gpt-56-and-gpt-6-pro-in-chatgpt",
+      "updated_or_published": "Displayed: updated 20 hours ago when accessed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "openai-releases",
+      "title": "ChatGPT Release Notes",
+      "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+      "updated_or_published": "Latest dated entry 2026-09-08; displayed updated 19 hours ago",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "openai-images",
+      "title": "Images in ChatGPT",
+      "url": "https://help.openai.com/en/articles/11084440-images-in-chatgpt",
+      "updated_or_published": "Displayed: updated 19 hours ago when accessed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "openai-voice",
+      "title": "ChatGPT Voice",
+      "url": "https://help.openai.com/en/articles/20001274",
+      "updated_or_published": "Displayed: updated 4 days ago when accessed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-model-settings",
+      "title": "Change the model, effort, and thinking settings",
+      "url": "https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings",
+      "updated_or_published": "No publication/update date in extracted article body",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-context",
+      "title": "How large is the context window on paid Claude plans?",
+      "url": "https://support.claude.com/en/articles/8606394-how-large-is-the-context-window-on-paid-claude-plans",
+      "updated_or_published": "No publication/update date in extracted article body",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-limits",
+      "title": "How do usage and length limits work?",
+      "url": "https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work",
+      "updated_or_published": "2026-07-13",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-fable-plans",
+      "title": "Claude Fable models on your plan",
+      "url": "https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan",
+      "updated_or_published": "No publication/update date in extracted article body; discusses 2026-07-19 promotion end",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-releases",
+      "title": "Claude Release notes",
+      "url": "https://support.claude.com/en/articles/12138966-release-notes",
+      "updated_or_published": "Latest dated entry 2026-09-01",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-opus3",
+      "title": "An update on our model deprecation commitments for Claude Opus 3",
+      "url": "https://www.anthropic.com/research/deprecation-updates-opus-3",
+      "updated_or_published": "2026-02-25",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "claude-fable51",
+      "title": "Claude Fable 5.1 and Claude Mythos 5.1",
+      "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+      "updated_or_published": "Launch dated 2026-09-01 in official Claude release notes",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "gemini-personal-limits",
+      "title": "Gemini Apps limits and upgrades for Google AI subscribers",
+      "url": "https://support.google.com/gemini/answer/16275805?hl=en",
+      "updated_or_published": "No publication/update date displayed; includes 2026-05-17 limit-change notice",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "gemini-work-limits",
+      "title": "Use Gemini Apps with a work or school Google Account",
+      "url": "https://support.google.com/gemini/answer/14620100?hl=en",
+      "updated_or_published": "No publication/update date displayed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "gemini-images",
+      "title": "Generate and edit images with Gemini Apps",
+      "url": "https://support.google.com/gemini/answer/14286560?hl=en",
+      "updated_or_published": "No publication/update date displayed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "gemini-video",
+      "title": "Generate videos with Gemini Apps",
+      "url": "https://support.google.com/gemini/answer/16126339?hl=en",
+      "updated_or_published": "No publication/update date displayed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "gemini-music",
+      "title": "Generate music with Gemini Apps",
+      "url": "https://support.google.com/gemini/answer/16901237?hl=en",
+      "updated_or_published": "No publication/update date displayed",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-models",
+      "title": "What advanced AI models are included in my subscription?",
+      "url": "https://www.perplexity.ai/help-center/en/articles/10354919-what-advanced-ai-models-are-included-in-my-subscription",
+      "updated_or_published": "Last modified 2026-09-05; tables explicitly snapshot 2026-09-04",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-how",
+      "title": "How does Perplexity work?",
+      "url": "https://www.perplexity.ai/help-center/en/articles/10352895-how-does-perplexity-work",
+      "updated_or_published": "Last modified 2026-09-03",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-legal-models",
+      "title": "Third-Party Models and Terms",
+      "url": "https://www.perplexity.ai/hub/legal/third-party-models",
+      "updated_or_published": "2025-11-25",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-council",
+      "title": "What is Model Council?",
+      "url": "https://www.perplexity.ai/help-center/en/articles/13641704-what-is-model-council",
+      "updated_or_published": "Last modified 2026-09-04",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-computer",
+      "title": "What is Computer?",
+      "url": "https://www.perplexity.ai/help-center/en/articles/13837784-what-is-computer",
+      "updated_or_published": "Last modified 2026-09-03",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-images",
+      "title": "Generating Images with Perplexity",
+      "url": "https://www.perplexity.ai/help-center/en/articles/10354781-generating-images-with-perplexity",
+      "updated_or_published": "Last modified 2026-09-03",
+      "accessed_on": "2026-09-09"
+    },
+    {
+      "id": "perplexity-video",
+      "title": "Generating Videos with Perplexity",
+      "url": "https://www.perplexity.ai/help-center/en/articles/11985060-generating-videos-with-perplexity",
+      "updated_or_published": "Last modified 2026-09-03",
+      "accessed_on": "2026-09-09"
+    }
+  ],
+  "entries": [
+    {
+      "id": "chatgpt-latest",
+      "site": "chatgpt",
+      "name": "Latest",
+      "kind": "router",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Selected in one observed account; account, plan and rollout dependent.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unresolved_routing",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-chatgpt",
+        "openai-chat-models"
+      ],
+      "notes": [
+        "A moving UI label. Do not map all Latest requests to one physical model or tokenizer."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-5-6-sol",
+      "site": "chatgpt",
+      "name": "GPT-5.6 Sol",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed as selectable. Official paid-plan availability: Plus, Pro, Business and Enterprise, with plan-specific reasoning options and workspace controls.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-chatgpt",
+        "openai-chat-models"
+      ],
+      "notes": [
+        "The same-day protocol audit observed gpt-5-6-thinking for an Extra High response. This is a bounded consumer-protocol observation, not a universal Latest alias or verified developer API identifier.",
+        "Free and Go default to Luna and do not receive Sol."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-5-5",
+      "site": "chatgpt",
+      "name": "GPT-5.5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed as selectable in one account; earlier models may remain available where supported.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-chatgpt",
+        "openai-chat-models",
+        "openai-releases"
+      ],
+      "notes": [
+        "Preserve the exact picker label. Do not infer one fixed Instant, Thinking or Pro execution from this family-level selection.",
+        "July 6 release notes described GPT-5.5 Instant Mini as a hidden fallback. Continued fallback routing after the GPT-5.6 rollout was not established."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-5-6-luna",
+      "site": "chatgpt",
+      "name": "GPT-5.6 Luna",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official default for Free and Go as it rolls out; also powers Think on those plans.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-chat-models"
+      ],
+      "notes": [
+        "Not selectable in standard ChatGPT conversations. Work, Codex and API availability are separate surfaces."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-5-6-sol-pro",
+      "site": "chatgpt",
+      "name": "GPT-5.6 Sol Pro",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official Pro option on Pro, Business and Enterprise; availability and shared or separate allowances depend on plan.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-chat-models"
+      ],
+      "notes": [
+        "Not observed in the inspected account menu. Pro is both a plan name and a model-option label; keep them distinct."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-6-pro",
+      "site": "chatgpt",
+      "name": "GPT-6 Pro",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Rolling out to Pro $100, Pro $200, Business and Enterprise; workspace permissions can restrict Enterprise access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-chat-models",
+        "openai-releases"
+      ],
+      "notes": [
+        "The official article says this is powered by GPT-6 Astra. This catalog does not invent an API identifier.",
+        "Plus access to Astra in Work or Codex does not establish Astra access in standard Chat."
+      ]
+    },
+    {
+      "id": "chatgpt-reasoning-effort",
+      "site": "chatgpt",
+      "name": "Reasoning effort",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Extra High was selected in the inspected account. Official Sol options include Instant, Medium, High and Extra High, depending on plan.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-chatgpt",
+        "openai-chat-models"
+      ],
+      "notes": [
+        "Medium and High: Plus, Pro, Business, Enterprise. Extra High: Pro, Business, Enterprise.",
+        "Higher intelligence may add reasoning while Instant remains selected. Effort labels are not separate physical models.",
+        "The inspected model submenu contained Latest, GPT-5.6 Sol and GPT-5.5."
+      ]
+    },
+    {
+      "id": "chatgpt-pro-option",
+      "site": "chatgpt",
+      "name": "Pro",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official option for difficult tasks on eligible paid plans.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-chat-models"
+      ],
+      "notes": [
+        "May select GPT-5.6 Sol Pro or GPT-6 Pro according to the chosen model and plan. Not a unique model identifier."
+      ]
+    },
+    {
+      "id": "chatgpt-think",
+      "site": "chatgpt",
+      "name": "Think",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official harder-question option for Free and Go, powered by GPT-5.6 Luna.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-chat-models"
+      ],
+      "notes": [
+        "Do not assign paid Sol capacity or tokenizer solely from the word Think."
+      ]
+    },
+    {
+      "id": "chatgpt-images-2-5",
+      "site": "chatgpt",
+      "name": "ChatGPT Images 2.5",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Official image generation and editing on all tiers; web, iOS and Android. Announced September 8.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-images",
+        "openai-releases"
+      ],
+      "notes": [
+        "An image-generation model/product label, not the selected text-chat model. No developer API identity established here."
+      ]
+    },
+    {
+      "id": "chatgpt-images-thinking",
+      "site": "chatgpt",
+      "name": "Images with thinking",
+      "kind": "mode",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Officially available on Plus, Pro and Business; Enterprise and Edu described as coming soon.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-images"
+      ],
+      "notes": [
+        "Separate from the text model's reasoning control."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-live-1",
+      "site": "chatgpt",
+      "name": "GPT-Live-1",
+      "kind": "model",
+      "surface": "voice",
+      "ui_observed": false,
+      "availability": "Official Live voice model on paid plans, subject to plan, workspace, region and application availability.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-voice"
+      ],
+      "notes": [
+        "Current voice support includes eligible managed workspaces, superseding narrower July launch availability.",
+        "Live voice intelligence settings do not establish the text-chat model or tokenizer."
+      ]
+    },
+    {
+      "id": "chatgpt-gpt-live-1-mini",
+      "site": "chatgpt",
+      "name": "GPT-Live-1 mini",
+      "kind": "model",
+      "surface": "voice",
+      "ui_observed": false,
+      "availability": "Official Live model for Free, also listed in several paid-plan voice allowances.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-voice"
+      ],
+      "notes": [
+        "Do not convert voice duration or an allowance into token consumption."
+      ]
+    },
+    {
+      "id": "chatgpt-voice-live",
+      "site": "chatgpt",
+      "name": "Live",
+      "kind": "mode",
+      "surface": "voice",
+      "ui_observed": false,
+      "availability": "Listed in current Voice settings guidance; options depend on plan, workspace, region, version and parental controls.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-voice"
+      ],
+      "notes": [
+        "Powered by GPT-Live-1 or GPT-Live-1 mini as documented; not observed here."
+      ]
+    },
+    {
+      "id": "chatgpt-voice-advanced",
+      "site": "chatgpt",
+      "name": "Advanced",
+      "kind": "mode",
+      "surface": "voice",
+      "ui_observed": false,
+      "availability": "Listed in current Voice settings guidance; options depend on plan, workspace, region, version and parental controls.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-voice"
+      ],
+      "notes": [
+        "Previous real-time voice experience with supported mobile video and screen sharing. Current help does not establish its exact model ID."
+      ]
+    },
+    {
+      "id": "chatgpt-voice-standard",
+      "site": "chatgpt",
+      "name": "Standard",
+      "kind": "mode",
+      "surface": "voice",
+      "ui_observed": false,
+      "availability": "Listed in current Voice settings guidance; options depend on plan, workspace, region, version and parental controls.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "openai-voice"
+      ],
+      "notes": [
+        "Turn-by-turn speech transcription and response experience. Current help does not establish its exact model ID."
+      ]
+    },
+    {
+      "id": "claude-fable-5-1",
+      "site": "claude",
+      "name": "Fable 5.1",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "All paid plans. Included within the Fable share of regular limits on Max and premium Team or legacy Enterprise seats; Pro and standard seats use usage credits.",
+      "aliases": [
+        "claude-fable-5-1"
+      ],
+      "api_model_ids": [
+        "claude-fable-5-1"
+      ],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-fable-plans",
+        "claude-fable51",
+        "claude-model-settings",
+        "claude-context",
+        "claude-limits"
+      ],
+      "notes": [
+        "Selected at High in the inspected menu; Medium was marked Default.",
+        "The same-day protocol audit paired the UI label with claude-fable-5-1. The launch page separately documents this exact API ID.",
+        "Thinking cannot be turned off in Claude.ai."
+      ],
+      "context_capacity": {
+        "tokens": 1000000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-opus-5",
+      "site": "claude",
+      "name": "Opus 5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed as a model option; paid-chat context documentation explicitly covers this model. Workspace controls and usage limits apply.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-releases",
+        "claude-limits"
+      ],
+      "notes": [
+        "Thinking cannot be turned off in Claude.ai; API thinking rules differ."
+      ],
+      "context_capacity": {
+        "tokens": 1000000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-sonnet-5",
+      "site": "claude",
+      "name": "Sonnet 5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed as a model option; paid-chat context documentation explicitly covers this model. Other plans were not inspected.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-releases",
+        "claude-limits"
+      ],
+      "notes": [],
+      "context_capacity": {
+        "tokens": 1000000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-haiku-4-5",
+      "site": "claude",
+      "name": "Haiku 4.5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models in one account; a complete current plan matrix was not established.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-releases"
+      ],
+      "notes": [
+        "The context page states a general 200K paid-chat rule for models outside its named larger-window sets, but does not individually list Haiku 4.5 in its chat paragraph."
+      ]
+    },
+    {
+      "id": "claude-fable-5",
+      "site": "claude",
+      "name": "Fable 5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "All paid plans under the same Fable plan rules as Fable 5.1; the former Pro and standard-seat promotion ended July 19.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-fable-plans",
+        "claude-model-settings"
+      ],
+      "notes": [
+        "Observed in More models.",
+        "The current context page names Fable 5 in Code and Cowork 1M lists but omits it from the named paid-chat lists. Do not transfer those 1M limits into Chat."
+      ]
+    },
+    {
+      "id": "claude-opus-4-8",
+      "site": "claude",
+      "name": "Opus 4.8",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models; explicitly covered by paid-chat context guidance.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-limits"
+      ],
+      "notes": [],
+      "context_capacity": {
+        "tokens": 500000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-opus-4-7",
+      "site": "claude",
+      "name": "Opus 4.7",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models; explicitly covered by paid-chat context guidance.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-limits"
+      ],
+      "notes": [],
+      "context_capacity": {
+        "tokens": 500000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-opus-4-6",
+      "site": "claude",
+      "name": "Opus 4.6",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models; explicitly covered by paid-chat context guidance.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-limits"
+      ],
+      "notes": [],
+      "context_capacity": {
+        "tokens": 500000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-opus-3",
+      "site": "claude",
+      "name": "Opus 3",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models. Officially retained for all paid Claude.ai subscribers after formal retirement.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-opus3"
+      ],
+      "notes": [
+        "January 5 formal retirement is not evidence of removal from Claude.ai; February 25 continued-access announcement explicitly distinguishes the app and request-only API access.",
+        "The context page gives a general 200K paid-chat rule outside its named larger-window sets, not an individual Opus 3 chat row."
+      ]
+    },
+    {
+      "id": "claude-sonnet-4-6",
+      "site": "claude",
+      "name": "Sonnet 4.6",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in More models; explicitly covered by paid-chat context guidance.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings",
+        "claude-context",
+        "claude-limits"
+      ],
+      "notes": [],
+      "context_capacity": {
+        "tokens": 500000,
+        "scope": "Claude.ai chat on paid plans only",
+        "source_id": "claude-context",
+        "notes": [
+          "Published full window; a portion is reserved for the response.",
+          "Not a live occupied-context measurement or an API, Code or Cowork capacity."
+        ]
+      }
+    },
+    {
+      "id": "claude-effort",
+      "site": "claude",
+      "name": "Effort",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed Low, Medium, High, Extra and Max for selected Fable 5.1. Available levels depend on model and Enterprise controls.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-claude",
+        "claude-model-settings"
+      ],
+      "notes": [
+        "Medium was marked Default; High was selected. Max showed a usage multiplier warning.",
+        "Public documentation calls the level between High and Max Extra high (xhigh). The observed menu shortened it to Extra.",
+        "Do not infer token counts or electricity from the displayed usage multiplier."
+      ]
+    },
+    {
+      "id": "claude-thinking",
+      "site": "claude",
+      "name": "Thinking / Extended",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Documented thinking control for supported models. Fable 5.1 and Opus 5 keep thinking on in Claude.ai.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "claude-model-settings"
+      ],
+      "notes": [
+        "An effort or thinking setting is not a separate model.",
+        "API exceptions for Opus 5 do not imply the same toggle exists in Claude.ai."
+      ]
+    },
+    {
+      "id": "gemini-3-6-flash",
+      "site": "gemini",
+      "name": "3.6 Flash",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in one Gemini Apps work account. This does not establish availability for personal, other Workspace or other regional accounts.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-gemini-work",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "Menu description: All-around help; marked New.",
+        "Exact underlying API ID and tokenizer mapping are unverified. Preserve this observed label separately from the personal-account documentation."
+      ]
+    },
+    {
+      "id": "gemini-3-6-thinking",
+      "site": "gemini",
+      "name": "3.6 Thinking",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in one Gemini Apps work account. This does not establish availability for personal, other Workspace or other regional accounts.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-gemini-work",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "Menu description: Solves complex problems; selected. Thinking in a UI label does not establish a separate developer model.",
+        "Exact underlying API ID and tokenizer mapping are unverified. Preserve this observed label separately from the personal-account documentation."
+      ]
+    },
+    {
+      "id": "gemini-3-1-pro",
+      "site": "gemini",
+      "name": "3.1 Pro",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in one Gemini Apps work account. This does not establish availability for personal, other Workspace or other regional accounts.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-gemini-work",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "Menu description: Advanced reasoning.",
+        "Exact underlying API ID and tokenizer mapping are unverified. Preserve this observed label separately from the personal-account documentation."
+      ]
+    },
+    {
+      "id": "gemini-public-flash-lite",
+      "site": "gemini",
+      "name": "Gemini Flash-Lite",
+      "kind": "family",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official personal-account page lists access on no-AI-plan, AI Plus, AI Pro and AI Ultra, with different limits.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits"
+      ],
+      "notes": [
+        "Personal-plan table calls this Gemini 3 Flash-lite; described as the speed-focused option.",
+        "Do not alias this general documentation label to the inspected work-account menu.",
+        "Personal-app context: 32K without AI plan, 128K AI Plus, 1M AI Pro or Ultra. These are plan-specific documentation values, not measured occupied context."
+      ]
+    },
+    {
+      "id": "gemini-public-flash",
+      "site": "gemini",
+      "name": "Gemini Flash",
+      "kind": "family",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official personal-account page lists access on no-AI-plan, AI Plus, AI Pro and AI Ultra, with different limits.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits"
+      ],
+      "notes": [
+        "Personal-plan table calls this Gemini 3 Flash; exact point version is not provided.",
+        "Do not alias this general documentation label to the inspected work-account menu.",
+        "Personal-app context: 32K without AI plan, 128K AI Plus, 1M AI Pro or Ultra. These are plan-specific documentation values, not measured occupied context."
+      ]
+    },
+    {
+      "id": "gemini-public-pro",
+      "site": "gemini",
+      "name": "Gemini Pro",
+      "kind": "family",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Official personal-account page lists access on no-AI-plan, AI Plus, AI Pro and AI Ultra, with different limits.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits"
+      ],
+      "notes": [
+        "Personal-plan table calls this Gemini 3 Pro; exact point version is not provided.",
+        "Do not alias this general documentation label to the inspected work-account menu.",
+        "Personal-app context: 32K without AI plan, 128K AI Plus, 1M AI Pro or Ultra. These are plan-specific documentation values, not measured occupied context."
+      ]
+    },
+    {
+      "id": "gemini-thinking-level",
+      "site": "gemini",
+      "name": "Standard thinking / Extended thinking",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Documented where available for Gemini models on the personal-account support page.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits"
+      ],
+      "notes": [
+        "Thinking levels modify reasoning. The support page does not publish an exact API mapping for the mode."
+      ]
+    },
+    {
+      "id": "gemini-deep-think",
+      "site": "gemini",
+      "name": "Deep Think",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Personal support: AI Ultra only and requires Pro. Work-account page separately lists Deep Think 3.1 for AI Ultra Access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "Not observed in the inspected work-account picker.",
+        "Work-account guidance lists a 192K context for Deep Think 3.1; do not carry the general 1M personal-plan context across to this mode."
+      ]
+    },
+    {
+      "id": "gemini-deep-research",
+      "site": "gemini",
+      "name": "Deep Research",
+      "kind": "mode",
+      "surface": "agent",
+      "ui_observed": false,
+      "availability": "Listed in Gemini personal-plan and Workspace feature tables, with plan-dependent access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-personal-limits",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "A research workflow, not an exact model identity or proof of a fixed number of internal calls."
+      ]
+    },
+    {
+      "id": "gemini-nano-banana-2-lite",
+      "site": "gemini",
+      "name": "Nano Banana 2 Lite",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Official image helper for image requests when the Gemini model is set to Flash-Lite.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-images"
+      ],
+      "notes": [
+        "Separate image model. No exact developer API ID established here."
+      ]
+    },
+    {
+      "id": "gemini-nano-banana-2",
+      "site": "gemini",
+      "name": "Nano Banana 2",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Official image model when the Gemini model is set to Flash or Pro; subject to plan, age and feature availability.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-images",
+        "gemini-personal-limits"
+      ],
+      "notes": [
+        "Do not assume image generation used the text model selected in the composer."
+      ]
+    },
+    {
+      "id": "gemini-nano-banana-pro",
+      "site": "gemini",
+      "name": "Nano Banana Pro",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Officially available with a Google AI plan for redo when the Gemini model is set to Pro; Workspace restrictions differ.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-images",
+        "gemini-work-limits"
+      ],
+      "notes": [
+        "Do not infer its API image-model identifier from the marketing name."
+      ]
+    },
+    {
+      "id": "gemini-omni",
+      "site": "gemini",
+      "name": "Gemini Omni",
+      "kind": "model",
+      "surface": "video_generation",
+      "ui_observed": false,
+      "availability": "Official video model for a personal Google AI plan or qualifying Workspace license, age 18 or over.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-video"
+      ],
+      "notes": [
+        "Video upload for editing is unavailable in the EEA, Switzerland, UK and some US states according to the current help page.",
+        "This page names Omni; an older Veo model list does not establish the current Gemini Apps video model."
+      ]
+    },
+    {
+      "id": "gemini-lyria",
+      "site": "gemini",
+      "name": "Lyria",
+      "kind": "family",
+      "surface": "other",
+      "ui_observed": false,
+      "availability": "Official music generation for eligible personal or supported work/school accounts, age 18 or over and Keep Activity enabled.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "gemini-music"
+      ],
+      "notes": [
+        "Music generation; the fetched help page does not specify a version.",
+        "Full tracks require switching the app model to Pro. A text token count is not a complete music-generation workload."
+      ]
+    },
+    {
+      "id": "perplexity-best",
+      "site": "perplexity",
+      "name": "Best",
+      "kind": "router",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Selected automatic option in the inspected Search menu. Officially available on Free and paid plans.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unresolved_routing",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Best selects a model per query; it is not a separate physical model or a separate search mode.",
+        "The earlier protocol label pplx_pro does not prove a Sonar or Llama model identity."
+      ]
+    },
+    {
+      "id": "perplexity-sonar-2",
+      "site": "perplexity",
+      "name": "Sonar 2",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-gpt-5-6-terra",
+      "site": "perplexity",
+      "name": "GPT-5.6 Terra",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Availability in Perplexity does not mean Terra is selectable in standard ChatGPT.",
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-gpt-5-6-sol",
+      "site": "perplexity",
+      "name": "GPT-5.6 Sol",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Visible but Max-gated in the inspected account. Official consumer table: Max, not Pro; Enterprise Pro and Max both list access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-gemini-3-8-flash",
+      "site": "perplexity",
+      "name": "Gemini 3.8 Flash",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Observed version differs from Gemini 3.7 Flash in the official September 4 catalog snapshot. They are separate entries, not aliases.",
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-claude-sonnet-5",
+      "site": "perplexity",
+      "name": "Claude Sonnet 5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-claude-opus-5",
+      "site": "perplexity",
+      "name": "Claude Opus 5",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Visible but Max-gated in the inspected account. Official consumer table: Max, not Pro; Enterprise Pro and Max both list access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-kimi-k3",
+      "site": "perplexity",
+      "name": "Kimi K3",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Displayed with Thinking in the inspected menu.",
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-glm-5-3",
+      "site": "perplexity",
+      "name": "GLM 5.3",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Displayed with Thinking in the inspected menu.",
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-grok-4-6",
+      "site": "perplexity",
+      "name": "Grok 4.6",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-nemotron-3-ultra",
+      "site": "perplexity",
+      "name": "Nemotron 3 Ultra",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed in the Search menu. Official table lists Pro and Max, plus Enterprise Pro and Max, except the Gemini point-version discrepancy noted below.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Displayed with Thinking in the inspected menu.",
+        "Perplexity adds its own search, prompts, citations, tools and limits. Provider-app context capacities do not transfer automatically."
+      ]
+    },
+    {
+      "id": "perplexity-gemini-3-7-flash",
+      "site": "perplexity",
+      "name": "Gemini 3.7 Flash",
+      "kind": "model",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Documented in the September 4 official Search snapshot for Pro, Max, Enterprise Pro and Enterprise Max. Current inspected menu instead shows 3.8 Flash.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_consumer_tokenizer_mapping",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models",
+        "ui-perplexity"
+      ],
+      "notes": [
+        "Retained as dated documentation evidence, not a claim that 3.7 remains selectable in the inspected account.",
+        "Do not reconcile differing point versions by aliasing them."
+      ]
+    },
+    {
+      "id": "perplexity-thinking",
+      "site": "perplexity",
+      "name": "Thinking",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed beside Kimi K3, GLM 5.3 and Nemotron 3 Ultra. Officially a setting where supported; some models use it automatically.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "No claim that the observed label uniquely identifies an API model or exposes hidden reasoning-token counts."
+      ]
+    },
+    {
+      "id": "perplexity-search",
+      "site": "perplexity",
+      "name": "Search",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": true,
+      "availability": "Observed model picker belongs to Search; Free has Best and limited Pro Searches, paid plans have eligible manual models.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "ui-perplexity",
+        "perplexity-models"
+      ],
+      "notes": [
+        "Search depth and selected model are separate properties."
+      ]
+    },
+    {
+      "id": "perplexity-deep-research",
+      "site": "perplexity",
+      "name": "Deep Research",
+      "kind": "mode",
+      "surface": "agent",
+      "ui_observed": false,
+      "availability": "Official research workflow with plan-specific access; models selected automatically.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models"
+      ],
+      "notes": [
+        "No fixed underlying model list is established by the mode name."
+      ]
+    },
+    {
+      "id": "perplexity-learn",
+      "site": "perplexity",
+      "name": "Learn Mode",
+      "kind": "mode",
+      "surface": "text_chat",
+      "ui_observed": false,
+      "availability": "Documented learning workflow; not inspected in the current menu audit.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models"
+      ],
+      "notes": [
+        "No unique underlying model established here."
+      ]
+    },
+    {
+      "id": "perplexity-council",
+      "site": "perplexity",
+      "name": "Model Council",
+      "kind": "mode",
+      "surface": "agent",
+      "ui_observed": false,
+      "availability": "Official detailed page: Max and Enterprise Max on web and eligible iOS; in Computer, all paid plans using credits.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models",
+        "perplexity-council"
+      ],
+      "notes": [
+        "The catalog's brief description says web; the detailed September 4 page additionally documents iOS.",
+        "Default lineup is one frontier model each from Anthropic, OpenAI and Google, then a synthesizer. Exact current selectable names are not established by the prose.",
+        "Council's picker may differ from Search."
+      ]
+    },
+    {
+      "id": "perplexity-computer",
+      "site": "perplexity",
+      "name": "Computer",
+      "kind": "mode",
+      "surface": "agent",
+      "ui_observed": false,
+      "availability": "Officially available with an active subscription and available credits; web desktop, iOS and Android.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models",
+        "perplexity-computer"
+      ],
+      "notes": [
+        "Has its own model selector and rules. Its complete current model list was not inspected and is not supplied in the fetched overview."
+      ]
+    },
+    {
+      "id": "perplexity-comet",
+      "site": "perplexity",
+      "name": "Comet",
+      "kind": "mode",
+      "surface": "agent",
+      "ui_observed": false,
+      "availability": "Officially identified as a separate browser-assistant experience; its model selection may differ from Search.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "depends_on_observed_model",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-models"
+      ],
+      "notes": [
+        "Outside the four-site text-picker inventory. No current Comet model enumeration is claimed."
+      ]
+    },
+    {
+      "id": "perplexity-image-default",
+      "site": "perplexity",
+      "name": "Default image model",
+      "kind": "router",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Official image preferences allow automatic selection among available image models; feature access scales by plan.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unresolved_routing",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-images"
+      ],
+      "notes": [
+        "Not the Search Best router and not proof of one image model."
+      ]
+    },
+    {
+      "id": "perplexity-gpt-image-1",
+      "site": "perplexity",
+      "name": "GPT Image 1",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Listed in current public image preferences; model-specific access beyond the published tier guidance was not observed.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-images"
+      ],
+      "notes": [
+        "Listed image preference; no exact developer API ID verified here.",
+        "Public help lists limited image generation on Free and higher access by paid tier; this does not prove every model is manually selectable on every tier."
+      ]
+    },
+    {
+      "id": "perplexity-nano-banana",
+      "site": "perplexity",
+      "name": "Nano Banana",
+      "kind": "family",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Listed in current public image preferences; model-specific access beyond the published tier guidance was not observed.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-images"
+      ],
+      "notes": [
+        "The Perplexity page does not provide a point version. Do not alias it to Gemini Apps Nano Banana 2 or its API identifier.",
+        "Public help lists limited image generation on Free and higher access by paid tier; this does not prove every model is manually selectable on every tier."
+      ]
+    },
+    {
+      "id": "perplexity-nano-banana-pro",
+      "site": "perplexity",
+      "name": "Nano Banana Pro",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Official Max and Enterprise Max image access.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-images"
+      ],
+      "notes": [
+        "Specifically documented for Max and Enterprise Max.",
+        "Public help lists limited image generation on Free and higher access by paid tier; this does not prove every model is manually selectable on every tier."
+      ]
+    },
+    {
+      "id": "perplexity-seedream-4-5",
+      "site": "perplexity",
+      "name": "Seedream 4.5",
+      "kind": "model",
+      "surface": "image_generation",
+      "ui_observed": false,
+      "availability": "Listed in current public image preferences; model-specific access beyond the published tier guidance was not observed.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-images"
+      ],
+      "notes": [
+        "Listed as a ByteDance image model.",
+        "Public help lists limited image generation on Free and higher access by paid tier; this does not prove every model is manually selectable on every tier."
+      ]
+    },
+    {
+      "id": "perplexity-veo-3-1",
+      "site": "perplexity",
+      "name": "Veo 3.1",
+      "kind": "model",
+      "surface": "video_generation",
+      "ui_observed": false,
+      "availability": "Official Pro, Max, Enterprise Pro and Enterprise Max video model; Enterprise Pro is described as fast mode.",
+      "aliases": [],
+      "api_model_ids": [],
+      "tokenizer_mapping_status": "unverified_for_media_accounting",
+      "energy_profile_status": "not_calibrated",
+      "source_ids": [
+        "perplexity-video"
+      ],
+      "notes": [
+        "Not manually selectable: assigned by subscription tier.",
+        "No claim that the same video model powers Gemini Apps."
+      ]
+    }
+  ]
+}

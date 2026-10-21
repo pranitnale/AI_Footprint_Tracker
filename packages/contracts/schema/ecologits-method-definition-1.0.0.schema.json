@@ -1,0 +1,824 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "engine_id": {
+      "type": "string",
+      "const": "ecologits"
+    },
+    "core": {
+      "type": "object",
+      "properties": {
+        "catalog_schema": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "catalog_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "converter_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "core_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "core_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "requested_git_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "source_artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "upstream_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        }
+      },
+      "required": [
+        "catalog_schema",
+        "catalog_sha256",
+        "converter_version",
+        "core_sha256",
+        "core_version",
+        "requested_git_commit",
+        "source_artifact_sha256",
+        "upstream_version"
+      ],
+      "additionalProperties": false
+    },
+    "mappings": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "mapping_basis": {
+          "type": "string",
+          "const": "consumer_to_api_assumption"
+        },
+        "source": {
+          "type": "string",
+          "format": "uri"
+        },
+        "bindings": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "model_name": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+              },
+              "workload": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "video"
+                ]
+              }
+            },
+            "required": [
+              "provider",
+              "model_name",
+              "workload"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "review_date",
+        "mapping_basis",
+        "source",
+        "bindings"
+      ],
+      "additionalProperties": false
+    },
+    "fallback": {
+      "type": "object",
+      "properties": {
+        "policy_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "provider_defaults": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "upstream_provider_flagship"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                      },
+                      "model_name": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                      },
+                      "workload": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "video"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "provider",
+                      "model_name",
+                      "workload"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "strategy",
+                  "profile"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "original_engine"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "unavailable"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "model_overrides": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+          },
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "upstream_profile"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                      },
+                      "model_name": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                      },
+                      "workload": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "video"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "provider",
+                      "model_name",
+                      "workload"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "nearest_record",
+                      "family_benchmark",
+                      "model_not_named",
+                      "model_not_in_library",
+                      "model_family_stand_in",
+                      "model_variant_stand_in",
+                      "model_kind_stand_in"
+                    ]
+                  }
+                },
+                "required": [
+                  "strategy",
+                  "profile",
+                  "basis"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "original_engine"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "strategy": {
+                    "type": "string",
+                    "const": "unavailable"
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "unknown_provider": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "upstream_provider_flagship"
+                },
+                "profile": {
+                  "type": "object",
+                  "properties": {
+                    "provider": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                    },
+                    "model_name": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                    },
+                    "workload": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "video"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "provider",
+                    "model_name",
+                    "workload"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "strategy",
+                "profile"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "original_engine"
+                }
+              },
+              "required": [
+                "strategy"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "unavailable"
+                }
+              },
+              "required": [
+                "strategy"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "policy_version",
+        "review_date",
+        "provider_defaults",
+        "model_overrides",
+        "unknown_provider"
+      ],
+      "additionalProperties": false
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "method_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+            },
+            "it_energy_wh_per_image": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+            },
+            "source": {
+              "type": "string",
+              "format": "uri"
+            },
+            "model_providers": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              }
+            },
+            "site_providers": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "gemini",
+                  "perplexity",
+                  "notebooklm"
+                ]
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              }
+            }
+          },
+          "required": [
+            "method_id",
+            "it_energy_wh_per_image",
+            "source",
+            "model_providers",
+            "site_providers"
+          ],
+          "additionalProperties": false
+        },
+        "speech": {
+          "type": "object",
+          "properties": {
+            "method_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+            },
+            "profile": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+                },
+                "model_name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+                },
+                "workload": {
+                  "type": "string",
+                  "enum": [
+                    "text",
+                    "video"
+                  ]
+                }
+              },
+              "required": [
+                "provider",
+                "model_name",
+                "workload"
+              ],
+              "additionalProperties": false
+            },
+            "tokens_per_second": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+              }
+            },
+            "characters_per_second": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+            },
+            "site_providers": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "gemini",
+                  "perplexity",
+                  "notebooklm"
+                ]
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+              }
+            },
+            "source": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "method_id",
+            "profile",
+            "tokens_per_second",
+            "characters_per_second",
+            "site_providers",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        "video": {
+          "type": "object",
+          "properties": {
+            "method_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+            },
+            "site_models": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "gemini",
+                  "perplexity",
+                  "notebooklm"
+                ]
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+              }
+            },
+            "site_defaults": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "enum": [
+                  "chatgpt",
+                  "claude",
+                  "gemini",
+                  "perplexity",
+                  "notebooklm"
+                ]
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65536
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65536
+                  },
+                  "duration_seconds": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                  },
+                  "with_audio": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "width",
+                  "height",
+                  "duration_seconds",
+                  "with_audio"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "model_defaults": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+\\-]{0,191}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65536
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65536
+                  },
+                  "duration_seconds": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                  },
+                  "with_audio": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "width",
+                  "height",
+                  "duration_seconds",
+                  "with_audio"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "source": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "method_id",
+            "site_models",
+            "site_defaults",
+            "model_defaults",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        "overview": {
+          "type": "object",
+          "properties": {
+            "method_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+            },
+            "seconds_per_illustration": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+            }
+          },
+          "required": [
+            "method_id",
+            "seconds_per_illustration"
+          ],
+          "additionalProperties": false
+        },
+        "environment_overrides": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "electricity_mix_zone": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "datacenter_pue": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "min": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                      },
+                      "max": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                      }
+                    },
+                    "required": [
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "datacenter_wue": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "min": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                      },
+                      "max": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+                      }
+                    },
+                    "required": [
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "electricity_mix_zone"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "claude_token_factor": {
+          "type": "object",
+          "properties": {
+            "factor": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,6})(\\.[0-9]{1,9})?$"
+            },
+            "tokenizer_profile_id": {
+              "type": "string",
+              "const": "o200k-base-4.0.0-reference"
+            },
+            "measured_on": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            "source": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "factor",
+            "tokenizer_profile_id",
+            "measured_on",
+            "source"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "review_date",
+        "image",
+        "speech",
+        "video",
+        "overview",
+        "environment_overrides"
+      ],
+      "additionalProperties": false
+    },
+    "product_policy": {
+      "type": "string",
+      "const": "operational-only-output-1"
+    },
+    "latency_policy": {
+      "type": "string",
+      "const": "observed-live-then-history-then-modeled-1"
+    },
+    "environment_policy": {
+      "type": "string",
+      "const": "upstream-provider-default-assumed"
+    },
+    "water_total_policy": {
+      "type": "string",
+      "const": "upstream-wcf-1"
+    },
+    "original_fallback": {
+      "type": "object",
+      "properties": {
+        "method_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"
+        },
+        "method_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "method_id",
+        "method_hash"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "engine_id",
+    "core",
+    "mappings",
+    "fallback",
+    "media",
+    "product_policy",
+    "latency_policy",
+    "environment_policy",
+    "water_total_policy",
+    "original_fallback"
+  ],
+  "additionalProperties": false
+}

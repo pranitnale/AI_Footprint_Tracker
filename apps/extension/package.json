@@ -1,0 +1,43 @@
+{
+  "name": "@footprint/extension",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "build:chrome": "wxt build -b chrome",
+    "build:edge": "wxt build -b edge",
+    "build:firefox": "wxt build -b firefox",
+    "zip:chrome": "wxt zip -b chrome",
+    "zip:edge": "wxt zip -b edge",
+    "zip:firefox": "wxt zip -b firefox",
+    "typecheck": "wxt prepare && tsc --noEmit",
+    "test": "tsx --test test/*.test.ts test/*.test.tsx"
+  },
+  "dependencies": {
+    "@footprint/file-text": "workspace:*",
+    "@footprint/contracts": "workspace:*",
+    "@footprint/estimator": "workspace:*",
+    "@footprint/tokenizers": "workspace:*",
+    "@footprint/ledger": "workspace:*",
+    "@footprint/capture-core": "workspace:*",
+    "@footprint/adapters": "workspace:*",
+    "@footprint/ui": "workspace:*",
+    "@streamparser/json": "0.0.24",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "wxt": "0.21.4",
+    "@wxt-dev/module-react": "1.2.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/jsdom": "30.0.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "jsdom": "29.1.1",
+    "typescript": "5.9.3"
+  }
+}

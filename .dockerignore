@@ -1,0 +1,23 @@
+.git
+**/node_modules
+**/.venv
+**/.output
+**/.wxt
+**/__pycache__
+**/coverage
+**/dist
+# The web image serves the website that `pnpm --filter @footprint/web build` built on the host.
+!apps/web/dist
+**/.env
+**/.env.*
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/*.log
+**/*.pem
+**/*.key
+artifacts
+.firecrawl
+.gstack
+design-canvas
+fixtures

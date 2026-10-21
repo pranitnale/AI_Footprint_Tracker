@@ -1,0 +1,1551 @@
+{
+  "excluded_surfaces": [
+    "Provider SDK tracing and token acquisition",
+    "OpenTelemetry exporters",
+    "Hosted server and provider clients",
+    "CLI/logging once-only side effects",
+    "Python filesystem access at runtime"
+  ],
+  "functions_and_types": [
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-gpu_energy"
+      ],
+      "implementation": "llmAssets.gpu_energy",
+      "line": 37,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "gpu_energy",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-generation_latency"
+      ],
+      "implementation": "llmAssets.generation_latency",
+      "line": 66,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "generation_latency",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-model_required_memory"
+      ],
+      "implementation": "llmAssets.model_required_memory",
+      "line": 106,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "model_required_memory",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-gpu_required_count"
+      ],
+      "implementation": "llmAssets.gpu_required_count",
+      "line": 124,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "gpu_required_count",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-server_energy"
+      ],
+      "implementation": "llmAssets.server_energy",
+      "line": 143,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "server_energy",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_energy"
+      ],
+      "implementation": "llmAssets.request_energy",
+      "line": 167,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_energy",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_it_energy"
+      ],
+      "implementation": "llmAssets.request_it_energy",
+      "line": 185,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_it_energy",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_usage_gwp"
+      ],
+      "implementation": "llmAssets.request_usage_gwp",
+      "line": 205,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_usage_gwp",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_usage_adpe"
+      ],
+      "implementation": "llmAssets.request_usage_adpe",
+      "line": 223,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_usage_adpe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_usage_pe"
+      ],
+      "implementation": "llmAssets.request_usage_pe",
+      "line": 241,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_usage_pe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_usage_wcf"
+      ],
+      "implementation": "llmAssets.request_usage_wcf",
+      "line": 259,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_usage_wcf",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-server_gpu_embodied_gwp"
+      ],
+      "implementation": "llmAssets.server_gpu_embodied_gwp",
+      "line": 280,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "server_gpu_embodied_gwp",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-server_gpu_embodied_adpe"
+      ],
+      "implementation": "llmAssets.server_gpu_embodied_adpe",
+      "line": 302,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "server_gpu_embodied_adpe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-server_gpu_embodied_pe"
+      ],
+      "implementation": "llmAssets.server_gpu_embodied_pe",
+      "line": 324,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "server_gpu_embodied_pe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_embodied_gwp"
+      ],
+      "implementation": "llmAssets.request_embodied_gwp",
+      "line": 346,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_embodied_gwp",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_embodied_adpe"
+      ],
+      "implementation": "llmAssets.request_embodied_adpe",
+      "line": 368,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_embodied_adpe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0",
+        "EL08-override-request_embodied_pe"
+      ],
+      "implementation": "llmAssets.request_embodied_pe",
+      "line": 390,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "request_embodied_pe",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-dag-0"
+      ],
+      "implementation": "computeLlmImpactsDag",
+      "line": 411,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "compute_llm_impacts_dag",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL20-0"
+      ],
+      "implementation": "computeLlmImpacts",
+      "line": 515,
+      "port": "src/llm.ts",
+      "source_sha256": "43428ade6b730b9a6f83adaf61025e4c91f0f6f2a29c63b4379f9712c6daad53",
+      "symbol": "compute_llm_impacts",
+      "upstream_file": "ecologits/impacts/llm.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-generation_latency"
+      ],
+      "implementation": "videoAssets.generation_latency",
+      "line": 15,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "generation_latency",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-server_accelerator_energy"
+      ],
+      "implementation": "videoAssets.server_accelerator_energy",
+      "line": 63,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "server_accelerator_energy",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "videoAssets.request_energy",
+      "line": 71,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_energy",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_usage_gwp"
+      ],
+      "implementation": "videoAssets.request_usage_gwp",
+      "line": 79,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_usage_gwp",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_usage_adpe"
+      ],
+      "implementation": "videoAssets.request_usage_adpe",
+      "line": 87,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_usage_adpe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_usage_pe"
+      ],
+      "implementation": "videoAssets.request_usage_pe",
+      "line": 95,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_usage_pe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_usage_wcf"
+      ],
+      "implementation": "videoAssets.request_usage_wcf",
+      "line": 103,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_usage_wcf",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-server_accelerator_embodied_gwp"
+      ],
+      "implementation": "videoAssets.server_accelerator_embodied_gwp",
+      "line": 113,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "server_accelerator_embodied_gwp",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-server_accelerator_embodied_adpe"
+      ],
+      "implementation": "videoAssets.server_accelerator_embodied_adpe",
+      "line": 122,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "server_accelerator_embodied_adpe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-server_accelerator_embodied_pe"
+      ],
+      "implementation": "videoAssets.server_accelerator_embodied_pe",
+      "line": 131,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "server_accelerator_embodied_pe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_embodied_gwp"
+      ],
+      "implementation": "videoAssets.request_embodied_gwp",
+      "line": 140,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_embodied_gwp",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_embodied_adpe"
+      ],
+      "implementation": "videoAssets.request_embodied_adpe",
+      "line": 149,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_embodied_adpe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0",
+        "EV10-override-request_embodied_pe"
+      ],
+      "implementation": "videoAssets.request_embodied_pe",
+      "line": 158,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "request_embodied_pe",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV04-0"
+      ],
+      "implementation": "computeVideoImpactsDag",
+      "line": 166,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "compute_video_impacts_dag",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV08-range-environment"
+      ],
+      "implementation": "computeVideoImpacts",
+      "line": 227,
+      "port": "src/video.ts",
+      "source_sha256": "1c065c810eb489399f357b61fff4356b3c933bc473b53c84609d3b6b9597ec3e",
+      "symbol": "compute_video_impacts",
+      "upstream_file": "ecologits/impacts/video.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL08-override-gpu_energy",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "Asset",
+      "line": 6,
+      "port": "src/dag.ts",
+      "reason": "Python mutable registration, decorated wrappers and graph-builder objects are replaced by explicit Asset tables. The port does not expose the Python registration API; executing those tables preserves the tested dependency and override behavior.",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL08-override-gpu_energy",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "Asset",
+      "line": 11,
+      "port": "src/dag.ts",
+      "reason": "Python mutable registration, decorated wrappers and graph-builder objects are replaced by explicit Asset tables. The port does not expose the Python registration API; executing those tables preserves the tested dependency and override behavior.",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG.__init__",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL08-override-gpu_energy",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "Asset",
+      "line": 15,
+      "port": "src/dag.ts",
+      "reason": "Python mutable registration, decorated wrappers and graph-builder objects are replaced by explicit Asset tables. The port does not expose the Python registration API; executing those tables preserves the tested dependency and override behavior.",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG.asset",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL08-override-gpu_energy",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "Asset",
+      "line": 17,
+      "port": "src/dag.ts",
+      "reason": "Python mutable registration, decorated wrappers and graph-builder objects are replaced by explicit Asset tables. The port does not expose the Python registration API; executing those tables preserves the tested dependency and override behavior.",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG.asset.wrapper",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL08-override-gpu_energy",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "Asset",
+      "line": 27,
+      "port": "src/dag.ts",
+      "reason": "Python mutable registration, decorated wrappers and graph-builder objects are replaced by explicit Asset tables. The port does not expose the Python registration API; executing those tables preserves the tested dependency and override behavior.",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG.build_dag",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL22-null-asset",
+        "EL22-null-dependency",
+        "EL22-absent-optional-node",
+        "EV10-override-request_energy"
+      ],
+      "implementation": "executeDag",
+      "line": 30,
+      "port": "src/dag.ts",
+      "source_sha256": "fa4b8a6a2792dab2cbdf4165da44b71a12ebe5d6da044f52a7be413233901160",
+      "symbol": "DAG.execute",
+      "upstream_file": "ecologits/impacts/dag.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 13,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "BaseImpact",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-add-energy",
+        "EL21-mismatch-energy"
+      ],
+      "implementation": "addImpacts",
+      "line": 28,
+      "port": "src/modeling.ts",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "BaseImpact.__add__",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-compare-804"
+      ],
+      "implementation": "compareImpacts",
+      "line": 40,
+      "port": "src/modeling.ts",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "BaseImpact.__eq__",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-compare-808"
+      ],
+      "implementation": "compareImpacts",
+      "line": 47,
+      "port": "src/modeling.ts",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "BaseImpact.__le__",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-compare-812"
+      ],
+      "implementation": "compareImpacts",
+      "line": 54,
+      "port": "src/modeling.ts",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "BaseImpact.__ge__",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 62,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "Energy",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 80,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "GWP",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 98,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "ADPe",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 116,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "PE",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 133,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "WCF",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impact",
+      "line": 151,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "Phase",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Usage",
+      "line": 163,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "Usage",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Embodied",
+      "line": 188,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "Embodied",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL20-0",
+        "EV08-range-environment"
+      ],
+      "implementation": "Impacts",
+      "line": 209,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic phase/impact classes are represented by immutable typed records. impact and impactsFromDag construct the source names, units, values and phase fields; Python class identity and arbitrary construction/coercion are not public runtime APIs.",
+      "source_sha256": "c12eff307e00c9523a7aee1ff99c57b10dfb27b07e648d3af4aa1cb4b2ab9f9a",
+      "symbol": "Impacts",
+      "upstream_file": "ecologits/impacts/modeling.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL05-midpoint",
+        "EL22-reverse-division"
+      ],
+      "implementation": "RangeValue",
+      "line": 7,
+      "port": "src/values.ts",
+      "reason": "The Pydantic class is represented by a typed min/max interface and range constructor. Arbitrary Python object coercion is outside this API; numeric endpoints, ordering and range shape are tested.",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-midpoint"
+      ],
+      "implementation": "mean",
+      "line": 19,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.mean",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL16-negative-range-multiplier"
+      ],
+      "implementation": "range",
+      "line": 23,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.check_order",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-750"
+      ],
+      "implementation": "add",
+      "line": 28,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__add__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-751"
+      ],
+      "implementation": "multiply",
+      "line": 40,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__mul__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL22-reverse-division"
+      ],
+      "implementation": "divide",
+      "line": 52,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__truediv__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-753"
+      ],
+      "implementation": "equal",
+      "line": 62,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__eq__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-755"
+      ],
+      "implementation": "lessEqual",
+      "line": 68,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__le__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-754"
+      ],
+      "implementation": "less",
+      "line": 74,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__lt__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-757"
+      ],
+      "implementation": "greaterEqual",
+      "line": 80,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__ge__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL05-range-756"
+      ],
+      "implementation": "greater",
+      "line": 86,
+      "port": "src/values.ts",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__gt__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "excluded",
+      "fixtures": [],
+      "implementation": null,
+      "line": 92,
+      "port": null,
+      "reason": "Python CLI/display formatting, including format specifiers, is outside the numeric core. No TypeScript formatter counterpart is claimed; the product formats its own retained values.",
+      "source_sha256": "5dd0a1714d1291167e973ceede17cace950770df824663c4622a321bf40f7d2f",
+      "symbol": "RangeValue.__format__",
+      "upstream_file": "ecologits/utils/range_value.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Provider",
+      "line": 12,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Providers",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Model",
+      "line": 21,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ArchitectureTypes",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Model",
+      "line": 26,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ParametersMoE",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Model",
+      "line": 31,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Architecture",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Model",
+      "line": 36,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Deployment",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Catalog",
+      "line": 41,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Alias",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Model",
+      "line": 47,
+      "port": "src/catalog.ts",
+      "reason": "The source enum/nested Pydantic model is represented by the corresponding typed provider, model or catalog fields. Runtime JSON coercion and arbitrary Pydantic validation are excluded; accepted catalog values are loaded by the pinned upstream converter.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Model",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-model-0",
+        "EL02-output-0"
+      ],
+      "implementation": "Model",
+      "line": 68,
+      "port": "src/catalog.ts",
+      "reason": "The Pydantic boolean property is represented by the warnings array and lookup bridge concatenation. Callers may test its length; the port does not claim a has_warnings accessor on Model records.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Model.has_warnings",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL22-source-loader",
+        "EL22-singular-source",
+        "EL22-singular-missing-sources",
+        "EL15-provider-enum"
+      ],
+      "implementation": "modelFromJson",
+      "line": 72,
+      "port": "src/catalog.ts",
+      "reason": "The helper preserves the typed numeric loader domain and source-key defect. Arbitrary malformed/coercible Pydantic objects are explicitly excluded; this helper is not the strict product schema validator.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "Model.from_json",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-duplicate-model",
+        "EL02-missing-alias",
+        "EL22-alias-overwrite"
+      ],
+      "implementation": "createModelRepository",
+      "line": 92,
+      "port": "src/catalog.ts",
+      "reason": "Mutable constructor/add-model behavior is represented by pure repository construction from an explicit model list. Combining prior records with a new record and constructing again preserves duplicate/alias checks without a mutable repository API.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-duplicate-model",
+        "EL02-missing-alias",
+        "EL22-alias-overwrite"
+      ],
+      "implementation": "createModelRepository",
+      "line": 97,
+      "port": "src/catalog.ts",
+      "reason": "Mutable constructor/add-model behavior is represented by pure repository construction from an explicit model list. Combining prior records with a new record and constructing again preserves duplicate/alias checks without a mutable repository API.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository.__init__",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-duplicate-model",
+        "EL02-missing-alias",
+        "EL22-alias-overwrite"
+      ],
+      "implementation": "createModelRepository",
+      "line": 116,
+      "port": "src/catalog.ts",
+      "reason": "Mutable constructor/add-model behavior is represented by pure repository construction from an explicit model list. Combining prior records with a new record and constructing again preserves duplicate/alias checks without a mutable repository API.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository.add_model",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL02-model-0",
+        "EL02-output-0"
+      ],
+      "implementation": "findModel",
+      "line": 123,
+      "port": "src/catalog.ts",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository.find_model",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "Catalog",
+      "line": 126,
+      "port": "src/catalog.ts",
+      "reason": "The source list method is an immutable catalog.models array in the port. No list_models method is exported; each normalized record and alias is independently compared to the actual source repository.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository.list_models",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "build-time",
+      "fixtures": [
+        "EL02-model-0"
+      ],
+      "implementation": "generate",
+      "line": 130,
+      "port": "tools/generate_catalog.py",
+      "reason": "Filesystem loading executes the real pinned upstream loader during deterministic conversion. Runtime consumes the retained-source-derived immutable catalog; no runtime file loader is claimed.",
+      "source_sha256": "6d7bd291d3f819d4a68a9979d95891b28123e650c59030400f29cd1677221667",
+      "symbol": "ModelRepository.from_json",
+      "upstream_file": "ecologits/model_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL12-mix-0",
+        "EL12-dense-0"
+      ],
+      "implementation": "ElectricityMix",
+      "line": 10,
+      "port": "src/catalog.ts",
+      "reason": "The source dataclass, list method and warning property are represented by typed immutable records, catalog.electricity_mixes and warning arrays. No equivalent Python object method/accessor identity is claimed.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMix",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL12-mix-0",
+        "EL12-dense-0"
+      ],
+      "implementation": "ElectricityMix",
+      "line": 30,
+      "port": "src/catalog.ts",
+      "reason": "The source dataclass, list method and warning property are represented by typed immutable records, catalog.electricity_mixes and warning arrays. No equivalent Python object method/accessor identity is claimed.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMix.has_warnings",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "domain-limited",
+      "fixtures": [
+        "EL15-mix-loader-1.2",
+        "EL15-mix-loader-invalid"
+      ],
+      "implementation": "electricityMixFromJson",
+      "line": 34,
+      "port": "src/catalog.ts",
+      "reason": "The raw helper supports numeric/boolean values and ASCII Python-style numeric text. Unicode decimal text accepted by Python float is explicitly outside this helper's domain; the pinned dataset uses supported forms. Product inputs never rely on this coercing loader.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMix.from_json",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL15-duplicate-mix"
+      ],
+      "implementation": "createElectricityRepository",
+      "line": 49,
+      "port": "src/catalog.ts",
+      "reason": "The source mutable repository constructor becomes pure array construction with the same duplicate-zone rejection. Runtime lookup uses a private immutable index built from accepted records.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMixRepository",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL15-duplicate-mix"
+      ],
+      "implementation": "createElectricityRepository",
+      "line": 54,
+      "port": "src/catalog.ts",
+      "reason": "The source mutable repository constructor becomes pure array construction with the same duplicate-zone rejection. Runtime lookup uses a private immutable index built from accepted records.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMixRepository.__init__",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL12-mix-0",
+        "EL12-dense-0"
+      ],
+      "implementation": "findElectricityMix",
+      "line": 61,
+      "port": "src/catalog.ts",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMixRepository.find_electricity_mix",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL12-mix-0",
+        "EL12-dense-0"
+      ],
+      "implementation": "Catalog",
+      "line": 64,
+      "port": "src/catalog.ts",
+      "reason": "The source dataclass, list method and warning property are represented by typed immutable records, catalog.electricity_mixes and warning arrays. No equivalent Python object method/accessor identity is claimed.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMixRepository.list_electricity_mixes",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "build-time",
+      "fixtures": [
+        "EL12-mix-0"
+      ],
+      "implementation": "generate",
+      "line": 68,
+      "port": "tools/generate_catalog.py",
+      "reason": "Filesystem loading uses the actual pinned upstream repository during deterministic conversion. Runtime consumes the immutable catalog and does not expose filesystem access.",
+      "source_sha256": "414c92e8b999da2f4991353a0e53406a03d2ed284a4876fd55c9f8008399d3c3",
+      "symbol": "ElectricityMixRepository.from_json",
+      "upstream_file": "ecologits/electricity_mix_repository.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV01-0-true-undefined"
+      ],
+      "implementation": "videoImpacts",
+      "line": 31,
+      "port": "src/catalog.ts",
+      "source_sha256": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+      "symbol": "video_impacts",
+      "upstream_file": "ecologits/estimations/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV02-720p"
+      ],
+      "implementation": "parseResolution",
+      "line": 132,
+      "port": "src/video.ts",
+      "source_sha256": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+      "symbol": "parse_resolution",
+      "upstream_file": "ecologits/estimations/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV02-parse-range"
+      ],
+      "implementation": "parseValueOrRange",
+      "line": 162,
+      "port": "src/catalog.ts",
+      "source_sha256": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+      "symbol": "parse_value_or_range",
+      "upstream_file": "ecologits/estimations/video.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EV03-5"
+      ],
+      "implementation": "durationToFrames",
+      "line": 177,
+      "port": "src/video.ts",
+      "source_sha256": "2bb1e957fa7ec563b40df9dc025cfede662aefded1092ce3dca4b0341b1acf52",
+      "symbol": "duration_to_frames",
+      "upstream_file": "ecologits/estimations/video.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-arch-not-released",
+        "EL21-status-zone-not-registered"
+      ],
+      "implementation": "StatusMessage",
+      "line": 6,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "_StatusMessage",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "excluded",
+      "fixtures": [],
+      "implementation": null,
+      "line": 17,
+      "port": null,
+      "reason": "This Python-only logging/string formatter or abstract NotImplementedError method is not used by numeric result consumers. The port returns code/message records and does not implement its documentation-URL string or abstract method.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "_StatusMessage.__str__",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "excluded",
+      "fixtures": [],
+      "implementation": null,
+      "line": 21,
+      "port": null,
+      "reason": "This Python-only logging/string formatter or abstract NotImplementedError method is not used by numeric result consumers. The port returns code/message records and does not implement its documentation-URL string or abstract method.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "_StatusMessage.from_code",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-arch-not-released",
+        "EL21-status-zone-not-registered"
+      ],
+      "implementation": "StatusMessage",
+      "line": 25,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "WarningMessage",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-status-model-arch-not-released"
+      ],
+      "implementation": "warningFromCode",
+      "line": 35,
+      "port": "src/catalog.ts",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "WarningMessage.from_code",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-arch-not-released",
+        "EL21-status-zone-not-registered"
+      ],
+      "implementation": "StatusMessage",
+      "line": 42,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ErrorMessage",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "implemented",
+      "fixtures": [
+        "EL21-status-zone-not-registered"
+      ],
+      "implementation": "errorFromCode",
+      "line": 52,
+      "port": "src/catalog.ts",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ErrorMessage.from_code",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-arch-not-released"
+      ],
+      "implementation": "StatusMessage",
+      "line": 59,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ModelArchNotReleasedWarning",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-arch-multimodal"
+      ],
+      "implementation": "StatusMessage",
+      "line": 64,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ModelArchMultimodalWarning",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-electricity-mix-adpe-world"
+      ],
+      "implementation": "StatusMessage",
+      "line": 69,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ElectricityMixADPeDefaultWarning",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-electricity-mix-pe-world"
+      ],
+      "implementation": "StatusMessage",
+      "line": 74,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ElectricityMixPEDefaultWarning",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-electricity-mix-wue-world"
+      ],
+      "implementation": "StatusMessage",
+      "line": 79,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ElectricityMixWUEDefaultWarning",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-model-not-registered"
+      ],
+      "implementation": "StatusMessage",
+      "line": 84,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ModelNotRegisteredError",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-status-zone-not-registered"
+      ],
+      "implementation": "StatusMessage",
+      "line": 89,
+      "port": "src/modeling.ts",
+      "reason": "Source status classes/defaults are code/message records, populated from the pinned status factories during catalog conversion. Class identity, __str__ logging and Pydantic construction are not exported; exact default code/message values are tested.",
+      "source_sha256": "4a43c89b7a6ee61dc31ab9d50f98772c6e837820ac3a74a670df7ae6d96cb84c",
+      "symbol": "ZoneNotRegisteredError",
+      "upstream_file": "ecologits/status_messages.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-mismatch-energy",
+        "EL02-duplicate-model"
+      ],
+      "implementation": "EcoLogitsError",
+      "line": 1,
+      "port": "src/values.ts",
+      "reason": "Python exception subclasses are represented by EcoLogitsError with a preserved pythonType/name. Cross-runtime tests compare exception classes; Python traceback and class object identity are not transported.",
+      "source_sha256": "516cdc714c98a8a426dcb542cca34caca9225d3a94135b409d9b2980afcd0f2f",
+      "symbol": "EcoLogitsError",
+      "upstream_file": "ecologits/exceptions.py"
+    },
+    {
+      "disposition": "excluded",
+      "fixtures": [],
+      "implementation": null,
+      "line": 5,
+      "port": null,
+      "reason": "SDK tracer initialization is outside the authorized calculation/lookup port. The package has no tracer initialization entry point and makes no implementation claim for its exception class.",
+      "source_sha256": "516cdc714c98a8a426dcb542cca34caca9225d3a94135b409d9b2980afcd0f2f",
+      "symbol": "TracerInitializationError",
+      "upstream_file": "ecologits/exceptions.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-mismatch-energy",
+        "EL02-duplicate-model"
+      ],
+      "implementation": "EcoLogitsError",
+      "line": 10,
+      "port": "src/values.ts",
+      "reason": "Python exception subclasses are represented by EcoLogitsError with a preserved pythonType/name. Cross-runtime tests compare exception classes; Python traceback and class object identity are not transported.",
+      "source_sha256": "516cdc714c98a8a426dcb542cca34caca9225d3a94135b409d9b2980afcd0f2f",
+      "symbol": "ModelingError",
+      "upstream_file": "ecologits/exceptions.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-output-empty",
+        "EL21-output-dedup"
+      ],
+      "implementation": "ImpactsOutput",
+      "line": 16,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic output fields are plain typed records. has_warnings/has_errors are represented by nonempty array tests in consumers, verified against source properties; no getter methods or arbitrary model_validate API is claimed.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "ImpactsOutput",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-output-empty",
+        "EL21-output-dedup"
+      ],
+      "implementation": "ImpactsOutput",
+      "line": 42,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic output fields are plain typed records. has_warnings/has_errors are represented by nonempty array tests in consumers, verified against source properties; no getter methods or arbitrary model_validate API is claimed.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "ImpactsOutput.has_warnings",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-output-empty",
+        "EL21-output-dedup"
+      ],
+      "implementation": "ImpactsOutput",
+      "line": 46,
+      "port": "src/modeling.ts",
+      "reason": "Pydantic output fields are plain typed records. has_warnings/has_errors are represented by nonempty array tests in consumers, verified against source properties; no getter methods or arbitrary model_validate API is claimed.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "ImpactsOutput.has_errors",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-output-empty",
+        "EL21-output-dedup"
+      ],
+      "implementation": "addOutputWarning",
+      "line": 49,
+      "port": "src/modeling.ts",
+      "reason": "The source mutates its output object; the TypeScript helper returns a new output while preserving warning-code deduplication, error append order and prior values. Mutation identity is deliberately not preserved.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "ImpactsOutput.add_warning",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL21-output-empty",
+        "EL21-output-dedup"
+      ],
+      "implementation": "addOutputError",
+      "line": 56,
+      "port": "src/modeling.ts",
+      "reason": "The source mutates its output object; the TypeScript helper returns a new output while preserving warning-code deduplication, error append order and prior values. Mutation identity is deliberately not preserved.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "ImpactsOutput.add_errors",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-output-0",
+        "EL10-exact-40"
+      ],
+      "implementation": "llmImpacts",
+      "line": 62,
+      "port": "src/catalog.ts",
+      "reason": "The numeric bridge is preserved. TypeScript additionally permits omitted request_latency and lowers it to null; the Python oracle explicitly supplies None for this convenience. Identical callable signatures are not claimed.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "llm_impacts",
+      "upstream_file": "ecologits/tracers/utils.py"
+    },
+    {
+      "disposition": "adapted",
+      "fixtures": [
+        "EL02-output-0"
+      ],
+      "implementation": "ProviderConfiguration",
+      "line": 140,
+      "port": "src/catalog.ts",
+      "reason": "The provider dataclass is a typed immutable record populated by deterministic upstream conversion. The bridge uses its exact location/PUE/WUE fields; no dataclass object API is exposed.",
+      "source_sha256": "aee6ff9ac03a414fc289c57dc35caab55ab78ffaacd9b49776977ce407f37a67",
+      "symbol": "_ProviderConfig",
+      "upstream_file": "ecologits/tracers/utils.py"
+    }
+  ],
+  "notes": [
+    "All Python defaults and all individual JSON source bytes are bound by upstream/lock.json.",
+    "The source archive includes upstream tests and docs for inspection. Only src and data imports belong in application bundles."
+  ],
+  "schema_version": 2,
+  "upstream_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "upstream_version": "0.11.2"
+}

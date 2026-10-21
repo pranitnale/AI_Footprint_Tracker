@@ -1,0 +1,492 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "method_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+$"
+    },
+    "equation_id": {
+      "type": "string",
+      "enum": [
+        "ecologits-output-v1",
+        "test-linear-v1"
+      ]
+    },
+    "runtime_selection_allowed": {
+      "type": "boolean",
+      "const": true
+    },
+    "validation_state": {
+      "type": "string",
+      "const": "unvalidated_reference"
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_date": {
+      "type": "string"
+    },
+    "release_validation": {
+      "type": "string",
+      "const": "pending"
+    },
+    "coefficients": {
+      "type": "object",
+      "properties": {
+        "energyAlpha": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "energyBeta": {
+          "type": "string",
+          "pattern": "^-[0-9]+\\.[0-9]+$"
+        },
+        "energyGamma": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "latencyAlpha": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "latencyBeta": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "latencyGamma": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        }
+      },
+      "required": [
+        "energyAlpha",
+        "energyBeta",
+        "energyGamma",
+        "latencyAlpha",
+        "latencyBeta",
+        "latencyGamma"
+      ],
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "gpuMemoryGb": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "precisionBits": {
+          "type": "string",
+          "const": "16"
+        },
+        "batchSize": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "memoryMultiplier": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "hostPowerKw": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "serverGpuCount": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        }
+      },
+      "required": [
+        "gpuMemoryGb",
+        "precisionBits",
+        "batchSize",
+        "memoryMultiplier",
+        "hostPowerKw",
+        "serverGpuCount"
+      ],
+      "additionalProperties": false
+    },
+    "profiles": {
+      "minItems": 1,
+      "maxItems": 1000,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "activeBillions": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          },
+          "totalBillions": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          },
+          "architecture_source": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "id",
+          "model",
+          "activeBillions",
+          "totalBillions",
+          "architecture_source"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "pue": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "carbon": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "carbon_gas": {
+          "type": "string",
+          "enum": [
+            "CO2",
+            "CO2e"
+          ]
+        },
+        "carbon_boundary": {
+          "type": "string",
+          "enum": [
+            "generation",
+            "lifecycle",
+            "unknown"
+          ]
+        },
+        "carbon_accounting": {
+          "type": "string",
+          "enum": [
+            "location",
+            "market"
+          ]
+        },
+        "gases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gwp": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "direct_water": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "direct_denominator": {
+          "type": "string",
+          "enum": [
+            "it",
+            "facility"
+          ]
+        },
+        "upstream_water": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "water_kind": {
+          "type": "string",
+          "const": "consumption"
+        },
+        "direct_water_source": {
+          "type": "string",
+          "enum": [
+            "freshwater",
+            "all_source",
+            "unknown"
+          ]
+        },
+        "upstream_water_source": {
+          "type": "string",
+          "enum": [
+            "freshwater",
+            "all_source",
+            "unknown"
+          ]
+        },
+        "common_water_scope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "freshwater_consumption",
+                "all_source_consumption"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upstream_exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "publisher": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "section": {
+              "type": "string"
+            },
+            "source_revision": {
+              "type": "string"
+            },
+            "license": {
+              "type": "string"
+            },
+            "access_date": {
+              "type": "string"
+            },
+            "activity_period": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "factor_data_period": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "publication_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "software_snapshot": {
+              "type": "string"
+            },
+            "review_date": {
+              "type": "string"
+            },
+            "unknown_period_reason": {
+              "type": "string"
+            },
+            "population": {
+              "type": "string"
+            },
+            "statistic": {
+              "type": "string",
+              "enum": [
+                "scenario_example",
+                "measured_configuration"
+              ]
+            }
+          },
+          "required": [
+            "publisher",
+            "title",
+            "url",
+            "section",
+            "source_revision",
+            "license",
+            "access_date",
+            "activity_period",
+            "factor_data_period",
+            "publication_date",
+            "software_snapshot",
+            "review_date",
+            "unknown_period_reason",
+            "population",
+            "statistic"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "pue",
+        "carbon",
+        "carbon_gas",
+        "carbon_boundary",
+        "carbon_accounting",
+        "gases",
+        "gwp",
+        "direct_water",
+        "direct_denominator",
+        "upstream_water",
+        "water_kind",
+        "direct_water_source",
+        "upstream_water_source",
+        "common_water_scope",
+        "upstream_exclusions",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "publisher": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "section": {
+          "type": "string"
+        },
+        "source_revision": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "access_date": {
+          "type": "string"
+        },
+        "activity_period": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "factor_data_period": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "publication_date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "software_snapshot": {
+          "type": "string"
+        },
+        "review_date": {
+          "type": "string"
+        },
+        "unknown_period_reason": {
+          "type": "string"
+        },
+        "population": {
+          "type": "string"
+        },
+        "statistic": {
+          "type": "string",
+          "enum": [
+            "scenario_example",
+            "measured_configuration"
+          ]
+        }
+      },
+      "required": [
+        "publisher",
+        "title",
+        "url",
+        "section",
+        "source_revision",
+        "license",
+        "access_date",
+        "activity_period",
+        "factor_data_period",
+        "publication_date",
+        "software_snapshot",
+        "review_date",
+        "unknown_period_reason",
+        "population",
+        "statistic"
+      ],
+      "additionalProperties": false
+    },
+    "missing_components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "method_id",
+    "equation_id",
+    "runtime_selection_allowed",
+    "validation_state",
+    "reviewer",
+    "review_date",
+    "release_validation",
+    "coefficients",
+    "settings",
+    "profiles",
+    "scenario",
+    "provenance",
+    "missing_components"
+  ],
+  "additionalProperties": false
+}

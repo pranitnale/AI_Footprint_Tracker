@@ -1,0 +1,149 @@
+{
+  "status": "success",
+  "has_next_page": false,
+  "entries": [
+    {
+      "uuid": "00000000-0000-4000-8000-000000000201",
+      "frontend_uuid": "00000000-0000-4000-8000-000000000201",
+      "backend_uuid": "00000000-0000-4000-8000-000000000200",
+      "context_uuid": "00000000-0000-4000-8000-000000000202",
+      "frontend_context_uuid": "00000000-0000-4000-8000-000000000203",
+      "thread_url_slug": "00000000-0000-4000-8000-000000000200",
+      "status": "COMPLETED",
+      "display_model": "pplx_asi_opus",
+      "user_selected_model": "pplx_asi_opus",
+      "active_computer_harness_mode": { "harness_mode": "standard", "version": 1 },
+      "query_str": "Synthetic Computer task: create footprint_test.py and notes.txt.",
+      "entry_created_datetime": "2026-10-14T12:53:40.000001+00:00",
+      "entry_updated_datetime": "2026-10-14T12:53:53.000001+00:00",
+      "read_write_token": "SYNTHETIC_CAPABILITY_MUST_NOT_PROJECT",
+      "blocks": [
+        {
+          "intended_usage": "plan",
+          "plan_block": { "goals": [] }
+        },
+        {
+          "intended_usage": "workflow_root",
+          "workflow_block": {
+            "version": "1.0",
+            "status": "WORKFLOW_COMPLETED",
+            "steps": [
+              {
+                "status": "WORKFLOW_COMPLETED",
+                "id": "00000000000000000000000000000204",
+                "items": [
+                  {
+                    "id": "00000000000000000000000000000205",
+                    "type": "WORKFLOW_ITEM_TEXT",
+                    "variant": "answer",
+                    "payload": {
+                      "text_payload": {
+                        "text": "Synthetic answer: both files are ready to download.",
+                        "chunks": ["Synthetic answer: both files are ready to download."],
+                        "variant": "answer",
+                        "is_streaming": false
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "intended_usage": "unified_assets",
+          "unified_assets_block": {
+            "assets": [
+              {
+                "uuid": "toolu_bdrk_01KEKeCFTJLnseufoGTD2wJn",
+                "asset_type": "CODE_FILE",
+                "code_file": { "name": "footprint_test", "filename": "footprint_test.py", "final": true },
+                "preview_info": [
+                  { "type": "text", "media_type": "text/x-python", "file_handle": "file:footprint_test.py" }
+                ],
+                "created_at": "1791982429"
+              },
+              {
+                "uuid": "toolu_bdrk_018MTNS64B97ZUgsgAWgbZ4h",
+                "asset_type": "CODE_FILE",
+                "code_file": { "name": "notes", "filename": "notes.txt", "final": true },
+                "preview_info": [
+                  { "type": "text", "media_type": "text/plain", "file_handle": "file:notes.txt" }
+                ],
+                "created_at": "1791982429"
+              },
+              {
+                "uuid": "59efa555-57c3-4dea-872f-dd014dfb7e76",
+                "asset_type": "CODE_FILE",
+                "backend_uuid_slug": "slug-REDACTED",
+                "code_file": {
+                  "name": "footprint_test.py",
+                  "filename": "footprint_test.py",
+                  "file_size": 410,
+                  "url": "https://files.example.invalid/footprint_test.py?signature=REDACTED"
+                },
+                "created_at": "1791982433",
+                "download_info": [
+                  {
+                    "filename": "footprint_test.py",
+                    "is_exportable": true,
+                    "size": 410,
+                    "status_id": "share_REDACTED",
+                    "url": "https://files.example.invalid/footprint_test.py?signature=REDACTED-download"
+                  }
+                ],
+                "fallback_info": {
+                  "name": "footprint_test.py",
+                  "webview_url": "https://files.example.invalid/footprint_test.py?signature=REDACTED"
+                },
+                "is_primary_asset": true,
+                "preview_text": "<preview text 96 chars>",
+                "root_asset_id": "59efa555-57c3-4dea-872f-dd014dfb7e76"
+              },
+              {
+                "uuid": "84201612-5466-4e58-8cb9-dd2b764e4801",
+                "asset_type": "CODE_FILE",
+                "backend_uuid_slug": "notes-txt-REDACTED",
+                "code_file": {
+                  "name": "notes.txt",
+                  "filename": "notes.txt",
+                  "file_size": 308,
+                  "url": "https://files.example.invalid/notes.txt?signature=REDACTED"
+                },
+                "created_at": "1791982433",
+                "download_info": [
+                  {
+                    "filename": "notes.txt",
+                    "is_exportable": true,
+                    "size": 308,
+                    "status_id": "share_REDACTED",
+                    "url": "https://files.example.invalid/notes.txt?signature=REDACTED-download"
+                  }
+                ],
+                "fallback_info": {
+                  "name": "notes.txt",
+                  "webview_url": "https://files.example.invalid/notes.txt?signature=REDACTED"
+                },
+                "is_primary_asset": true,
+                "preview_text": "<preview text 115 chars>",
+                "root_asset_id": "84201612-5466-4e58-8cb9-dd2b764e4801"
+              }
+            ]
+          }
+        },
+        {
+          "intended_usage": "pending_followups",
+          "pending_followups_block": { "followups": [] }
+        }
+      ]
+    }
+  ],
+  "first_entry": {
+    "uuid": "00000000-0000-4000-8000-000000000201",
+    "frontend_uuid": "00000000-0000-4000-8000-000000000201",
+    "backend_uuid": "00000000-0000-4000-8000-000000000200",
+    "thread_url_slug": "00000000-0000-4000-8000-000000000200",
+    "query_str": "Synthetic Computer task: create footprint_test.py and notes.txt.",
+    "entry_created_datetime": "2026-10-14T12:53:40.000001+00:00"
+  }
+}

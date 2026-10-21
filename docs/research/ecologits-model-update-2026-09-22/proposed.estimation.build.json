@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "default_engine": "original",
+  "available_engines": [
+    "original",
+    "ecologits"
+  ],
+  "ecologits_fallback": {
+    "policy_version": "provider-flagships-direct-models-2026-09-22",
+    "review_date": "2026-09-22",
+    "provider_defaults": {
+      "openai": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5.2-chat-latest",
+          "workload": "text"
+        }
+      },
+      "anthropic": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "anthropic",
+          "model_name": "claude-opus-4-8",
+          "workload": "text"
+        }
+      },
+      "google_genai": {
+        "strategy": "upstream_provider_flagship",
+        "profile": {
+          "provider": "google_genai",
+          "model_name": "gemini-3.1-pro-preview",
+          "workload": "text"
+        }
+      }
+    },
+    "model_overrides": {},
+    "unknown_provider": {
+      "strategy": "upstream_provider_flagship",
+      "profile": {
+        "provider": "openai",
+        "model_name": "gpt-5.5",
+        "workload": "text"
+      }
+    }
+  }
+}

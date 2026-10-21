@@ -1,0 +1,81 @@
+# A self-hosted organization's own address. 10-validate-config.sh adds this file to the nginx
+# templates only when AIFT_TENANT_HOST is set; the hosted service leaves it empty and serves every
+# organization from the registration host. The map, upstream and compression settings it uses
+# are in default.conf.template.
+server {
+  listen 443 ssl;
+  server_name ${AIFT_TENANT_HOST};
+  root /usr/share/nginx/html;
+  ssl_certificate /run/aift-tls/fullchain.pem;
+  ssl_certificate_key /run/aift-tls/privkey.pem;
+  access_log off;
+  # HSTS on every response. nginx inherits add_header only into blocks that set none of their own,
+  # so each location with its own headers repeats this line.
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+  # Summaries and the other large read-only answers: compressed (they hold no session, CSRF value
+  # or token, so BREACH cannot reveal one) and allowed longer than the client's 90 s wait.
+  location ~ ^/v1/(?:(?:me|company|admin)/summary|me/(?:conversations|history|recorded-threads)/[^/]+/summary|admin/(?:breakdown|activity|requests)|methods)$ {
+    proxy_pass http://aift_api;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Connection "";
+    proxy_request_buffering on;
+    proxy_buffering on;
+    proxy_read_timeout 95s;
+    proxy_send_timeout 95s;
+    gzip on;
+  }
+
+  location ~ ^/(?:v1|auth/bootstrap|health)(?:/|$) {
+    proxy_pass http://aift_api;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_request_buffering on;
+    proxy_buffering on;
+    # Sign-in, session and connection answers carry tokens and CSRF values: never compressed.
+    gzip off;
+  }
+  location ~ ^/assets/ {
+    add_header Content-Security-Policy "default-src 'none'; style-src 'self'; sandbox" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    # Content-hashed file names: a changed file gets a new name.
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    gzip on;
+    try_files $uri =404;
+  }
+  location ~ ^/downloads/ {
+    add_header Content-Security-Policy "default-src 'none'; style-src 'self'; sandbox" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Cache-Control "public, max-age=300, must-revalidate";
+    gzip on;
+    try_files $uri =404;
+  }
+  # Contact and registration are accepted only on the registration host, so the organization's host sends people there.
+  location ~ ^/(contact|register)/?$ {
+    return 302 https://${AIFT_REGISTRATION_HOST}/$1;
+  }
+  location = / {
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Cache-Control "no-cache";
+    gzip on;
+    try_files /index.html =404;
+  }
+  location ~ "^/(?:methodology(?:/ecologits|/reference)?|privacy|privacy-policy|terms|dpa|imprint|open-source|downloads?|teams|self-host|login|admin(?:/people(?:/[0-9a-f-]{36})?|/users|/usage|/tools|/activity|/requests|/network|/health|/policies|/exports|/audit|/deletions|/plan)?)/?$" {
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Cache-Control "no-cache";
+    gzip on;
+    try_files /index.html =404;
+  }
+  location / { return 404; }
+}

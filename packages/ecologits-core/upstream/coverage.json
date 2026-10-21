@@ -1,0 +1,19 @@
+{
+  "imported": {
+    "aliases": 9,
+    "electricity_mixes": 215,
+    "hardware_configurations": 4,
+    "models": 339,
+    "resolved_models": 348,
+    "video_models": 17
+  },
+  "numerical_cases": 24195,
+  "production_exclusions": [
+    "Provider SDK tracing and token acquisition are not bundled into the local calculation core.",
+    "Catalog presence does not prove a consumer-site model mapping or tokenizer mapping.",
+    "Image generation remains on its separately versioned product method.",
+    "Models without suitable observed workload fields remain inactive in product policy."
+  ],
+  "schema_version": "1",
+  "source_to_port_entries": 117
+}

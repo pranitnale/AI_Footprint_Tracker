@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Reviewed facts that the locks cannot supply. tools/generate-sbom.py applies them to THIRD-PARTY-INVENTORY.json, and tools/test_third_party.py fails when the inventory, SBOM or notices disagree with this file. Record a licence only from the upstream licence file or an upstream statement; otherwise use NOASSERTION with license_status unverified and say what to check.",
+  "exclude_name_prefixes": [
+    "@napi-rs/canvas-"
+  ],
+  "not_shipped": [
+    {
+      "ecosystem": "npm",
+      "name": "@napi-rs/canvas",
+      "reason": "Optional Node canvas for pdfjs-dist. The browser builds use the text-only PDF path and do not bundle it; its platform binaries are excluded so the inventory does not depend on the machine that generated it."
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pywin32",
+      "reason": "Installed only on Windows, as a dependency of portalocker. The server image runs on Linux and does not contain it."
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "tzdata",
+      "reason": "Installed only on Windows (sys_platform == 'win32' in apps/server/uv.lock). The server image runs on Linux and does not contain it."
+    }
+  ],
+  "license_corrections": [
+    {
+      "ecosystem": "pypi",
+      "name": "colorama",
+      "license": "BSD-3-Clause",
+      "reason": "The metadata declares no licence field; the distributed LICENSE.txt of 0.4.6 is the 3-clause BSD licence.",
+      "homepage": "https://github.com/tartley/colorama"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "python-dateutil",
+      "license": "Apache-2.0 AND BSD-3-Clause",
+      "reason": "The metadata says Dual License. The distributed LICENSE of 2.9.0.post0 applies the 3-clause BSD licence to all code and Apache-2.0 to contributions after 1 December 2017, so both apply."
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pywin32",
+      "license": "NOASSERTION",
+      "reason": "The metadata says PSF, but the distributed licence files of 312 combine a BSD-style licence (win32, com, pythonwin), LGPL 2.1 (adodbapi), MIT (MAPIStubLibrary), the Scintilla licence and the PSF licence (idle). No single expression was verified.",
+      "homepage": "https://github.com/mhammond/pywin32"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "tzdata",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/python/tzdata",
+      "reason": "Windows only, so a Linux run finds no metadata. The 2026.3 distribution declares License: Apache-2.0 and ships the Apache licence file."
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "wrapt",
+      "license": "BSD-2-Clause",
+      "reason": "The metadata says BSD; the distributed LICENSE of 1.17.3 is the 2-clause BSD licence."
+    }
+  ],
+  "data": [
+    {
+      "name": "EcoLogits model, provider and electricity data",
+      "version": "EcoLogits 0.11.2",
+      "license": "MPL-2.0",
+      "license_status": "declared",
+      "supplier": "EcoLogits contributors (CodeCarbon)",
+      "source": "https://github.com/mlco2/ecologits",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "files": [
+        "packages/ecologits-core/data/catalog.json"
+      ],
+      "note": "Converted from the pinned EcoLogits release (packages/ecologits-core/upstream/lock.json) and distributed under MPL-2.0 with the port. The server uses the same data through the EcoLogits Python package. The entries marked as part of this data name the sources EcoLogits credits."
+    },
+    {
+      "name": "Our World in Data electricity mix",
+      "version": "As bundled in EcoLogits 0.11.2",
+      "license": "CC-BY-4.0",
+      "license_status": "declared",
+      "supplier": "Our World in Data (Hannah Ritchie and Pablo Rosado)",
+      "source": "https://ourworldindata.org/electricity-mix",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Electricity-mix carbon intensity. Our World in Data states that data it republishes from third parties stays under the original authors' terms."
+    },
+    {
+      "name": "ADEME Base Empreinte electricity factors",
+      "version": "As bundled in EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "ADEME",
+      "source": "https://base-empreinte.ademe.fr/",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Abiotic resource depletion and primary energy factors of electricity. Licence not recorded here; check the Base Empreinte terms of use."
+    },
+    {
+      "name": "World Resources Institute electricity water data",
+      "version": "As bundled in EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "World Resources Institute",
+      "source": "https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Water consumed to generate electricity (off-site WUE). Licence not recorded here; check the WRI publication terms."
+    },
+    {
+      "name": "OpenRouter model statistics",
+      "version": "As bundled in EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "OpenRouter",
+      "source": "https://openrouter.ai",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Time to first token and output speed in the EcoLogits model records. Licence not recorded here."
+    },
+    {
+      "name": "ML.ENERGY Leaderboard measurements behind the EcoLogits regressions",
+      "version": "As used by EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "ML.ENERGY",
+      "source": "https://ml.energy/leaderboard/",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "EcoLogits ships regression coefficients fitted to these measurements, not the measurements themselves. Licence not recorded here: the leaderboard repository (https://github.com/ml-energy/leaderboard) had no licence file when checked on 9 September 2026."
+    },
+    {
+      "name": "BoaviztAPI server impact data",
+      "version": "As bundled in EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "Boavizta",
+      "source": "https://github.com/Boavizta/boaviztapi",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Server embodied impacts and non-GPU server power, as values in the EcoLogits data. No BoaviztAPI software is included. Licence of the values not recorded here."
+    },
+    {
+      "name": "Lees-Perasso et al. GPU life-cycle study",
+      "version": "2026, as cited by EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "ADEME",
+      "source": "https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "GPU embodied impacts. Published figures cited by EcoLogits; licence not recorded here."
+    },
+    {
+      "name": "Jegham et al. video generation figures",
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "Jegham et al.",
+      "source": "https://arxiv.org/abs/2607.04553",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "Video generation durations and server power. Published figures cited by EcoLogits; licence not recorded here."
+    },
+    {
+      "name": "Schneider et al. TPU embodied carbon figures",
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2",
+      "license": "NOASSERTION",
+      "license_status": "unverified",
+      "supplier": "Schneider et al.",
+      "source": "https://arxiv.org/abs/2502.01671",
+      "shipped_in": [
+        "browser_extension",
+        "server"
+      ],
+      "part_of": "EcoLogits model, provider and electricity data",
+      "note": "TPU embodied carbon. Published figures cited by EcoLogits; licence not recorded here."
+    },
+    {
+      "name": "EcoLogits reference coefficients for the archived Original method",
+      "version": "EcoLogits commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+      "license": "MPL-2.0",
+      "license_status": "declared",
+      "supplier": "EcoLogits contributors (CodeCarbon)",
+      "source": "https://github.com/mlco2/ecologits/tree/886d1ebfadb51a2d6407fcea6d9778c997c85c35",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "files": [
+        "packages/estimator/data/baseline.json"
+      ],
+      "note": "Coefficients and default settings copied from the pinned EcoLogits source for the archived Original method, which the product no longer offers. The data still ships in the estimator bundle."
+    },
+    {
+      "name": "cl100k_base BPE ranks",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 b56372fb0b95dbd370f9de6f44b6c15006a8a36980fbc6c0568a0108971aea45)",
+      "license": "MIT",
+      "license_status": "declared",
+      "supplier": "OpenAI (tiktoken), packaged by gpt-tokenizer",
+      "source": "https://github.com/niieani/gpt-tokenizer",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "part_of": "gpt-tokenizer",
+      "note": "Vocabulary shipped inside the MIT-licensed gpt-tokenizer package. It reproduces the cl100k_base encoding that OpenAI publishes with tiktoken (MIT); that notice is kept in packages/tokenizers/LICENSES. No separate licence for the rank files themselves is recorded."
+    },
+    {
+      "name": "o200k_base BPE ranks",
+      "version": "gpt-tokenizer 4.0.0 (asset sha256 4cd35a52f4ece645422670151ccbdbd6afd2bcb47b83efd13e47e5d8942aecb4)",
+      "license": "MIT",
+      "license_status": "declared",
+      "supplier": "OpenAI (tiktoken), packaged by gpt-tokenizer",
+      "source": "https://github.com/niieani/gpt-tokenizer",
+      "shipped_in": [
+        "browser_extension"
+      ],
+      "part_of": "gpt-tokenizer",
+      "note": "Vocabulary shipped inside the MIT-licensed gpt-tokenizer package. It reproduces the o200k_base encoding that OpenAI publishes with tiktoken (MIT); that notice is kept in packages/tokenizers/LICENSES. No separate licence for the rank files themselves is recorded."
+    },
+    {
+      "name": "Bricolage Grotesque font files",
+      "version": "@fontsource-variable/bricolage-grotesque 5.3.0",
+      "license": "OFL-1.1",
+      "license_status": "declared",
+      "supplier": "The Bricolage Grotesque Project Authors, packaged by Fontsource",
+      "source": "https://github.com/ateliertriay/bricolage",
+      "shipped_in": [
+        "browser_extension",
+        "website"
+      ],
+      "part_of": "@fontsource-variable/bricolage-grotesque",
+      "note": "WOFF2 subsets bundled into the extension and the website. The OFL copyright notice and licence travel with them: in licenses/ of each browser package and in the website's open-source page."
+    },
+    {
+      "name": "Instrument Sans font files",
+      "version": "@fontsource-variable/instrument-sans 5.3.0",
+      "license": "OFL-1.1",
+      "license_status": "declared",
+      "supplier": "The Instrument Sans Project Authors, packaged by Fontsource",
+      "source": "https://github.com/Instrument/instrument-sans",
+      "shipped_in": [
+        "browser_extension",
+        "website"
+      ],
+      "part_of": "@fontsource-variable/instrument-sans",
+      "note": "WOFF2 subsets bundled into the extension and the website. The OFL copyright notice and licence travel with them: in licenses/ of each browser package and in the website's open-source page."
+    }
+  ]
+}

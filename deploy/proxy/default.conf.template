@@ -1,0 +1,158 @@
+# An upgrade request keeps its Connection header. Every other request sends none, so nginx reuses
+# its idle connections to the API (keepalive below). Mapping "" to "close", as before 15 Oct 2026,
+# closed the upstream connection after every request.
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  "" "";
+}
+
+upstream aift_api {
+  server api:8000;
+  keepalive 32;
+  # Shorter than uvicorn's --timeout-keep-alive (75 s in apps/server/Dockerfile), so nginx never
+  # reuses a connection the API has just closed.
+  keepalive_timeout 60s;
+}
+
+# Compression settings for the locations that turn it on. It stays off everywhere else, and in
+# particular for API answers that carry a session, CSRF value or token next to text a request can
+# choose (BREACH): see the summary location below and deploy/README.md.
+gzip_comp_level 5;
+gzip_min_length 1024;
+gzip_proxied any;
+gzip_vary on;
+gzip_types application/json application/javascript text/javascript text/css image/svg+xml;
+
+server {
+  listen 443 ssl default_server;
+  server_name _;
+  root /usr/share/nginx/html;
+  ssl_certificate /run/aift-tls/fullchain.pem;
+  ssl_certificate_key /run/aift-tls/privkey.pem;
+  access_log off;
+  # HSTS on every response. nginx inherits add_header only into blocks that set none of their own,
+  # so each location with its own headers repeats this line.
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  return 404;
+}
+
+# The hosted service has one address: the website, registration, administrator sign-in and every
+# organization's admin dashboard. The API finds the organization from the session or credential.
+server {
+  listen 443 ssl;
+  server_name ${AIFT_REGISTRATION_HOST};
+  root /usr/share/nginx/html;
+  ssl_certificate /run/aift-tls/fullchain.pem;
+  ssl_certificate_key /run/aift-tls/privkey.pem;
+  access_log off;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+  # Summaries and the other large read-only answers. They hold usage figures and no session, CSRF
+  # value or token, so compressing them cannot reveal a secret (BREACH). The website and the
+  # extension wait 90 s for them, so nginx waits longer and the client's limit is the one that ends a slow summary.
+  location ~ ^/v1/(?:(?:me|company|admin)/summary|me/(?:conversations|history|recorded-threads)/[^/]+/summary|admin/(?:breakdown|activity|requests)|methods)$ {
+    proxy_pass http://aift_api;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Connection "";
+    proxy_request_buffering on;
+    proxy_buffering on;
+    proxy_read_timeout 95s;
+    proxy_send_timeout 95s;
+    gzip on;
+  }
+
+  location ~ ^/(?:v1|auth/bootstrap|health)(?:/|$) {
+    proxy_pass http://aift_api;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_request_buffering on;
+    proxy_buffering on;
+    # Sign-in, session and connection answers carry tokens and CSRF values: never compressed.
+    gzip off;
+  }
+
+  location ~ ^/assets/ {
+    add_header Content-Security-Policy "default-src 'none'; style-src 'self'; sandbox" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    # The website build names every file here by a hash of its content, so a changed file gets a
+    # new name and a cached copy never goes stale. Without "always" a 404 is not cached.
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    gzip on;
+    try_files $uri =404;
+  }
+
+  location ~ ^/downloads/ {
+    add_header Content-Security-Policy "default-src 'none'; style-src 'self'; sandbox" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    # The packages keep their names from release to release, so a browser checks again after five minutes.
+    add_header Cache-Control "public, max-age=300, must-revalidate";
+    gzip on;
+    try_files $uri =404;
+  }
+
+  location = / {
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    # The page names the current hashed assets, so it is checked again on every visit.
+    add_header Cache-Control "no-cache";
+    gzip on;
+    try_files /index.html =404;
+  }
+  location ~ "^/(?:methodology(?:/ecologits|/reference)?|privacy|privacy-policy|terms|dpa|imprint|contact|open-source|downloads?|teams|self-host|register|login|admin(?:/people(?:/[0-9a-f-]{36})?|/users|/usage|/tools|/activity|/requests|/network|/health|/policies|/exports|/audit|/deletions|/plan)?)/?$" {
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Cache-Control "no-cache";
+    gzip on;
+    try_files /index.html =404;
+  }
+  location / { return 404; }
+}
+
+server {
+  listen 443 ssl;
+  server_name ${AIFT_OPERATOR_HOST};
+  root /usr/share/nginx/html;
+  ssl_certificate /run/aift-tls/fullchain.pem;
+  ssl_certificate_key /run/aift-tls/privkey.pem;
+  access_log off;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+  location ~ ^/(?:v1|health)(?:/|$) {
+    proxy_pass http://aift_api;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    # Without this nginx sends "Connection: close" and opens a new connection for every request.
+    proxy_set_header Connection "";
+    proxy_request_buffering on;
+    proxy_buffering on;
+    # Developer sign-in and session answers carry tokens and CSRF values: never compressed.
+    gzip off;
+  }
+  location /assets/ {
+    add_header Content-Security-Policy "default-src 'none'; style-src 'self'; sandbox" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    gzip on;
+    try_files $uri =404;
+  }
+  location ~ ^/operator(?:/login|/contacts|/plans|/exceptions|/health)?/?$ {
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Cache-Control "no-cache";
+    gzip on;
+    try_files /index.html =404;
+  }
+  location / { return 404; }
+}

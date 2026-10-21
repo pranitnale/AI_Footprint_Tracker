@@ -1,0 +1,7 @@
+# The archived source and copied legal files must retain their original bytes.
+* text eol=lf
+upstream/** -text
+data/** -text
+oracle/uv.lock -text
+LICENSE -text
+CITATION.cff -text

@@ -1,0 +1,37 @@
+name: Feature or methodology request
+description: Propose a bounded product or calculation improvement.
+title: "[Proposal] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use public or synthetic evidence only. Do not include credentials, signed URLs, raw IPs, private hostnames, employee content, authenticated HAR files, real documents or private provider captures.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the user or methodology problem and its current impact.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain scope, unknown states and any privacy, accessibility or cross-browser effect.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public or synthetic evidence
+      description: Link public sources or describe a redistributable synthetic fixture. Do not paste restricted material.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: I have not represented an estimate as a provider measurement or converted missing evidence to zero.
+          required: true
+        - label: I removed secrets, employee content, real files and private deployment details.
+          required: true

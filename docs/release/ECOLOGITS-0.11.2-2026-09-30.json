@@ -1,0 +1,2222 @@
+{
+  "date": "2026-09-30",
+  "status": "adopted_locally",
+  "release": "0.11.2",
+  "commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "identity": {
+    "catalog_schema": "1",
+    "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "converter_version": "2",
+    "core_sha256": "c5f61cfea5a3b6f6fb36ea5faf0b8ef2910b6c2fd25e295748bf80bc547aa810",
+    "core_version": "0.11.1-port.2",
+    "requested_git_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "source_artifact_sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c",
+    "upstream_version": "0.11.2"
+  },
+  "method": {
+    "engine_id": "ecologits",
+    "implementation_version": "0.11.1-port.2",
+    "method_id": "ecologits-0.11.2-5e61b03c7249d0b421b28db63ff9b4483d35b0af793e550aa00a457c37251d70",
+    "method_hash": "5e61b03c7249d0b421b28db63ff9b4483d35b0af793e550aa00a457c37251d70",
+    "source_version": "0.11.2",
+    "source_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+    "catalog_hash": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "profile_policy_hash": "29900baaedba8245ed62951bf22430e4988612d1c1cdd2e54e4032ace973ee83",
+    "environment_policy_hash": "b65ede0895b04373ad1efaded6e6ee53a21ba9257bfff5fee6a07809c6ec57de",
+    "product_scope": "operational-only"
+  },
+  "previous_method_hash": "a02a064e3420bd41cf7f261bfe8f4a4209e60ed90e2a328f4581a80f1b9e24ce",
+  "original_method": {
+    "engine_id": "original",
+    "implementation_version": "ecologits-output-v1",
+    "method_id": "ecologits-reference-2026-09-10-v1",
+    "method_hash": "7684a7960e2b21ae5082a23c50052563447bbe588d32ea052b79373525783bc9",
+    "source_version": null,
+    "source_commit": null,
+    "catalog_hash": "ab68715d7a60247862091e12a58924ea073f513c6aaeb7134d4576390a209c33",
+    "profile_policy_hash": "ab68715d7a60247862091e12a58924ea073f513c6aaeb7134d4576390a209c33",
+    "environment_policy_hash": "572f898ebc41711efc4f8f5d0dfcde3d655cf5ee29cf61330d28122bece9d168",
+    "product_scope": "operational-only"
+  },
+  "model_changes": {
+    "added": [
+      "anthropic/claude-fable-5",
+      "anthropic/claude-fable-5-1",
+      "anthropic/claude-opus-5",
+      "anthropic/claude-opus-5-5",
+      "anthropic/claude-sonnet-5",
+      "anthropic/claude-sonnet-5-5",
+      "google_genai/gemini-3.5-flash-lite",
+      "google_genai/gemini-3.6-flash",
+      "google_genai/gemini-3.7-flash",
+      "google_genai/gemini-3.8-flash",
+      "mistralai/glm-5-2",
+      "mistralai/labs-leanstral-1-5",
+      "mistralai/labs-leanstral-1-5-1",
+      "mistralai/mistral-code-fim-latest",
+      "mistralai/zai-glm-5",
+      "mistralai/zai-glm-5-2",
+      "mistralai/zai-glm-5-3",
+      "mistralai/zai-glm-latest",
+      "openai/gpt-5.6-luna",
+      "openai/gpt-5.6-sol",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-6-astra",
+      "openai/gpt-6-luna",
+      "openai/gpt-6-sol",
+      "openai/gpt-6.1-sol"
+    ],
+    "modified": [
+      {
+        "changes": [
+          {
+            "accepted": 71.1,
+            "candidate": 60,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.67,
+            "candidate": 0.61,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-haiku-4-5-20251001"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 39.6,
+            "candidate": 33,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.56,
+            "candidate": 1.24,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-opus-4-5-20251101"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 37,
+            "candidate": 36,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.19,
+            "candidate": 1.69,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-opus-4-6"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 47.4,
+            "candidate": 53,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.76,
+            "candidate": 1.35,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-opus-4-7"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 58,
+            "candidate": 108.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.63,
+            "candidate": 1.01,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-opus-4-8"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 32.2,
+            "candidate": 44,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.33,
+            "candidate": 1.18,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-sonnet-4-5-20250929"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 41.4,
+            "candidate": 39,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.56,
+            "candidate": 1.37,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "anthropic/claude-sonnet-4-6"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/c4ai-aya-expanse-32b"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/c4ai-aya-vision-32b"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": 63,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": 0.95,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-a-03-2025"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 218,
+            "candidate": {
+              "active": 25,
+              "total": 218
+            },
+            "path": "architecture.parameters"
+          },
+          {
+            "accepted": 26.8,
+            "candidate": 139.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": 0.23,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-a-plus-05-2026"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-a-reasoning-08-2025"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-a-translate-08-2025"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-a-vision-07-2025"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 47.4,
+            "candidate": 23.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.22,
+            "candidate": 0.32,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-r-08-2024"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.6,
+            "candidate": 8,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.32,
+            "candidate": 0.65,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-r-plus-08-2024"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 55,
+            "candidate": 49,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.24,
+            "candidate": 0.35,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-r7b-12-2024"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.59,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "cohere/command-r7b-arabic-02-2025"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 64.6,
+            "candidate": 70.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.1,
+            "candidate": 0.87,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-2.5-flash"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 158.5,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 7.2,
+            "candidate": 13.48,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-2.5-flash-image"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 101,
+            "candidate": 87.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.5,
+            "candidate": 0.78,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-2.5-flash-lite"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 89.6,
+            "candidate": 88,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.28,
+            "candidate": 2.45,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-2.5-pro"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73.9,
+            "candidate": 67,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.24,
+            "candidate": 2.04,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3-flash-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 55.2,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 22.28,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3-pro-image-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 80.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 13.21,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3.1-flash-image-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 115.4,
+            "candidate": 36,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.48,
+            "candidate": 1.02,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3.1-flash-lite"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 85.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.95,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3.1-flash-lite-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": 56,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 4.32,
+            "candidate": 48.34,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3.1-pro-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 130.6,
+            "candidate": 84.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.72,
+            "candidate": 1.82,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-3.5-flash"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 85.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.95,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-flash-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 130.6,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.72,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemini-flash-lite-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 61.5,
+            "candidate": 24,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.37,
+            "candidate": 0.86,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "google_genai/gemma-4-26b-a4b-it"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 57.2,
+            "candidate": 44.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.21,
+            "candidate": 0.31,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/codestral-2508"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 57.2,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.21,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/codestral-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.2,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.47,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/magistral-medium-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 55.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.36,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/magistral-small-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.1,
+            "candidate": 24.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.27,
+            "candidate": 0.6,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-14b-2512"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.27,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-14b-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 35,
+            "candidate": 33,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.2,
+            "candidate": 0.36,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-3b-2512"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 35,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.2,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-3b-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.4,
+            "candidate": 42.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.23,
+            "candidate": 0.34,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-8b-2512"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.4,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.23,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/ministral-8b-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 123,
+            "candidate": {
+              "active": 41,
+              "total": 675
+            },
+            "path": "architecture.parameters"
+          },
+          {
+            "accepted": "dense",
+            "candidate": "moe",
+            "path": "architecture.type"
+          },
+          {
+            "accepted": 41.5,
+            "candidate": 16,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.68,
+            "candidate": 0.64,
+            "path": "deployment.ttft"
+          },
+          {
+            "accepted": [],
+            "candidate": [
+              {
+                "code": "model-arch-multimodal",
+                "message": "The model architecture is multimodal, expect lower precision."
+              }
+            ],
+            "path": "warnings"
+          }
+        ],
+        "key": "mistralai/mistral-large-2512"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 123,
+            "candidate": {
+              "active": 41,
+              "total": 675
+            },
+            "path": "architecture.parameters"
+          },
+          {
+            "accepted": "dense",
+            "candidate": "moe",
+            "path": "architecture.type"
+          },
+          {
+            "accepted": 35.6,
+            "candidate": 42.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.54,
+            "candidate": 0.64,
+            "path": "deployment.ttft"
+          },
+          {
+            "accepted": [],
+            "candidate": [
+              {
+                "code": "model-arch-multimodal",
+                "message": "The model architecture is multimodal, expect lower precision."
+              }
+            ],
+            "path": "warnings"
+          }
+        ],
+        "key": "mistralai/mistral-large-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.83,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.5,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.47,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium-2604"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.5,
+            "candidate": 103.2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.47,
+            "candidate": 0.36,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium-3"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.1,
+            "candidate": 27,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.83,
+            "candidate": 0.36,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium-3-5"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.1,
+            "candidate": 27,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.83,
+            "candidate": 0.36,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium-3.5"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.5,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.47,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-medium-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 116.9,
+            "candidate": 94.2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.46,
+            "candidate": 0.39,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-small-2603"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 98.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.29,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/mistral-small-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 79.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.31,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/voxtral-small-2507"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 98.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.29,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "mistralai/voxtral-small-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/chat-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 44.3,
+            "candidate": 20,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.43,
+            "candidate": 0.67,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 44.3,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.43,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo-0125"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 44.3,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.43,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo-1106"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 37.2,
+            "candidate": 7.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.44,
+            "candidate": 1.07,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo-16k"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 79.4,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.73,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo-instruct"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 79.4,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.73,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-3.5-turbo-instruct-0914"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 22.4,
+            "candidate": 38,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.85,
+            "candidate": 0.92,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 22.4,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.85,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4-0613"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 14.9,
+            "candidate": 7.5,
+            "path": "deployment.tps"
+          }
+        ],
+        "key": "openai/gpt-4-turbo"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 14.9,
+            "candidate": 7.5,
+            "path": "deployment.tps"
+          }
+        ],
+        "key": "openai/gpt-4-turbo-2024-04-09"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.5,
+            "candidate": 45,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.63,
+            "candidate": 0.95,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.5,
+            "candidate": 45,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.63,
+            "candidate": 0.95,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1-2025-04-14"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 34.4,
+            "candidate": 49,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.69,
+            "candidate": 0.95,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.5,
+            "candidate": 49,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.63,
+            "candidate": 0.95,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 26.1,
+            "candidate": 69,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.48,
+            "candidate": 0.97,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1-nano"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 42.5,
+            "candidate": 69,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.63,
+            "candidate": 0.98,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4.1-nano-2025-04-14"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 46.2,
+            "candidate": 41,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.53,
+            "candidate": 0.65,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 47.8,
+            "candidate": 70,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.35,
+            "candidate": 1.33,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-2024-05-13"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 29.1,
+            "candidate": 10,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.23,
+            "candidate": 2.21,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-2024-08-06"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 77.8,
+            "candidate": 34,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.43,
+            "candidate": 0.86,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-2024-11-20"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 33,
+            "candidate": 58,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.6,
+            "candidate": 0.53,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 45.5,
+            "candidate": 43,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.58,
+            "candidate": 0.65,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini-2024-07-18"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 47.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.82,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini-search-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 47.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.82,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini-search-preview-2025-03-11"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 32.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.6,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini-tts"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 32.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.6,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-mini-tts-2025-03-20"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 46,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.17,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-search-preview"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 46,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.17,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-4o-search-preview-2025-03-11"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.6,
+            "candidate": 59,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.57,
+            "candidate": 3.02,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 43.8,
+            "candidate": 59,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.29,
+            "candidate": 3.02,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-2025-08-07"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-chat-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.32,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-codex"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 71,
+            "candidate": 76.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 4.28,
+            "candidate": 4.57,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.6,
+            "candidate": 76.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.57,
+            "candidate": 4.57,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-mini-2025-08-07"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 96.1,
+            "candidate": 84.5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.29,
+            "candidate": 1.57,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-nano"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.6,
+            "candidate": 84.5,
+            "path": "deployment.tps"
+          }
+        ],
+        "key": "openai/gpt-5-nano-2025-08-07"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 12.2,
+            "candidate": 2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 59.54,
+            "candidate": 17.77,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-pro"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 12.2,
+            "candidate": 2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 59.54,
+            "candidate": 17.77,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-pro-2025-10-06"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.6,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.57,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-search-api"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 53.6,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.57,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5-search-api-2025-10-14"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 60.6,
+            "candidate": 37.8,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.85,
+            "candidate": 1.15,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 60.6,
+            "candidate": 37.8,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.85,
+            "candidate": 1.15,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1-2025-11-13"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1-chat-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 59.1,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.15,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1-codex"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 83.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.68,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1-codex-max"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 71.6,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.7,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.1-codex-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 43.8,
+            "candidate": 48,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.29,
+            "candidate": 3.45,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 43.8,
+            "candidate": 48,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.29,
+            "candidate": 3.45,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2-2025-12-11"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2-chat-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 58.8,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 2.04,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2-codex"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 8.1,
+            "candidate": 15,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 15.82,
+            "candidate": 11.3,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2-pro"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 8.1,
+            "candidate": 15,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 15.82,
+            "candidate": 11.3,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.2-pro-2025-12-11"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.3-chat-latest"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 48.8,
+            "candidate": 32.2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.01,
+            "candidate": 2.11,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.3-codex"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 45.5,
+            "candidate": 58,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": 1.69,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 45.5,
+            "candidate": 58,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 1.01,
+            "candidate": 1.69,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-2026-03-05"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": 71,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.67,
+            "candidate": 0.8,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 73,
+            "candidate": 71,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.67,
+            "candidate": 0.8,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-mini-2026-03-17"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 70.8,
+            "candidate": 51.2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.54,
+            "candidate": 1.28,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-nano"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 70.8,
+            "candidate": 51.2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 0.54,
+            "candidate": 1.28,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-nano-2026-03-17"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 4,
+            "candidate": 2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 26.59,
+            "candidate": 5.57,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-pro"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 4,
+            "candidate": 2,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 26.59,
+            "candidate": 5.57,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.4-pro-2026-03-05"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 40.4,
+            "candidate": 47,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.38,
+            "candidate": 2.16,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.5"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 40.4,
+            "candidate": 47,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.38,
+            "candidate": 2.16,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.5-2026-04-23"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 14.4,
+            "candidate": 5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 46.04,
+            "candidate": 3.45,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.5-pro"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 14.4,
+            "candidate": 5,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 46.04,
+            "candidate": 3.45,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/gpt-5.5-pro-2026-04-23"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 136.6,
+            "candidate": 6,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.2,
+            "candidate": 1.09,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o1"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 136.6,
+            "candidate": 6,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.2,
+            "candidate": 1.09,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o1-2024-12-17"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 170.6,
+            "candidate": 92,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 4.13,
+            "candidate": 3.06,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o3-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 170.6,
+            "candidate": 92,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 4.13,
+            "candidate": 3.06,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o3-mini-2025-01-31"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 95.6,
+            "candidate": 92,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.93,
+            "candidate": 2.93,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o4-mini"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 95.6,
+            "candidate": 92,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 3.93,
+            "candidate": 2.93,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o4-mini-2025-04-16"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 91.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 17.34,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o4-mini-deep-research"
+      },
+      {
+        "changes": [
+          {
+            "accepted": 91.9,
+            "candidate": null,
+            "path": "deployment.tps"
+          },
+          {
+            "accepted": 17.34,
+            "candidate": null,
+            "path": "deployment.ttft"
+          }
+        ],
+        "key": "openai/o4-mini-deep-research-2025-06-26"
+      }
+    ],
+    "removed": [
+      "anthropic/claude-opus-4-1-20250805",
+      "anthropic/claude-opus-4-20250514",
+      "anthropic/claude-sonnet-4-20250514",
+      "google_genai/gemini-2.0-flash",
+      "google_genai/gemini-2.0-flash-001",
+      "google_genai/gemini-2.0-flash-lite",
+      "google_genai/gemini-2.0-flash-lite-001",
+      "google_genai/gemini-3-pro-preview",
+      "mistralai/codestral-2405",
+      "mistralai/codestral-2411-rc5",
+      "mistralai/codestral-2412",
+      "mistralai/codestral-2501",
+      "mistralai/devstral-2512",
+      "mistralai/devstral-latest",
+      "mistralai/devstral-medium-latest",
+      "mistralai/magistral-medium-2509",
+      "mistralai/magistral-small-2509",
+      "mistralai/mistral-medium-2505",
+      "mistralai/mistral-medium-2508",
+      "mistralai/mistral-small-2506",
+      "mistralai/mistral-tiny-2407",
+      "mistralai/mistral-tiny-latest",
+      "mistralai/open-mistral-7b",
+      "mistralai/open-mistral-nemo",
+      "mistralai/open-mistral-nemo-2407",
+      "mistralai/pixtral-12b",
+      "mistralai/pixtral-12b-2409",
+      "mistralai/pixtral-12b-latest",
+      "mistralai/voxtral-mini-2507",
+      "mistralai/voxtral-mini-2509"
+    ],
+    "renamed": []
+  },
+  "alias_changes": {
+    "added": [],
+    "modified": [],
+    "removed": [
+      "anthropic/claude-opus-4-0",
+      "anthropic/claude-opus-4-1",
+      "anthropic/claude-sonnet-4-0"
+    ],
+    "renamed": []
+  },
+  "counts": {
+    "models": 339,
+    "aliases": 9,
+    "resolved_models": 348,
+    "direct_mappings": 20,
+    "newly_direct_mappings": [
+      "chatgpt-gpt-5-6-sol",
+      "chatgpt-gpt-5-6-luna",
+      "claude-fable-5",
+      "claude-fable-5-1",
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "gemini-3-6-flash",
+      "perplexity-gpt-5-6-terra",
+      "perplexity-gpt-5-6-sol",
+      "perplexity-claude-sonnet-5",
+      "perplexity-claude-opus-5",
+      "perplexity-gemini-3-8-flash",
+      "perplexity-gemini-3-7-flash"
+    ]
+  },
+  "timing": {
+    "max_ttft_seconds": 48.34,
+    "nonpositive_tps_count": 0
+  },
+  "numerical": {
+    "accepted_python_sha256": "3ebfd9f56381f43009e093a257187e61f901841adca3f566157283ba26131184",
+    "candidate_python_sha256": "05c0d3ec34a6cd9dcd1d158dd3b3bca1e3f8d08aa915f7e45e9841678acbfa52",
+    "candidate_typescript_sha256": "353b8d009f314ed2f32fd739899dd218dc52a8a0382b69df9cb04543fb7fc3e0",
+    "case_input_sha256": "186a85913cb0678a979435b1ebe286788115b957cd998579f24a579f27b227b2",
+    "cases": 24195,
+    "mismatches": [],
+    "parity": true,
+    "changed_case_count": 822
+  },
+  "deterministic_generation": {
+    "catalog_sha256": "8882e18dee1b50ce9fbed98ec077e7387fd50b369bd90f40d3c7b8430b0d3421",
+    "converter_version": "2",
+    "maintenance_tool_version": "1",
+    "passed": true
+  },
+  "impact_examples": [
+    {
+      "provider": "openai",
+      "model_name": "gpt-5.5",
+      "output_token_count": 500,
+      "request_latency": null,
+      "accepted_0_11_1_kwh": 0.0033039537379698425,
+      "rejected_catalog_kwh": 0.06862411029737578,
+      "release_0_11_2_kwh": 0.003230005244184294,
+      "release_to_accepted_ratio": 0.9776181812306528
+    },
+    {
+      "provider": "openai",
+      "model_name": "gpt-5.5",
+      "output_token_count": 500,
+      "request_latency": 10,
+      "accepted_0_11_1_kwh": 0.0031600477973757835,
+      "rejected_catalog_kwh": 0.0031600477973757835,
+      "release_0_11_2_kwh": 0.0031600477973757835,
+      "release_to_accepted_ratio": 1
+    },
+    {
+      "provider": "openai",
+      "model_name": "gpt-5.5",
+      "output_token_count": 500,
+      "request_latency": 60,
+      "accepted_0_11_1_kwh": 0.0033039537379698425,
+      "rejected_catalog_kwh": 0.004410047797375783,
+      "release_0_11_2_kwh": 0.003230005244184294,
+      "release_to_accepted_ratio": 0.9776181812306528
+    },
+    {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-8",
+      "output_token_count": 500,
+      "request_latency": null,
+      "accepted_0_11_1_kwh": 0.0023324426592312955,
+      "rejected_catalog_kwh": 0.028827059940723796,
+      "release_0_11_2_kwh": 0.002224835990114817,
+      "release_to_accepted_ratio": 0.9538652456511225
+    },
+    {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-8",
+      "output_token_count": 500,
+      "request_latency": 10,
+      "accepted_0_11_1_kwh": 0.0023266193474496865,
+      "rejected_catalog_kwh": 0.0023266193474496865,
+      "release_0_11_2_kwh": 0.002224835990114817,
+      "release_to_accepted_ratio": 0.956252681623043
+    },
+    {
+      "provider": "anthropic",
+      "model_name": "claude-opus-4-8",
+      "output_token_count": 500,
+      "request_latency": 60,
+      "accepted_0_11_1_kwh": 0.0023324426592312955,
+      "rejected_catalog_kwh": 0.00348807768078302,
+      "release_0_11_2_kwh": 0.002224835990114817,
+      "release_to_accepted_ratio": 0.9538652456511225
+    },
+    {
+      "provider": "google_genai",
+      "model_name": "gemini-3.1-pro-preview",
+      "output_token_count": 500,
+      "request_latency": null,
+      "accepted_0_11_1_kwh": 0.006687611928410497,
+      "rejected_catalog_kwh": 0.1281646928642487,
+      "release_0_11_2_kwh": 0.008781286488097385,
+      "release_to_accepted_ratio": 1.3130675915557362
+    },
+    {
+      "provider": "google_genai",
+      "model_name": "gemini-3.1-pro-preview",
+      "output_token_count": 500,
+      "request_latency": 10,
+      "accepted_0_11_1_kwh": 0.006634505535716433,
+      "rejected_catalog_kwh": 0.006634505535716433,
+      "release_0_11_2_kwh": 0.006634505535716433,
+      "release_to_accepted_ratio": 1
+    },
+    {
+      "provider": "google_genai",
+      "model_name": "gemini-3.1-pro-preview",
+      "output_token_count": 500,
+      "request_latency": 60,
+      "accepted_0_11_1_kwh": 0.006687611928410497,
+      "rejected_catalog_kwh": 0.008905338869049767,
+      "release_0_11_2_kwh": 0.008781286488097385,
+      "release_to_accepted_ratio": 1.3130675915557362
+    }
+  ]
+}

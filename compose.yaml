@@ -1,0 +1,120 @@
+name: ai-footprint-tracker
+services:
+  postgres:
+    image: postgres:17.11-bookworm@sha256:051f7b7b3abdd564d5d1bd1e8c4b9c1b6e77087d1dd22020ede611c096a272e0
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AIFT_POSTGRES_DB:-aift}
+      POSTGRES_USER: ${AIFT_POSTGRES_USER:-aift}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      backend:
+        ipv4_address: 172.30.0.2
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    environment: &server-environment
+      AIFT_SETTINGS_FILE: /run/aift-config/settings.json
+      # Uvicorn trusts X-Forwarded-Proto/For only from 127.0.0.1 by default. Without the web
+      # proxy's address here every API request looks like plain HTTP and is refused.
+      FORWARDED_ALLOW_IPS: 172.30.0.10
+    command: [".venv/bin/alembic", "upgrade", "head"]
+    volumes: &server-volumes
+      - ${AIFT_SETTINGS_FILE:?Set AIFT_SETTINGS_FILE to a protected production JSON file}:/run/aift-config/settings.json:ro
+      - ${AIFT_JOURNAL_DIRECTORY:?Set AIFT_JOURNAL_DIRECTORY to the protected journal directory}:/var/lib/aift-journal
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      backend:
+        ipv4_address: 172.30.0.3
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    restart: unless-stopped
+    environment:
+      <<: *server-environment
+      # One line per request without IP addresses or submitted values, kept 14 days (privacy policy).
+      AIFT_REQUEST_LOG: /var/log/aift/requests.log
+    volumes:
+      - ${AIFT_SETTINGS_FILE:?Set AIFT_SETTINGS_FILE to a protected production JSON file}:/run/aift-config/settings.json:ro
+      - ${AIFT_JOURNAL_DIRECTORY:?Set AIFT_JOURNAL_DIRECTORY to the protected journal directory}:/var/lib/aift-journal
+      - request-logs:/var/log/aift
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      backend:
+        ipv4_address: 172.30.0.4
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    restart: unless-stopped
+    environment: *server-environment
+    command: [".venv/bin/python", "-m", "aift.maintenance", "serve"]
+    volumes: *server-volumes
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", ".venv/bin/python", "-m", "aift.maintenance", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    networks:
+      backend:
+        ipv4_address: 172.30.0.5
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/proxy/Dockerfile
+    restart: unless-stopped
+    environment:
+      AIFT_REGISTRATION_HOST: ${AIFT_REGISTRATION_HOST:?Set the exact registration host}
+      # Self-hosting: the organization's own exact host. Hosted service: empty, one address for all.
+      AIFT_TENANT_HOST: ${AIFT_TENANT_HOST:-}
+      AIFT_OPERATOR_HOST: ${AIFT_OPERATOR_HOST:?Set a distinct exact operator host}
+      NGINX_ENVSUBST_FILTER: ^AIFT_
+    volumes:
+      - ${AIFT_TLS_DIRECTORY:?Set AIFT_TLS_DIRECTORY to a protected certificate directory}:/run/aift-tls:ro
+    ports:
+      - "${AIFT_HTTPS_BIND:-0.0.0.0:443}:443"
+    depends_on:
+      api:
+        condition: service_started
+      worker:
+        condition: service_healthy
+    networks:
+      backend:
+        ipv4_address: 172.30.0.10
+
+secrets:
+  postgres_password:
+    file: ${AIFT_POSTGRES_PASSWORD_FILE:?Set AIFT_POSTGRES_PASSWORD_FILE to a protected password file}
+
+volumes:
+  postgres-data:
+  request-logs:
+
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

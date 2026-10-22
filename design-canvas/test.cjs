@@ -109,9 +109,9 @@ test('earlier-request methodology preserves all 623 existing article review anch
   // Normalize only the reviewed catalog notice edits to retain the historical anchor check.
   const referenceIndex = originalLeaves.findIndex(text => text.startsWith('The transparent starting reference is the operational component of EcoLogits 0.11.1,'));
   assert.ok(referenceIndex >= 0);
-  assert.ok(originalLeaves[referenceIndex].includes('EcoLogits 0.11.2, commit c739e8d61f6a12a85864adb698ab85623fe70f3c'));
+  assert.ok(originalLeaves[referenceIndex].includes('EcoLogits 0.11.3, commit d0b76e382442e63df688e9c37016f596223c8aff'));
   originalLeaves[referenceIndex] = 'The transparent starting reference is the operational component of EcoLogits 0.11.1, published on 7 July 2026 and pinned to commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35. Its code separates GPU energy, model-memory allocation, non-GPU host energy and facility overhead. The equations below reproduce that reference’s functional form; they do not claim that a closed provider uses the assumed hardware or deployment settings.';
-  const catalogIndex = originalLeaves.indexOf('[3] EcoLogits contributors. Model registry at release 0.11.2, commit c739e8d61f6a12a85864adb698ab85623fe70f3c.');
+  const catalogIndex = originalLeaves.indexOf('[3] EcoLogits contributors. Model registry at release 0.11.3, commit d0b76e382442e63df688e9c37016f596223c8aff.');
   assert.ok(catalogIndex >= 0);
   originalLeaves[catalogIndex] = '[3] EcoLogits contributors. Model registry at the pinned release.';
   // 4 October 2026: the audit leaf now dates the audit and points to the later usage reports.

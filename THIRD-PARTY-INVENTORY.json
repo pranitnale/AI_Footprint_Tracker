@@ -259,7 +259,7 @@
       "license": "MPL-2.0",
       "name": "ecologits",
       "scope": "runtime",
-      "version": "0.11.2"
+      "version": "0.11.3"
     },
     {
       "ecosystem": "pypi",
@@ -544,7 +544,7 @@
       ],
       "source": "https://base-empreinte.ademe.fr/",
       "supplier": "ADEME",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -558,7 +558,7 @@
       ],
       "source": "https://github.com/Boavizta/boaviztapi",
       "supplier": "Boavizta",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "license": "OFL-1.1",
@@ -588,7 +588,7 @@
       ],
       "source": "https://github.com/mlco2/ecologits",
       "supplier": "EcoLogits contributors (CodeCarbon)",
-      "version": "EcoLogits 0.11.2"
+      "version": "EcoLogits 0.11.3"
     },
     {
       "files": [
@@ -631,7 +631,7 @@
       ],
       "source": "https://arxiv.org/abs/2607.04553",
       "supplier": "Jegham et al.",
-      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2"
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -645,7 +645,7 @@
       ],
       "source": "https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html",
       "supplier": "ADEME",
-      "version": "2026, as cited by EcoLogits 0.11.2"
+      "version": "2026, as cited by EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -659,7 +659,7 @@
       ],
       "source": "https://ml.energy/leaderboard/",
       "supplier": "ML.ENERGY",
-      "version": "As used by EcoLogits 0.11.2"
+      "version": "As used by EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -673,7 +673,7 @@
       ],
       "source": "https://openrouter.ai",
       "supplier": "OpenRouter",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "license": "CC-BY-4.0",
@@ -687,7 +687,7 @@
       ],
       "source": "https://ourworldindata.org/electricity-mix",
       "supplier": "Our World in Data (Hannah Ritchie and Pablo Rosado)",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -701,7 +701,7 @@
       ],
       "source": "https://arxiv.org/abs/2502.01671",
       "supplier": "Schneider et al.",
-      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2"
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.3"
     },
     {
       "license": "NOASSERTION",
@@ -715,7 +715,7 @@
       ],
       "source": "https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity",
       "supplier": "World Resources Institute",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "license": "MIT",

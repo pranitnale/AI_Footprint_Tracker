@@ -15,15 +15,15 @@ The Details overlay, the popup and the dashboard translate figures into everyday
 
 ## Smaller model per tool
 
-All records come from `packages/ecologits-core/data/catalog.json` (EcoLogits 0.11.2). The comparison keeps the same output tokens and swaps only the model record.
+All records come from `packages/ecologits-core/data/catalog.json` (EcoLogits 0.11.2; the Claude row was updated for EcoLogits 0.11.3 on 22 October 2026). The comparison keeps the same output tokens and swaps only the model record.
 
 | Tool | Smaller record | Reason |
 | --- | --- | --- |
 | ChatGPT | openai/gpt-6-luna | Small tier of the current generation; the default for Free and Go plans in `registry/model-catalog-2026-09-09.json`. |
-| Claude, Cowork | anthropic/claude-haiku-4-5 | The only Haiku record; already the stand-in for older Haiku labels. |
+| Claude, Cowork | anthropic/claude-haiku-5-5 | The newest Haiku record and the Haiku offered on claude.ai; also the stand-in for unknown Haiku labels. Until 22 October 2026 (EcoLogits 0.11.2) this was claude-haiku-4-5, then the only Haiku record. |
 | Gemini | google_genai/gemini-3.5-flash-lite | Newest Flash-Lite record (`gemini-flash-lite-latest` still points to an older record). |
 | NotebookLM | google_genai/gemini-3.5-flash-lite | NotebookLM names no model; it follows its Gemini stand-in. |
-| Perplexity | Follows the vendor of the resolved stand-in: OpenAI to gpt-6-luna, Anthropic to claude-haiku-4-5, Google to gemini-3.5-flash-lite | Perplexity has no record of its own; the existing vendor stand-in approach stays (no route to the original method). |
+| Perplexity | Follows the vendor of the resolved stand-in: OpenAI to gpt-6-luna, Anthropic to claude-haiku-5-5, Google to gemini-3.5-flash-lite | Perplexity has no record of its own; the existing vendor stand-in approach stays (no route to the original method). |
 
 ## Sources
 

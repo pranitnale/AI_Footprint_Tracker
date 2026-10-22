@@ -216,7 +216,12 @@ test(
         unchangedReport.execution.ordinary_runtime_fetch_required,
         false,
       );
-      assert.equal(unchangedReport.retention.excluded_file_count, 143);
+      // The adopted manifest records how many upstream files the release leaves out (143 in
+      // 0.11.2, 144 in 0.11.3), so the count follows the release named in the lock.
+      assert.equal(
+        unchangedReport.retention.excluded_file_count,
+        Object.keys((await readJson(join(core, "upstream/retained-source.json"))).excluded_files).length,
+      );
       const firstCatalog = await readFile(
         join(unchangedStage, "verification/generated/catalog.json"),
       );

@@ -179,36 +179,33 @@ const CASES: Record<Site, [string, string, string][]> = {
     ],
     // Owner decision of 13 October 2026: an unknown version uses its family's newest record.
     ["claude-opus-6", "claude-opus-unlisted", `claude-opus-5-5 ${SAME_FAMILY}`],
-    // The live chat of 13 October: Haiku 5.5 had been estimated as Opus 5.5.
-    ["claude-haiku-5-5", "claude-haiku-unlisted", `claude-haiku-4-5 ${SAME_FAMILY}`],
-    [
-      "claude-haiku-5-5-20261001",
-      "claude-haiku-unlisted",
-      `claude-haiku-4-5 ${SAME_FAMILY}`,
-    ],
-    ["claude-haiku-5-9", "claude-haiku-unlisted", `claude-haiku-4-5 ${SAME_FAMILY}`],
-    ["claude-3-7-haiku", "claude-haiku-unlisted", `claude-haiku-4-5 ${SAME_FAMILY}`],
+    // The live chat of 13 October: Haiku 5.5 had been estimated as Opus 5.5. Since EcoLogits
+    // 0.11.3 (22 October 2026) it has its own record.
+    ["claude-haiku-5-5", "claude-haiku-5-5", `claude-haiku-5-5 ${EXACT}`],
+    ["claude-haiku-5-5-20261001", "claude-haiku-5-5", `claude-haiku-5-5 ${EXACT}`],
+    ["claude-haiku-5-9", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
+    ["claude-3-7-haiku", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
     ["claude-sonnet-6", "claude-sonnet-unlisted", `claude-sonnet-5-5 ${SAME_FAMILY}`],
     ["claude-fable-6-fast", "claude-fable-unlisted", `claude-fable-5-1 ${SAME_FAMILY}`],
     // Owner decision of 14 October 2026: "-thinking" is a reasoning setting, as "-fast" is a
     // speed setting; the catalog has no Claude thinking record.
-    ["claude-haiku-6-thinking", "claude-haiku-unlisted", `claude-haiku-4-5 ${SAME_FAMILY}`],
+    ["claude-haiku-6-thinking", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
     ["claude-opus-5-5-thinking", "claude-opus-5-5", `claude-opus-5-5 ${EXACT}`],
     [
       "claude-sonnet-4-5-thinking-20250929",
       "claude-sonnet-4-5",
       `claude-sonnet-4-5 ${EXACT}`,
     ],
-    ["claude-sonnet-6-mini-thinking", "claude-small-unlisted", `claude-haiku-4-5 ${SAME_KIND}`],
+    ["claude-sonnet-6-mini-thinking", "claude-small-unlisted", `claude-haiku-5-5 ${SAME_KIND}`],
     ["claude-opus", "claude-opus-unlisted", `claude-opus-5-5 ${SAME_FAMILY}`],
     // Owner decision of 14 October 2026: the library has no small Claude variant, so a mini,
     // nano or lite variant uses Claude Haiku, Anthropic's small model, not Opus.
-    ["claude-haiku-5-5-mini", "claude-small-unlisted", `claude-haiku-4-5 ${SAME_KIND}`],
-    ["claude-sonnet-6-mini", "claude-small-unlisted", `claude-haiku-4-5 ${SAME_KIND}`],
+    ["claude-haiku-5-5-mini", "claude-small-unlisted", `claude-haiku-5-5 ${SAME_KIND}`],
+    ["claude-sonnet-6-mini", "claude-small-unlisted", `claude-haiku-5-5 ${SAME_KIND}`],
     [
       "claude-opus-6-lite-20261001",
       "claude-small-unlisted",
-      `claude-haiku-4-5 ${SAME_KIND}`,
+      `claude-haiku-5-5 ${SAME_KIND}`,
     ],
     // No Anthropic image or Pro record exists, and an unknown family names no variant.
     ["claude-sonnet-6-image-20261001", "claude-unlisted", `claude-opus-5-5 ${UNKNOWN}`],
@@ -560,12 +557,12 @@ const CASES: Record<Site, [string, string, string][]> = {
     [
       "claude60sonnetmini",
       "perplexity-claude-small-unlisted",
-      `claude-haiku-4-5 ${SAME_KIND}`,
+      `claude-haiku-5-5 ${SAME_KIND}`,
     ],
     [
       "claude60sonnetminithinking",
       "perplexity-claude-small-unlisted",
-      `claude-haiku-4-5 ${SAME_KIND}`,
+      `claude-haiku-5-5 ${SAME_KIND}`,
     ],
     // No Anthropic Pro record exists, and a variant word needs a family or vendor name.
     [
@@ -598,12 +595,12 @@ const CASES: Record<Site, [string, string, string][]> = {
     [
       "claude55haiku",
       "perplexity-claude-haiku-unlisted",
-      `claude-haiku-4-5 ${SAME_FAMILY}`,
+      `claude-haiku-5-5 ${SAME_FAMILY}`,
     ],
     [
       "claude55haikuthinking",
       "perplexity-claude-haiku-unlisted",
-      `claude-haiku-4-5 ${SAME_FAMILY}`,
+      `claude-haiku-5-5 ${SAME_FAMILY}`,
     ],
     [
       "claude60opus",

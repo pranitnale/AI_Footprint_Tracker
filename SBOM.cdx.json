@@ -809,9 +809,9 @@
           "value": "runtime"
         }
       ],
-      "purl": "pkg:pypi/ecologits@0.11.2",
+      "purl": "pkg:pypi/ecologits@0.11.3",
       "type": "library",
-      "version": "0.11.2"
+      "version": "0.11.3"
     },
     {
       "externalReferences": [
@@ -1664,7 +1664,7 @@
         "name": "ADEME"
       },
       "type": "data",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1697,7 +1697,7 @@
         "name": "Boavizta"
       },
       "type": "data",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1771,7 +1771,7 @@
         "name": "EcoLogits contributors (CodeCarbon)"
       },
       "type": "data",
-      "version": "EcoLogits 0.11.2"
+      "version": "EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1874,7 +1874,7 @@
         "name": "Jegham et al."
       },
       "type": "data",
-      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2"
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1907,7 +1907,7 @@
         "name": "ADEME"
       },
       "type": "data",
-      "version": "2026, as cited by EcoLogits 0.11.2"
+      "version": "2026, as cited by EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1940,7 +1940,7 @@
         "name": "ML.ENERGY"
       },
       "type": "data",
-      "version": "As used by EcoLogits 0.11.2"
+      "version": "As used by EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -1973,7 +1973,7 @@
         "name": "OpenRouter"
       },
       "type": "data",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -2012,7 +2012,7 @@
         "name": "Our World in Data (Hannah Ritchie and Pablo Rosado)"
       },
       "type": "data",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -2045,7 +2045,7 @@
         "name": "Schneider et al."
       },
       "type": "data",
-      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2"
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -2078,7 +2078,7 @@
         "name": "World Resources Institute"
       },
       "type": "data",
-      "version": "As bundled in EcoLogits 0.11.2"
+      "version": "As bundled in EcoLogits 0.11.3"
     },
     {
       "externalReferences": [
@@ -2158,7 +2158,7 @@
       "version": "0.1.0"
     }
   },
-  "serialNumber": "urn:uuid:1c42db36-b862-5bb1-839e-632e380e9b56",
+  "serialNumber": "urn:uuid:74635e09-5f16-5763-b0b3-d6c63187b3f9",
   "specVersion": "1.6",
   "version": 1
 }

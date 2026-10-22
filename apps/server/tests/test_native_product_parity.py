@@ -294,10 +294,10 @@ def test_native_component_envelopes_match_typescript_methods():
     for result, record in zip(
         stand_ins,
         (
-            ("claude-haiku-4-5", "model_family_stand_in"),
+            ("claude-haiku-5-5", "model_family_stand_in"),
             ("gemini-3.5-flash-lite", "model_family_stand_in"),
             ("gpt-5.5-pro", "model_variant_stand_in"),
-            ("claude-haiku-4-5", "model_kind_stand_in"),
+            ("claude-haiku-5-5", "model_kind_stand_in"),
         ),
         strict=True,
     ):

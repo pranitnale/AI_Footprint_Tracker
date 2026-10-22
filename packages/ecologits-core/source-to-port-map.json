@@ -1546,6 +1546,6 @@
     "The source archive includes upstream tests and docs for inspection. Only src and data imports belong in application bundles."
   ],
   "schema_version": 2,
-  "upstream_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
-  "upstream_version": "0.11.2"
+  "upstream_commit": "d0b76e382442e63df688e9c37016f596223c8aff",
+  "upstream_version": "0.11.3"
 }

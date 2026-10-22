@@ -91,6 +91,11 @@
       "sha256": "5a09d05d8a26a485cacd480e8a49d921a25381742adf8aa0b8521818160354c5",
       "size": 53757
     },
+    "docs/assets/codecarbon-logo.svg": {
+      "reason": "documentation-image",
+      "sha256": "afa45c09916449a64d1bfdae9acf56bc81d4147e90c9443e80a4d5bd37f915ae",
+      "size": 2811
+    },
     "docs/assets/leaf.svg": {
       "reason": "documentation-image",
       "sha256": "377954875c72588d4d3978d18f6e0b4dba5b791bee8af6f15fb9ac86d785a3c1",
@@ -203,8 +208,8 @@
     },
     "docs/css/extra.css": {
       "reason": "outside-core-oracle-surface",
-      "sha256": "275dd852a68606387ff68efe398788b96872935f61df02cc3c9a7290581c1034",
-      "size": 6298
+      "sha256": "508a5f33c9fed9651572791ff9c48aa06d13bf913c6a342304d1bbd5fee0e446",
+      "size": 7269
     },
     "docs/faq.md": {
       "reason": "outside-core-oracle-surface",
@@ -218,8 +223,8 @@
     },
     "docs/index.md": {
       "reason": "outside-core-oracle-surface",
-      "sha256": "8bae74bd9c2778a73d83a1a71badd4ee6f1e880429f5cffa8911eab09bf5135f",
-      "size": 12546
+      "sha256": "2a8ea66140ce5c15810915afbee7bd6a6d7d64ddf57745f47faa2acc94f66bfd",
+      "size": 16677
     },
     "docs/js/clipboard_copy.js": {
       "reason": "outside-core-oracle-surface",
@@ -263,8 +268,8 @@
     },
     "docs/theme/announce.html": {
       "reason": "outside-core-oracle-surface",
-      "sha256": "a70c186722ed5cd4b516adcee4d0bec684969cf97c9d8b6c83172ca30c4bbcb8",
-      "size": 152
+      "sha256": "01298c399b8f03b752119e61c7ba8024b14c0dc93874a1832ef5b6a446fc66f3",
+      "size": 176
     },
     "docs/theme/main.html": {
       "reason": "outside-core-oracle-surface",
@@ -403,8 +408,8 @@
     },
     "mkdocs.yml": {
       "reason": "outside-core-oracle-surface",
-      "sha256": "8c8062d924134c1ca26f3d547e3a88a463ec17e4d16149ba75290b512c92a343",
-      "size": 4307
+      "sha256": "6bc991d1943d30d56369e2fc8bb0cc714fcea2710b7df1e1c243f10baa964301",
+      "size": 4383
     },
     "tests/__init__.py": {
       "reason": "outside-core-oracle-surface",
@@ -713,13 +718,13 @@
     },
     "uv.lock": {
       "reason": "outside-core-oracle-surface",
-      "sha256": "397b4e77f092e2b489e2c005ea4497a56474ce8669ba17047383d9e108e74254",
-      "size": 827270
+      "sha256": "550b35544d77b40da702fa6d2121f1fe499e604d4f9de350f3f7d5a3ad8fe95d",
+      "size": 858498
     }
   },
-  "original_file_count": 168,
+  "original_file_count": 169,
   "private_preservation": "The complete selected source and package archives are preserved in the developer Git metadata directory. Public build and test verification use only this retained manifest and the locked package environment.",
-  "requested_git_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
+  "requested_git_commit": "d0b76e382442e63df688e9c37016f596223c8aff",
   "retained_files": {
     "CITATION.cff": {
       "reason": "license-citation-metadata",
@@ -733,12 +738,12 @@
     },
     "README.md": {
       "reason": "license-citation-metadata",
-      "sha256": "ba109db1a04305a9758f3e820afccc270b033b1d48905c5dc4dc8cf9f04ebe5a",
-      "size": 5138
+      "sha256": "e238882b4982a5ed730385309873a1720726fd17541029ed776724c5d740995e",
+      "size": 5363
     },
     "ecologits/__init__.py": {
       "reason": "core-oracle-source",
-      "sha256": "2c038b9bd5a47a2126bb3257a7fb42d7ca20978f1fa43a871c2899da8ad7c227",
+      "sha256": "0354623189984725b811ac12bf0fe2d1c5e7c38538930b65a1d2671803a30066",
       "size": 107
     },
     "ecologits/_ecologits.py": {
@@ -753,8 +758,8 @@
     },
     "ecologits/data/models.json": {
       "reason": "core-data",
-      "sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0",
-      "size": 202764
+      "sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774",
+      "size": 204619
     },
     "ecologits/data/video_models.json": {
       "reason": "core-data",
@@ -843,17 +848,17 @@
     },
     "pyproject.toml": {
       "reason": "license-citation-metadata",
-      "sha256": "26dd8b2218ab543012f58d97dbc10dcefa1d53aa935aab903c69360b185ff846",
+      "sha256": "5f240f89bfed38e6d2085606bd202bf1cfdc05d16b6d08ca564300005754d095",
       "size": 4188
     }
   },
   "schema_version": 1,
-  "snapshot_directory": "ecologits-0.11.2",
+  "snapshot_directory": "ecologits-0.11.3",
   "source_artifact": {
-    "filename": "ecologits-0.11.2.tar.gz",
-    "origin": "https://files.pythonhosted.org/packages/f5/45/c7cd0930cc93dbf3a9f2f76fe8dd4c8b7e7662c6b76d6d25f4d7c4a37e9d/ecologits-0.11.2.tar.gz",
-    "sha256": "518969a1ec84d4336168645416033617bc515f061d7c13b9b9c53add9f4f0a5c"
+    "filename": "ecologits-0.11.3.tar.gz",
+    "origin": "https://files.pythonhosted.org/packages/99/a2/89d5266c93e43f6f5267453fbabbe0554fe39145a36491a263c3994bcf41/ecologits-0.11.3.tar.gz",
+    "sha256": "8887d7ac04a8368e73363f911a814f3a643e51bc0ead9da31179bd2cc03f5964"
   },
-  "upstream_version": "0.11.2",
+  "upstream_version": "0.11.3",
   "verification": "Every retained file hash and size were calculated from the exact staged candidate before this manifest was sealed. Excluded files retain hashes and classifications only. No complete Git tag attestation is asserted."
 }

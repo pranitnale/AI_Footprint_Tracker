@@ -16,7 +16,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
       {bar}
       <header style={{ "background": "#0F2A1C", "color": "#F4F5EF", "padding": "clamp(36px, 5vw, 64px) clamp(16px, 4vw, 56px) clamp(32px, 4vw, 48px)", "position": "relative", "overflow": "hidden" }}><div style={{ "position": "absolute", "right": "-120px", "top": "-140px", "width": "520px", "height": "520px", "borderRadius": "50%", "border": "64px solid rgba(185,226,124,.06)" }} />
         <div style={{ "maxWidth": "1160px", "margin": "0 auto", "display": "flex", "flexDirection": "column", "gap": "22px", "position": "relative" }}>
-          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 21 October 2026 · EcoLogits 0.11.2</span>
+          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 22 October 2026 · EcoLogits 0.11.3</span>
           <h1 className="mth-dsp" style={{ "margin": "0", "fontSize": "clamp(40px, 6vw, 64px)", "lineHeight": "1.04", "fontWeight": "700", "letterSpacing": "-0.02em", "maxWidth": "900px" }}>How we estimate the footprint of your AI chats</h1>
           <p style={{ "margin": "0", "fontSize": "20px", "lineHeight": "31px", "color": "#DDE8DF", "maxWidth": "760px" }}>The tracker counts the text that you and the AI write. It finds the model that answered. Then it uses EcoLogits, an open-source method, to calculate electricity, carbon and water. Plain words come first. The equations come after.</p>
           <div style={{ "padding": "22px 24px", "borderRadius": "18px", "background": "rgba(185,226,124,.10)", "border": "1px solid rgba(185,226,124,.40)", "display": "flex", "flexWrap": "wrap", "gap": "18px 32px", "alignItems": "center", "justifyContent": "space-between" }}>
@@ -25,7 +25,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "22px", "height": "22px" }}><path d="M12 3 4 7v5c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V7l-8-4z" /><path d="m9 12 2 2 4-4" /></svg></span>
               <div style={{ "display": "flex", "flexDirection": "column", "gap": "6px" }}>
                 <b className="mth-dsp" style={{ "fontSize": "22px", "lineHeight": "28px", "color": "#F4F5EF" }}>Built on the EcoLogits methodology</b>
-                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations and parameters of EcoLogits 0.11.2, an open-source project. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
+                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations and parameters of EcoLogits 0.11.3, an open-source project. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
             <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "10px" }}>
               <a href="https://ecologits.ai" target="_blank" rel="noopener noreferrer" style={{ "height": "42px", "padding": "0 16px", "borderRadius": "12px", "display": "inline-flex", "alignItems": "center", "gap": "8px", "fontSize": "15px", "fontWeight": "600", "textDecoration": "none", "background": "#B9E27C", "color": "#0F2A1C" }}>ecologits.ai
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a>
@@ -77,7 +77,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
             <p className="mth-p">
               <span className="mth-cs" style={{ background: mark("k1") }}>EcoLogits is an open-source method and library.</span>
               <button className="mth-ct" data-cite="k1" type="button" onClick={() => pick("k1")} aria-pressed={cite === "k1"} aria-label="Source 9">9</button> It calculates the environmental impact of one request to an AI model.{" "}
-              <span className="mth-cs" style={{ background: mark("k2") }}>The tracker uses its equations and its parameters from release 0.11.2.</span>
+              <span className="mth-cs" style={{ background: mark("k2") }}>The tracker uses its equations and its parameters from release 0.11.3.</span>
               <button className="mth-ct" data-cite="k2" type="button" onClick={() => pick("k2")} aria-pressed={cite === "k2"} aria-label="Source 5">5</button> This part shows each equation and explains each value.</p>
             {cite === "k1" && (
             <>
@@ -96,9 +96,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">5</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 5 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.2: the equations and constants</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.3: the equations and constants</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k2")} aria-label="Close the source">×</button></div></>)}
             <div style={{ "display": "flex", "alignItems": "center", "gap": "10px", "padding": "12px 16px", "borderRadius": "14px", "background": "#FFF8E1", "border": "1px solid #F0D58A", "fontSize": "14px", "lineHeight": "20px", "color": "#4D3A00" }}>
@@ -271,9 +271,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">5</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 5 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.2: the equations and constants</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.3: the equations and constants</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k5")} aria-label="Close the source">×</button></div></>)}
             <div className="mth-card" style={{ "padding": "18px", "display": "flex", "flexDirection": "column", "gap": "10px" }}>
@@ -341,12 +341,12 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">5</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 5 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.2: the equations and constants</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.3: the equations and constants</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k7")} aria-label="Close the source">×</button></div></>)}
-            <p className="mth-p">Example: Claude Opus 5.5 writes 75.5 tokens each second and starts after 3.43 seconds. A reply of 1,000 tokens takes 1,000 / 75.5 + 3.43 = 16.7 seconds.</p></section>
+            <p className="mth-p">Example: Claude Opus 5.5 writes 102.8 tokens each second and starts after 2.68 seconds. A reply of 1,000 tokens takes 1,000 / 102.8 + 2.68 = 12.4 seconds.</p></section>
           <section id="m-server" className="mth-sec">
             <h2 className="mth-dsp mth-h2">4 and 5 · Server and data centre</h2>
             <p className="mth-p">The GPUs are not the only parts that use energy. The rest of the server uses energy too: processors, memory and fans.{" "}
@@ -358,9 +358,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">5</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 5 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.2: the equations and constants</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.3: the equations and constants</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k8")} aria-label="Close the source">×</button></div></>)}
             <div className="mth-eq">
@@ -433,9 +433,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">6</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 6 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>tracers/utils.py, release 0.11.2: location, PUE and WUE for each provider</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>tracers/utils.py, release 0.11.3: location, PUE and WUE for each provider</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k9")} aria-label="Close the source">×</button></div></>)}</section>
           <section id="m-carbon" className="mth-sec">
@@ -480,9 +480,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">7</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 7 · EcoLogits data on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.2: carbon and water of each grid</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k11")} aria-label="Close the source">×</button></div></>)}</section>
           <section id="m-water" className="mth-sec">
@@ -535,9 +535,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">7</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 7 · EcoLogits data on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.2: carbon and water of each grid</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k13")} aria-label="Close the source">×</button></div></>)}
             <p className="mth-p">For 1 kWh of IT energy, the water is 3.54 to 4.57 L for Anthropic, 4.33 L for OpenAI and 4.41 L for Google.</p></section>
@@ -566,9 +566,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">8</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 8 · EcoLogits code on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>utils/range_value.py, release 0.11.2: how ranges multiply</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>utils/range_value.py, release 0.11.3: how ranges multiply</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/utils/range_value.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/utils/range_value.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k15")} aria-label="Close the source">×</button></div></>)}
             <p className="mth-p">The worked example below shows both ends for one reply. Totals add the same end of each estimate. These ends are scenarios, not a statistical confidence interval. The real value can be anywhere in the range, or outside it if an assumption is not correct.</p></section>
@@ -656,11 +656,11 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                   <tr>
                     <td>Time{" "}
                       <i>t</i></td>
-                    <td className="mth-num">16.7 s</td>
-                    <td className="mth-muted">Step 3: 1,000 / 75.5 + 3.43</td></tr>
+                    <td className="mth-num">12.4 s</td>
+                    <td className="mth-muted">Step 3: 1,000 / 102.8 + 2.68</td></tr>
                   <tr>
                     <td>GPU energy / server energy</td>
-                    <td className="mth-num">2.57 to 4.94 Wh / 0.35 Wh</td>
+                    <td className="mth-num">2.57 to 4.94 Wh / 0.26 Wh</td>
                     <td className="mth-muted">Steps 2 and 4</td></tr>
                   <tr>
                     <td>PUE / WUE</td>
@@ -669,19 +669,19 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
             <div style={{ "display": "grid", "gridTemplateColumns": "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", "gap": "10px" }}>
               <div style={{ "padding": "18px", "borderRadius": "18px", "background": "#FFF6DB", "display": "flex", "flexDirection": "column", "gap": "4px" }}>
                 <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#8A5A00" }}>Electricity</span>
-                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>3.18 to 6.03 Wh</span>
-                <span className="mth-num" style={{ "fontSize": "14px", "color": "#5E4300" }}>(2.57 + 0.35) × 1.09 for the minimum</span></div>
+                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>3.09 to 5.93 Wh</span>
+                <span className="mth-num" style={{ "fontSize": "14px", "color": "#5E4300" }}>(2.57 + 0.26) × 1.09 for the minimum</span></div>
               <div style={{ "padding": "18px", "borderRadius": "18px", "background": "#F1EFEA", "display": "flex", "flexDirection": "column", "gap": "4px" }}>
                 <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#5B564C" }}>Carbon</span>
-                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>1.22 to 2.32 g</span>
+                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>1.19 to 2.28 g</span>
                 <span className="mth-num" style={{ "fontSize": "14px", "color": "#5B564C" }}>electricity × 384.4 g CO₂e for each kWh</span></div>
               <div style={{ "padding": "18px", "borderRadius": "18px", "background": "#E7F1FA", "display": "flex", "flexDirection": "column", "gap": "4px" }}>
                 <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#1D69AE" }}>Water</span>
-                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>10.3 to 24.2 mL</span>
-                <span className="mth-num" style={{ "fontSize": "14px", "color": "#1D4F80" }}>2.92 Wh × (0.13 + 1.09 × 3.132) for the minimum</span></div></div></section>
+                <span className="mth-dsp mth-num" style={{ "fontSize": "28px", "fontWeight": "700" }}>10.0 to 23.8 mL</span>
+                <span className="mth-num" style={{ "fontSize": "14px", "color": "#1D4F80" }}>2.83 Wh × (0.13 + 1.09 × 3.132) for the minimum</span></div></div></section>
           <section id="m-sources" className="mth-sec">
             <h2 className="mth-dsp mth-h2">Sources</h2>
-            <p className="mth-p">Each number in the text points to one of these sources. All links were checked on 11 October 2026.</p>
+            <p className="mth-p">Each number in the text points to one of these sources. All links were checked on 22 October 2026.</p>
             <div style={{ "display": "grid", "gridTemplateColumns": "repeat(auto-fit, minmax(min(360px, 100%), 1fr))", "gap": "6px 12px" }}>
               <div className="mth-ref" id="src-2" style={{ background: source(2) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>2</span>
@@ -705,26 +705,26 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>5</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits code on GitHub</span>
-                  <span>impacts/llm.py, release 0.11.2: the equations and constants</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py</a></div></div>
+                  <span>impacts/llm.py, release 0.11.3: the equations and constants</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py</a></div></div>
               <div className="mth-ref" id="src-6" style={{ background: source(6) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>6</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits code on GitHub</span>
-                  <span>tracers/utils.py, release 0.11.2: location, PUE and WUE for each provider</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py</a></div></div>
+                  <span>tracers/utils.py, release 0.11.3: location, PUE and WUE for each provider</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py</a></div></div>
               <div className="mth-ref" id="src-7" style={{ background: source(7) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>7</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits data on GitHub</span>
-                  <span>data/electricity_mixes.json, release 0.11.2: carbon and water of each grid</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/data/electricity_mixes.json</a></div></div>
+                  <span>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json</a></div></div>
               <div className="mth-ref" id="src-8" style={{ background: source(8) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>8</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits code on GitHub</span>
-                  <span>utils/range_value.py, release 0.11.2: how ranges multiply</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/utils/range_value.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/utils/range_value.py</a></div></div>
+                  <span>utils/range_value.py, release 0.11.3: how ranges multiply</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/utils/range_value.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/utils/range_value.py</a></div></div>
               <div className="mth-ref" id="src-9" style={{ background: source(9) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>9</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>

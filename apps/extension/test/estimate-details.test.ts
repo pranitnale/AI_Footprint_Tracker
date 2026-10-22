@@ -174,17 +174,17 @@ test("an unknown version of a known family names the family's stand-in, why, and
     envelope([
       component("main", "text", {
         model: "claude-haiku-unlisted",
-        record: ["anthropic", "claude-haiku-4-5"],
+        record: ["anthropic", "claude-haiku-5-5"],
         basis: "model_family_stand_in",
       }),
     ]),
   );
   const result = details.result();
   assert.equal(needsModelLabels(result), true);
-  const [line] = estimateDetailLines(result, ["claude-haiku-5-5"]);
+  const [line] = estimateDetailLines(result, ["claude-haiku-6"]);
   assert.match(
     line!,
-    /^Claude Haiku, version not yet listed: 1 reply, estimated as Claude Haiku 4\.5, the newest model of the same family in the library, because this version is not in the library yet \(anthropic\/claude-haiku-4-5\)\. Model names seen on this site that the library does not know: claude-haiku-5-5\.$/,
+    /^Claude Haiku, version not yet listed: 1 reply, estimated as Claude Haiku 5\.5, the newest model of the same family in the library, because this version is not in the library yet \(anthropic\/claude-haiku-5-5\)\. Model names seen on this site that the library does not know: claude-haiku-6\.$/,
   );
 });
 
@@ -202,7 +202,7 @@ test("an unknown variant names the same variant's stand-in or the kind's, why, a
       }),
       component("main", "text", {
         model: "claude-small-unlisted",
-        record: ["anthropic", "claude-haiku-4-5"],
+        record: ["anthropic", "claude-haiku-5-5"],
         basis: "model_kind_stand_in",
       }),
     ]),
@@ -216,7 +216,7 @@ test("an unknown variant names the same variant's stand-in or the kind's, why, a
   );
   assert.equal(
     small,
-    "Claude mini, nano or lite model, not yet listed: 1 reply, estimated as Claude Haiku 4.5, the newest model of the same kind from the same provider in the library, because the library has no version of this variant yet (anthropic/claude-haiku-4-5). Model names seen on this site that the library does not know: gpt-7-pro.",
+    "Claude mini, nano or lite model, not yet listed: 1 reply, estimated as Claude Haiku 5.5, the newest model of the same kind from the same provider in the library, because the library has no version of this variant yet (anthropic/claude-haiku-5-5). Model names seen on this site that the library does not know: gpt-7-pro.",
   );
 });
 
@@ -256,7 +256,7 @@ test("Details name each model and its stand-in in plain words (owner decisions o
       // A reasoning word is a setting: Claude Haiku 6 Thinking is an unlisted Claude Haiku.
       component("main", "text", {
         model: "claude-haiku-unlisted",
-        record: ["anthropic", "claude-haiku-4-5"],
+        record: ["anthropic", "claude-haiku-5-5"],
         basis: "model_family_stand_in",
       }),
       // Nano Banana Pro is Gemini 3 Pro Image, the library's own record.
@@ -272,7 +272,7 @@ test("Details name each model and its stand-in in plain words (owner decisions o
     [
       "Perplexity Best: 1 reply. Perplexity chose the model and did not say which one; estimated as GPT-6.1 Sol (openai/gpt-6.1-sol).",
       "o3 (Pro reasoning): 1 reply, estimated as GPT-6 Astra, the nearest EcoLogits record, as a stand-in (openai/gpt-6-astra).",
-      "Claude Haiku, version not yet listed: 1 reply, estimated as Claude Haiku 4.5, the newest model of the same family in the library, because this version is not in the library yet (anthropic/claude-haiku-4-5). Model names seen on this site that the library does not know: Claude Haiku 6 (Thinking).",
+      "Claude Haiku, version not yet listed: 1 reply, estimated as Claude Haiku 5.5, the newest model of the same family in the library, because this version is not in the library yet (anthropic/claude-haiku-5-5). Model names seen on this site that the library does not know: Claude Haiku 6 (Thinking).",
       "Nano Banana Pro (Gemini 3 Pro Image): 1 reply, estimated with its own EcoLogits record (google_genai/gemini-3-pro-image-preview).",
     ],
   );

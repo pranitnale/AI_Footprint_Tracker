@@ -59,7 +59,7 @@
   "data": [
     {
       "name": "EcoLogits model, provider and electricity data",
-      "version": "EcoLogits 0.11.2",
+      "version": "EcoLogits 0.11.3",
       "license": "MPL-2.0",
       "license_status": "declared",
       "supplier": "EcoLogits contributors (CodeCarbon)",
@@ -75,7 +75,7 @@
     },
     {
       "name": "Our World in Data electricity mix",
-      "version": "As bundled in EcoLogits 0.11.2",
+      "version": "As bundled in EcoLogits 0.11.3",
       "license": "CC-BY-4.0",
       "license_status": "declared",
       "supplier": "Our World in Data (Hannah Ritchie and Pablo Rosado)",
@@ -89,7 +89,7 @@
     },
     {
       "name": "ADEME Base Empreinte electricity factors",
-      "version": "As bundled in EcoLogits 0.11.2",
+      "version": "As bundled in EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "ADEME",
@@ -103,7 +103,7 @@
     },
     {
       "name": "World Resources Institute electricity water data",
-      "version": "As bundled in EcoLogits 0.11.2",
+      "version": "As bundled in EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "World Resources Institute",
@@ -117,7 +117,7 @@
     },
     {
       "name": "OpenRouter model statistics",
-      "version": "As bundled in EcoLogits 0.11.2",
+      "version": "As bundled in EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "OpenRouter",
@@ -131,7 +131,7 @@
     },
     {
       "name": "ML.ENERGY Leaderboard measurements behind the EcoLogits regressions",
-      "version": "As used by EcoLogits 0.11.2",
+      "version": "As used by EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "ML.ENERGY",
@@ -145,7 +145,7 @@
     },
     {
       "name": "BoaviztAPI server impact data",
-      "version": "As bundled in EcoLogits 0.11.2",
+      "version": "As bundled in EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "Boavizta",
@@ -159,7 +159,7 @@
     },
     {
       "name": "Lees-Perasso et al. GPU life-cycle study",
-      "version": "2026, as cited by EcoLogits 0.11.2",
+      "version": "2026, as cited by EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "ADEME",
@@ -173,7 +173,7 @@
     },
     {
       "name": "Jegham et al. video generation figures",
-      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.2",
+      "version": "arXiv:2607.04553, as cited by EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "Jegham et al.",
@@ -187,7 +187,7 @@
     },
     {
       "name": "Schneider et al. TPU embodied carbon figures",
-      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.2",
+      "version": "arXiv:2502.01671, as cited by EcoLogits 0.11.3",
       "license": "NOASSERTION",
       "license_status": "unverified",
       "supplier": "Schneider et al.",

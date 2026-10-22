@@ -130,7 +130,7 @@ def test_perplexity_labels_use_own_records_stand_ins_or_the_family_benchmark(mod
 @pytest.mark.parametrize(
     "site,model,provider,expected",
     [
-        ("claude", "claude-haiku-unlisted", "anthropic", "claude-haiku-4-5"),
+        ("claude", "claude-haiku-unlisted", "anthropic", "claude-haiku-5-5"),
         ("claude", "claude-sonnet-unlisted", "anthropic", "claude-sonnet-5-5"),
         ("claude", "claude-opus-unlisted", "anthropic", "claude-opus-5-5"),
         ("claude", "claude-fable-unlisted", "anthropic", "claude-fable-5-1"),
@@ -141,7 +141,7 @@ def test_perplexity_labels_use_own_records_stand_ins_or_the_family_benchmark(mod
         ("gemini", "gemini-flash-unlisted", "google_genai", "gemini-3.8-flash"),
         ("gemini", "gemini-flash-lite-unlisted", "google_genai", "gemini-3.5-flash-lite"),
         ("gemini", "gemini-pro-unlisted", "google_genai", "gemini-3.1-pro-preview"),
-        ("perplexity", "perplexity-claude-haiku-unlisted", "anthropic", "claude-haiku-4-5"),
+        ("perplexity", "perplexity-claude-haiku-unlisted", "anthropic", "claude-haiku-5-5"),
         ("perplexity", "perplexity-gpt-sol-unlisted", "openai", "gpt-6.1-sol"),
         ("perplexity", "perplexity-gemini-flash-lite-unlisted", "google_genai", "gemini-3.5-flash-lite"),
     ],
@@ -165,11 +165,11 @@ def test_unknown_versions_use_the_newest_record_of_their_family(site, model, pro
     [
         ("chatgpt", "chatgpt-gpt-pro-unlisted", "openai", "gpt-5.5-pro", "model_variant_stand_in"),
         ("chatgpt", "chatgpt-gpt-mini-unlisted", "openai", "gpt-5.4-mini", "model_variant_stand_in"),
-        ("claude", "claude-small-unlisted", "anthropic", "claude-haiku-4-5", "model_kind_stand_in"),
+        ("claude", "claude-small-unlisted", "anthropic", "claude-haiku-5-5", "model_kind_stand_in"),
         ("gemini", "gemini-pro-image-unlisted", "google_genai", "gemini-3-pro-image-preview", "model_variant_stand_in"),
         ("gemini", "gemini-image-unlisted", "google_genai", "gemini-3.1-flash-image-preview", "model_kind_stand_in"),
         ("perplexity", "perplexity-gpt-pro-unlisted", "openai", "gpt-5.5-pro", "model_variant_stand_in"),
-        ("perplexity", "perplexity-claude-small-unlisted", "anthropic", "claude-haiku-4-5", "model_kind_stand_in"),
+        ("perplexity", "perplexity-claude-small-unlisted", "anthropic", "claude-haiku-5-5", "model_kind_stand_in"),
         (
             "perplexity",
             "perplexity-gemini-pro-image-unlisted",

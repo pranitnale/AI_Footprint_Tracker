@@ -24,7 +24,7 @@ from .engine_components import ComponentEngine, decimal_string, sum_component_me
 from .security import Problem
 
 ROOT = Path(__file__).resolve().parents[3]
-SUPPORTED_NATIVE_VERSION = "0.11.2"
+SUPPORTED_NATIVE_VERSION = "0.11.3"
 MAX_SAFE_INTEGER = 9007199254740991
 # Perplexity serves models of many vendors, so its replies name no provider by site.
 PROVIDERS = {"chatgpt": "openai", "claude": "anthropic", "gemini": "google_genai", "notebooklm": "google_genai"}

@@ -3,11 +3,11 @@
     "aliases": 9,
     "electricity_mixes": 215,
     "hardware_configurations": 4,
-    "models": 339,
-    "resolved_models": 348,
+    "models": 342,
+    "resolved_models": 351,
     "video_models": 17
   },
-  "numerical_cases": 24195,
+  "numerical_cases": 2243,
   "production_exclusions": [
     "Provider SDK tracing and token acquisition are not bundled into the local calculation core.",
     "Catalog presence does not prove a consumer-site model mapping or tokenizer mapping.",

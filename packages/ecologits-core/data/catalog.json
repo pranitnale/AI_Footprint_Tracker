@@ -4092,116 +4092,123 @@
   },
   "model_provenance": {
     "anthropic/claude-fable-5": {
-      "path": "ecologits/data/models.json#/models/219",
+      "path": "ecologits/data/models.json#/models/221",
       "raw_sources": [
         "https://platform.claude.com/docs/en/models/fable-5/overview",
         "https://platform.claude.com/docs/en/models/overview"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "anthropic/claude-fable-5-1": {
-      "path": "ecologits/data/models.json#/models/220",
+      "path": "ecologits/data/models.json#/models/222",
       "raw_sources": [
         "https://platform.claude.com/docs/en/models/fable-5-1/overview",
         "https://platform.claude.com/docs/en/models/overview"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "anthropic/claude-haiku-4-5": {
       "alias_of": "anthropic/claude-haiku-4-5-20251001",
       "path": "ecologits/data/models.json#/aliases/0",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "anthropic/claude-haiku-4-5-20251001": {
-      "path": "ecologits/data/models.json#/models/221",
-      "raw_sources": [
-        "https://docs.anthropic.com/en/docs/about-claude/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "anthropic/claude-opus-4-5": {
-      "alias_of": "anthropic/claude-opus-4-5-20251101",
-      "path": "ecologits/data/models.json#/aliases/2",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "anthropic/claude-opus-4-5-20251101": {
-      "path": "ecologits/data/models.json#/models/222",
-      "raw_sources": [
-        "https://docs.anthropic.com/en/docs/about-claude/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "anthropic/claude-opus-4-6": {
       "path": "ecologits/data/models.json#/models/223",
       "raw_sources": [
         "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-opus-4-7": {
+    "anthropic/claude-haiku-5-5": {
       "path": "ecologits/data/models.json#/models/224",
       "raw_sources": [
-        "https://docs.anthropic.com/en/docs/about-claude/models"
+        "https://platform.claude.com/docs/en/models/haiku-5-5/overview"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-opus-4-8": {
+    "anthropic/claude-opus-4-5": {
+      "alias_of": "anthropic/claude-opus-4-5-20251101",
+      "path": "ecologits/data/models.json#/aliases/2",
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "anthropic/claude-opus-4-5-20251101": {
       "path": "ecologits/data/models.json#/models/225",
       "raw_sources": [
         "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-opus-5": {
+    "anthropic/claude-opus-4-6": {
       "path": "ecologits/data/models.json#/models/226",
       "raw_sources": [
-        "https://platform.claude.com/docs/en/models/opus-5/overview",
-        "https://platform.claude.com/docs/en/models/overview"
+        "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-opus-5-5": {
+    "anthropic/claude-opus-4-7": {
       "path": "ecologits/data/models.json#/models/227",
       "raw_sources": [
-        "https://platform.claude.com/docs/en/models/opus-5-5/overview",
-        "https://platform.claude.com/docs/en/models/overview"
+        "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-sonnet-4-5": {
-      "alias_of": "anthropic/claude-sonnet-4-5-20250929",
-      "path": "ecologits/data/models.json#/aliases/1",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "anthropic/claude-sonnet-4-5-20250929": {
+    "anthropic/claude-opus-4-8": {
       "path": "ecologits/data/models.json#/models/228",
       "raw_sources": [
         "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "anthropic/claude-sonnet-4-6": {
+    "anthropic/claude-opus-5": {
       "path": "ecologits/data/models.json#/models/229",
+      "raw_sources": [
+        "https://platform.claude.com/docs/en/models/opus-5/overview",
+        "https://platform.claude.com/docs/en/models/overview"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "anthropic/claude-opus-5-5": {
+      "path": "ecologits/data/models.json#/models/230",
+      "raw_sources": [
+        "https://platform.claude.com/docs/en/models/opus-5-5/overview",
+        "https://platform.claude.com/docs/en/models/overview"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "anthropic/claude-sonnet-4-5": {
+      "alias_of": "anthropic/claude-sonnet-4-5-20250929",
+      "path": "ecologits/data/models.json#/aliases/1",
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "anthropic/claude-sonnet-4-5-20250929": {
+      "path": "ecologits/data/models.json#/models/231",
       "raw_sources": [
         "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "anthropic/claude-sonnet-4-6": {
+      "path": "ecologits/data/models.json#/models/232",
+      "raw_sources": [
+        "https://docs.anthropic.com/en/docs/about-claude/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "anthropic/claude-sonnet-5": {
-      "path": "ecologits/data/models.json#/models/230",
+      "path": "ecologits/data/models.json#/models/233",
       "raw_sources": [
         "https://platform.claude.com/docs/en/models/sonnet-5/overview",
         "https://platform.claude.com/docs/en/models/overview"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "anthropic/claude-sonnet-5-5": {
-      "path": "ecologits/data/models.json#/models/231",
+      "path": "ecologits/data/models.json#/models/234",
       "raw_sources": [
         "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
         "https://www.anthropic.com/claude-sonnet-5-5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/c4ai-aya-expanse-32b": {
       "path": "ecologits/data/models.json#/models/0",
@@ -4209,7 +4216,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/aya-expanse-32b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/c4ai-aya-vision-32b": {
       "path": "ecologits/data/models.json#/models/1",
@@ -4217,7 +4224,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/aya-vision-32b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-a-03-2025": {
       "path": "ecologits/data/models.json#/models/2",
@@ -4225,7 +4232,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-a-plus-05-2026": {
       "path": "ecologits/data/models.json#/models/3",
@@ -4235,7 +4242,7 @@
         "https://huggingface.co/CohereLabs/command-a-plus-05-2026-bf16",
         "https://cohere.com/blog/command-a-plus"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-a-reasoning-08-2025": {
       "path": "ecologits/data/models.json#/models/4",
@@ -4243,7 +4250,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-a-translate-08-2025": {
       "path": "ecologits/data/models.json#/models/5",
@@ -4251,7 +4258,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-a-03-2025"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-a-vision-07-2025": {
       "path": "ecologits/data/models.json#/models/6",
@@ -4259,7 +4266,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/command-a-vision-07-2025"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-r-08-2024": {
       "path": "ecologits/data/models.json#/models/7",
@@ -4267,7 +4274,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-r-08-2024"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-r-plus-08-2024": {
       "path": "ecologits/data/models.json#/models/8",
@@ -4275,7 +4282,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-r7b-12-2024": {
       "path": "ecologits/data/models.json#/models/9",
@@ -4283,7 +4290,7 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "cohere/command-r7b-arabic-02-2025": {
       "path": "ecologits/data/models.json#/models/10",
@@ -4291,1381 +4298,1381 @@
         "https://docs.cohere.com/docs/models",
         "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "google_genai/gemini-2.5-flash": {
-      "path": "ecologits/data/models.json#/models/232",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-2.5-flash-image": {
-      "path": "ecologits/data/models.json#/models/233",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-2.5-flash-lite": {
-      "path": "ecologits/data/models.json#/models/234",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-2.5-pro": {
       "path": "ecologits/data/models.json#/models/235",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3-flash-preview": {
+    "google_genai/gemini-2.5-flash-image": {
       "path": "ecologits/data/models.json#/models/236",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3-pro-image-preview": {
+    "google_genai/gemini-2.5-flash-lite": {
       "path": "ecologits/data/models.json#/models/237",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3.1-flash-image-preview": {
+    "google_genai/gemini-2.5-pro": {
       "path": "ecologits/data/models.json#/models/238",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3.1-flash-lite": {
+    "google_genai/gemini-3-flash-preview": {
       "path": "ecologits/data/models.json#/models/239",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3.1-flash-lite-preview": {
+    "google_genai/gemini-3-pro-image-preview": {
       "path": "ecologits/data/models.json#/models/240",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3.1-pro-preview": {
+    "google_genai/gemini-3.1-flash-image-preview": {
       "path": "ecologits/data/models.json#/models/241",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-3.1-pro-preview-customtools": {
+    "google_genai/gemini-3.1-flash-lite": {
       "path": "ecologits/data/models.json#/models/242",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-3.1-flash-lite-preview": {
+      "path": "ecologits/data/models.json#/models/243",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-3.1-pro-preview": {
+      "path": "ecologits/data/models.json#/models/244",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-3.1-pro-preview-customtools": {
+      "path": "ecologits/data/models.json#/models/245",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "google_genai/gemini-3.5-flash": {
-      "path": "ecologits/data/models.json#/models/243",
+      "path": "ecologits/data/models.json#/models/246",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash",
         "https://deepmind.google/models/model-cards/gemini-3-5-flash/",
         "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "google_genai/gemini-3.5-flash-lite": {
-      "path": "ecologits/data/models.json#/models/244",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-3.6-flash": {
-      "path": "ecologits/data/models.json#/models/245",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
-        "https://deepmind.google/models/model-cards/gemini-3-6-flash/"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-3.7-flash": {
-      "path": "ecologits/data/models.json#/models/246",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
-        "https://deepmind.google/models/model-cards/gemini-3-6-flash/"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-3.8-flash": {
       "path": "ecologits/data/models.json#/models/247",
       "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-3.6-flash": {
+      "path": "ecologits/data/models.json#/models/248",
+      "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
         "https://deepmind.google/models/model-cards/gemini-3-6-flash/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-flash-latest": {
-      "path": "ecologits/data/models.json#/models/248",
-      "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "google_genai/gemini-flash-lite-latest": {
+    "google_genai/gemini-3.7-flash": {
       "path": "ecologits/data/models.json#/models/249",
       "raw_sources": [
-        "https://ai.google.dev/gemini-api/docs/models"
+        "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
+        "https://deepmind.google/models/model-cards/gemini-3-6-flash/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "google_genai/gemini-pro-latest": {
+    "google_genai/gemini-3.8-flash": {
       "path": "ecologits/data/models.json#/models/250",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
+        "https://deepmind.google/models/model-cards/gemini-3-6-flash/"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-flash-latest": {
+      "path": "ecologits/data/models.json#/models/251",
       "raw_sources": [
         "https://ai.google.dev/gemini-api/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-flash-lite-latest": {
+      "path": "ecologits/data/models.json#/models/252",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "google_genai/gemini-pro-latest": {
+      "path": "ecologits/data/models.json#/models/253",
+      "raw_sources": [
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "google_genai/gemma-4-26b-a4b-it": {
-      "path": "ecologits/data/models.json#/models/251",
+      "path": "ecologits/data/models.json#/models/254",
       "raw_sources": [
         "https://ai.google.dev/gemma/docs/core/model_card_4",
         "https://huggingface.co/google/gemma-4-26B-A4B-it",
         "https://deepmind.google/models/gemma/gemma-4/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "google_genai/gemma-4-31b-it": {
-      "path": "ecologits/data/models.json#/models/252",
+      "path": "ecologits/data/models.json#/models/255",
       "raw_sources": [
         "https://ai.google.dev/gemma/docs/core/model_card_4",
         "https://huggingface.co/google/gemma-4-31B-it",
         "https://deepmind.google/models/gemma/gemma-4/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/aya-23-35B": {
       "path": "ecologits/data/models.json#/models/84",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/aya-23-35B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/aya-23-8B": {
       "path": "ecologits/data/models.json#/models/83",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/aya-23-8B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/c4ai-command-r-plus": {
       "path": "ecologits/data/models.json#/models/85",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/c4ai-command-r-plus"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/c4ai-command-r-plus-4bit": {
       "path": "ecologits/data/models.json#/models/86",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/c4ai-command-r-plus-4bit"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/c4ai-command-r-v01": {
       "path": "ecologits/data/models.json#/models/87",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/c4ai-command-r-v01"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/CohereForAI/c4ai-command-r-v01-4bit": {
       "path": "ecologits/data/models.json#/models/88",
       "raw_sources": [
         "https://huggingface.co/CohereForAI/c4ai-command-r-v01-4bit"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dbrx-base": {
       "path": "ecologits/data/models.json#/models/15",
       "raw_sources": [
         "https://huggingface.co/databricks/dbrx-base"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dbrx-instruct": {
       "path": "ecologits/data/models.json#/models/16",
       "raw_sources": [
         "https://huggingface.co/databricks/dbrx-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dolly-v1-6b": {
       "path": "ecologits/data/models.json#/models/11",
       "raw_sources": [
         "https://huggingface.co/databricks/dolly-v1-6b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dolly-v2-12b": {
       "path": "ecologits/data/models.json#/models/12",
       "raw_sources": [
         "https://huggingface.co/databricks/dolly-v2-12b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dolly-v2-3b": {
       "path": "ecologits/data/models.json#/models/14",
       "raw_sources": [
         "https://huggingface.co/databricks/dolly-v2-3b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/databricks/dolly-v2-7b": {
       "path": "ecologits/data/models.json#/models/13",
       "raw_sources": [
         "https://huggingface.co/databricks/dolly-v2-7b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-2b": {
       "path": "ecologits/data/models.json#/models/116",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-2b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-2b-GGUF": {
       "path": "ecologits/data/models.json#/models/119",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-2b-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-2b-pytorch": {
       "path": "ecologits/data/models.json#/models/117",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-2b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-7b-it": {
       "path": "ecologits/data/models.json#/models/115",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-7b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-7b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/120",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-7b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-1.1-7b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/118",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-1.1-7b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-2b": {
       "path": "ecologits/data/models.json#/models/103",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-2b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-2b-GGUF": {
       "path": "ecologits/data/models.json#/models/107",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-2b-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-2b-keras": {
       "path": "ecologits/data/models.json#/models/112",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-2b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-2b-pytorch": {
       "path": "ecologits/data/models.json#/models/110",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-2b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b": {
       "path": "ecologits/data/models.json#/models/104",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-GGUF": {
       "path": "ecologits/data/models.json#/models/108",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-it": {
       "path": "ecologits/data/models.json#/models/105",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/106",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-it-keras": {
       "path": "ecologits/data/models.json#/models/114",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-it-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/111",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-keras": {
       "path": "ecologits/data/models.json#/models/113",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/codegemma-7b-pytorch": {
       "path": "ecologits/data/models.json#/models/109",
       "raw_sources": [
         "https://huggingface.co/google/codegemma-7b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-2b-it": {
       "path": "ecologits/data/models.json#/models/121",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-2b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-2b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/124",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-2b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-2b-it-keras": {
       "path": "ecologits/data/models.json#/models/157",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-2b-it-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-2b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/125",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-2b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-2b-it-tflite": {
       "path": "ecologits/data/models.json#/models/159",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-2b-it-tflite"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-7b-it": {
       "path": "ecologits/data/models.json#/models/122",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-7b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-7b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/123",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-7b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-7b-it-keras": {
       "path": "ecologits/data/models.json#/models/158",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-7b-it-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-1.1-7b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/126",
       "raw_sources": [
         "https://huggingface.co/google/gemma-1.1-7b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-27b": {
       "path": "ecologits/data/models.json#/models/93",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-27b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-27b-it": {
       "path": "ecologits/data/models.json#/models/94",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-27b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-27b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/100",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-27b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-27b-pytorch": {
       "path": "ecologits/data/models.json#/models/99",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-27b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-2b": {
       "path": "ecologits/data/models.json#/models/89",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-2b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-2b-it": {
       "path": "ecologits/data/models.json#/models/90",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-2b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-2b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/96",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-2b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-2b-pytorch": {
       "path": "ecologits/data/models.json#/models/95",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-2b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-9b": {
       "path": "ecologits/data/models.json#/models/91",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-9b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-9b-it": {
       "path": "ecologits/data/models.json#/models/92",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-9b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-9b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/98",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-9b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-9b-keras": {
       "path": "ecologits/data/models.json#/models/101",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-9b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-9b-pytorch": {
       "path": "ecologits/data/models.json#/models/97",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-9b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2-instruct-9b-keras": {
       "path": "ecologits/data/models.json#/models/102",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2-instruct-9b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b": {
       "path": "ecologits/data/models.json#/models/129",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-GGUF": {
       "path": "ecologits/data/models.json#/models/133",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-cpp": {
       "path": "ecologits/data/models.json#/models/156",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-flax": {
       "path": "ecologits/data/models.json#/models/143",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-flax"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it": {
       "path": "ecologits/data/models.json#/models/130",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/134",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-cpp": {
       "path": "ecologits/data/models.json#/models/150",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-flax": {
       "path": "ecologits/data/models.json#/models/144",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-flax"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-keras": {
       "path": "ecologits/data/models.json#/models/145",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/140",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-sfp-cpp": {
       "path": "ecologits/data/models.json#/models/155",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-sfp-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-it-tflite": {
       "path": "ecologits/data/models.json#/models/160",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-it-tflite"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-keras": {
       "path": "ecologits/data/models.json#/models/147",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-pytorch": {
       "path": "ecologits/data/models.json#/models/137",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-2b-sfp-cpp": {
       "path": "ecologits/data/models.json#/models/149",
       "raw_sources": [
         "https://huggingface.co/google/gemma-2b-sfp-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b": {
       "path": "ecologits/data/models.json#/models/127",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-GGUF": {
       "path": "ecologits/data/models.json#/models/132",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-cpp": {
       "path": "ecologits/data/models.json#/models/152",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-flax": {
       "path": "ecologits/data/models.json#/models/141",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-flax"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it": {
       "path": "ecologits/data/models.json#/models/128",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-GGUF": {
       "path": "ecologits/data/models.json#/models/131",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-GGUF"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-cpp": {
       "path": "ecologits/data/models.json#/models/153",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-flax": {
       "path": "ecologits/data/models.json#/models/142",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-flax"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-keras": {
       "path": "ecologits/data/models.json#/models/148",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-pytorch": {
       "path": "ecologits/data/models.json#/models/135",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-quant-pytorch": {
       "path": "ecologits/data/models.json#/models/139",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-quant-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-it-sfp-cpp": {
       "path": "ecologits/data/models.json#/models/154",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-it-sfp-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-keras": {
       "path": "ecologits/data/models.json#/models/146",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-keras"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-pytorch": {
       "path": "ecologits/data/models.json#/models/136",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-quant-pytorch": {
       "path": "ecologits/data/models.json#/models/138",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-quant-pytorch"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/google/gemma-7b-sfp-cpp": {
       "path": "ecologits/data/models.json#/models/151",
       "raw_sources": [
         "https://huggingface.co/google/gemma-7b-sfp-cpp"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-13b-Instruct-hf": {
       "path": "ecologits/data/models.json#/models/80",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-13b-Instruct-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-13b-Python-hf": {
       "path": "ecologits/data/models.json#/models/77",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-13b-Python-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-13b-hf": {
       "path": "ecologits/data/models.json#/models/72",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-13b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-34b-Instruct-hf": {
       "path": "ecologits/data/models.json#/models/81",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-34b-Instruct-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-34b-Python-hf": {
       "path": "ecologits/data/models.json#/models/76",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-34b-Python-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-34b-hf": {
       "path": "ecologits/data/models.json#/models/73",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-34b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-70b-Instruct-hf": {
       "path": "ecologits/data/models.json#/models/82",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-70b-Instruct-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-70b-Python-hf": {
       "path": "ecologits/data/models.json#/models/78",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-70b-Python-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-70b-hf": {
       "path": "ecologits/data/models.json#/models/74",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-70b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-7b-Instruct-hf": {
       "path": "ecologits/data/models.json#/models/79",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-7b-Instruct-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-7b-Python-hf": {
       "path": "ecologits/data/models.json#/models/75",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-7b-Python-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/CodeLlama-7b-hf": {
       "path": "ecologits/data/models.json#/models/71",
       "raw_sources": [
         "https://huggingface.co/meta-llama/CodeLlama-7b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-13b": {
       "path": "ecologits/data/models.json#/models/65",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-13b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-13b-chat": {
       "path": "ecologits/data/models.json#/models/68",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-13b-chat"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-13b-chat-hf": {
       "path": "ecologits/data/models.json#/models/62",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-13b-chat-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-13b-hf": {
       "path": "ecologits/data/models.json#/models/59",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-13b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-70b": {
       "path": "ecologits/data/models.json#/models/66",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-70b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-70b-chat": {
       "path": "ecologits/data/models.json#/models/69",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-70b-chat"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-70b-chat-hf": {
       "path": "ecologits/data/models.json#/models/63",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-70b-chat-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-70b-hf": {
       "path": "ecologits/data/models.json#/models/60",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-70b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-7b": {
       "path": "ecologits/data/models.json#/models/64",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-7b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-7b-chat": {
       "path": "ecologits/data/models.json#/models/67",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-7b-chat"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-7b-chat-hf": {
       "path": "ecologits/data/models.json#/models/61",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-7b-chat-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-2-7b-hf": {
       "path": "ecologits/data/models.json#/models/58",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-2-7b-hf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-Guard-3-8B": {
       "path": "ecologits/data/models.json#/models/50",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-Guard-3-8B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Llama-Guard-3-8B-INT8": {
       "path": "ecologits/data/models.json#/models/51",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Llama-Guard-3-8B-INT8"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/LlamaGuard-7b": {
       "path": "ecologits/data/models.json#/models/70",
       "raw_sources": [
         "https://huggingface.co/meta-llama/LlamaGuard-7b"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3-70B": {
       "path": "ecologits/data/models.json#/models/56",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3-70B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3-70B-Instruct": {
       "path": "ecologits/data/models.json#/models/55",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3-8B": {
       "path": "ecologits/data/models.json#/models/53",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3-8B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3-8B-Instruct": {
       "path": "ecologits/data/models.json#/models/54",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-405B": {
       "path": "ecologits/data/models.json#/models/46",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-405B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-405B-FP8": {
       "path": "ecologits/data/models.json#/models/48",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-FP8"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-405B-Instruct": {
       "path": "ecologits/data/models.json#/models/47",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-405B-Instruct-FP8": {
       "path": "ecologits/data/models.json#/models/49",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct-FP8"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-70B": {
       "path": "ecologits/data/models.json#/models/44",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-70B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-70B-Instruct": {
       "path": "ecologits/data/models.json#/models/45",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-8B": {
       "path": "ecologits/data/models.json#/models/42",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-8B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-3.1-8B-Instruct": {
       "path": "ecologits/data/models.json#/models/43",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Meta-Llama-Guard-2-8B": {
       "path": "ecologits/data/models.json#/models/57",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Meta-Llama-Guard-2-8B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/meta-llama/Prompt-Guard-86M": {
       "path": "ecologits/data/models.json#/models/52",
       "raw_sources": [
         "https://huggingface.co/meta-llama/Prompt-Guard-86M"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-128k-instruct": {
       "path": "ecologits/data/models.json#/models/168",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-128k-instruct-onnx-cpu": {
       "path": "ecologits/data/models.json#/models/178",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-cpu"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-128k-instruct-onnx-cuda": {
       "path": "ecologits/data/models.json#/models/179",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-cuda"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-128k-instruct-onnx-directml": {
       "path": "ecologits/data/models.json#/models/180",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-directml"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-4k-instruct": {
       "path": "ecologits/data/models.json#/models/167",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-4k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-4k-instruct-onnx-cpu": {
       "path": "ecologits/data/models.json#/models/175",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-cpu"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-4k-instruct-onnx-cuda": {
       "path": "ecologits/data/models.json#/models/176",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-cuda"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-medium-4k-instruct-onnx-directml": {
       "path": "ecologits/data/models.json#/models/177",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-directml"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-128k-instruct": {
       "path": "ecologits/data/models.json#/models/164",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-128k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-128k-instruct-onnx": {
       "path": "ecologits/data/models.json#/models/172",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-4k-instruct": {
       "path": "ecologits/data/models.json#/models/163",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-4k-instruct-gguf": {
       "path": "ecologits/data/models.json#/models/184",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-4k-instruct-onnx": {
       "path": "ecologits/data/models.json#/models/170",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-mini-4k-instruct-onnx-web": {
       "path": "ecologits/data/models.json#/models/171",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx-web"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-small-128k-instruct": {
       "path": "ecologits/data/models.json#/models/166",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-small-128k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-small-128k-instruct-onnx-cuda": {
       "path": "ecologits/data/models.json#/models/174",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-small-128k-instruct-onnx-cuda"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-small-8k-instruct": {
       "path": "ecologits/data/models.json#/models/165",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-small-8k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-small-8k-instruct-onnx-cuda": {
       "path": "ecologits/data/models.json#/models/173",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-small-8k-instruct-onnx-cuda"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-vision-128k-instruct": {
       "path": "ecologits/data/models.json#/models/169",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-vision-128k-instruct"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-vision-128k-instruct-onnx-cpu": {
       "path": "ecologits/data/models.json#/models/181",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-vision-128k-instruct-onnx-cpu"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-vision-128k-instruct-onnx-cuda": {
       "path": "ecologits/data/models.json#/models/182",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-vision-128k-instruct-onnx-cuda"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/Phi-3-vision-128k-instruct-onnx-directml": {
       "path": "ecologits/data/models.json#/models/183",
       "raw_sources": [
         "https://huggingface.co/microsoft/Phi-3-vision-128k-instruct-onnx-directml"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/phi-1": {
       "path": "ecologits/data/models.json#/models/161",
       "raw_sources": [
         "https://huggingface.co/microsoft/phi-1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/microsoft/phi-1_5": {
       "path": "ecologits/data/models.json#/models/162",
       "raw_sources": [
         "https://huggingface.co/microsoft/phi-1_5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Codestral-22B-v0.1": {
       "path": "ecologits/data/models.json#/models/41",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Codestral-22B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mistral-7B-Instruct-v0.3": {
       "path": "ecologits/data/models.json#/models/40",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mistral-7B-Instruct-v0.3"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mistral-7B-v0.2": {
       "path": "ecologits/data/models.json#/models/31",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mistral-7B-v0.2"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mixtral-8x22B-Instruct-v0.1-4bit": {
       "path": "ecologits/data/models.json#/models/36",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mixtral-8x22B-Instruct-v0.1-4bit"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mixtral-8x22B-v0.1": {
       "path": "ecologits/data/models.json#/models/32",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mixtral-8x22B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mixtral-8x22B-v0.1-4bit": {
       "path": "ecologits/data/models.json#/models/34",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mixtral-8x22B-v0.1-4bit"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mixtral-8x22B-v0.1-AWQ": {
       "path": "ecologits/data/models.json#/models/35",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mixtral-8x22B-v0.1-AWQ"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/Mixtral-8x22B-v0.1-original": {
       "path": "ecologits/data/models.json#/models/33",
       "raw_sources": [
         "https://huggingface.co/mistral-community/Mixtral-8x22B-v0.1-original"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/mixtral-8x22B-Instruct-v0.3-original": {
       "path": "ecologits/data/models.json#/models/37",
       "raw_sources": [
         "https://huggingface.co/mistral-community/mixtral-8x22B-Instruct-v0.3-original"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/mixtral-8x22B-v0.3": {
       "path": "ecologits/data/models.json#/models/39",
       "raw_sources": [
         "https://huggingface.co/mistral-community/mixtral-8x22B-v0.3"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistral-community/mixtral-8x22B-v0.3-original": {
       "path": "ecologits/data/models.json#/models/38",
       "raw_sources": [
         "https://huggingface.co/mistral-community/mixtral-8x22B-v0.3-original"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Codestral-22B-v0.1": {
       "path": "ecologits/data/models.json#/models/26",
       "raw_sources": [
         "https://huggingface.co/mistralai/Codestral-22B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mathstral-7B-v0.1": {
       "path": "ecologits/data/models.json#/models/27",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mathstral-7B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-7B-Instruct-v0.1": {
       "path": "ecologits/data/models.json#/models/18",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-7B-Instruct-v0.2": {
       "path": "ecologits/data/models.json#/models/21",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-7B-Instruct-v0.3": {
       "path": "ecologits/data/models.json#/models/25",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-7B-v0.1": {
       "path": "ecologits/data/models.json#/models/17",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-7B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-7B-v0.3": {
       "path": "ecologits/data/models.json#/models/24",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-7B-v0.3"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-Large-Instruct-2407": {
       "path": "ecologits/data/models.json#/models/30",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-Nemo-Base-2407": {
       "path": "ecologits/data/models.json#/models/29",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-Nemo-Base-2407"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mistral-Nemo-Instruct-2407": {
       "path": "ecologits/data/models.json#/models/28",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mixtral-8x22B-Instruct-v0.1": {
       "path": "ecologits/data/models.json#/models/23",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mixtral-8x22B-v0.1": {
       "path": "ecologits/data/models.json#/models/22",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mixtral-8x22B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mixtral-8x7B-Instruct-v0.1": {
       "path": "ecologits/data/models.json#/models/20",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/mistralai/Mixtral-8x7B-v0.1": {
       "path": "ecologits/data/models.json#/models/19",
       "raw_sources": [
         "https://huggingface.co/mistralai/Mixtral-8x7B-v0.1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/openai/gpt-oss-120b": {
       "path": "ecologits/data/models.json#/models/185",
@@ -5674,7 +5681,7 @@
         "https://platform.openai.com/docs/models/gpt-oss-120b",
         "https://cdn.openai.com/pdf/419b6906-9da6-406c-a19d-1bb078ac7637/oai_gpt-oss_model_card.pdf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "huggingface_hub/openai/gpt-oss-20b": {
       "path": "ecologits/data/models.json#/models/186",
@@ -5683,7 +5690,7 @@
         "https://platform.openai.com/docs/models/gpt-oss-20b",
         "https://cdn.openai.com/pdf/419b6906-9da6-406c-a19d-1bb078ac7637/oai_gpt-oss_model_card.pdf"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/codestral-2508": {
       "path": "ecologits/data/models.json#/models/187",
@@ -5691,7 +5698,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/codestral"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/codestral-latest": {
       "path": "ecologits/data/models.json#/models/188",
@@ -5699,7 +5706,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/codestral"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/glm-5-2": {
       "path": "ecologits/data/models.json#/models/189",
@@ -5707,7 +5714,7 @@
         "https://docs.mistral.ai/models/zai-glm-5-2",
         "https://github.com/zai-org/GLM-5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/labs-leanstral-1-5": {
       "path": "ecologits/data/models.json#/models/190",
@@ -5715,7 +5722,7 @@
         "https://docs.mistral.ai/models/leanstral-1-5",
         "https://mistral.ai/news/leanstral-1-5/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/labs-leanstral-1-5-1": {
       "path": "ecologits/data/models.json#/models/191",
@@ -5723,35 +5730,35 @@
         "https://docs.mistral.ai/models/leanstral-1-5",
         "https://mistral.ai/news/leanstral-1-5/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/magistral-medium-latest": {
       "path": "ecologits/data/models.json#/models/192",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/magistral-small-latest": {
       "path": "ecologits/data/models.json#/models/193",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-14b-2512": {
       "path": "ecologits/data/models.json#/models/194",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-14b-latest": {
       "path": "ecologits/data/models.json#/models/195",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-3b-2512": {
       "path": "ecologits/data/models.json#/models/196",
@@ -5759,7 +5766,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/ministraux"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-3b-latest": {
       "path": "ecologits/data/models.json#/models/197",
@@ -5767,7 +5774,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/ministraux"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-8b-2512": {
       "path": "ecologits/data/models.json#/models/198",
@@ -5775,7 +5782,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/ministraux"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/ministral-8b-latest": {
       "path": "ecologits/data/models.json#/models/199",
@@ -5783,7 +5790,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/ministraux"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/mistral-code-fim-latest": {
       "path": "ecologits/data/models.json#/models/200",
@@ -5791,7 +5798,7 @@
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/codestral"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/mistral-large-2512": {
       "path": "ecologits/data/models.json#/models/201",
@@ -5800,787 +5807,801 @@
         "https://mistral.ai/news/mistral-3/",
         "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "mistralai/mistral-large-4": {
+      "path": "ecologits/data/models.json#/models/202",
+      "raw_sources": [
+        "https://docs.mistral.ai/models/mistral-large-4-0"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "mistralai/mistral-large-4-0": {
+      "path": "ecologits/data/models.json#/models/203",
+      "raw_sources": [
+        "https://docs.mistral.ai/models/mistral-large-4-0"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/mistral-large-latest": {
-      "path": "ecologits/data/models.json#/models/202",
+      "path": "ecologits/data/models.json#/models/204",
       "raw_sources": [
         "https://docs.mistral.ai/models/mistral-large-3-25-12",
         "https://mistral.ai/news/mistral-3/",
         "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/mistral-medium": {
-      "path": "ecologits/data/models.json#/models/203",
+      "path": "ecologits/data/models.json#/models/205",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "mistralai/mistral-medium-2604": {
-      "path": "ecologits/data/models.json#/models/204",
-      "raw_sources": [
-        "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
-        "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "mistralai/mistral-medium-3": {
-      "path": "ecologits/data/models.json#/models/205",
-      "raw_sources": [
-        "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
-        "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "mistralai/mistral-medium-3-5": {
       "path": "ecologits/data/models.json#/models/206",
       "raw_sources": [
         "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
         "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/mistral-medium-3.5": {
+    "mistralai/mistral-medium-3": {
       "path": "ecologits/data/models.json#/models/207",
       "raw_sources": [
         "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
         "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/mistral-medium-latest": {
+    "mistralai/mistral-medium-3-5": {
       "path": "ecologits/data/models.json#/models/208",
       "raw_sources": [
-        "https://docs.mistral.ai/getting-started/models/"
+        "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+        "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/mistral-small-2603": {
+    "mistralai/mistral-medium-3.5": {
       "path": "ecologits/data/models.json#/models/209",
       "raw_sources": [
-        "https://docs.mistral.ai/getting-started/models/",
-        "https://mistral.ai/news/mistral-small-4"
+        "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+        "https://huggingface.co/mistralai/Mistral-Medium-3.5-128B"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/mistral-small-latest": {
+    "mistralai/mistral-medium-latest": {
       "path": "ecologits/data/models.json#/models/210",
       "raw_sources": [
+        "https://docs.mistral.ai/getting-started/models/"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "mistralai/mistral-small-2603": {
+      "path": "ecologits/data/models.json#/models/211",
+      "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/",
         "https://mistral.ai/news/mistral-small-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/voxtral-mini-2602": {
-      "path": "ecologits/data/models.json#/models/211",
-      "raw_sources": [
-        "https://docs.mistral.ai/getting-started/models/"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "mistralai/voxtral-mini-latest": {
+    "mistralai/mistral-small-latest": {
       "path": "ecologits/data/models.json#/models/212",
       "raw_sources": [
-        "https://docs.mistral.ai/getting-started/models/"
+        "https://docs.mistral.ai/getting-started/models/",
+        "https://mistral.ai/news/mistral-small-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/voxtral-small-2507": {
+    "mistralai/voxtral-mini-2602": {
       "path": "ecologits/data/models.json#/models/213",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/voxtral-small-latest": {
+    "mistralai/voxtral-mini-latest": {
       "path": "ecologits/data/models.json#/models/214",
       "raw_sources": [
         "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/zai-glm-5": {
+    "mistralai/voxtral-small-2507": {
       "path": "ecologits/data/models.json#/models/215",
       "raw_sources": [
-        "https://docs.mistral.ai/models/zai-glm-5-2",
-        "https://github.com/zai-org/GLM-5"
+        "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/zai-glm-5-2": {
+    "mistralai/voxtral-small-latest": {
       "path": "ecologits/data/models.json#/models/216",
       "raw_sources": [
-        "https://docs.mistral.ai/models/zai-glm-5-2",
-        "https://github.com/zai-org/GLM-5"
+        "https://docs.mistral.ai/getting-started/models/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/zai-glm-5-3": {
+    "mistralai/zai-glm-5": {
       "path": "ecologits/data/models.json#/models/217",
       "raw_sources": [
         "https://docs.mistral.ai/models/zai-glm-5-2",
         "https://github.com/zai-org/GLM-5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "mistralai/zai-glm-latest": {
+    "mistralai/zai-glm-5-2": {
       "path": "ecologits/data/models.json#/models/218",
       "raw_sources": [
         "https://docs.mistral.ai/models/zai-glm-5-2",
         "https://github.com/zai-org/GLM-5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "mistralai/zai-glm-5-3": {
+      "path": "ecologits/data/models.json#/models/219",
+      "raw_sources": [
+        "https://docs.mistral.ai/models/zai-glm-5-2",
+        "https://github.com/zai-org/GLM-5"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "mistralai/zai-glm-latest": {
+      "path": "ecologits/data/models.json#/models/220",
+      "raw_sources": [
+        "https://docs.mistral.ai/models/zai-glm-5-2",
+        "https://github.com/zai-org/GLM-5"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/chat-latest": {
-      "path": "ecologits/data/models.json#/models/253",
+      "path": "ecologits/data/models.json#/models/256",
       "raw_sources": [
         "https://openai.com/index/introducing-gpt-5-5/",
         "https://developers.openai.com/api/docs/models/gpt-5.5",
         "https://inferencebench.io/models/proprietary/gpt-5-5/"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-3.5-turbo": {
-      "path": "ecologits/data/models.json#/models/254",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-3.5-turbo-0125": {
-      "path": "ecologits/data/models.json#/models/255",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-3.5-turbo-1106": {
-      "path": "ecologits/data/models.json#/models/256",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-3.5-turbo-16k": {
       "path": "ecologits/data/models.json#/models/257",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-3-5-turbo"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-3.5-turbo-instruct": {
+    "openai/gpt-3.5-turbo-0125": {
       "path": "ecologits/data/models.json#/models/258",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-3-5-turbo"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-3.5-turbo-instruct-0914": {
+    "openai/gpt-3.5-turbo-1106": {
       "path": "ecologits/data/models.json#/models/259",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-3-5-turbo"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-3.5-turbo-16k": {
+      "path": "ecologits/data/models.json#/models/260",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-3.5-turbo-instruct": {
+      "path": "ecologits/data/models.json#/models/261",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-3.5-turbo-instruct-0914": {
+      "path": "ecologits/data/models.json#/models/262",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#gpt-3-5-turbo"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo": {
       "alias_of": "openai/gpt-3.5-turbo",
       "path": "ecologits/data/models.json#/aliases/3",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo-0125": {
       "alias_of": "openai/gpt-3.5-turbo-0125",
       "path": "ecologits/data/models.json#/aliases/4",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo-1106": {
       "alias_of": "openai/gpt-3.5-turbo-1106",
       "path": "ecologits/data/models.json#/aliases/5",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo-16k": {
       "alias_of": "openai/gpt-3.5-turbo-16k",
       "path": "ecologits/data/models.json#/aliases/6",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo-instruct": {
       "alias_of": "openai/gpt-3.5-turbo-instruct",
       "path": "ecologits/data/models.json#/aliases/8",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-35-turbo-instruct-0914": {
       "alias_of": "openai/gpt-3.5-turbo-instruct-0914",
       "path": "ecologits/data/models.json#/aliases/7",
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-4": {
-      "path": "ecologits/data/models.json#/models/260",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-4-0613": {
-      "path": "ecologits/data/models.json#/models/261",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-4-turbo": {
-      "path": "ecologits/data/models.json#/models/262",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/gpt-4-turbo-2024-04-09": {
       "path": "ecologits/data/models.json#/models/263",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1": {
+    "openai/gpt-4-0613": {
       "path": "ecologits/data/models.json#/models/264",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1-2025-04-14": {
+    "openai/gpt-4-turbo": {
       "path": "ecologits/data/models.json#/models/265",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1-mini": {
+    "openai/gpt-4-turbo-2024-04-09": {
       "path": "ecologits/data/models.json#/models/266",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1-mini-2025-04-14": {
+    "openai/gpt-4.1": {
       "path": "ecologits/data/models.json#/models/267",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1-nano": {
+    "openai/gpt-4.1-2025-04-14": {
       "path": "ecologits/data/models.json#/models/268",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4.1-nano-2025-04-14": {
+    "openai/gpt-4.1-mini": {
       "path": "ecologits/data/models.json#/models/269",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o": {
+    "openai/gpt-4.1-mini-2025-04-14": {
       "path": "ecologits/data/models.json#/models/270",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-2024-05-13": {
+    "openai/gpt-4.1-nano": {
       "path": "ecologits/data/models.json#/models/271",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-2024-08-06": {
+    "openai/gpt-4.1-nano-2025-04-14": {
       "path": "ecologits/data/models.json#/models/272",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-2024-11-20": {
+    "openai/gpt-4o": {
       "path": "ecologits/data/models.json#/models/273",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini": {
+    "openai/gpt-4o-2024-05-13": {
       "path": "ecologits/data/models.json#/models/274",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o-mini"
+        "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-2024-07-18": {
+    "openai/gpt-4o-2024-08-06": {
       "path": "ecologits/data/models.json#/models/275",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o-mini"
+        "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-search-preview": {
+    "openai/gpt-4o-2024-11-20": {
       "path": "ecologits/data/models.json#/models/276",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o-mini"
+        "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-search-preview-2025-03-11": {
+    "openai/gpt-4o-mini": {
       "path": "ecologits/data/models.json#/models/277",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-transcribe": {
+    "openai/gpt-4o-mini-2024-07-18": {
       "path": "ecologits/data/models.json#/models/278",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-transcribe-2025-03-20": {
+    "openai/gpt-4o-mini-search-preview": {
       "path": "ecologits/data/models.json#/models/279",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-transcribe-2025-12-15": {
+    "openai/gpt-4o-mini-search-preview-2025-03-11": {
       "path": "ecologits/data/models.json#/models/280",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-tts": {
+    "openai/gpt-4o-mini-transcribe": {
       "path": "ecologits/data/models.json#/models/281",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-tts-2025-03-20": {
+    "openai/gpt-4o-mini-transcribe-2025-03-20": {
       "path": "ecologits/data/models.json#/models/282",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-mini-tts-2025-12-15": {
+    "openai/gpt-4o-mini-transcribe-2025-12-15": {
       "path": "ecologits/data/models.json#/models/283",
       "raw_sources": [
         "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-search-preview": {
+    "openai/gpt-4o-mini-tts": {
       "path": "ecologits/data/models.json#/models/284",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o"
+        "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-4o-search-preview-2025-03-11": {
+    "openai/gpt-4o-mini-tts-2025-03-20": {
       "path": "ecologits/data/models.json#/models/285",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#gpt-4o"
+        "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5": {
+    "openai/gpt-4o-mini-tts-2025-12-15": {
       "path": "ecologits/data/models.json#/models/286",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4o-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-2025-08-07": {
+    "openai/gpt-4o-search-preview": {
       "path": "ecologits/data/models.json#/models/287",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-chat-latest": {
+    "openai/gpt-4o-search-preview-2025-03-11": {
       "path": "ecologits/data/models.json#/models/288",
       "raw_sources": [
-        "https://platform.openai.com/docs/models"
+        "https://platform.openai.com/docs/models#gpt-4o"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-codex": {
+    "openai/gpt-5": {
       "path": "ecologits/data/models.json#/models/289",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-mini": {
+    "openai/gpt-5-2025-08-07": {
       "path": "ecologits/data/models.json#/models/290",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-mini-2025-08-07": {
+    "openai/gpt-5-chat-latest": {
       "path": "ecologits/data/models.json#/models/291",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-nano": {
+    "openai/gpt-5-codex": {
       "path": "ecologits/data/models.json#/models/292",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-nano-2025-08-07": {
+    "openai/gpt-5-mini": {
       "path": "ecologits/data/models.json#/models/293",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-pro": {
+    "openai/gpt-5-mini-2025-08-07": {
       "path": "ecologits/data/models.json#/models/294",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-pro-2025-10-06": {
+    "openai/gpt-5-nano": {
       "path": "ecologits/data/models.json#/models/295",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-search-api": {
+    "openai/gpt-5-nano-2025-08-07": {
       "path": "ecologits/data/models.json#/models/296",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5-search-api-2025-10-14": {
+    "openai/gpt-5-pro": {
       "path": "ecologits/data/models.json#/models/297",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1": {
+    "openai/gpt-5-pro-2025-10-06": {
       "path": "ecologits/data/models.json#/models/298",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1-2025-11-13": {
+    "openai/gpt-5-search-api": {
       "path": "ecologits/data/models.json#/models/299",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1-chat-latest": {
+    "openai/gpt-5-search-api-2025-10-14": {
       "path": "ecologits/data/models.json#/models/300",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1-codex": {
+    "openai/gpt-5.1": {
       "path": "ecologits/data/models.json#/models/301",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1-codex-max": {
+    "openai/gpt-5.1-2025-11-13": {
       "path": "ecologits/data/models.json#/models/302",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.1-codex-mini": {
+    "openai/gpt-5.1-chat-latest": {
       "path": "ecologits/data/models.json#/models/303",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2": {
+    "openai/gpt-5.1-codex": {
       "path": "ecologits/data/models.json#/models/304",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2-2025-12-11": {
+    "openai/gpt-5.1-codex-max": {
       "path": "ecologits/data/models.json#/models/305",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2-chat-latest": {
+    "openai/gpt-5.1-codex-mini": {
       "path": "ecologits/data/models.json#/models/306",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2-codex": {
+    "openai/gpt-5.2": {
       "path": "ecologits/data/models.json#/models/307",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2-pro": {
+    "openai/gpt-5.2-2025-12-11": {
       "path": "ecologits/data/models.json#/models/308",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.2-pro-2025-12-11": {
+    "openai/gpt-5.2-chat-latest": {
       "path": "ecologits/data/models.json#/models/309",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.3-chat-latest": {
+    "openai/gpt-5.2-codex": {
       "path": "ecologits/data/models.json#/models/310",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.3-codex": {
+    "openai/gpt-5.2-pro": {
       "path": "ecologits/data/models.json#/models/311",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4": {
+    "openai/gpt-5.2-pro-2025-12-11": {
       "path": "ecologits/data/models.json#/models/312",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-2026-03-05": {
+    "openai/gpt-5.3-chat-latest": {
       "path": "ecologits/data/models.json#/models/313",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-mini": {
+    "openai/gpt-5.3-codex": {
       "path": "ecologits/data/models.json#/models/314",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-mini-2026-03-17": {
+    "openai/gpt-5.4": {
       "path": "ecologits/data/models.json#/models/315",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-nano": {
+    "openai/gpt-5.4-2026-03-05": {
       "path": "ecologits/data/models.json#/models/316",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-nano-2026-03-17": {
+    "openai/gpt-5.4-mini": {
       "path": "ecologits/data/models.json#/models/317",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-pro": {
+    "openai/gpt-5.4-mini-2026-03-17": {
       "path": "ecologits/data/models.json#/models/318",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.4-pro-2026-03-05": {
+    "openai/gpt-5.4-nano": {
       "path": "ecologits/data/models.json#/models/319",
       "raw_sources": [
         "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.5": {
+    "openai/gpt-5.4-nano-2026-03-17": {
       "path": "ecologits/data/models.json#/models/320",
       "raw_sources": [
-        "https://openai.com/index/introducing-gpt-5-5/",
-        "https://developers.openai.com/api/docs/models/gpt-5.5",
-        "https://inferencebench.io/models/proprietary/gpt-5-5/"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.5-2026-04-23": {
+    "openai/gpt-5.4-pro": {
       "path": "ecologits/data/models.json#/models/321",
       "raw_sources": [
-        "https://openai.com/index/introducing-gpt-5-5/",
-        "https://developers.openai.com/api/docs/models/gpt-5.5",
-        "https://inferencebench.io/models/proprietary/gpt-5-5/"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.5-pro": {
+    "openai/gpt-5.4-pro-2026-03-05": {
       "path": "ecologits/data/models.json#/models/322",
       "raw_sources": [
-        "https://openai.com/index/introducing-gpt-5-5/",
-        "https://developers.openai.com/api/docs/models/gpt-5.5-pro",
-        "https://www.swfte.com/research/gpt-5-5"
+        "https://platform.openai.com/docs/models"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/gpt-5.5-pro-2026-04-23": {
+    "openai/gpt-5.5": {
       "path": "ecologits/data/models.json#/models/323",
       "raw_sources": [
         "https://openai.com/index/introducing-gpt-5-5/",
+        "https://developers.openai.com/api/docs/models/gpt-5.5",
+        "https://inferencebench.io/models/proprietary/gpt-5-5/"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-5.5-2026-04-23": {
+      "path": "ecologits/data/models.json#/models/324",
+      "raw_sources": [
+        "https://openai.com/index/introducing-gpt-5-5/",
+        "https://developers.openai.com/api/docs/models/gpt-5.5",
+        "https://inferencebench.io/models/proprietary/gpt-5-5/"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-5.5-pro": {
+      "path": "ecologits/data/models.json#/models/325",
+      "raw_sources": [
+        "https://openai.com/index/introducing-gpt-5-5/",
         "https://developers.openai.com/api/docs/models/gpt-5.5-pro",
         "https://www.swfte.com/research/gpt-5-5"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/gpt-5.5-pro-2026-04-23": {
+      "path": "ecologits/data/models.json#/models/326",
+      "raw_sources": [
+        "https://openai.com/index/introducing-gpt-5-5/",
+        "https://developers.openai.com/api/docs/models/gpt-5.5-pro",
+        "https://www.swfte.com/research/gpt-5-5"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-5.6-luna": {
-      "path": "ecologits/data/models.json#/models/324",
+      "path": "ecologits/data/models.json#/models/327",
       "raw_sources": [
         "https://openai.com/index/gpt-5-6/",
         "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-5.6-sol": {
-      "path": "ecologits/data/models.json#/models/325",
+      "path": "ecologits/data/models.json#/models/328",
       "raw_sources": [
         "https://openai.com/index/gpt-5-6/",
         "https://developers.openai.com/api/docs/models/gpt-5.6-sol"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-5.6-terra": {
-      "path": "ecologits/data/models.json#/models/326",
+      "path": "ecologits/data/models.json#/models/329",
       "raw_sources": [
         "https://openai.com/index/gpt-5-6/",
         "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-6-astra": {
-      "path": "ecologits/data/models.json#/models/327",
+      "path": "ecologits/data/models.json#/models/330",
       "raw_sources": [
         "https://openai.com/index/gpt-6-astra/",
         "https://developers.openai.com/api/docs/models/gpt-6-astra"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-6-luna": {
-      "path": "ecologits/data/models.json#/models/328",
+      "path": "ecologits/data/models.json#/models/331",
       "raw_sources": [
         "https://developers.openai.com/api/docs/changelog",
         "https://developers.openai.com/api/docs/models/gpt-6-luna"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-6-sol": {
-      "path": "ecologits/data/models.json#/models/329",
+      "path": "ecologits/data/models.json#/models/332",
       "raw_sources": [
         "https://developers.openai.com/api/docs/changelog",
         "https://developers.openai.com/api/docs/models/gpt-6-sol"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/gpt-6.1-sol": {
-      "path": "ecologits/data/models.json#/models/330",
+      "path": "ecologits/data/models.json#/models/333",
       "raw_sources": [
         "https://developers.openai.com/api/docs/changelog",
         "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
     "openai/o1": {
-      "path": "ecologits/data/models.json#/models/331",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#o1"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/o1-2024-12-17": {
-      "path": "ecologits/data/models.json#/models/332",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#o1"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/o3-mini": {
-      "path": "ecologits/data/models.json#/models/333",
-      "raw_sources": [
-        "https://platform.openai.com/docs/models#o3-mini"
-      ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
-    },
-    "openai/o3-mini-2025-01-31": {
       "path": "ecologits/data/models.json#/models/334",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#o3-mini"
+        "https://platform.openai.com/docs/models#o1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/o4-mini": {
+    "openai/o1-2024-12-17": {
       "path": "ecologits/data/models.json#/models/335",
       "raw_sources": [
-        "https://platform.openai.com/docs/models#o3-mini"
+        "https://platform.openai.com/docs/models#o1"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/o4-mini-2025-04-16": {
+    "openai/o3-mini": {
       "path": "ecologits/data/models.json#/models/336",
       "raw_sources": [
         "https://platform.openai.com/docs/models#o3-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/o4-mini-deep-research": {
+    "openai/o3-mini-2025-01-31": {
       "path": "ecologits/data/models.json#/models/337",
       "raw_sources": [
         "https://platform.openai.com/docs/models#o3-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     },
-    "openai/o4-mini-deep-research-2025-06-26": {
+    "openai/o4-mini": {
       "path": "ecologits/data/models.json#/models/338",
       "raw_sources": [
         "https://platform.openai.com/docs/models#o3-mini"
       ],
-      "source_sha256": "a36d6fa817e1ff5d5c903cef8a3315c76cfa582aa95378b6dc703a7ec6f13bd0"
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/o4-mini-2025-04-16": {
+      "path": "ecologits/data/models.json#/models/339",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#o3-mini"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/o4-mini-deep-research": {
+      "path": "ecologits/data/models.json#/models/340",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#o3-mini"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
+    },
+    "openai/o4-mini-deep-research-2025-06-26": {
+      "path": "ecologits/data/models.json#/models/341",
+      "raw_sources": [
+        "https://platform.openai.com/docs/models#o3-mini"
+      ],
+      "source_sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774"
     }
   },
   "models": [
@@ -6623,8 +6644,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 63.0,
-        "ttft": 0.95
+        "tps": 51.5,
+        "ttft": 0.32
       },
       "name": "command-a-03-2025",
       "provider": "cohere",
@@ -6640,8 +6661,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 139.5,
-        "ttft": 0.23
+        "tps": 141.0,
+        "ttft": 0.26
       },
       "name": "command-a-plus-05-2026",
       "provider": "cohere",
@@ -6706,8 +6727,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 23.5,
-        "ttft": 0.32
+        "tps": 38.5,
+        "ttft": 0.25
       },
       "name": "command-r-08-2024",
       "provider": "cohere",
@@ -6720,8 +6741,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 8.0,
-        "ttft": 0.65
+        "tps": 6.0,
+        "ttft": 0.62
       },
       "name": "command-r-plus-08-2024",
       "provider": "cohere",
@@ -6734,8 +6755,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 49.0,
-        "ttft": 0.35
+        "tps": 57.0,
+        "ttft": 0.24
       },
       "name": "command-r7b-12-2024",
       "provider": "cohere",
@@ -9294,8 +9315,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 44.5,
-        "ttft": 0.31
+        "tps": 98.0,
+        "ttft": 0.38
       },
       "name": "codestral-2508",
       "provider": "mistralai",
@@ -9325,8 +9346,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 57.5,
-        "ttft": 0.64
+        "tps": 79.8,
+        "ttft": 2.24
       },
       "name": "glm-5-2",
       "provider": "mistralai",
@@ -9409,8 +9430,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 24.5,
-        "ttft": 0.6
+        "tps": 77.0,
+        "ttft": 0.38
       },
       "name": "ministral-14b-2512",
       "provider": "mistralai",
@@ -9437,8 +9458,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 33.0,
-        "ttft": 0.36
+        "tps": 131.0,
+        "ttft": 0.32
       },
       "name": "ministral-3b-2512",
       "provider": "mistralai",
@@ -9465,8 +9486,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 42.5,
-        "ttft": 0.34
+        "tps": 81.5,
+        "ttft": 0.32
       },
       "name": "ministral-8b-2512",
       "provider": "mistralai",
@@ -9510,10 +9531,54 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 16.0,
-        "ttft": 0.64
+        "tps": 59.2,
+        "ttft": 0.63
       },
       "name": "mistral-large-2512",
+      "provider": "mistralai",
+      "sources": [],
+      "warnings": [
+        {
+          "code": "model-arch-multimodal",
+          "message": "The model architecture is multimodal, expect lower precision."
+        }
+      ]
+    },
+    {
+      "architecture": {
+        "parameters": {
+          "active": 52,
+          "total": 1050
+        },
+        "type": "moe"
+      },
+      "deployment": {
+        "tps": 51.0,
+        "ttft": 1.11
+      },
+      "name": "mistral-large-4",
+      "provider": "mistralai",
+      "sources": [],
+      "warnings": [
+        {
+          "code": "model-arch-multimodal",
+          "message": "The model architecture is multimodal, expect lower precision."
+        }
+      ]
+    },
+    {
+      "architecture": {
+        "parameters": {
+          "active": 52,
+          "total": 1050
+        },
+        "type": "moe"
+      },
+      "deployment": {
+        "tps": 51.0,
+        "ttft": 1.11
+      },
+      "name": "mistral-large-4-0",
       "provider": "mistralai",
       "sources": [],
       "warnings": [
@@ -9532,8 +9597,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 42.5,
-        "ttft": 0.64
+        "tps": 52.0,
+        "ttft": 0.68
       },
       "name": "mistral-large-latest",
       "provider": "mistralai",
@@ -9592,8 +9657,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 103.2,
-        "ttft": 0.36
+        "tps": 78.5,
+        "ttft": 0.41
       },
       "name": "mistral-medium-3",
       "provider": "mistralai",
@@ -9611,7 +9676,7 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 27.0,
+        "tps": 93.5,
         "ttft": 0.36
       },
       "name": "mistral-medium-3-5",
@@ -9630,7 +9695,7 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 27.0,
+        "tps": 93.5,
         "ttft": 0.36
       },
       "name": "mistral-medium-3.5",
@@ -9674,8 +9739,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 94.2,
-        "ttft": 0.39
+        "tps": 110.2,
+        "ttft": 0.44
       },
       "name": "mistral-small-2603",
       "provider": "mistralai",
@@ -9855,8 +9920,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 42.0,
-        "ttft": 3.52
+        "tps": 57.0,
+        "ttft": 3.58
       },
       "name": "claude-fable-5",
       "provider": "anthropic",
@@ -9884,8 +9949,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 53.0,
-        "ttft": 5.96
+        "tps": 51.0,
+        "ttft": 3.89
       },
       "name": "claude-fable-5-1",
       "provider": "anthropic",
@@ -9910,10 +9975,32 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 60.0,
-        "ttft": 0.61
+        "tps": 79.0,
+        "ttft": 0.5
       },
       "name": "claude-haiku-4-5-20251001",
+      "provider": "anthropic",
+      "sources": [],
+      "warnings": [
+        {
+          "code": "model-arch-not-released",
+          "message": "The model architecture has not been released, expect lower precision."
+        }
+      ]
+    },
+    {
+      "architecture": {
+        "parameters": {
+          "max": 35,
+          "min": 10
+        },
+        "type": "dense"
+      },
+      "deployment": {
+        "tps": 147.0,
+        "ttft": 1.75
+      },
+      "name": "claude-haiku-5-5",
       "provider": "anthropic",
       "sources": [],
       "warnings": [
@@ -9935,8 +10022,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 33.0,
-        "ttft": 1.24
+        "tps": 30.5,
+        "ttft": 5.03
       },
       "name": "claude-opus-4-5-20251101",
       "provider": "anthropic",
@@ -9960,8 +10047,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 36.0,
-        "ttft": 1.69
+        "tps": 35.0,
+        "ttft": 1.95
       },
       "name": "claude-opus-4-6",
       "provider": "anthropic",
@@ -9985,8 +10072,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 53.0,
-        "ttft": 1.35
+        "tps": 42.0,
+        "ttft": 1.75
       },
       "name": "claude-opus-4-7",
       "provider": "anthropic",
@@ -10010,8 +10097,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 108.5,
-        "ttft": 1.01
+        "tps": 110.8,
+        "ttft": 0.87
       },
       "name": "claude-opus-4-8",
       "provider": "anthropic",
@@ -10035,8 +10122,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 20.5,
-        "ttft": 1.96
+        "tps": 89.5,
+        "ttft": 1.84
       },
       "name": "claude-opus-5",
       "provider": "anthropic",
@@ -10064,8 +10151,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 75.5,
-        "ttft": 3.43
+        "tps": 102.8,
+        "ttft": 2.68
       },
       "name": "claude-opus-5-5",
       "provider": "anthropic",
@@ -10093,8 +10180,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 44.0,
-        "ttft": 1.18
+        "tps": 42.0,
+        "ttft": 1.15
       },
       "name": "claude-sonnet-4-5-20250929",
       "provider": "anthropic",
@@ -10118,8 +10205,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 39.0,
-        "ttft": 1.37
+        "tps": 40.0,
+        "ttft": 1.15
       },
       "name": "claude-sonnet-4-6",
       "provider": "anthropic",
@@ -10143,8 +10230,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 16.0,
-        "ttft": 1.13
+        "tps": 79.5,
+        "ttft": 1.76
       },
       "name": "claude-sonnet-5",
       "provider": "anthropic",
@@ -10172,8 +10259,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 91.0,
-        "ttft": 3.35
+        "tps": 102.0,
+        "ttft": 2.21
       },
       "name": "claude-sonnet-5-5",
       "provider": "anthropic",
@@ -10201,8 +10288,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 70.5,
-        "ttft": 0.87
+        "tps": 68.5,
+        "ttft": 1.14
       },
       "name": "gemini-2.5-flash",
       "provider": "google_genai",
@@ -10231,7 +10318,7 @@
       },
       "deployment": {
         "tps": null,
-        "ttft": 13.48
+        "ttft": 15.05
       },
       "name": "gemini-2.5-flash-image",
       "provider": "google_genai",
@@ -10256,8 +10343,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 87.5,
-        "ttft": 0.78
+        "tps": 131.5,
+        "ttft": 0.92
       },
       "name": "gemini-2.5-flash-lite",
       "provider": "google_genai",
@@ -10285,8 +10372,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 88.0,
-        "ttft": 2.45
+        "tps": 91.8,
+        "ttft": 2.67
       },
       "name": "gemini-2.5-pro",
       "provider": "google_genai",
@@ -10314,8 +10401,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 67.0,
-        "ttft": 2.04
+        "tps": 86.0,
+        "ttft": 1.64
       },
       "name": "gemini-3-flash-preview",
       "provider": "google_genai",
@@ -10398,8 +10485,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 36.0,
-        "ttft": 1.02
+        "tps": 107.0,
+        "ttft": 0.82
       },
       "name": "gemini-3.1-flash-lite",
       "provider": "google_genai",
@@ -10453,8 +10540,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 56.0,
-        "ttft": 48.34
+        "tps": 77.0,
+        "ttft": 3.12
       },
       "name": "gemini-3.1-pro-preview",
       "provider": "google_genai",
@@ -10511,8 +10598,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 84.5,
-        "ttft": 1.82
+        "tps": 73.0,
+        "ttft": 4.18
       },
       "name": "gemini-3.5-flash",
       "provider": "google_genai",
@@ -10537,8 +10624,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 62.0,
-        "ttft": 1.11
+        "tps": 137.0,
+        "ttft": 1.05
       },
       "name": "gemini-3.5-flash-lite",
       "provider": "google_genai",
@@ -10566,8 +10653,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 106.0,
-        "ttft": 2.06
+        "tps": 110.5,
+        "ttft": 1.74
       },
       "name": "gemini-3.6-flash",
       "provider": "google_genai",
@@ -10595,8 +10682,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 86.0,
-        "ttft": 2.39
+        "tps": 71.0,
+        "ttft": 3.01
       },
       "name": "gemini-3.7-flash",
       "provider": "google_genai",
@@ -10624,8 +10711,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 37.0,
-        "ttft": 2.64
+        "tps": 74.0,
+        "ttft": 2.7
       },
       "name": "gemini-3.8-flash",
       "provider": "google_genai",
@@ -10734,8 +10821,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 24.0,
-        "ttft": 0.86
+        "tps": 20.0,
+        "ttft": 1.09
       },
       "name": "gemma-4-26b-a4b-it",
       "provider": "google_genai",
@@ -10804,8 +10891,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 20.0,
-        "ttft": 0.67
+        "tps": 88.0,
+        "ttft": 0.71
       },
       "name": "gpt-3.5-turbo",
       "provider": "openai",
@@ -10870,8 +10957,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 7.5,
-        "ttft": 1.07
+        "tps": 95.0,
+        "ttft": 0.81
       },
       "name": "gpt-3.5-turbo-16k",
       "provider": "openai",
@@ -10939,8 +11026,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 38.0,
-        "ttft": 0.92
+        "tps": 46.0,
+        "ttft": 0.89
       },
       "name": "gpt-4",
       "provider": "openai",
@@ -10997,8 +11084,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 7.5,
-        "ttft": 1.17
+        "tps": 23.0,
+        "ttft": 1.25
       },
       "name": "gpt-4-turbo",
       "provider": "openai",
@@ -11026,8 +11113,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 7.5,
-        "ttft": 1.17
+        "tps": 23.0,
+        "ttft": 1.25
       },
       "name": "gpt-4-turbo-2024-04-09",
       "provider": "openai",
@@ -11055,8 +11142,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 45.0,
-        "ttft": 0.95
+        "tps": 81.0,
+        "ttft": 1.02
       },
       "name": "gpt-4.1",
       "provider": "openai",
@@ -11084,8 +11171,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 45.0,
-        "ttft": 0.95
+        "tps": 81.0,
+        "ttft": 1.02
       },
       "name": "gpt-4.1-2025-04-14",
       "provider": "openai",
@@ -11110,8 +11197,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 49.0,
-        "ttft": 0.95
+        "tps": 79.0,
+        "ttft": 0.93
       },
       "name": "gpt-4.1-mini",
       "provider": "openai",
@@ -11136,8 +11223,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 49.0,
-        "ttft": 0.95
+        "tps": 79.0,
+        "ttft": 0.93
       },
       "name": "gpt-4.1-mini-2025-04-14",
       "provider": "openai",
@@ -11162,8 +11249,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 69.0,
-        "ttft": 0.97
+        "tps": 83.0,
+        "ttft": 0.83
       },
       "name": "gpt-4.1-nano",
       "provider": "openai",
@@ -11188,8 +11275,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 69.0,
-        "ttft": 0.98
+        "tps": 83.0,
+        "ttft": 0.83
       },
       "name": "gpt-4.1-nano-2025-04-14",
       "provider": "openai",
@@ -11217,8 +11304,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 41.0,
-        "ttft": 0.65
+        "tps": 74.0,
+        "ttft": 0.61
       },
       "name": "gpt-4o",
       "provider": "openai",
@@ -11246,8 +11333,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 70.0,
-        "ttft": 1.33
+        "tps": 44.5,
+        "ttft": 1.1
       },
       "name": "gpt-4o-2024-05-13",
       "provider": "openai",
@@ -11275,8 +11362,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 10.0,
-        "ttft": 2.21
+        "tps": 40.0,
+        "ttft": 2.03
       },
       "name": "gpt-4o-2024-08-06",
       "provider": "openai",
@@ -11304,8 +11391,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 34.0,
-        "ttft": 0.86
+        "tps": 95.0,
+        "ttft": 0.67
       },
       "name": "gpt-4o-2024-11-20",
       "provider": "openai",
@@ -11330,8 +11417,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 58.0,
-        "ttft": 0.53
+        "tps": 79.0,
+        "ttft": 0.54
       },
       "name": "gpt-4o-mini",
       "provider": "openai",
@@ -11356,8 +11443,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 43.0,
-        "ttft": 0.65
+        "tps": 63.0,
+        "ttft": 0.53
       },
       "name": "gpt-4o-mini-2024-07-18",
       "provider": "openai",
@@ -11652,7 +11739,7 @@
       },
       "deployment": {
         "tps": 59.0,
-        "ttft": 3.02
+        "ttft": 5.13
       },
       "name": "gpt-5",
       "provider": "openai",
@@ -11681,7 +11768,7 @@
       },
       "deployment": {
         "tps": 59.0,
-        "ttft": 3.02
+        "ttft": 5.13
       },
       "name": "gpt-5-2025-08-07",
       "provider": "openai",
@@ -11764,8 +11851,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 76.5,
-        "ttft": 4.57
+        "tps": 101.0,
+        "ttft": 3.72
       },
       "name": "gpt-5-mini",
       "provider": "openai",
@@ -11790,8 +11877,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 76.5,
-        "ttft": 4.57
+        "tps": 101.0,
+        "ttft": 3.72
       },
       "name": "gpt-5-mini-2025-08-07",
       "provider": "openai",
@@ -11816,8 +11903,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 84.5,
-        "ttft": 1.57
+        "tps": 62.5,
+        "ttft": 6.93
       },
       "name": "gpt-5-nano",
       "provider": "openai",
@@ -11842,8 +11929,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 84.5,
-        "ttft": 1.57
+        "tps": 62.5,
+        "ttft": 6.93
       },
       "name": "gpt-5-nano-2025-08-07",
       "provider": "openai",
@@ -11871,8 +11958,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 2.0,
-        "ttft": 17.77
+        "tps": 12.0,
+        "ttft": 21.83
       },
       "name": "gpt-5-pro",
       "provider": "openai",
@@ -11900,8 +11987,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 2.0,
-        "ttft": 17.77
+        "tps": 12.0,
+        "ttft": 21.83
       },
       "name": "gpt-5-pro-2025-10-06",
       "provider": "openai",
@@ -11987,8 +12074,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 37.8,
-        "ttft": 1.15
+        "tps": 74.5,
+        "ttft": 0.97
       },
       "name": "gpt-5.1",
       "provider": "openai",
@@ -12016,8 +12103,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 37.8,
-        "ttft": 1.15
+        "tps": 74.5,
+        "ttft": 0.97
       },
       "name": "gpt-5.1-2025-11-13",
       "provider": "openai",
@@ -12158,8 +12245,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 48.0,
-        "ttft": 3.45
+        "tps": 68.0,
+        "ttft": 2.41
       },
       "name": "gpt-5.2",
       "provider": "openai",
@@ -12187,8 +12274,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 48.0,
-        "ttft": 3.45
+        "tps": 68.0,
+        "ttft": 2.41
       },
       "name": "gpt-5.2-2025-12-11",
       "provider": "openai",
@@ -12274,8 +12361,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 15.0,
-        "ttft": 11.3
+        "tps": 19.0,
+        "ttft": 3.71
       },
       "name": "gpt-5.2-pro",
       "provider": "openai",
@@ -12303,8 +12390,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 15.0,
-        "ttft": 11.3
+        "tps": 19.0,
+        "ttft": 3.71
       },
       "name": "gpt-5.2-pro-2025-12-11",
       "provider": "openai",
@@ -12361,8 +12448,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 32.2,
-        "ttft": 2.11
+        "tps": 70.0,
+        "ttft": 2.29
       },
       "name": "gpt-5.3-codex",
       "provider": "openai",
@@ -12390,8 +12477,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 58.0,
-        "ttft": 1.69
+        "tps": 51.0,
+        "ttft": 1.56
       },
       "name": "gpt-5.4",
       "provider": "openai",
@@ -12419,8 +12506,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 58.0,
-        "ttft": 1.69
+        "tps": 51.0,
+        "ttft": 1.56
       },
       "name": "gpt-5.4-2026-03-05",
       "provider": "openai",
@@ -12445,8 +12532,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 71.0,
-        "ttft": 0.8
+        "tps": 106.0,
+        "ttft": 1.04
       },
       "name": "gpt-5.4-mini",
       "provider": "openai",
@@ -12471,8 +12558,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 71.0,
-        "ttft": 0.8
+        "tps": 106.0,
+        "ttft": 1.04
       },
       "name": "gpt-5.4-mini-2026-03-17",
       "provider": "openai",
@@ -12497,8 +12584,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 51.2,
-        "ttft": 1.28
+        "tps": 95.5,
+        "ttft": 1.1
       },
       "name": "gpt-5.4-nano",
       "provider": "openai",
@@ -12523,8 +12610,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 51.2,
-        "ttft": 1.28
+        "tps": 95.5,
+        "ttft": 1.1
       },
       "name": "gpt-5.4-nano-2026-03-17",
       "provider": "openai",
@@ -12552,8 +12639,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 2.0,
-        "ttft": 5.57
+        "tps": 9.0,
+        "ttft": 7.12
       },
       "name": "gpt-5.4-pro",
       "provider": "openai",
@@ -12581,8 +12668,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 2.0,
-        "ttft": 5.57
+        "tps": 9.0,
+        "ttft": 7.12
       },
       "name": "gpt-5.4-pro-2026-03-05",
       "provider": "openai",
@@ -12610,8 +12697,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 47.0,
-        "ttft": 2.16
+        "tps": 96.0,
+        "ttft": 4.03
       },
       "name": "gpt-5.5",
       "provider": "openai",
@@ -12639,8 +12726,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 47.0,
-        "ttft": 2.16
+        "tps": 96.0,
+        "ttft": 4.03
       },
       "name": "gpt-5.5-2026-04-23",
       "provider": "openai",
@@ -12668,8 +12755,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 5.0,
-        "ttft": 3.45
+        "tps": null,
+        "ttft": null
       },
       "name": "gpt-5.5-pro",
       "provider": "openai",
@@ -12697,8 +12784,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 5.0,
-        "ttft": 3.45
+        "tps": null,
+        "ttft": null
       },
       "name": "gpt-5.5-pro-2026-04-23",
       "provider": "openai",
@@ -12726,8 +12813,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 55.0,
-        "ttft": 1.99
+        "tps": 60.0,
+        "ttft": 2.0
       },
       "name": "gpt-5.6-luna",
       "provider": "openai",
@@ -12755,8 +12842,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 44.0,
-        "ttft": 2.98
+        "tps": 71.0,
+        "ttft": 3.26
       },
       "name": "gpt-5.6-sol",
       "provider": "openai",
@@ -12784,8 +12871,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 52.0,
-        "ttft": 2.26
+        "tps": 75.0,
+        "ttft": 2.15
       },
       "name": "gpt-5.6-terra",
       "provider": "openai",
@@ -12813,8 +12900,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 35.0,
-        "ttft": 4.2
+        "tps": 35.8,
+        "ttft": 2.94
       },
       "name": "gpt-6-astra",
       "provider": "openai",
@@ -12842,8 +12929,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 68.0,
-        "ttft": 2.17
+        "tps": 65.0,
+        "ttft": 2.6
       },
       "name": "gpt-6-luna",
       "provider": "openai",
@@ -12871,8 +12958,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 60.0,
-        "ttft": 2.04
+        "tps": 74.0,
+        "ttft": 1.93
       },
       "name": "gpt-6-sol",
       "provider": "openai",
@@ -12900,8 +12987,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 46.0,
-        "ttft": 3.45
+        "tps": 57.0,
+        "ttft": 4.07
       },
       "name": "gpt-6.1-sol",
       "provider": "openai",
@@ -12929,8 +13016,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 6.0,
-        "ttft": 1.09
+        "tps": 111.5,
+        "ttft": 0.96
       },
       "name": "o1",
       "provider": "openai",
@@ -12958,8 +13045,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 6.0,
-        "ttft": 1.09
+        "tps": 111.5,
+        "ttft": 0.96
       },
       "name": "o1-2024-12-17",
       "provider": "openai",
@@ -12984,8 +13071,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 92.0,
-        "ttft": 3.06
+        "tps": 142.0,
+        "ttft": 4.49
       },
       "name": "o3-mini",
       "provider": "openai",
@@ -13010,8 +13097,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 92.0,
-        "ttft": 3.06
+        "tps": 142.0,
+        "ttft": 4.49
       },
       "name": "o3-mini-2025-01-31",
       "provider": "openai",
@@ -13036,8 +13123,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 92.0,
-        "ttft": 2.93
+        "tps": 93.0,
+        "ttft": 3.4
       },
       "name": "o4-mini",
       "provider": "openai",
@@ -13062,8 +13149,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 92.0,
-        "ttft": 2.93
+        "tps": 93.0,
+        "ttft": 3.4
       },
       "name": "o4-mini-2025-04-16",
       "provider": "openai",
@@ -13140,8 +13227,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 60.0,
-        "ttft": 0.61
+        "tps": 79.0,
+        "ttft": 0.5
       },
       "name": "claude-haiku-4-5",
       "provider": "anthropic",
@@ -13165,8 +13252,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 44.0,
-        "ttft": 1.18
+        "tps": 42.0,
+        "ttft": 1.15
       },
       "name": "claude-sonnet-4-5",
       "provider": "anthropic",
@@ -13190,8 +13277,8 @@
         "type": "moe"
       },
       "deployment": {
-        "tps": 33.0,
-        "ttft": 1.24
+        "tps": 30.5,
+        "ttft": 5.03
       },
       "name": "claude-opus-4-5",
       "provider": "anthropic",
@@ -13212,8 +13299,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 20.0,
-        "ttft": 0.67
+        "tps": 88.0,
+        "ttft": 0.71
       },
       "name": "gpt-35-turbo",
       "provider": "openai",
@@ -13278,8 +13365,8 @@
         "type": "dense"
       },
       "deployment": {
-        "tps": 7.5,
-        "ttft": 1.07
+        "tps": 95.0,
+        "ttft": 0.81
       },
       "name": "gpt-35-turbo-16k",
       "provider": "openai",
@@ -13381,8 +13468,8 @@
     }
   },
   "schema_version": "1",
-  "upstream_commit": "c739e8d61f6a12a85864adb698ab85623fe70f3c",
-  "upstream_version": "0.11.2",
+  "upstream_commit": "d0b76e382442e63df688e9c37016f596223c8aff",
+  "upstream_version": "0.11.3",
   "video": {
     "hardware_configurations": {
       "dgx_h200": {

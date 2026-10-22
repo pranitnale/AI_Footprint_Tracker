@@ -33,9 +33,9 @@ const resolve = (modelId: string | null, provider: string | null) =>
     catalog,
   );
 
-// Owner decision of 13 October 2026, computed from the EcoLogits 0.11.2 catalog.
+// Owner decision of 13 October 2026, computed from the EcoLogits 0.11.3 catalog.
 const TODAY: Record<string, string> = {
-  "claude-haiku": "anthropic/claude-haiku-4-5",
+  "claude-haiku": "anthropic/claude-haiku-5-5",
   "claude-sonnet": "anthropic/claude-sonnet-5-5",
   "claude-opus": "anthropic/claude-opus-5-5",
   "claude-fable": "anthropic/claude-fable-5-1",
@@ -86,7 +86,7 @@ test("VS1 the build configuration holds the variant stand-ins the catalog gives"
       assert.ok(ids.includes(id), id);
 });
 
-// Owner decision of 14 October 2026, computed from the EcoLogits 0.11.2 catalog: [registry id,
+// Owner decision of 14 October 2026, computed from the EcoLogits 0.11.3 catalog: [registry id,
 // record, basis]. Anthropic's catalog has no mini, nano or lite record, so Claude Haiku, its
 // small model, stands in by kind; Google's only image records are the stand-ins for images.
 const VARIANT = "model_variant_stand_in";
@@ -100,8 +100,8 @@ const TODAY_VARIANTS: [string, string, string][] = [
   ["perplexity-gpt-nano-unlisted", "openai/gpt-5.4-nano", VARIANT],
   ["chatgpt-gpt-codex-unlisted", "openai/gpt-5.3-codex", VARIANT],
   ["perplexity-gpt-codex-unlisted", "openai/gpt-5.3-codex", VARIANT],
-  ["claude-small-unlisted", "anthropic/claude-haiku-4-5", KIND],
-  ["perplexity-claude-small-unlisted", "anthropic/claude-haiku-4-5", KIND],
+  ["claude-small-unlisted", "anthropic/claude-haiku-5-5", KIND],
+  ["perplexity-claude-small-unlisted", "anthropic/claude-haiku-5-5", KIND],
   [
     "gemini-pro-image-unlisted",
     "google_genai/gemini-3-pro-image-preview",
@@ -348,7 +348,7 @@ test("FS4 a family id is a model override with the family basis; a label without
     selection: "model_override",
     profile: {
       provider: "anthropic",
-      model_name: "claude-haiku-4-5",
+      model_name: "claude-haiku-5-5",
       workload: "text",
     },
     basis: "model_family_stand_in",
@@ -370,7 +370,8 @@ test("FS4 a family id is a model override with the family basis; a label without
 });
 
 test("FS5 the live Haiku 5.5 chat of 13 October no longer gets the Opus 5.5 figure", () => {
-  // 19,724 output tokens on claude.ai's claude-haiku-5-5, which EcoLogits 0.11.2 lacks.
+  // 19,724 output tokens on claude.ai's claude-haiku-5-5, which EcoLogits 0.11.2 lacked; an unknown
+  // Haiku now uses the Haiku 5.5 record of 0.11.3.
   const midpointWh = (modelId: string) => {
     const resolution = resolve(modelId, "anthropic");
     assert.equal(resolution.kind, "upstream");

@@ -37,7 +37,8 @@ const applications = {
     // Streams large saved conversations without holding the whole body (reviewed 22 Sep 2026).
     "@streamparser/json",
   ],
-  web: ["@footprint/ui", "react", "react-dom"],
+  // The admin site reads the organization API's contract types and schemas (reviewed 22 Oct 2026).
+  web: ["@footprint/ui", "@footprint/contracts", "react", "react-dom"],
 };
 const browserClients = new Set([
   "entrypoints/background.ts",
@@ -48,6 +49,14 @@ const browserClients = new Set([
   "lib/file-relay.ts",
   "lib/dashboard/client.ts",
   "lib/offscreen-entry.ts",
+  // Reviewed 22 Oct 2026: presentation-only browser calls that touch no ledger or capture state.
+  "lib/dash/Settings.tsx", // storage.onChanged, to show settings changed in another view
+  "lib/dash/Tracking.tsx", // runtime.getManifest, for the version shown in Settings
+  "lib/popup/last-view.ts", // storage.local, the popup's remembered view
+  "lib/ui/navigation.ts", // runtime.getURL, links between extension pages
+  "lib/ui/preferences.ts", // storage.local, display preferences
+  "lib/ui/theme.ts", // storage.onChanged, the Appearance choice
+  "lib/welcome/Welcome.tsx", // tabs.update, the tour's close and site links
 ]);
 const estimatorClients = new Set([
   "lib/runtime-composition.ts",
@@ -59,7 +68,26 @@ const estimatorClients = new Set([
   "lib/method-service.ts",
   // This standalone compatibility client uses the injected callback in the production composition.
   "lib/company.ts",
+  // Reviewed 22 Oct 2026: pure aggregation of saved figures, no estimation.
+  "lib/server-summary.ts", // emptyHistorySummary
+  "lib/usage-breakdown.ts", // HistoryAccumulator
 ]);
+// Read-only JSON data an application module may import from outside its folder (reviewed 22 Oct 2026).
+const sharedData = (kind, name, local, target) =>
+  kind === "apps" &&
+  (/^(config\/source-repository\.json|THIRD-PARTY-INVENTORY\.json)$/.test(target) ||
+    (name === "extension" &&
+      ["lib/claude-token-factor.ts", "lib/estimate-details.ts"].includes(local) &&
+      target === "config/estimation.media.json") ||
+    (name === "web" &&
+      local === "src/site/pages/WebDownloads.tsx" &&
+      target === "apps/extension/package.json") ||
+    // The admin site reuses the extension's figure modules, which use no extension API.
+    (name === "web" &&
+      local === "src/admin/figures.ts" &&
+      /^apps\/extension\/lib\/(ui\/(usage-figures|components|figure-math|model-names|dash-periods)|dashboard\/types)$/.test(
+        target,
+      )));
 const countingFiles = new Set([
   "lib/count.worker.ts",
   "lib/file.worker.ts",
@@ -300,7 +328,8 @@ export function checkModule(file, source, root = repositoryRoot) {
           name === "extension" &&
           local === "lib/estimation/config.ts" &&
           /^config\/estimation\.(build|mappings|media)\.json$/.test(target);
-        if (!buildData) fail(`relative import escapes its module: ${raw}`);
+        if (!buildData && !sharedData(kind, name, local, target))
+          fail(`relative import escapes its module: ${raw}`);
       }
       if (/(^|\/)(test|tests|tools|\.test-runtime|upstream)\//.test(target))
         fail(`runtime imports developer or upstream source: ${raw}`);

@@ -18,6 +18,8 @@ import { largeProfile } from "./perf/large-profile";
 // Answers of the code before the speed work of 15 October 2026 (commit 4365c75), made by
 // test/perf/parity-snapshot.ts on that code. Made again on 20 October 2026 on 71685720 with the
 // removed image benchmark references left out: only the dashboard hashes changed, no figure.
+// Made again on 22 October 2026 for EcoLogits 0.11.3: request, attempt, chat and prompt counts are
+// unchanged; only the electricity, carbon and water figures and their hashes moved with the catalog.
 const golden: Record<string, Record<string, ParityEntry>> = JSON.parse(
   readFileSync(new URL("./fixtures/summary-parity.json", import.meta.url), "utf8"),
 );

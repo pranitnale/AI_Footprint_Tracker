@@ -2,23 +2,24 @@ import type { ComponentResult, EstimationEnvelope } from "@footprint/contracts";
 
 /**
  * The smaller EcoLogits text record each provider's replies are compared with in Details. Chosen on
- * 12 October 2026 in docs/methodology/EVERYDAY-COMPARISONS-2026-10-12.md. Perplexity has no record of
- * its own, so its replies follow the provider of their stand-in record.
+ * 12 October 2026 in docs/methodology/EVERYDAY-COMPARISONS-2026-10-12.md; Claude moved from Haiku 4.5
+ * to Haiku 5.5 with EcoLogits 0.11.3 (22 October 2026). Perplexity has no record of its own, so its
+ * replies follow the provider of their stand-in record.
  */
 export const SMALLER_RECORDS: Readonly<Record<string, string>> = {
   openai: "gpt-6-luna",
-  anthropic: "claude-haiku-4-5",
+  anthropic: "claude-haiku-5-5",
   google_genai: "gemini-3.5-flash-lite",
 };
 export const SMALLER_NAMES: Readonly<Record<string, string>> = {
   "gpt-6-luna": "GPT-6 Luna",
-  "claude-haiku-4-5": "Claude Haiku 4.5",
+  "claude-haiku-5-5": "Claude Haiku 5.5",
   "gemini-3.5-flash-lite": "Gemini 3.5 Flash-Lite",
 };
 
 /**
  * Owner, 13 October 2026: a reply already written by the smallest family of its provider is not
- * compared, whatever its version, because comparing Claude Haiku 5.5 with Haiku 4.5, for example,
+ * compared, whatever its version, because comparing Claude Haiku 6 with Haiku 5.5, for example,
  * would suggest a saving the person cannot make. The observed model is checked as well as the
  * record: an unknown version carries its family in its unlisted id (`claude-haiku-unlisted`,
  * `chatgpt-gpt-luna-unlisted`, `gemini-flash-lite-unlisted`), and a stand-in record or a

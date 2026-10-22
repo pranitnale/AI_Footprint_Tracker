@@ -16,7 +16,7 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
       {bar}
       <header style={{ "background": "#0F2A1C", "color": "#F4F5EF", "padding": "clamp(36px, 5vw, 64px) clamp(16px, 4vw, 56px) clamp(32px, 4vw, 48px)", "position": "relative", "overflow": "hidden" }}><div style={{ "position": "absolute", "right": "-120px", "top": "-140px", "width": "520px", "height": "520px", "borderRadius": "50%", "border": "64px solid rgba(185,226,124,.06)" }} />
         <div style={{ "maxWidth": "1160px", "margin": "0 auto", "display": "flex", "flexDirection": "column", "gap": "22px", "position": "relative" }}>
-          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 21 October 2026 · EcoLogits 0.11.2</span>
+          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 22 October 2026 · EcoLogits 0.11.3</span>
           <h1 className="mth-dsp" style={{ "margin": "0", "fontSize": "clamp(40px, 6vw, 64px)", "lineHeight": "1.04", "fontWeight": "700", "letterSpacing": "-0.02em", "maxWidth": "900px" }}>How we estimate the footprint of your AI chats</h1>
           <p style={{ "margin": "0", "fontSize": "20px", "lineHeight": "31px", "color": "#DDE8DF", "maxWidth": "760px" }}>The tracker counts the text that you and the AI write. It finds the model that answered. Then it uses EcoLogits, an open-source method, to calculate electricity, carbon and water. Plain words come first. The equations come after.</p>
           <div style={{ "padding": "22px 24px", "borderRadius": "18px", "background": "rgba(185,226,124,.10)", "border": "1px solid rgba(185,226,124,.40)", "display": "flex", "flexWrap": "wrap", "gap": "18px 32px", "alignItems": "center", "justifyContent": "space-between" }}>
@@ -25,7 +25,7 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "22px", "height": "22px" }}><path d="M12 3 4 7v5c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V7l-8-4z" /><path d="m9 12 2 2 4-4" /></svg></span>
               <div style={{ "display": "flex", "flexDirection": "column", "gap": "6px" }}>
                 <b className="mth-dsp" style={{ "fontSize": "22px", "lineHeight": "28px", "color": "#F4F5EF" }}>Built on the EcoLogits methodology</b>
-                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations and parameters of EcoLogits 0.11.2, an open-source project. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
+                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations and parameters of EcoLogits 0.11.3, an open-source project. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
             <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "10px" }}>
               <a href="https://ecologits.ai" target="_blank" rel="noopener noreferrer" style={{ "height": "42px", "padding": "0 16px", "borderRadius": "12px", "display": "inline-flex", "alignItems": "center", "gap": "8px", "fontSize": "15px", "fontWeight": "600", "textDecoration": "none", "background": "#B9E27C", "color": "#0F2A1C" }}>ecologits.ai
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a>
@@ -411,9 +411,9 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
                     <span className="mth-scn">5</span>
                     <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                       <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 5 · EcoLogits code on GitHub</span>
-                      <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.2: the equations and constants</span>
+                      <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>impacts/llm.py, release 0.11.3: the equations and constants</span>
                       <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                      <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                      <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                         <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                     <button className="mth-sclose" type="button" onClick={() => pick("k6")} aria-label="Close the source">×</button></div></>)}
                 <div className="mth-why">
@@ -458,9 +458,9 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
                     <span className="mth-scn">6</span>
                     <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                       <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 6 · EcoLogits code on GitHub</span>
-                      <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>tracers/utils.py, release 0.11.2: location, PUE and WUE for each provider</span>
+                      <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>tracers/utils.py, release 0.11.3: location, PUE and WUE for each provider</span>
                       <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                      <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
+                      <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the code on GitHub
                         <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                     <button className="mth-sclose" type="button" onClick={() => pick("k8")} aria-label="Close the source">×</button></div></>)}
                 <div className="mth-why">
@@ -676,7 +676,7 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
             <p className="mth-p">The tracker counts in your browser. It keeps numbers only: token counts, model names and times. It never keeps your messages, the AI's replies or the contents of your files. If you connect to an organization, the tracker sends only these numbers, never chat titles. The organization server keeps the address of your browser connection for 30 days, for the administrator's network view.</p></section>
           <section id="m-sources" className="mth-sec">
             <h2 className="mth-dsp mth-h2">Sources</h2>
-            <p className="mth-p">Each number in the text points to one of these sources. All links were checked on 11 October 2026.</p>
+            <p className="mth-p">Each number in the text points to one of these sources. All links were checked on 22 October 2026.</p>
             <div style={{ "display": "grid", "gridTemplateColumns": "repeat(auto-fit, minmax(min(360px, 100%), 1fr))", "gap": "6px 12px" }}>
               <div className="mth-ref" id="src-1" style={{ background: source(1) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>1</span>
@@ -706,14 +706,14 @@ export function MethodologyTracker({ links, bar, credit, reference }: { links: M
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>5</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits code on GitHub</span>
-                  <span>impacts/llm.py, release 0.11.2: the equations and constants</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/impacts/llm.py</a></div></div>
+                  <span>impacts/llm.py, release 0.11.3: the equations and constants</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/impacts/llm.py</a></div></div>
               <div className="mth-ref" id="src-6" style={{ background: source(6) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>6</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits code on GitHub</span>
-                  <span>tracers/utils.py, release 0.11.2: location, PUE and WUE for each provider</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.2/ecologits/tracers/utils.py</a></div></div>
+                  <span>tracers/utils.py, release 0.11.3: location, PUE and WUE for each provider</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/tracers/utils.py</a></div></div>
               <div className="mth-ref" id="src-10" style={{ background: source(10) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>10</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>

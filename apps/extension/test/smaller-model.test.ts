@@ -55,7 +55,7 @@ test("the change is the smaller record minus the actual record, per reply, in Wh
   assert.ok(change);
   const expected = { low: 0, high: 0 };
   for (const [provider, actual, small, tokens] of [
-    ["anthropic", "claude-opus-5-5", "claude-haiku-4-5", 1000],
+    ["anthropic", "claude-opus-5-5", "claude-haiku-5-5", 1000],
     ["openai", "gpt-5.6-sol", "gpt-6-luna", 400],
   ] as const) {
     const a = endpoints(provider, actual, tokens),
@@ -66,7 +66,7 @@ test("the change is the smaller record minus the actual record, per reply, in Wh
   assert.ok(Math.abs(change.minimum - expected.low) < 1e-9);
   assert.ok(Math.abs(change.maximum - expected.high) < 1e-9);
   assert.ok(Math.abs(change.midpoint - (expected.low + expected.high) / 2) < 1e-9);
-  assert.deepEqual(change.records, ["claude-haiku-4-5", "gpt-6-luna"]);
+  assert.deepEqual(change.records, ["claude-haiku-5-5", "gpt-6-luna"]);
   assert.equal(change.replies, 2);
   assert.equal(change.unchanged, 0);
 });
@@ -83,18 +83,18 @@ test("replies already on a small record keep their figure, and nothing to shrink
   assert.equal(mixed.replies, 2);
   // Mistral has no smaller record chosen; an unknown figure is not compared at all.
   assert.equal(mixed.unchanged, 1);
-  assert.deepEqual(mixed.records, ["claude-haiku-4-5"]);
+  assert.deepEqual(mixed.records, ["claude-haiku-5-5"]);
   assert.equal(await smallerModelChange([], alternative), null);
 });
 
 test("the card adds the change to the figure Details shows, at the chosen scenario", () => {
-  const smaller: SmallerModel = { minimum: -2, midpoint: -6, maximum: -10, records: ["claude-haiku-4-5"], replies: 3, unchanged: 1 };
+  const smaller: SmallerModel = { minimum: -2, midpoint: -6, maximum: -10, records: ["claude-haiku-5-5"], replies: 3, unchanged: 1 };
   const energy = { value: "0.009", unit: "kWh", value_kind: "midpoint_sum", scenario_low: "0.003", scenario_high: "0.015" };
   const card = smallerModelCard({ energy, scenario: "midpoint" }, smaller)!;
   assert.equal(card.thisChat, "9 Wh");
   assert.equal(card.smaller, "≈ 3 Wh");
   assert.ok(Math.abs(card.share - 3 / 9) < 1e-12);
-  assert.match(card.note, /^Compared with Claude Haiku 4\.5\. Assumes the same answer length/);
+  assert.match(card.note, /^Compared with Claude Haiku 5\.5\. Assumes the same answer length/);
   assert.match(card.note, /1 reply keeps its own figure\.$/);
   assert.equal(smallerModelCard({ energy, scenario: "minimum" }, smaller)!.smaller, "≈ 1 Wh");
   assert.equal(smallerModelCard({ energy, scenario: "maximum" }, smaller)!.smaller, "≈ 5 Wh");
@@ -111,7 +111,7 @@ test("a reply faster than modelled shows the smaller record's own figure, not ze
   // Seen live on 13 October 2026: Claude Opus 5.5, 128 tokens out, counted with a measured
   // latency shorter than the modelled one. The old modelled difference exceeded the counted
   // minimum, so the card showed "≈ 0 kWh" at Minimum and about 0.9 mWh at Midpoint.
-  const haiku = endpoints("anthropic", "claude-haiku-4-5", 128);
+  const haiku = endpoints("anthropic", "claude-haiku-5-5", 128);
   const shown = (kwh: number) => formatMetric(kwh, "kWh");
   for (const latency of [3, 5]) {
     const own = counted(endpoints("anthropic", "claude-opus-5-5", 128, latency));
@@ -215,7 +215,7 @@ test("a saved Claude chat gets the smaller-model change in its comparison reply"
     const smaller = result.smallerModel;
     assert.ok(smaller, "a chat on the Claude flagship stand-in can shrink");
     // Claude names no model in this history, so each reply uses the provider stand-in.
-    assert.deepEqual(smaller.records, ["claude-haiku-4-5"]);
+    assert.deepEqual(smaller.records, ["claude-haiku-5-5"]);
     // Three saved replies and one live reply.
     assert.equal(smaller.replies, 4);
     assert.equal(smaller.unchanged, 0);
@@ -231,7 +231,7 @@ test("a saved Claude chat gets the smaller-model change in its comparison reply"
 
 test("a reply from the smallest family of any version is not compared", async () => {
   // Owner, 13 Oct 2026: Haiku, Luna and Flash are the smallest families; comparing Claude Haiku 5.5
-  // (unlisted, so estimated with a stand-in record) with Haiku 4.5 suggested a saving that does not exist.
+  // (then unlisted, so estimated with a stand-in record) with Haiku 4.5 suggested a saving that does not exist.
   const observed = (envelope: EstimationEnvelope, id: string) => {
     (envelope.components[0] as any).selection.observed_model_id = id;
     return envelope;
@@ -254,11 +254,11 @@ test("a reply from the smallest family of any version is not compared", async ()
   );
   assert.ok(mixed);
   assert.equal(mixed.replies, 2);
-  assert.deepEqual(mixed.records, ["claude-haiku-4-5"]);
+  assert.deepEqual(mixed.records, ["claude-haiku-5-5"]);
 });
 
 test("a family's unlisted id of the smallest families is not compared, whatever record stands in", async () => {
-  // Owner, 13 Oct 2026: an unknown Haiku 5.5 becomes claude-haiku-unlisted and uses the newest Haiku
+  // Owner, 13 Oct 2026: an unknown Haiku version becomes claude-haiku-unlisted and uses the newest Haiku
   // record. The observed id alone must hide the comparison, also if a larger record stood in.
   const observed = (envelope: EstimationEnvelope, id: string) => {
     (envelope.components[0] as any).selection.observed_model_id = id;
@@ -283,5 +283,5 @@ test("a family's unlisted id of the smallest families is not compared, whatever 
     alternative,
   );
   assert.ok(opus);
-  assert.deepEqual(opus.records, ["claude-haiku-4-5"]);
+  assert.deepEqual(opus.records, ["claude-haiku-5-5"]);
 });

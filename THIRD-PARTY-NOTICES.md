@@ -53,7 +53,7 @@ These Python packages run in the organization server. Container base images and 
 | cffi | 2.1.1 | MIT-0 |
 | click | 8.5.0 | BSD-3-Clause |
 | cryptography | 50.0.1 | Apache-2.0 OR BSD-3-Clause |
-| ecologits | 0.11.2 | MPL-2.0 |
+| ecologits | 0.11.3 | MPL-2.0 |
 | fastapi | 0.141.1 | MIT |
 | greenlet | 3.5.5 | MIT AND PSF-2.0 |
 | h11 | 0.16.0 | MIT |
@@ -102,19 +102,19 @@ Development tools and optional packages that the locks contain but that no brows
 
 | Data | Version | Licence | Shipped in | Source |
 | --- | --- | --- | --- | --- |
-| ADEME Base Empreinte electricity factors | As bundled in EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://base-empreinte.ademe.fr/ |
-| BoaviztAPI server impact data | As bundled in EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://github.com/Boavizta/boaviztapi |
+| ADEME Base Empreinte electricity factors | As bundled in EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://base-empreinte.ademe.fr/ |
+| BoaviztAPI server impact data | As bundled in EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://github.com/Boavizta/boaviztapi |
 | Bricolage Grotesque font files | @fontsource-variable/bricolage-grotesque 5.3.0 | OFL-1.1 | Browser extension, Website | https://github.com/ateliertriay/bricolage |
-| EcoLogits model, provider and electricity data | EcoLogits 0.11.2 | MPL-2.0 | Browser extension, Server | https://github.com/mlco2/ecologits |
+| EcoLogits model, provider and electricity data | EcoLogits 0.11.3 | MPL-2.0 | Browser extension, Server | https://github.com/mlco2/ecologits |
 | EcoLogits reference coefficients for the archived Original method | EcoLogits commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35 | MPL-2.0 | Browser extension | https://github.com/mlco2/ecologits/tree/886d1ebfadb51a2d6407fcea6d9778c997c85c35 |
 | Instrument Sans font files | @fontsource-variable/instrument-sans 5.3.0 | OFL-1.1 | Browser extension, Website | https://github.com/Instrument/instrument-sans |
-| Jegham et al. video generation figures | arXiv:2607.04553, as cited by EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://arxiv.org/abs/2607.04553 |
-| Lees-Perasso et al. GPU life-cycle study | 2026, as cited by EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html |
-| ML.ENERGY Leaderboard measurements behind the EcoLogits regressions | As used by EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://ml.energy/leaderboard/ |
-| OpenRouter model statistics | As bundled in EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://openrouter.ai |
-| Our World in Data electricity mix | As bundled in EcoLogits 0.11.2 | CC-BY-4.0 | Browser extension, Server | https://ourworldindata.org/electricity-mix |
-| Schneider et al. TPU embodied carbon figures | arXiv:2502.01671, as cited by EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://arxiv.org/abs/2502.01671 |
-| World Resources Institute electricity water data | As bundled in EcoLogits 0.11.2 | Unverified | Browser extension, Server | https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity |
+| Jegham et al. video generation figures | arXiv:2607.04553, as cited by EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://arxiv.org/abs/2607.04553 |
+| Lees-Perasso et al. GPU life-cycle study | 2026, as cited by EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html |
+| ML.ENERGY Leaderboard measurements behind the EcoLogits regressions | As used by EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://ml.energy/leaderboard/ |
+| OpenRouter model statistics | As bundled in EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://openrouter.ai |
+| Our World in Data electricity mix | As bundled in EcoLogits 0.11.3 | CC-BY-4.0 | Browser extension, Server | https://ourworldindata.org/electricity-mix |
+| Schneider et al. TPU embodied carbon figures | arXiv:2502.01671, as cited by EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://arxiv.org/abs/2502.01671 |
+| World Resources Institute electricity water data | As bundled in EcoLogits 0.11.3 | Unverified | Browser extension, Server | https://www.wri.org/research/guidance-calculating-water-use-embedded-purchased-electricity |
 | cl100k_base BPE ranks | gpt-tokenizer 4.0.0 (asset sha256 b56372fb0b95dbd370f9de6f44b6c15006a8a36980fbc6c0568a0108971aea45) | MIT | Browser extension | https://github.com/niieani/gpt-tokenizer |
 | o200k_base BPE ranks | gpt-tokenizer 4.0.0 (asset sha256 4cd35a52f4ece645422670151ccbdbd6afd2bcb47b83efd13e47e5d8942aecb4) | MIT | Browser extension | https://github.com/niieani/gpt-tokenizer |
 

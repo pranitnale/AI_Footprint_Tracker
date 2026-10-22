@@ -5,7 +5,7 @@
     "ecologits"
   ],
   "ecologits_fallback": {
-    "policy_version": "pro-reasoning-2026-10-14",
+    "policy_version": "ecologits-0-11-3-2026-10-22",
     "review_date": "2026-10-14",
     "provider_defaults": {
       "openai": {
@@ -236,7 +236,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-haiku-4-5",
+          "model_name": "claude-haiku-5-5",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -281,7 +281,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-haiku-4-5",
+          "model_name": "claude-haiku-5-5",
           "workload": "text"
         },
         "basis": "model_kind_stand_in"
@@ -452,7 +452,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-haiku-4-5",
+          "model_name": "claude-haiku-5-5",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -488,7 +488,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-haiku-4-5",
+          "model_name": "claude-haiku-5-5",
           "workload": "text"
         },
         "basis": "model_kind_stand_in"

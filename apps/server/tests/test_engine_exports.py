@@ -143,7 +143,7 @@ def test_mixed_live_and_history_records_keep_raw_originals_and_engine_identities
                 else:
                     assert row["selected_profile_provider"] == "openai"
                     assert row["selected_profile_model_name"] == "gpt-5.5"
-                    assert row["source_version"] == "0.11.2"
+                    assert row["source_version"] == "0.11.3"
                     metric = json.loads(row["metrics_json"])["energy"]
                     assert metric["value_kind"] == "midpoint"
                     assert metric["interval_kind"] == "upstream_approximation"

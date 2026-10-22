@@ -1,7 +1,7 @@
-EcoLogits 0.11.2
+EcoLogits 0.11.3
 
-Requested core commit (not independently attested): c739e8d61f6a12a85864adb698ab85623fe70f3c
-Requested catalog commit (not independently attested): c739e8d61f6a12a85864adb698ab85623fe70f3c
+Requested core commit (not independently attested): d0b76e382442e63df688e9c37016f596223c8aff
+Requested catalog commit (not independently attested): d0b76e382442e63df688e9c37016f596223c8aff
 Release classification: release_candidate
 
 This package includes an independent TypeScript port of EcoLogits. EcoLogits is developed by its contributors and is part of CodeCarbon.
@@ -48,4 +48,4 @@ Citation metadata reproduced from the candidate CITATION.cff:
 
 License SHA256: 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5
 Citation SHA256: 537d1c9205a09c870eeee1e104988a8a6de9c3f43e319ba55dbe098a5393beaf
-Dependency metadata changes: 1
+Dependency metadata changes: 2

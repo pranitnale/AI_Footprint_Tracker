@@ -421,9 +421,10 @@ test("D3 video G3: Gemini Omni stands in as veo-3.1 at the stored size and 10 s 
   assert.equal(storyboard.selection?.basis, "model_not_named");
   assert.equal(storyboard.selection?.profile?.model_name, "gemini-3.8-flash");
   assert.equal(storyboard.inputs.output_tokens, "954");
-  // 3.4 to 5.8 Wh in the reference (EP2, own calculation).
-  assert.equal(Math.round(low(storyboard.metrics.energy) * 1e4) / 10, 3.4);
-  assert.equal(Math.round(high(storyboard.metrics.energy) * 1e4) / 10, 5.8);
+  // 3.1 to 5.5 Wh with EcoLogits 0.11.3, whose Gemini 3.8 Flash speeds changed; 3.4 to 5.8 Wh in
+  // the reference made with 0.11.2 (EP2, own calculation).
+  assert.equal(Math.round(low(storyboard.metrics.energy) * 1e4) / 10, 3.1);
+  assert.equal(Math.round(high(storyboard.metrics.energy) * 1e4) / 10, 5.5);
   // Ranges add endpoint by endpoint.
   close(
     String(low(result.metrics.energy)),
@@ -738,6 +739,9 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   // 20 October 2026. They were a reference outside the totals, and estimates keep naming the
   // retired data's identity, so every figure and input hash is unchanged; only
   // image_references, which held a GPU energy reference here, is now empty.
+  // Pinned again on 22 October 2026 for EcoLogits 0.11.3: both input hashes name the catalog and
+  // policy, and the totals include 120 GPT-5.5 text tokens, whose speeds changed. The image
+  // component and the Original figures are the same as before.
   const input = live("chatgpt", "chatgpt-gpt-5-5", "120", {
     text_components: [],
     media: [
@@ -801,14 +805,14 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   const result = await estimate(observed);
   assert.equal(
     result.input_hash,
-    "06416eb783fbf84e97091749030c8e9b546fee61051e1f53cda0955fea6dbf8c",
+    "2150c0f0dfef18dc0960a3a318a9f65fb52962ead4c5c62f600aaec811b33126",
   );
   assert.deepEqual(figures(result.metrics), {
-    energy: ["0.007793041258604229", "0.00751753604348263", "0.008068546473725829"],
-    carbon: ["2.995645059807466", "2.8897408551147232", "3.101549264500209"],
+    energy: ["0.007807211471370187", "0.0075317062562485874", "0.008082716686491787"],
+    carbon: ["3.0010920895947004", "2.8951878849019574", "3.106996294287443"],
     water_direct: none,
     water_upstream: none,
-    water_total: ["0.02810378492286248", "0.027110239649076627", "0.029097330196648334"],
+    water_total: ["0.02815488648881993", "0.027161341215034076", "0.029148431762605783"],
   });
   assert.deepEqual(figures(component(result.components, "image_0").metrics), {
     energy: ["0.006976799999999999", null, null],
@@ -824,7 +828,7 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   EstimationEnvelopeSchema.parse(original);
   assert.equal(
     original.input_hash,
-    "3bfa6a3e950cf1eb66299a788cd39e2ce67bc5e830f3bdc46930b99f78921e05",
+    "ca98a045f25c01c414e8894da4f060cacc0c276c31d56710dc4bc08a9b1e6ef1",
   );
   assert.deepEqual(figures(original.metrics), {
     energy: ["0.000093361070985012", null, null],

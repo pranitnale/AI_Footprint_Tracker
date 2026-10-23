@@ -251,7 +251,7 @@ class Service:
         """
         The stored identity of this person in the organization, or None. Rows are keyed by
         email_identity since migration 0014; an erased member keeps a row under the exact address
-        it was created with, so that key still blocks the same address from joining again.
+        it was created with until the person joins again as a new member (member()).
         """
         identity = get(s, "email", self.secrets.keyed("email:" + company.id, email_identity(email)), company.id)
         if identity:
@@ -343,9 +343,15 @@ class Service:
         identity = self.email_record(s, company, email)
         if identity:
             member = get(s, "member", identity.owner, company.id)
-            if not member or member.data["status"] != "active":
+            if member and member.data["status"] == "active":
+                return member
+            # A suspended member stays suspended until an administrator reactivates them.
+            if member and member.data["status"] != "deleted":
                 raise Problem("identity_unavailable", 403)
-            return member
+            # A person whose records were erased may join again, as a new member with nothing
+            # of the old one (owner decision of 22 Oct 2026). The address moves to them.
+            s.delete(identity)
+            s.flush()
         if (
             s.scalar(
                 select(func.count())
@@ -1103,19 +1109,24 @@ class Service:
         company = self.challenge_company(s, challenge)
         email = self.secrets.decrypt(challenge.data["email"])
         identity = self.email_record(s, company, email)
-        if identity:
-            member = get(s, "member", identity.owner, company.id)
-            if not member or member.data["status"] != "active":
-                raise Problem("member_unavailable", 403)
-        else:
+        member = get(s, "member", identity.owner, company.id) if identity else None
+        if member and member.data["status"] == "suspended":
+            raise Problem("member_unavailable", 403)
+        if not member or member.data["status"] != "active":
+            # A new address, or a person whose records were erased joining again (22 Oct 2026).
             member = self.member(s, company, email)
         resume = data["resume_device_id"]
         if resume:
             device = get(s, "device", resume, company.id)
-            if not device or (device.owner == member.id and device.data["status"] == "revoked"):
+            if (
+                not device
+                or device.data["status"] == "deleted"
+                or (device.owner == member.id and device.data["status"] == "revoked")
+            ):
                 # A browser last connected to another organization, or one whose record is gone,
                 # connects as a new browser. So does one an administrator or the member removed:
                 # the email code proves the person again, and the removed browser stays removed.
+                # A browser whose person was erased connects as the new member (22 Oct 2026).
                 resume = None
             elif (
                 device.owner != member.id

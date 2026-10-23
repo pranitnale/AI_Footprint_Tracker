@@ -8,7 +8,6 @@ import {
   refineHistory,
   mergeHistoryEvidence,
   mergeHistoryCoverage,
-  compareHistoricalInstants,
   type HistoryMessage,
 } from "@footprint/contracts";
 import type {
@@ -26,6 +25,8 @@ import {
   recordKey,
   type Scope,
   type HistoryRow,
+  erasedWhenRead,
+  rangeErasesHistory,
 } from "./ledger-support";
 import {
   MemoryKernel,
@@ -51,25 +52,26 @@ export function historyErased(
   scope: Scope,
   row: HistoryMessage,
 ): boolean {
+  const read = (marker: { at: number } | undefined) =>
+    erasedWhenRead(marker, row.observed_at);
   return (
     s.erasedNamespaces.has(scope.namespace) ||
-    s.erasedHistory.has(`${scope.namespace}:history:${row.message_key}`) ||
+    read(s.erasedHistory.get(`${scope.namespace}:history:${row.message_key}`)) ||
     (!!row.provider_request_key &&
-      s.erasedProvider.has(
-        `${scope.namespace}:request:${row.provider_request_key}`,
+      read(
+        s.erasedProvider.get(
+          `${scope.namespace}:request:${row.provider_request_key}`,
+        ),
       )) ||
     (!!row.provider_attempt_key &&
-      s.erasedProvider.has(
-        `${scope.namespace}:attempt:${row.provider_attempt_key}`,
+      read(
+        s.erasedProvider.get(
+          `${scope.namespace}:attempt:${row.provider_attempt_key}`,
+        ),
       )) ||
     s.ranges.some(
       (r) =>
-        r.scope.namespace === scope.namespace &&
-        !r.retention &&
-        (row.occurred_at === null ||
-          ((!r.start ||
-            compareHistoricalInstants(row.occurred_at, r.start) >= 0) &&
-            (!r.end || compareHistoricalInstants(row.occurred_at, r.end) < 0))),
+        r.scope.namespace === scope.namespace && rangeErasesHistory(r, row),
     )
   );
 }
@@ -121,14 +123,17 @@ export function removeHistory(
   s: MemoryState,
   row: HistoryRow,
   tombstone = true,
+  refused = false,
 ) {
   s.histories.delete(row.key);
   touchHistoryLinks(s, rowScope(row), row.record);
   s.historyQueue.delete(row.key);
   touch(s, rowScope(row), "history", row.record.message_key, true);
-  if (tombstone) {
-    s.erasedHistory.add(row.key);
-  }
+  if (tombstone)
+    s.erasedHistory.set(
+      row.key,
+      refused ? { at: Date.now(), refused: true } : { at: Date.now() },
+    );
 }
 function validMessageKey(id: unknown): id is string {
   return typeof id === "string" && id.length === 64 && /^[a-f0-9]{64}$/.test(id);
@@ -586,7 +591,8 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
               q.row.hash !== receipt.payload_hash
             )
               continue;
-            if (receipt.status === "erased") removeHistory(s, row);
+            // As acknowledgeHistory in history-repository.ts: the message stays out.
+            if (receipt.status === "erased") removeHistory(s, row, true, true);
             else if (receipt.status === "conflict") {
               row.status = "conflict";
               row.serverConflict = true;

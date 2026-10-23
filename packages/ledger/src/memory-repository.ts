@@ -465,7 +465,9 @@ function eraseFamily(
         ? row.record.provider_request_key
         : row.record.provider_attempt_key;
     if (tombstone && stable && !retention)
-      s.erasedProvider.add(`${namespace}:${row.record.kind}:${stable}`);
+      s.erasedProvider.set(`${namespace}:${row.record.kind}:${stable}`, {
+        at: Date.now(),
+      });
     s.records.delete(key);
     count++;
     if (row.record.kind === "attempt") {
@@ -1315,6 +1317,7 @@ export function createMemoryRepository(
           end,
           epoch: deletionEpoch,
           retention,
+          at: Date.now(),
         });
         let count = 0;
         const roots = [...s.records.values()].filter(

@@ -13,6 +13,7 @@ repositoryContract("IndexedDB domain repository", async (t) => {
   });
   return {
     repository: db.application,
+    writeMarker: (value) => db.put("deletion_markers", value),
     failNextCapture() {
       IDBObjectStore.prototype.put = function (
         value: unknown,

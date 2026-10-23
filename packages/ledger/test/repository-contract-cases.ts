@@ -42,6 +42,8 @@ const company: Scope = {
 export interface ContractHarness {
   repository: ApplicationRepository;
   failNextCapture(): void;
+  /** Writes a raw deletion marker, for repositories that keep markers from earlier releases. */
+  writeMarker?(value: { key: string; [key: string]: unknown }): Promise<void>;
 }
 export type ContractFactory = (test: TestContext) => Promise<ContractHarness>;
 async function initialize(repository: ApplicationRepository, scope: Scope) {
@@ -2045,6 +2047,143 @@ export function repositoryContract(label: string, create: ContractFactory) {
       (await r.findHistoryMessage(company, message.message_key))?.companyKey,
       "1".repeat(64),
     );
+  });
+  test(`${label}: an erasure is a clean slate: a chat read again after it counts, while a read from before it and a message the server refused stay out`, async (t) => {
+    // Owner decision of 22 Oct 2026. Seen on 22 Oct: after an organization erasure every saved
+    // message of that range stayed out for good, so every chat showed "No figures yet".
+    const harness = await create(t),
+      r = harness.repository;
+    await initialize(r, company);
+    const pair = records();
+    const read = (key: string, at: number, occurred: string | null) =>
+      HistoryMessageSchema.parse({
+        schema_version: "3.0.0",
+        kind: "history_message",
+        timing: null,
+        message_key: key,
+        role: "response",
+        conversation_key: "d".repeat(64),
+        key_version: "1",
+        site: "claude",
+        parent_key: null,
+        prompt_key: null,
+        provider_request_key: null,
+        provider_attempt_key: null,
+        occurred_at: occurred,
+        date_basis: occurred ? "message_created" : "unknown",
+        observed_at: new Date(at).toISOString(),
+        model_id: null,
+        proposed_method_id: methods.original.method_id,
+        company_dedup_key: null,
+        proposed_method_hash: methods.original.method_hash,
+        tokens: pair[1].tokens.answer_output,
+        inline_file_text: null,
+        parts: historyResponseParts(pair[1].tokens.answer_output),
+        generation: emptyGeneration(),
+        text_complete: true,
+        coverage_reasons: ["history_only"],
+      });
+    const commit = async (messages: HistoryMessage[]) => {
+      const publication = await r.publicationSnapshot(company.namespace);
+      await r.commitHistory(
+        company,
+        HistoryPageSchema.parse({
+          schema_version: "3.0.0",
+          site: "claude",
+          conversation_key: "d".repeat(64),
+          observed_at: messages[0]!.observed_at,
+          deletion_epoch: 0,
+          branch_scope: "loaded_messages",
+          selected_leaf_key: null,
+          branch_message_keys: null,
+          root_message_key: null,
+          first_request_verified: false,
+          has_earlier: null,
+          has_later: null,
+          messages,
+        }),
+        {
+          authority: historyAuthority(publication),
+          erasureVersion: publication.erasureVersion,
+          estimates: Object.fromEntries(
+            messages.map((m) => [m.message_key, estimateHistoricalText(m)]),
+          ),
+        },
+        () => true,
+      );
+    };
+    const saved = async (key: string) =>
+      (await r.findHistoryMessage(company, key)) !== undefined;
+    const dated = "2020-06-01T10:00:00.000Z",
+      [first, undated, refused] = ["1", "2", "3"].map((c) => c.repeat(64)) as [
+        string,
+        string,
+        string,
+      ];
+    const before = Date.now() - 60000;
+    await commit([read(first, before, dated), read(undated, before, null)]);
+    assert.ok(await saved(first));
+    await r.applyRange(
+      company,
+      "2020-01-01T00:00:00.000Z",
+      "2021-01-01T00:00:00.000Z",
+      1,
+    );
+    assert.equal(await saved(first), false);
+    assert.equal(await saved(undated), false);
+    // A page read before the erasure that arrives after it stays out.
+    await commit([read(first, before, dated), read(undated, before, null)]);
+    assert.equal(await saved(first), false);
+    assert.equal(await saved(undated), false);
+    // Read again after the erasure, the chat counts, dated or not, and is queued for upload.
+    const after = Date.now() + 1000;
+    await commit([
+      read(first, after, dated),
+      read(undated, after, null),
+      read(refused, after, dated),
+    ]);
+    assert.ok(await saved(first));
+    assert.ok(await saved(undated));
+    assert.deepEqual(
+      (await r.pendingHistory(company)).map((row) => row.record.message_key).sort(),
+      [first, undated, refused],
+    );
+    // The server refuses a message only for an erasure it keeps applying, so it stays out.
+    const pending = await r.pendingHistory(company);
+    await r.acknowledgeHistory(
+      company,
+      pending.map((row) => ({
+        message_key: row.record.message_key,
+        payload_hash: row.hash,
+        status: row.record.message_key === refused ? ("erased" as const) : ("applied" as const),
+      })),
+    );
+    assert.equal(await saved(refused), false);
+    await commit([read(refused, Date.now() + 2000, dated)]);
+    assert.equal(await saved(refused), false);
+    assert.ok(await saved(first));
+    if (!harness.writeMarker) return;
+    // Markers written before 22 Oct 2026 carry no time and no refusal: the erasure that wrote
+    // them removed what it covered, so they no longer keep a chat read again out.
+    const legacy = "4".repeat(64);
+    await harness.writeMarker({
+      key: `range:${company.namespace}:9:2019-01-01T00:00:00.000Z:2022-01-01T00:00:00.000Z`,
+      namespace: company.namespace,
+      start: "2019-01-01T00:00:00.000Z",
+      end: "2022-01-01T00:00:00.000Z",
+      epoch: 9,
+      range: true,
+      retention: false,
+      status: "complete",
+    });
+    await harness.writeMarker({
+      key: `${company.namespace}:history:${legacy}`,
+      namespace: company.namespace,
+      at: before,
+    });
+    await commit([read(legacy, Date.now() + 3000, dated)]);
+    assert.ok(await saved(legacy));
+    assert.ok(await saved(first));
   });
   test(`${label}: a reread that could not count keeps the saved counts, a matching read clears only a conflict this browser found, and a server conflict clears when the server accepts the copy`, async (t) => {
     const { repository: r } = await create(t);

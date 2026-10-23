@@ -158,7 +158,8 @@ def _check_live(session, row, request):
     for marker in _markers(session, row.tenant):
         if marker.deletion_user_id is not None and marker.deletion_user_id != row.owner:
             continue
-        if marker.scope in ("user", "company") or marker.range_start <= when < marker.range_end:
+        # Only deleting a person covers all time; a company erasure keeps its frozen range.
+        if marker.scope == "user" or marker.range_start <= when < marker.range_end:
             return False
     return True
 

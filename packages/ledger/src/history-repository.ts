@@ -20,7 +20,6 @@ import {
   refineHistory,
   mergeHistoryEvidence,
   mergeHistoryCoverage,
-  compareHistoricalInstants,
   type HistoryMessage,
   type HistoryPage,
   type HistoryReceipt,
@@ -71,6 +70,8 @@ import {
   type CoworkCheckpoint,
   liveReplyContent,
   sortLiveReplyContents,
+  erasedWhenRead,
+  rangeErasesHistory,
 } from "./ledger-support";
 import type {
   LiveReplyContent,
@@ -204,26 +205,23 @@ export class HistoryRepository {
         ])
           if (
             stable &&
-            (await request(
-              tx
-                .objectStore("deletion_markers")
-                .get(`history-live:${scope.namespace}:${kind}:${stable}`),
-            ))
+            erasedWhenRead(
+              await request(
+                tx
+                  .objectStore("deletion_markers")
+                  .get(`history-live:${scope.namespace}:${kind}:${stable}`),
+              ),
+              record.observed_at,
+            )
           )
             continue messages;
+        // A message read before an erasure stays out; read again afterwards, it counts.
         if (
-          (await request(tx.objectStore("deletion_markers").get(key))) ||
-          ranges.some(
-            (marker) =>
-              !marker.retention &&
-              (record.occurred_at === null ||
-                ((!marker.start ||
-                  compareHistoricalInstants(record.occurred_at, marker.start) >=
-                    0) &&
-                  (!marker.end ||
-                    compareHistoricalInstants(record.occurred_at, marker.end) <
-                      0))),
-          )
+          erasedWhenRead(
+            await request(tx.objectStore("deletion_markers").get(key)),
+            record.observed_at,
+          ) ||
+          ranges.some((marker) => rangeErasesHistory(marker, record))
         )
           continue;
         retained++;
@@ -764,10 +762,13 @@ export class HistoryRepository {
             row.record.message_key,
             true,
           );
+          // The server answers "erased" only for an erasure it keeps applying to every
+          // later read (one whose time it does not know), so this message stays out.
           tx.objectStore("deletion_markers").put({
             key,
             namespace: scope.namespace,
             at: Date.now(),
+            refused: true,
           });
         } else if (receipt.status === "conflict") {
           tx.objectStore("history_records").put({

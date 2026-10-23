@@ -1,21 +1,21 @@
 {
   "aliases": {
     "chrome": {
-      "bytes": 6075624,
+      "bytes": 6075698,
       "path": "/downloads/ai-footprint-tracker-chrome.zip",
-      "sha256": "2dcd792e5e91536447deb4998a28ffde771c4f3545c65ff426e1f145019c89a7",
+      "sha256": "3bd2b7eaf2008488d842ad53f9e42433ce16a9af56d9aa78cc1aedb870644ca1",
       "variant_id": "chrome-ecologits"
     },
     "edge": {
-      "bytes": 6075617,
+      "bytes": 6075690,
       "path": "/downloads/ai-footprint-tracker-edge.zip",
-      "sha256": "293d3d5ce6c364bb7e26ed6dde18de1432e4967b7c134ac9457a0a84ad1a33fc",
+      "sha256": "44159727fbf938bce7662bbc3435f031c92d2ff28228cd34bd5e531bd8eb8db0",
       "variant_id": "edge-ecologits"
     },
     "firefox": {
-      "bytes": 6075442,
+      "bytes": 6075550,
       "path": "/downloads/ai-footprint-tracker-firefox.zip",
-      "sha256": "8058020f3ff5d40b53163479fae4154312520c9c6d80f8cecbc971bdfe1cd76b",
+      "sha256": "4b160402538158ede92aa7578c312ac5f3a2c24e6f19f045cf2557325c7b3539",
       "variant_id": "firefox-ecologits"
     }
   },
@@ -24,13 +24,13 @@
     "effective_configuration_sha256": "589638e9cb4d5ab798e00a52d994e6b01b9db2a62b3a62acd6159d6582930bd6",
     "engine": "ecologits",
     "source": "config/estimation.build.json",
-    "source_input_sha256": "e69c4b24ba08706982b2a2e5198d67ae4c3ece8933f7061f7372f9c8137e8f72",
+    "source_input_sha256": "868e5093b434a9e8e26ed5162d0bdfa1efb06e4ffee3fc6699ab17ee48ce3918",
     "source_sha256": "016af5fd174b48de6a8dc67be9c72ca5a203855d4ee8b0fdbdfc0f548c9c1345"
   },
   "input_fingerprint": {
     "algorithm": "sha256",
     "files": 824,
-    "sha256": "e69c4b24ba08706982b2a2e5198d67ae4c3ece8933f7061f7372f9c8137e8f72"
+    "sha256": "868e5093b434a9e8e26ed5162d0bdfa1efb06e4ffee3fc6699ab17ee48ce3918"
   },
   "packages": {
     "chrome-ecologits": {
@@ -68,7 +68,7 @@
         "user_override_enabled": false,
         "variant_id": "chrome-ecologits"
       },
-      "bytes": 6075624,
+      "bytes": 6075698,
       "default_engine": "ecologits",
       "input_fingerprint": {
         "algorithm": "sha256",
@@ -91,14 +91,14 @@
           "source": {
             "algorithm": "sha256",
             "files": 824,
-            "sha256": "e69c4b24ba08706982b2a2e5198d67ae4c3ece8933f7061f7372f9c8137e8f72"
+            "sha256": "868e5093b434a9e8e26ed5162d0bdfa1efb06e4ffee3fc6699ab17ee48ce3918"
           },
           "source_date_epoch": 1788998400
         },
-        "sha256": "806acd8215afd16cbbc66626271e5233a7cd1e0e2cac97ec808d687de98302f1"
+        "sha256": "c1d4ebcbdf78903598fdfc637ce3023babb6a84f045ec6ef1826b46c4910d812"
       },
       "path": "/downloads/ai-footprint-tracker-chrome.zip",
-      "sha256": "2dcd792e5e91536447deb4998a28ffde771c4f3545c65ff426e1f145019c89a7",
+      "sha256": "3bd2b7eaf2008488d842ad53f9e42433ce16a9af56d9aa78cc1aedb870644ca1",
       "target": "chrome-mv3"
     },
     "edge-ecologits": {
@@ -136,7 +136,7 @@
         "user_override_enabled": false,
         "variant_id": "edge-ecologits"
       },
-      "bytes": 6075617,
+      "bytes": 6075690,
       "default_engine": "ecologits",
       "input_fingerprint": {
         "algorithm": "sha256",
@@ -159,14 +159,14 @@
           "source": {
             "algorithm": "sha256",
             "files": 824,
-            "sha256": "e69c4b24ba08706982b2a2e5198d67ae4c3ece8933f7061f7372f9c8137e8f72"
+            "sha256": "868e5093b434a9e8e26ed5162d0bdfa1efb06e4ffee3fc6699ab17ee48ce3918"
           },
           "source_date_epoch": 1788998400
         },
-        "sha256": "d47e5f021fb3ca641cdd27848948cc9d528c2e1a64e1b1d5121740a4fcb2d163"
+        "sha256": "94a0f4af9938c2bf54681a75b9235937846d05972da7d86fc5e2d98e37f7dfaf"
       },
       "path": "/downloads/ai-footprint-tracker-edge.zip",
-      "sha256": "293d3d5ce6c364bb7e26ed6dde18de1432e4967b7c134ac9457a0a84ad1a33fc",
+      "sha256": "44159727fbf938bce7662bbc3435f031c92d2ff28228cd34bd5e531bd8eb8db0",
       "target": "edge-mv3"
     },
     "firefox-ecologits": {
@@ -204,7 +204,7 @@
         "user_override_enabled": false,
         "variant_id": "firefox-ecologits"
       },
-      "bytes": 6075442,
+      "bytes": 6075550,
       "default_engine": "ecologits",
       "input_fingerprint": {
         "algorithm": "sha256",
@@ -227,20 +227,20 @@
           "source": {
             "algorithm": "sha256",
             "files": 824,
-            "sha256": "e69c4b24ba08706982b2a2e5198d67ae4c3ece8933f7061f7372f9c8137e8f72"
+            "sha256": "868e5093b434a9e8e26ed5162d0bdfa1efb06e4ffee3fc6699ab17ee48ce3918"
           },
           "source_date_epoch": 1788998400
         },
-        "sha256": "1e9f1d4dee355fc96088ddce4316048e7faf374b2f3b5b16197d1334dd539dbe"
+        "sha256": "13e08c4719a3d4dd99ca2d540073bce8ca07a2985edb4760c2efc0b92ec37a38"
       },
       "path": "/downloads/ai-footprint-tracker-firefox.zip",
-      "sha256": "8058020f3ff5d40b53163479fae4154312520c9c6d80f8cecbc971bdfe1cd76b",
+      "sha256": "4b160402538158ede92aa7578c312ac5f3a2c24e6f19f045cf2557325c7b3539",
       "target": "firefox-mv2"
     },
     "sources": {
       "archive": "artifacts/browser/ai-footprint-tracker-0.1.0-sources.zip",
-      "bytes": 3306471,
-      "sha256": "58b61fb899da1bbad79b98f6196d6e60a3497c3bb837123cebbf885eab5c8399"
+      "bytes": 3308331,
+      "sha256": "069fabfc565969368649f269df570adfbce52815e0f83c307a339f8f0f543a3c"
     }
   },
   "product": "ai-footprint-tracker",

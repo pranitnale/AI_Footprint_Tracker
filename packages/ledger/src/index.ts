@@ -2266,11 +2266,14 @@ export class Ledger {
   ): Promise<number> {
     const proofRefresh = new Set<string>();
     const markerKey = `range:${scope.namespace}:${epoch}:${start ?? "all"}:${end ?? "all"}${retention ? ":retention" : ""}`;
-    const existing = await this.get<{ status?: string }>(
+    const existing = await this.get<{ status?: string; at?: number }>(
       "deletion_markers",
       markerKey,
     );
     if (existing && existing.status !== "purging") return 0;
+    // When this browser applied the erasure: saved messages read before it stay out, and a
+    // chat read again afterwards counts again (rangeErasesHistory).
+    const at = existing?.at ?? Date.now();
     const marking = this.transaction(
       ["deletion_markers", "dashboard_cache", "policy"],
       "readwrite",
@@ -2288,6 +2291,7 @@ export class Ledger {
       range: true,
       retention,
       status: "purging",
+      at,
     });
     await invalidateSummaries(marking, scope.namespace, true);
     await marked;
@@ -2371,6 +2375,7 @@ export class Ledger {
       range: true,
       retention,
       status: "complete",
+      at,
     });
     // Recheck only surviving inputs whose history was removed while the purge blocked reads.
     const refreshKeys = [...proofRefresh];
@@ -2758,6 +2763,7 @@ export class Ledger {
           tx.objectStore("deletion_markers").put({
             key: `history-live:${namespace}:${kind}:${key}`,
             namespace,
+            at: Date.now(),
           });
       tx.objectStore("requests").delete(
         recordKey(namespace, "request", requestId),
@@ -3011,6 +3017,7 @@ export class Ledger {
             tx.objectStore("deletion_markers").put({
               key: `history-live:${namespace}:attempt:${stable}`,
               namespace,
+              at: Date.now(),
             });
           await invalidateSummaries(tx, namespace, true);
           await done;
@@ -3102,7 +3109,7 @@ export class Ledger {
             .delete(`${namespace}:${row.record.conversation_key}`);
           cleanup
             .objectStore("deletion_markers")
-            .put({ key: row.key, namespace });
+            .put({ key: row.key, namespace, at: Date.now() });
           count++;
         }
         await finished;

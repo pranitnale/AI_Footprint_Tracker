@@ -401,6 +401,44 @@ def test_erasing_the_counted_copy_hands_the_reply_to_another_members_copy(world)
     ]
 
 
+def test_an_erased_person_joins_again_and_their_chats_count_again(world):
+    # Owner decision of 22 Oct 2026: erasing a person is a clean slate. The person may connect
+    # again as a new member, and the chats their browser reads again count as usual.
+    admin, _ = world.member("admin@example.org")
+    person, keys = world.member("person@example.org")
+    prompt, reply = opened(world.now[0])
+    assert statuses(saved(person, keys, world.now[0], [prompt, reply])) == ["applied", "applied"]
+    preview = admin.post("/v1/admin/deletions/preview", json={"scope": "user", "user_id": keys["user_id"]})
+    assert preview.status_code == 200, preview.text
+    operation = str(uuid4())
+    erased = admin.post(
+        "/v1/admin/deletions",
+        json={
+            "preview_token": preview.json()["preview_token"],
+            "idempotency_key": operation,
+            "confirmed": True,
+            "reauth_token": reauth(world.app, world.company, world.admin),
+        },
+    )
+    assert erased.status_code == 200, erased.text
+    finish_job(world.app, world.company, operation)
+    assert counts(company_totals(admin)) == ("0", "0", "0", "0")
+    world.now[0] += timedelta(minutes=1)
+    again, new_keys = world.member("person@example.org")
+    assert new_keys["user_id"] != keys["user_id"]
+    # The new browser reads the same chat again.
+    for row in (prompt, reply):
+        row["observed_at"] = instant(world.now[0])
+    with world.app.state.db.transaction(readonly=True) as s:
+        epoch = get(s, "company", world.company.id).data["epoch"]
+    body = page(world.now[0], [prompt, reply], epoch)
+    body.update(site="chatgpt", conversation_key=CHAT)
+    answer = again.post("/v1/me/history", headers=auth(new_keys), json=body)
+    assert statuses(answer) == ["applied", "applied"]
+    assert counts(period(again)) == ("0", "0", "1", "1")
+    assert counts(company_totals(admin)) == ("0", "0", "1", "1")
+
+
 def test_erasing_a_live_reply_without_a_key_also_erases_its_saved_copy_and_hands_the_key_over(world):
     admin, _ = world.member("admin@example.org")
     sender, sender_keys = world.member("sender@example.org")

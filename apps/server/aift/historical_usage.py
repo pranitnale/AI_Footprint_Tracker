@@ -345,7 +345,16 @@ def scope_conditions(company, marker):
     conditions = [HistoryObservation.tenant == company.id]
     if marker.get("user_id"):
         conditions.append(HistoryObservation.owner == marker["user_id"])
-    if marker["scope"] not in ("user", "company"):
+    # An erasure is a clean slate when it is made (owner decision of 22 Oct 2026): a chat read
+    # again afterwards counts again, so a restore that replays the erasure keeps those reads.
+    # Stored reading times never pass the server clock (ingest), so everything saved before
+    # the erasure is no later than it.
+    if marker.get("created_at"):
+        conditions.append(HistoryObservation.observed_at <= marker["created_at"])
+    # Only deleting a person covers all time. A company-wide erasure applies the range its
+    # preview froze, like a range, so it never prohibits later usage (CONTRACTS.md, deletion
+    # protocol 1 and 5; a company erasure of 17 Oct 2026 erased all saved history since).
+    if marker["scope"] != "user":
         conditions.append(
             or_(
                 HistoryObservation.occurred_at.is_(None),
@@ -462,11 +471,26 @@ class HistoricalUsage:
         # The condition names no organization, so one expression serves every query; a summary
         # with its splits builds it more than a hundred times otherwise.
         h = HistoryObservation
+        made = DeletionScope.data["created_at"].as_string()
+
+        def read_after(epoch):
+            # The message was read again after the erasure of this epoch was made, so that
+            # erasure does not cover it (clean slate, owner decision of 22 Oct 2026). A
+            # tombstone whose erasure time is unknown keeps hiding its message.
+            return exists(
+                select(1).where(
+                    DeletionScope.tenant == h.tenant,
+                    DeletionScope.epoch == epoch,
+                    made < h.observed_at,
+                )
+            )
+
         stable = exists(
             select(1).where(
                 DeletionTombstone.tenant == h.tenant,
                 DeletionTombstone.owner == h.owner,
                 DeletionTombstone.reason != "retention",
+                ~read_after(DeletionTombstone.epoch),
                 or_(
                     and_(
                         DeletionTombstone.kind == "request",
@@ -484,8 +508,9 @@ class HistoricalUsage:
                 DeletionScope.tenant == h.tenant,
                 or_(DeletionScope.deletion_user_id.is_(None), DeletionScope.deletion_user_id == h.owner),
                 DeletionScope.data["retention"].as_boolean().is_not(True),
+                or_(made.is_(None), made >= h.observed_at),
                 or_(
-                    DeletionScope.scope.in_(("user", "company")),
+                    DeletionScope.scope == "user",
                     h.occurred_at.is_(None),
                     and_(
                         func.substr(DeletionScope.range_start, 1, 23).op("||")("000Z") <= h.occurred_at,
@@ -499,6 +524,7 @@ class HistoricalUsage:
                 HistoryTombstone.tenant == h.tenant,
                 HistoryTombstone.owner == h.owner,
                 HistoryTombstone.message_key == h.message_key,
+                ~read_after(HistoryTombstone.epoch),
             )
         )
         return and_(~stable, ~erased, ~tombstone)
@@ -601,9 +627,28 @@ class HistoricalUsage:
                 replies.setdefault(row.owner, []).append(row.payload)
         return {owner: reply_models(payloads) for owner, payloads in replies.items()}
 
-    def erased(self, s, company, owner, m):
-        if s.get(HistoryTombstone, (company.id, owner, m["message_key"])):
-            return True
+    def erasures(self, s, company, owner, m, observed):
+        """
+        When each erasure that covers this saved message, read at observed, was made, or None
+        when that is unknown. An erasure is a clean slate when it is made (owner decision of
+        22 Oct 2026): it covers the messages read before it, and a chat read again afterwards
+        counts again, in the browser and in the organization totals.
+        """
+        made = {
+            epoch: data.get("created_at")
+            for epoch, data in s.execute(
+                select(DeletionScope.epoch, DeletionScope.data).where(DeletionScope.tenant == company.id)
+            )
+        }
+        times = []
+
+        def cover(epoch):
+            if not made.get(epoch) or observed <= made[epoch]:
+                times.append(made.get(epoch))
+
+        tombstone = s.get(HistoryTombstone, (company.id, owner, m["message_key"]))
+        if tombstone:
+            cover(tombstone.epoch)
         for marker in s.scalars(
             select(DeletionScope).where(
                 DeletionScope.tenant == company.id,
@@ -613,27 +658,29 @@ class HistoricalUsage:
             if marker.data.get("retention"):
                 continue
             if (
-                marker.scope in ("user", "company")
+                marker.scope == "user"
                 or m["occurred_at"] is None
                 or parse_time(marker.range_start)
                 <= parse_time(m["occurred_at"])
                 < parse_time(marker.range_end)
             ):
-                return True
+                cover(marker.epoch)
         for field, kind in (("provider_request_key", "request"), ("provider_attempt_key", "attempt")):
-            if m[field] and s.scalar(
-                select(DeletionTombstone.record_id)
-                .where(
-                    DeletionTombstone.tenant == company.id,
-                    DeletionTombstone.owner == owner,
-                    DeletionTombstone.kind == kind,
-                    DeletionTombstone.reason != "retention",
-                    DeletionTombstone.stable_key == m[field],
-                )
-                .limit(1)
-            ):
-                return True
-        return False
+            if m[field]:
+                for epoch in s.scalars(
+                    select(DeletionTombstone.epoch).where(
+                        DeletionTombstone.tenant == company.id,
+                        DeletionTombstone.owner == owner,
+                        DeletionTombstone.kind == kind,
+                        DeletionTombstone.reason != "retention",
+                        DeletionTombstone.stable_key == m[field],
+                    )
+                ):
+                    cover(epoch)
+        return times
+
+    def erased(self, s, company, owner, m, observed):
+        return bool(self.erasures(s, company, owner, m, observed))
 
     def ingest(self, s, company, member, device, body, query):
         if not device:
@@ -674,6 +721,17 @@ class HistoricalUsage:
                 for e in eras
             ):
                 raise Problem("outside_enrollment_era", 409)
+            # The browser applied every erasure before it sent this page (deletion_epoch above),
+            # and none is taken while one is applied, so this read follows every erasure that
+            # covers it: the chat was read again (clean slate, owner decision of 22 Oct 2026).
+            # The stored time follows the server clock: just after each erasure that covers the
+            # message, even when that computer's clock is slow, and otherwise never later than the
+            # server clock, so a later erasure covers every message saved before it.
+            observed = min(observed, now)
+            covered = self.erasures(s, company, member.id, m, instant(observed))
+            if covered and None not in covered:
+                observed = max(parse_time(t) for t in covered) + timedelta(milliseconds=1)
+            m = {**m, "observed_at": instant(observed)}
             from .method_registry import estimate_history, retain_packaged_definition
             from .timing_evidence import merge_history_evidence
 
@@ -699,7 +757,8 @@ class HistoricalUsage:
                     raise
                 assessment = {"status": "pending", "reason": error.code}
             hashed = numeric_payload_hash(m)
-            if self.erased(s, company, member.id, m):
+            # Only an erasure whose time is unknown still refuses the message.
+            if None in covered:
                 results.append(
                     {"message_key": m["message_key"], "payload_hash": receipt_hash, "status": "erased"}
                 )
@@ -1097,7 +1156,7 @@ class HistoricalUsage:
         if marker.get("retention"):
             return 0
         conditions = scope_conditions(company, marker)
-        if marker["scope"] not in ("user", "company"):
+        if marker["scope"] != "user":
             conditions[-1] = or_(conditions[-1], ~self.visible(company))
         rows = list(
             s.scalars(
@@ -1179,7 +1238,7 @@ class HistoricalUsage:
                     "original_resources": r.original_estimate,
                 }
                 for r in selected
-                if not self.erased(s, company, member.id, r.payload)
+                if not self.erased(s, company, member.id, r.payload, r.observed_at)
             ],
             "next_cursor": selected[-1].message_key if len(rows) > 100 else None,
         }
@@ -1215,7 +1274,7 @@ class HistoricalUsage:
             or row.message_key != m["message_key"]
             or row.conversation != m["conversation_key"]
             or row.occurred_at != indexed_instant(m["occurred_at"])
-            or self.erased(s, company, row.owner, m)
+            or self.erased(s, company, row.owner, m, row.observed_at)
         ):
             raise Problem("aggregate_inconsistent", 503)
 
@@ -1223,6 +1282,6 @@ class HistoricalUsage:
         if marker.get("retention"):
             return False
         conditions = scope_conditions(company, marker)
-        if marker["scope"] not in ("user", "company"):
+        if marker["scope"] != "user":
             conditions[-1] = or_(conditions[-1], ~self.visible(company))
         return s.scalar(select(HistoryObservation.message_key).where(*conditions).limit(1)) is not None

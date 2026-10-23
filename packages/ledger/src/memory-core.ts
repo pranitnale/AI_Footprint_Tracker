@@ -163,14 +163,16 @@ export interface MemoryState {
   releasableNamespaces: Set<string>;
   erasedRequests: Set<string>;
   erasedAttempts: Set<string>;
-  erasedHistory: Set<string>;
-  erasedProvider: Set<string>;
+  /** As the IndexedDB markers: when the erasure was applied; see erasedWhenRead. */
+  erasedHistory: Map<string, { at: number; refused?: true }>;
+  erasedProvider: Map<string, { at: number }>;
   ranges: Array<{
     scope: Scope;
     start: string | null;
     end: string | null;
     epoch: number;
     retention: boolean;
+    at: number;
   }>;
 }
 export function newState(): MemoryState {
@@ -209,8 +211,8 @@ export function newState(): MemoryState {
     releasableNamespaces: new Set(),
     erasedRequests: new Set(),
     erasedAttempts: new Set(),
-    erasedHistory: new Set(),
-    erasedProvider: new Set(),
+    erasedHistory: new Map(),
+    erasedProvider: new Map(),
     ranges: [],
   };
 }

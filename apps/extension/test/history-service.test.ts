@@ -996,7 +996,7 @@ test("more than100 historical messages persist through bounded chunks and changi
     f.db.close();
   }
 });
-test("age retention preserves historical rows while explicit range erases unknown dates and prevents reobservation", async () => {
+test("age retention preserves historical rows while explicit range erases unknown dates, and a chat read again after the erasure counts again", async () => {
   const f = await setup();
   try {
     const page = historyPage();
@@ -1013,8 +1013,15 @@ test("age retention preserves historical rows while explicit range erases unknow
       1,
     );
     assert.equal((await f.db.historyPage(scope, undefined)).length, 0);
-    await receive(f.c, { ...page, observedAt: new Date().toISOString() });
+    // The page read before the erasure stays out.
+    await receive(f.c, page);
     assert.equal((await f.db.historyPage(scope, undefined)).length, 0);
+    // An erasure is a clean slate (owner decision of 22 October 2026): read again, it counts.
+    await receive(f.c, {
+      ...page,
+      observedAt: new Date(Date.now() + 1000).toISOString(),
+    });
+    assert.equal((await f.db.historyPage(scope, undefined)).length, 2);
   } finally {
     f.db.close();
   }
@@ -1147,7 +1154,7 @@ test("loaded-message root proof survives partial pages and microsecond range fil
   }
 });
 
-test("exact microsecond range deletion holds within its scope and a later Personal clear starts from scratch", async () => {
+test("exact microsecond range deletion holds within its scope, a chat read again after it counts again, and a later Personal clear starts from scratch", async () => {
   const f = await setup();
   try {
     const page = historyPage(4);
@@ -1164,8 +1171,14 @@ test("exact microsecond range deletion holds within its scope and a later Person
       1,
     );
     assert.equal((await f.db.historyPage(scope, undefined)).length, 3);
-    await receive(f.c, { ...page, observedAt: new Date().toISOString() });
+    await receive(f.c, page);
     assert.equal((await f.db.historyPage(scope, undefined)).length, 3);
+    // An erasure is a clean slate (owner decision of 22 October 2026): read again, it counts.
+    await receive(f.c, {
+      ...page,
+      observedAt: new Date(Date.now() + 1000).toISOString(),
+    });
+    assert.equal((await f.db.historyPage(scope, undefined)).length, 4);
     // The range marker belonged to the old scope; a full Personal clear keeps nothing back.
     await f.c.clearPersonal();
     await receive(f.c, { ...page, observedAt: new Date().toISOString() });

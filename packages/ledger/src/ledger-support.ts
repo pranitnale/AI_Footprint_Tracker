@@ -159,14 +159,49 @@ export function checkedCoworkCheckpoint(
     throw new Error("ledger_integrity_failed");
   return structuredClone(v.checkpoint);
 }
+/**
+ * Whether an erasure marker covers a saved message this browser read at `observedAt`. An
+ * erasure is a clean slate when it is applied (owner decision of 22 Oct 2026): it covers the
+ * messages read before it, and a chat read again afterwards counts again. A message the server
+ * refused (`refused`) stays out. Markers written before 22 Oct 2026 carry no time: the erasure
+ * that wrote them already removed what it covered, so they cover nothing read since.
+ */
+export function erasedWhenRead(
+  marker: { at?: unknown; refused?: unknown } | null | undefined,
+  observedAt: string,
+): boolean {
+  if (!marker) return false;
+  if (marker.refused === true) return true;
+  return typeof marker.at === "number" && Date.parse(observedAt) <= marker.at;
+}
+/** Whether a range erasure covers a saved message; see erasedWhenRead. */
+export function rangeErasesHistory(
+  marker: {
+    start?: string | null;
+    end?: string | null;
+    retention?: unknown;
+    at?: unknown;
+  },
+  record: Pick<HistoryMessage, "occurred_at" | "observed_at">,
+): boolean {
+  return (
+    !marker.retention &&
+    erasedWhenRead(marker, record.observed_at) &&
+    (record.occurred_at === null ||
+      ((!marker.start ||
+        compareHistoricalInstants(record.occurred_at, marker.start) >= 0) &&
+        (!marker.end ||
+          compareHistoricalInstants(record.occurred_at, marker.end) < 0)))
+  );
+}
 /** Namespace, message and linked live-request markers. Range markers are applied by page readers. */
 export async function historyMarkersErased(
   store: IDBObjectStore,
   scope: Scope,
   row: HistoryMessage,
 ): Promise<boolean> {
+  if (await request(store.get(scope.namespace))) return true;
   const keys = [
-    scope.namespace,
     `${scope.namespace}:history:${row.message_key}`,
     ...(row.provider_request_key
       ? [`history-live:${scope.namespace}:request:${row.provider_request_key}`]
@@ -176,7 +211,7 @@ export async function historyMarkersErased(
       : []),
   ];
   const markers = await Promise.all(keys.map((key) => request(store.get(key))));
-  return markers.some(Boolean);
+  return markers.some((marker) => erasedWhenRead(marker, row.observed_at));
 }
 /**
  * Whether a coverage write changes what a totals read can see. The sync-only `pending`

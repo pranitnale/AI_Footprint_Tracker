@@ -386,13 +386,19 @@ def test_resume_from_another_organization_starts_a_fresh_browser(setup):
     assert colleague.status_code == 403 and colleague.json()["error"]["code"] == "connection_denied"
 
 
-def test_removed_members_cannot_connect_again(setup):
+def test_erased_members_connect_again_as_new_members_and_suspended_ones_stay_out(setup):
     app, _, company, _, _, settings = setup
     _, extension = service_clients(app, settings)
     credentials, _ = connect(app, extension, "member@example.org")
     with app.state.db.transaction() as session:
         member = get(session, "member", credentials["user_id"], company.id)
         member.data = {**member.data, "status": "deleted"}
+    # Owner decision of 22 Oct 2026: a person whose records were erased may join again.
+    rejoined, _ = connect(app, extension, "member@example.org")
+    assert rejoined["user_id"] != credentials["user_id"]
+    with app.state.db.transaction() as session:
+        member = get(session, "member", rejoined["user_id"], company.id)
+        member.data = {**member.data, "status": "suspended"}
     refused, _ = create_connection(app, extension, "member@example.org")
     assert refused.status_code == 403 and refused.json()["error"]["code"] == "member_unavailable"
 

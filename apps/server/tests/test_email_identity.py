@@ -48,7 +48,7 @@ def test_case_and_tag_variants_connect_as_one_member_with_one_seat(setup):
         assert len([m for m in rows(session, "member", company.id) if m.data["role"] == "user"]) == 1
 
 
-def test_an_erased_member_cannot_rejoin_with_a_variant(setup):
+def test_an_erased_member_rejoins_as_a_new_member_with_a_variant(setup):
     app, client, company, _, _, _ = setup
     extension = TestClient(app, base_url=str(client.base_url).rstrip("/"))
     extension.headers["Origin"] = EXTENSION
@@ -56,14 +56,17 @@ def test_an_erased_member_cannot_rejoin_with_a_variant(setup):
     with app.state.db.transaction() as session:
         member = get(session, "member", credentials["user_id"], company.id)
         member.data = {**member.data, "status": "deleted"}
-    from conftest import create_connection
+    # A person whose records were erased may join again, with nothing of the old member (owner
+    # decision of 22 Oct 2026). Both variants name the one new member.
+    variants = ("Carol@example.org", "carol+again@example.org")
+    rejoined = [connect(app, extension, variant)[0] for variant in variants]
+    assert rejoined[0]["user_id"] == rejoined[1]["user_id"] != credentials["user_id"]
+    with app.state.db.transaction(readonly=True) as session:
+        assert get(session, "member", credentials["user_id"], company.id).data["status"] == "deleted"
+        assert get(session, "member", rejoined[0]["user_id"], company.id).data["status"] == "active"
 
-    for variant in ("Carol@example.org", "carol+again@example.org"):
-        refused, _ = create_connection(app, extension, variant)
-        assert refused.status_code == 403 and refused.json()["error"]["code"] == "member_unavailable"
 
-
-def test_an_erased_member_keyed_before_identities_still_blocks_the_same_address(setup):
+def test_an_erased_member_keyed_before_identities_rejoins_as_a_new_member(setup):
     app, client, company, _, _, _ = setup
     service = app.state.service
     member_id = str(uuid4())
@@ -93,10 +96,13 @@ def test_an_erased_member_keyed_before_identities_still_blocks_the_same_address(
         )
     extension = TestClient(app, base_url=str(client.base_url).rstrip("/"))
     extension.headers["Origin"] = EXTENSION
-    from conftest import create_connection
-
-    refused, _ = create_connection(app, extension, "Dora@example.org")
-    assert refused.status_code == 403 and refused.json()["error"]["code"] == "member_unavailable"
+    rejoined, _ = connect(app, extension, "Dora@example.org")
+    assert rejoined["user_id"] != member_id
+    # The address now names the new member alone; the old key is gone.
+    assert connect(app, extension, "dora@example.org")[0]["user_id"] == rejoined["user_id"]
+    with app.state.db.transaction(readonly=True) as session:
+        old_key = service.secrets.keyed("email:" + company.id, "Dora@example.org")
+        assert get(session, "email", old_key, company.id) is None
 
 
 def test_website_sign_in_and_reauthentication_accept_variants(setup):

@@ -6,7 +6,6 @@ import {
   HistoryMessageSchema,
   EstimationEnvelopeSchema,
   OriginalEstimateResultSchema,
-  compareHistoricalInstants,
   EngineMethodIdentitySchema,
   UNAVAILABLE_ADMISSION_METHOD_ID,
   type EngineMethodIdentity,
@@ -20,6 +19,8 @@ import {
   type Scope,
   type RecordRow,
   type HistoryRow,
+  erasedWhenRead,
+  rangeErasesHistory,
 } from "./ledger-support";
 import type {
   EstimationInput,
@@ -214,8 +215,9 @@ export async function historyRowErased(
   tx: IDBTransaction,
   row: HistoryRow,
 ): Promise<boolean> {
+  if (await request(tx.objectStore("deletion_markers").get(row.namespace)))
+    return true;
   const keys = [
-    row.namespace,
     row.key,
     ...(row.record.provider_request_key
       ? [
@@ -229,7 +231,13 @@ export async function historyRowErased(
       : []),
   ];
   for (const key of keys)
-    if (await request(tx.objectStore("deletion_markers").get(key))) return true;
+    if (
+      erasedWhenRead(
+        await request(tx.objectStore("deletion_markers").get(key)),
+        row.record.observed_at,
+      )
+    )
+      return true;
   let erased = false;
   await eachCursor(
     tx.objectStore("deletion_markers"),
@@ -238,17 +246,7 @@ export async function historyRowErased(
       `range:${row.namespace}:\uffff`,
     ),
     (marker) => {
-      if (
-        !marker.retention &&
-        (row.record.occurred_at === null ||
-          ((!marker.start ||
-            compareHistoricalInstants(row.record.occurred_at, marker.start) >=
-              0) &&
-            (!marker.end ||
-              compareHistoricalInstants(row.record.occurred_at, marker.end) <
-                0)))
-      )
-        erased = true;
+      if (rangeErasesHistory(marker, row.record)) erased = true;
     },
   );
   return erased;

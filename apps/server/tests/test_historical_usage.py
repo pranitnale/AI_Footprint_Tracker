@@ -193,7 +193,7 @@ def test_history_token_rows_add_other_models_output_apart_from_reply_totals(setu
     assert rows[("response", "other_models")]["evidence"] == "provider_reported"
 
 
-def test_unknown_dates_remain_unknown_and_explicit_erasure_prevents_reopen(setup):
+def test_unknown_dates_remain_unknown_and_a_chat_read_after_an_erasure_counts_again(setup):
     app, client, company, member, now, c = paired(setup)
     m = message(now[0])
     m["occurred_at"] = None
@@ -220,12 +220,67 @@ def test_unknown_dates_remain_unknown_and_explicit_erasure_prevents_reopen(setup
     for _ in range(10):
         run(app.state.service)
     assert summary(client, c)["response_count"] == "0"
+    # A page read before the browser applied the erasure is refused.
+    stale = send(client, c, page(now[0], [m]))
+    assert stale.status_code == 409 and stale.json()["error"]["code"] == "deletion_epoch_changed"
+    # The erasure was a clean slate (owner decision of 22 Oct 2026): the chat, read again, counts.
     answer = send(client, c, page(now[0], [m], 1))
     assert answer.status_code == 200, answer.text
-    assert answer.json()["results"][0]["status"] == "erased"
-    m["occurred_at"] = "2025-01-01T00:00:00.000Z"
-    m["date_basis"] = "entry_created"
-    assert send(client, c, page(now[0], [m], 1)).json()["results"][0]["status"] == "erased"
+    assert answer.json()["results"][0]["status"] == "applied"
+    assert summary(client, c)["undated_message_count"] == "1"
+
+
+def test_company_erasure_applies_its_frozen_range_and_chats_read_again_count(setup):
+    # CONTRACTS.md, deletion protocol 1 and 5: a company-wide erasure applies the range its
+    # preview froze, so it never prohibits later usage. Seen in production on 22 Oct 2026: a
+    # company erasure of 17 Oct made the server answer "erased" for every saved message since,
+    # and the browser then deleted its own copies, so every chat showed no figures. An erasure
+    # is a clean slate when it is made (owner decision of 22 Oct 2026): chats read again count.
+    app, client, company, member, now, c = paired(setup)
+    erased = message(now[0], "d" * 64)
+    kept = message(now[0], "e" * 64)
+    kept["occurred_at"] = "2025-01-01T00:00:00.000Z"
+    first = send(client, c, page(now[0], [erased, kept]))
+    assert [r["status"] for r in first.json()["results"]] == ["applied", "applied"], first.text
+    with app.state.db.transaction(scope=company.id) as s:
+        tenant = get(s, "company", company.id)
+        marker = {
+            "scope": "company",
+            "user_id": None,
+            "start": "2019-01-01T00:00:00.000Z",
+            "end": "2021-01-01T00:00:00.000Z",
+            "epoch": 1,
+            "created_at": instant(now[0]),
+            "record_ids": [],
+            "record_owners": {},
+            "job_id": str(uuid4()),
+        }
+        app.state.service.analytics.journal(company.id, marker)
+        put(s, "deletion", marker["job_id"], marker, company.id, None)
+        tenant.data = {**tenant.data, "epoch": 1}
+        app.state.service.analytics.deletions.schedule_marker(s, tenant, marker)
+    for _ in range(10):
+        run(app.state.service)
+    # The message inside the range is gone; the one after it stays counted.
+    assert summary(client, c)["response_count"] == "1"
+    later = message(now[0], "f" * 64)
+    later["occurred_at"] = "2025-06-01T00:00:00.000Z"
+    undated = message(now[0], "9" * 64)
+    undated["occurred_at"] = None
+    undated["date_basis"] = "unknown"
+    # The browser reads the chat again at the same instant, as a computer whose clock is behind
+    # the server's would: still a read after the erasure, so every message counts.
+    answer = send(client, c, page(now[0], [erased, kept, later, undated], 1))
+    assert answer.status_code == 200, answer.text
+    assert [r["status"] for r in answer.json()["results"]] == ["applied", "duplicate", "applied", "applied"]
+    assert summary(client, c)["response_count"] == "4"
+    # A restore replays the erasure from the journal; the messages read again stay.
+    with app.state.db.transaction(scope=company.id) as s:
+        tenant = get(s, "company", company.id)
+        app.state.service.analytics.deletions.schedule_marker(s, tenant, marker)
+    for _ in range(10):
+        run(app.state.service)
+    assert summary(client, c)["response_count"] == "4"
 
 
 @pytest.mark.parametrize(
@@ -627,14 +682,12 @@ def test_history_erasure_compares_source_microseconds_before_and_after_cleanup(s
         visible = list(session.scalars(select(HistoryObservation).where(history.visible(tenant))))
         assert [row.message_key for row in visible] == [records[3]["message_key"]]
         assert history.erase_page(session, tenant, marker) == 3
-        assert [history.erased(session, tenant, member.id, record) for record in records] == [
-            True,
-            True,
-            True,
-            False,
-        ]
+        # Each message as read before the erasure was made.
+        assert [
+            history.erased(session, tenant, member.id, record, record["observed_at"]) for record in records
+        ] == [True, True, True, False]
         records[1]["occurred_at"] = "2025-01-01T00:00:00.000Z"
-        assert history.erased(session, tenant, member.id, records[1]) is True
+        assert history.erased(session, tenant, member.id, records[1], records[1]["observed_at"]) is True
 
 
 def test_studio_rows_count_without_waiting_for_a_live_match(setup):

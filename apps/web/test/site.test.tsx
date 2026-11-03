@@ -14,6 +14,7 @@ import { WebContactPage, afterSending } from "../src/site/pages/WebContact";
 import { WebPrivacyPage } from "../src/site/pages/WebPrivacy";
 import { WebSelfHostPage } from "../src/site/pages/WebSelfHost";
 import { WebHomePage } from "../src/site/pages/WebHome";
+import { WebDownloadsPage } from "../src/site/pages/WebDownloads";
 
 const dom = new JSDOM("<!doctype html><html><body></body></html>", {
   url: "https://aifootprinttracker.example/contact",
@@ -53,13 +54,36 @@ test("no website page ships a canvas placeholder or an unwired control", () => {
 });
 
 test("every link on the website goes to a site route, a heading on the page or a named outside address", () => {
+  const allowedOutsideAddresses = /^(https:\/\/github\.com\/pranitnale\/AI_Footprint_Tracker|https:\/\/www\.linkedin\.com\/|mailto:|https:\/\/chromewebstore\.google\.com\/detail\/ai-footprint-tracker\/hcipdbbjkdjifcmallagehhjbdhodide$)/;
   for (const [name, source] of pageSources) {
     const ids = new Set([...source.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
     for (const [, href] of source.matchAll(/href="([^"]*)"/g)) {
       if (href.startsWith("#")) assert.ok(ids.has(href.slice(1)), `${name} ${href}`);
       else if (href.startsWith("/")) assert.ok(SITE_ROUTES.has(href.split("#")[0]), `${name} ${href}`);
-      else assert.match(href, /^(https:\/\/github\.com\/pranitnale\/AI_Footprint_Tracker|https:\/\/www\.linkedin\.com\/|mailto:)/, `${name} ${href}`);
+      else assert.match(href, allowedOutsideAddresses, `${name} ${href}`);
     }
+  }
+  const html = renderToStaticMarkup(<WebDownloadsPage navigate={() => {}} />);
+  for (const [, href] of html.matchAll(/href="(https:[^"]*)"/g)) {
+    assert.match(href, allowedOutsideAddresses, `WebDownloads ${href}`);
+  }
+});
+
+test("downloads offer only the Chrome Web Store and show Edge and Firefox as coming soon", () => {
+  const html = renderToStaticMarkup(<WebDownloadsPage navigate={() => {}} />);
+  const page = JSDOM.fragment(html);
+  const storeLink = page.querySelector('a[href="https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide"]');
+  assert.ok(storeLink);
+  assert.equal(storeLink.textContent, "Add to Chrome");
+  assert.equal(storeLink.getAttribute("class"), "btn pri");
+  assert.equal(storeLink.getAttribute("target"), "_blank");
+  assert.equal(storeLink.getAttribute("rel"), "noopener noreferrer");
+  assert.equal(page.querySelectorAll("a[download]").length, 0);
+  assert.doesNotMatch(html, /test package|unsigned|Load unpacked|about:debugging/i);
+  for (const card of [...page.querySelectorAll(".bc")].slice(1)) {
+    const button = card.querySelector("button");
+    assert.equal(button?.textContent, "Coming soon");
+    assert.equal(button?.hasAttribute("disabled"), true);
   }
 });
 

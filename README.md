@@ -4,7 +4,7 @@
 
 AI Footprint Tracker is a browser extension for Chrome, Edge and Firefox. It works on ChatGPT, Claude, Gemini, Perplexity and NotebookLM. It counts the tokens of each chat in your browser. Then it estimates the electricity, carbon and water that the AI used. Everything is calculated on your computer, and your chats stay in your browser.
 
-[Website](https://aifootprinttracker.com) · [Download](https://aifootprinttracker.com/download) · [Methodology](https://aifootprinttracker.com/methodology) · [Privacy](https://aifootprinttracker.com/privacy) · [MIT License](LICENSE)
+[Website](https://aifootprinttracker.com) · [Download](https://aifootprinttracker.com/download) · [Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide) · [Methodology](https://aifootprinttracker.com/methodology) · [Privacy](https://aifootprinttracker.com/privacy) · [MIT License](LICENSE)
 
 ![The tracker in use: the welcome tour, a ChatGPT chat with the bar under the message box, Details, the dashboard and Settings](docs/media/demo.gif)
 
@@ -61,9 +61,15 @@ The [methodology](https://aifootprinttracker.com/methodology) explains each step
 
 ## Install
 
-The extension is not in a browser store yet. The packages on the website are unsigned test packages, version 0.1.0. Review the source before you roll them out.
+Chrome users can install from the [Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide). Edge and Firefox are not in their browser stores yet. The packages on the website are unsigned test packages, version 0.1.0. Review the source before you roll them out.
 
-**Chrome and Edge**
+**Chrome (Chrome Web Store)**
+
+1. Open [AI Footprint Tracker in the Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide).
+2. Choose Add to Chrome and confirm.
+3. On the welcome page, choose Agree and start. Nothing is counted until you agree.
+
+**Chrome and Edge (manual test package)**
 
 1. Download the package from [aifootprinttracker.com/download](https://aifootprinttracker.com/download) and unzip it. Keep the unzipped folder somewhere it will stay.
 2. Go to `chrome://extensions` or `edge://extensions` and turn on Developer mode.
@@ -87,7 +93,7 @@ You can use the hosted service at [aifootprinttracker.com](https://aifootprinttr
 
 ## Build from source
 
-Use Node 22.23.2, pnpm 11.19.0, uv 0.11.28 and Python 3.13.15. From a clean checkout:
+Use Node 22.23.4, pnpm 11.19.0, uv 0.12.24 and Python 3.13.15. From a clean checkout:
 
 ```sh
 corepack enable

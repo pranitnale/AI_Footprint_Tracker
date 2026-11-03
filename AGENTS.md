@@ -1,6 +1,6 @@
 # AI Footprint Tracker project rules
 
-Read `IMPLEMENTATION-PLAN.md` and the relevant contracts before changing product behavior. This repository contains the application implementation alongside preserved design and planning material. Unsigned local packages have verification evidence; native-browser and external release gates remain separate. Read `docs/release/MODULAR-REFINEMENT-STATUS.md` for the current state. The extension has not been published.
+Read `IMPLEMENTATION-PLAN.md` and the relevant contracts before changing product behavior. This repository contains the application implementation alongside preserved design and planning material. Unsigned local packages have verification evidence; native-browser and external release gates remain separate. Read `docs/release/MODULAR-REFINEMENT-STATUS.md` for the current state. Version 0.1.0 is published in the Chrome Web Store (29 October 2026, id hcipdbbjkdjifcmallagehhjbdhodide). Edge and Firefox are not published.
 
 ## Tracking changes
 

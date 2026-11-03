@@ -4,7 +4,7 @@ All standard and release builds use the same three unpacked folders: `apps/exten
 
 ## Reproducible checks
 
-Use Node 22.23.2, pnpm 11.19.0, uv 0.11.28 and Python 3.13.15. The pinned versions were checked against official Node, npm/PyPI and project metadata on 10 September 2026. From a clean checkout:
+Use Node 22.23.4, pnpm 11.19.0, uv 0.12.24 and Python 3.13.15. The pinned versions were checked against official Node, npm/PyPI and project metadata on 10 September 2026. uv moved from 0.11.28 on 3 November 2026 because that release cannot download Python 3.13.15 (first offered in uv 0.12.3). From a clean checkout:
 
 ```sh
 corepack enable
@@ -67,7 +67,7 @@ On 10 September 2026, read-only queries to the official Docker Hub library API c
 | Node 22.23.4 slim Bookworm   | [Official tag](https://hub.docker.com/v2/namespaces/library/repositories/node/tags/22.23.4-bookworm-slim)   | `sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d` |
 | Nginx 1.30.6 Alpine 3.24     | [Official tag](https://hub.docker.com/v2/namespaces/library/repositories/nginx/tags/1.30.6-alpine3.24)      | `sha256:47928bf67eb62a1863cb08d9ecb52d3e704304ba614eaee17884204677702951` |
 
-On 22 October 2026 the proxy image moved to Node 22.23.4 (CVE-2026-111497, Brotli decoder out-of-bounds write) and Nginx 1.30.6 (the 14 October 2026 advisories, CVE-2026-15176, CVE-2026-93479, CVE-2026-95101, CVE-2026-97629, CVE-2026-97205). Both digests come from Docker Hub API queries on 22 and 23 October 2026. The Nginx tag was rebuilt on 22 October 2026, so the pin uses that rebuild. `.node-version` stays at 22.23.2 until the next browser release, because it is a hashed browser-artifact input.
+On 22 October 2026 the proxy image moved to Node 22.23.4 (CVE-2026-111497, Brotli decoder out-of-bounds write) and Nginx 1.30.6 (the 14 October 2026 advisories, CVE-2026-15176, CVE-2026-93479, CVE-2026-95101, CVE-2026-97629, CVE-2026-97205). Both digests come from Docker Hub API queries on 22 and 23 October 2026. The Nginx tag was rebuilt on 22 October 2026, so the pin uses that rebuild. On 28 October 2026 `.node-version`, and with it CI and local builds, moved to 22.23.4 as well. It is a hashed browser-artifact input, so the next browser packages get a new source fingerprint.
 
 Registry metadata proves tag/digest availability, not that the images build, run or have no vulnerabilities. Docker CLI is absent on the local Windows verification host. Actual Compose validation, clean image builds and OS-image vulnerability scans remain unverified locally. CI includes Compose validation and no-cache image builds without starting a database. npm/pip audits do not cover container OS packages. No alternate database runtime was started around the host's denied PostgreSQL launcher.
 

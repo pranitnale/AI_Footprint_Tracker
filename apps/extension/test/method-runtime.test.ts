@@ -524,7 +524,9 @@ test("actual client enrollment and authenticated bundle delivery through SQLite 
         (_, reject) =>
           (startupTimer = setTimeout(
             () => reject(new Error("synthetic_api_start_timeout")),
-            20000,
+            // A clean checkout has no Python bytecode, so the first start can take
+            // most of 20 seconds and longer on a busy machine.
+            60000,
           )),
       ),
     ]);

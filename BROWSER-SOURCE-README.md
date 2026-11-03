@@ -2,7 +2,7 @@
 
 This archive contains the source and locked JavaScript dependencies needed to rebuild the unsigned browser extension. It is a rebuild-only subset of the repository, not a complete development checkout.
 
-Use Node 22.23.2 and pnpm 11.19.0. From the extracted archive root:
+Use Node 22.23.4 and pnpm 11.19.0. From the extracted archive root:
 
 ```sh
 pnpm install --frozen-lockfile

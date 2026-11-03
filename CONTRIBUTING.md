@@ -4,7 +4,7 @@ Thank you for improving AI Footprint Tracker. Contributions should preserve the 
 
 ## Development environment
 
-Use Node 22.23.2, pnpm 11.19.0, uv 0.11.28 and Python 3.13.15. From a clean checkout:
+Use Node 22.23.4, pnpm 11.19.0, uv 0.12.24 and Python 3.13.15. From a clean checkout:
 
 ```sh
 corepack enable

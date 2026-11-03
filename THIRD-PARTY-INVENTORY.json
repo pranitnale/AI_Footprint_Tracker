@@ -146,7 +146,7 @@
       "license": "MIT",
       "name": "vite",
       "scope": "runtime",
-      "version": "7.3.6"
+      "version": "7.3.7"
     },
     {
       "browser_runtime": true,
@@ -172,7 +172,7 @@
       "license": "MIT",
       "name": "zod",
       "scope": "runtime",
-      "version": "4.6.1"
+      "version": "4.6.7"
     },
     {
       "ecosystem": "pypi",
@@ -220,7 +220,7 @@
       "license": "MPL-2.0",
       "name": "certifi",
       "scope": "runtime",
-      "version": "2026.7.22"
+      "version": "2026.10.23"
     },
     {
       "ecosystem": "pypi",

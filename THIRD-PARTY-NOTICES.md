@@ -25,10 +25,10 @@ Each browser package ships the full upstream licence and notice files of these c
 | react-dom | 19.3.0 | MIT |
 | saxes | 6.0.0 | ISC |
 | scheduler | 0.28.0 | MIT |
-| vite | 7.3.6 | MIT |
+| vite | 7.3.7 | MIT |
 | wxt | 0.21.4 | MIT |
 | xmlchars | 2.2.0 | MIT |
-| zod | 4.6.1 | MIT |
+| zod | 4.6.7 | MIT |
 
 Tokenizer vocabulary assets are redistributed only with the notices in `packages/tokenizers/LICENSES/`. A tokenizer mapping is a reproducibility dependency, not evidence that a consumer website exposed complete usage.
 
@@ -49,7 +49,7 @@ These Python packages run in the organization server. Container base images and 
 | annotated-types | 0.8.0 | MIT |
 | anyio | 4.15.1 | MIT |
 | attrs | 26.1.0 | MIT |
-| certifi | 2026.7.22 | MPL-2.0 |
+| certifi | 2026.10.23 | MPL-2.0 |
 | cffi | 2.1.1 | MIT-0 |
 | click | 8.5.0 | BSD-3-Clause |
 | cryptography | 50.0.1 | Apache-2.0 OR BSD-3-Clause |

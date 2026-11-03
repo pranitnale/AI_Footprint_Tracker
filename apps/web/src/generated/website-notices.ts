@@ -95,7 +95,7 @@ export const websiteNotices: WebsiteNotice[] = [
   },
   {
     "name": "zod",
-    "version": "4.6.1",
+    "version": "4.6.7",
     "license": "MIT",
     "notices": [
       {

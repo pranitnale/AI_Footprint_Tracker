@@ -177,13 +177,7 @@ export function WebPrivacyPolicyPage({ navigate }: { navigate: Navigate }) {
                   <tr>
                     <td>IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Germany</td>
                     <td>Runs the servers, the database and the backups since 24 November 2026</td>
-                    <td>Germany</td></tr>
-                  <tr>
-                    <td>
-                      Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany</td>
-                    <td>Ran the servers until 24 November 2026. Keeps a copy of the database and its backups until 8 December 2026 at the latest, in case the move to the new servers must be undone.</td>
-                    <td>
-                      European Union</td></tr></tbody></table></div>
+                    <td>Germany</td></tr></tbody></table></div>
             <p>We send sign-in codes from our own mail server, which runs on the IONOS servers named above. Its delivery log holds the recipient's address, the time and the answer of the receiving mail system, and is kept for up to five weeks. An email that cannot be delivered comes back to our mail server; such a returned message is deleted after at most five weeks.</p>
             <p>All providers in the table process data only on our instructions under a data processing agreement. We do not sell personal data or share it for advertising.</p>
             <h2 id="transfers-outside-the-eu">Transfers outside the EU</h2>

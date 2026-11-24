@@ -141,14 +141,7 @@ export function WebDPAPage({ navigate }: { navigate: Navigate }) {
                     <td>IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Germany</td>
                     <td>Servers, database and backups since 24 November 2026</td>
                     <td>All data listed in section 3</td>
-                    <td>Germany</td></tr>
-                  <tr>
-                    <td>
-                      Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany</td>
-                    <td>Servers until 24 November 2026. A copy of the database and its backups until 8 December 2026 at the latest, in case the move to the new servers must be undone.</td>
-                    <td>All data listed in section 3</td>
-                    <td>
-                      European Union</td></tr></tbody></table></div>
+                    <td>Germany</td></tr></tbody></table></div>
             <p>We send sign-in codes from our own mail server, which runs on the IONOS servers listed above. Its delivery log holds the recipient's address, the time and the answer of the receiving mail system, and is kept for up to five weeks. An email that cannot be delivered comes back to our mail server; such a returned message is deleted after at most five weeks.</p></article></div></section>
     </>
   );

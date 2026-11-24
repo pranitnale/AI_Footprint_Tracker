@@ -103,7 +103,6 @@ We do not use analytics, advertising, social media plugins, or fonts and scripts
 | --- | --- | --- |
 | Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, Germany (part of Sendinblue SAS, Paris) | Sends sign-in codes by email only as a fallback, when our own mail server cannot deliver them. Brevo then receives only the recipient's address and the code, with tracking turned off. Its delivery logs are kept for 1 month. | EU. Some of Brevo's sub-processors are outside the EU, see below. |
 | IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Germany | Runs the servers, the database and the backups since 24 November 2026 | Germany |
-| Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany | Ran the servers until 24 November 2026. Keeps a copy of the database and its backups until 8 December 2026 at the latest, in case the move to the new servers must be undone. | European Union |
 
 We send sign-in codes from our own mail server, which runs on the IONOS servers named above. Its delivery log holds the recipient's address, the time and the answer of the receiving mail system, and is kept for up to five weeks. An email that cannot be delivered comes back to our mail server; such a returned message is deleted after at most five weeks.
 

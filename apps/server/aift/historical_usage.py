@@ -22,7 +22,7 @@ from footprint_estimator import (
 from footprint_estimator import (
     fixed as quantity_string,
 )
-from sqlalchemy import and_, exists, func, or_, select
+from sqlalchemy import and_, delete, exists, func, or_, select
 from sqlalchemy.orm import aliased, defer
 from sqlalchemy.orm.util import identity_key
 
@@ -31,7 +31,9 @@ from .db import (
     DeletionTombstone,
     EnrollmentEra,
     HistoryCoverage,
+    HistoryExactInput,
     HistoryObservation,
+    HistoryReplacement,
     HistoryTombstone,
 )
 from .security import Problem, instant, parse_time
@@ -283,6 +285,49 @@ def message_parts(m, claude_factor):
     return list(history_token_parts(counted)), list(project_components(counted["inline_file_text"]))
 
 
+def exact_inputs_of(s, rows):
+    """Claude's input count (new, cache written, cache read) by owner and key, for the replies
+    among rows that carry one. Only Claude pages bring one. A summary with its day, tool and model
+    splits reads the same rows many times, so within a read memo each reply is looked up once."""
+    from .history_matching import memo_of
+
+    memo = memo_of(s)
+    if memo is None:
+        memo = {}
+    wanted = {
+        ("exact input", r.tenant, r.owner, r.message_key)
+        for r in rows
+        if r.role == "response" and r.site == "claude"
+    }
+    missing = sorted(name for name in wanted if name not in memo)
+    for tenant in sorted({name[1] for name in missing}):
+        keys = sorted({name[3] for name in missing if name[1] == tenant})
+        for start in range(0, len(keys), 500):
+            for e in s.scalars(
+                select(HistoryExactInput).where(
+                    HistoryExactInput.tenant == tenant,
+                    HistoryExactInput.message_key.in_(keys[start : start + 500]),
+                )
+            ):
+                counts = (e.fresh, e.cache_write, e.cache_read)
+                memo[("exact input", e.tenant, e.owner, e.message_key)] = counts
+    for name in missing:
+        memo.setdefault(name, None)
+    return {(name[2], name[3]): memo[name] for name in wanted if memo[name]}
+
+
+def provider_measurement(value):
+    """Mirror of providerMeasurement."""
+    return {
+        "value": str(value),
+        "evidence": "provider_reported",
+        "scope": "provider_request",
+        "completeness": "complete_for_scope",
+        "profile_id": None,
+        "reason": None,
+    }
+
+
 def load_rows(s, conditions, order=(), limit=None):
     """
     The saved messages matching conditions, as select(HistoryObservation) would return them. Only
@@ -463,11 +508,20 @@ class HistoricalUsage:
         self.analytics = analytics
 
     def visible(self, company):
-        return self._visible()
+        """The saved messages that count: not erased, and not replaced by the owner's exact rows."""
+        return self._visible(True)
+
+    def unerased(self, company):
+        """
+        visible() without the replacement rule. A replaced text row still holds its company-key
+        election, so another member's copy of the same reply does not start counting beside the
+        exact row, and erasure sweeps do not take it for an erased row outside their range.
+        """
+        return self._visible(False)
 
     @staticmethod
-    @lru_cache(maxsize=1)
-    def _visible():
+    @lru_cache(maxsize=2)
+    def _visible(replacements):
         # The condition names no organization, so one expression serves every query; a summary
         # with its splits builds it more than a hundred times otherwise.
         h = HistoryObservation
@@ -527,7 +581,16 @@ class HistoricalUsage:
                 ~read_after(HistoryTombstone.epoch),
             )
         )
-        return and_(~stable, ~erased, ~tombstone)
+        if not replacements:
+            return and_(~stable, ~erased, ~tombstone)
+        replaced = exists(
+            select(1).where(
+                HistoryReplacement.tenant == h.tenant,
+                HistoryReplacement.owner == h.owner,
+                HistoryReplacement.message_key == h.message_key,
+            )
+        )
+        return and_(~stable, ~erased, ~tombstone, ~replaced)
 
     def regenerated(self, s, company, rows):
         """(owner, message_key) of the saved Claude replies among rows that regenerated an
@@ -829,12 +892,49 @@ class HistoricalUsage:
                     else ("applied" if action == "improved" else action),
                 }
             )
+        # The page's exact Claude rows replace, once, the member's saved text rows they name
+        # (validate_history_page allows the list on Claude pages only). Rows are keyed by their
+        # owner, so a member never hides another member's copy. Receipts do not change.
+        # Claude's own input for replies of this page (validate_history_page checks each names a
+        # reply here, once). A later upload of the same reply brings the current count. A reply an
+        # erasure refused is not stored, so neither is its count.
+        stored = {r["message_key"] for r in results if r["status"] != "erased"}
+        for entry in page.get("exact_inputs") or ():
+            if entry["message_key"] not in stored:
+                continue
+            identity = (company.id, member.id, entry["message_key"])
+            exact = s.get(HistoryExactInput, identity)
+            if not exact:
+                exact = HistoryExactInput(tenant=identity[0], owner=identity[1], message_key=identity[2])
+                s.add(exact)
+            exact.fresh, exact.cache_write, exact.cache_read = (
+                int(entry["new"]),
+                int(entry["cache_write"]),
+                int(entry["cache_read"]),
+            )
+        for message_key in page.get("replaced_message_keys") or ():
+            if s.get(HistoryReplacement, (company.id, member.id, message_key)):
+                continue
+            s.add(
+                HistoryReplacement(
+                    tenant=company.id, owner=member.id, message_key=message_key, observed_at=instant(now)
+                )
+            )
+            replaced = s.get(HistoryObservation, (company.id, member.id, message_key))
+            if replaced:
+                from .engine_history import invalidate_linked_estimates
+
+                # As for a changed message above: estimates made with this row are made again.
+                invalidate_linked_estimates(s, replaced)
         for key in sorted(elections):
             self.analytics.company.elect(s, company, key)
         # An accepted upload of saved messages is a sync like a usage batch. Without this, a browser
         # that had only sent saved history showed "Never" synced on the Health page (14 Oct 2026).
         if any(result["status"] != "conflict" for result in results):
             device.data = {**device.data, "last_reporting_at": instant(now)}
+        # As for a usage batch (Analytics.ingest): the saved messages of this page, and the live
+        # estimates this page made stale above, are calculated in the server's method now.
+        self.analytics.methods.keep_current(s, company, member.id)
         retained = s.scalar(
             select(HistoryObservation.message_key)
             .where(
@@ -1015,6 +1115,16 @@ class HistoricalUsage:
         # With requests_only, prompt_count per person: each person's own summary counts the same
         # rows, as long as the period holds no more saved messages than one summary reads.
         requests_by_owner = {}
+        # Claude's own input for the replies that carry it (owner decision of 23 Nov 2026), as
+        # the browser sums it (HistoryService.local). The prompt such a reply names adds no text
+        # count beside it, also when it came on an earlier page. A reply names its first prompt
+        # only, so a prompt queued into a running turn keeps its text count.
+        exact_inputs = {} if requests_only else exact_inputs_of(s, rows)
+        exact_prompts = {
+            (r.owner, r.payload["prompt_key"])
+            for r in rows
+            if (r.owner, r.message_key) in exact_inputs and r.status != "conflict"
+        }
 
         for row in rows:
             m = row.payload if query.get("calculation_view") == "recalculated" else row.original
@@ -1048,12 +1158,25 @@ class HistoricalUsage:
                     ("message parts", row.tenant, row.owner, row.message_key, m is row.payload),
                     lambda: message_parts(m, claude_factor),
                 )
-                for part, measured in token_parts:
-                    group = (row.role, part, measured["profile_id"], measured["evidence"])
+                exact = exact_inputs.get((row.owner, row.message_key))
+                if row.role == "prompt" and (row.owner, row.message_key) in exact_prompts:
+                    counted_parts = []
+                else:
+                    # Claude's count is everything the model read in the turn, tool results
+                    # included, so the reply's own tool result count is left out beside it.
+                    counted_parts = [
+                        (row.role, part, measured)
+                        for part, measured in token_parts
+                        if not exact or part != "tool_output"
+                    ]
+                if exact:
+                    counted_parts.append(("prompt", "total", provider_measurement(sum(exact))))
+                for role, part, measured in counted_parts:
+                    group = (role, part, measured["profile_id"], measured["evidence"])
                     t = tokens.setdefault(
                         group,
                         {
-                            "role": row.role,
+                            "role": role,
                             "part": part,
                             "profile_id": group[2],
                             "evidence": group[3],
@@ -1155,9 +1278,20 @@ class HistoricalUsage:
     def erase_page(self, s, company, marker, limit=100):
         if marker.get("retention"):
             return 0
+        if marker["scope"] == "user":
+            # Deleting a person also removes which of their messages were replaced; a replay
+            # keeps those replaced after it was made (clean slate). A range keeps them, as it
+            # keeps tombstones: without them a published build's re-upload of the text would
+            # count beside the exact rows read again.
+            gone = delete(HistoryReplacement).where(
+                HistoryReplacement.tenant == company.id, HistoryReplacement.owner == marker["user_id"]
+            )
+            if marker.get("created_at"):
+                gone = gone.where(HistoryReplacement.observed_at <= marker["created_at"])
+            s.execute(gone)
         conditions = scope_conditions(company, marker)
         if marker["scope"] != "user":
-            conditions[-1] = or_(conditions[-1], ~self.visible(company))
+            conditions[-1] = or_(conditions[-1], ~self.unerased(company))
         rows = list(
             s.scalars(
                 select(HistoryObservation)
@@ -1187,6 +1321,10 @@ class HistoricalUsage:
             c = s.get(HistoryCoverage, (company.id, row.owner, row.conversation))
             if c:
                 s.delete(c)
+            # The reply's input count goes with it; a chat read again brings it again.
+            exact = s.get(HistoryExactInput, (company.id, row.owner, row.message_key))
+            if exact:
+                s.delete(exact)
             s.delete(row)
         s.flush()
         # Another member's copy of an erased message counts from now on (erase handover).
@@ -1283,5 +1421,5 @@ class HistoricalUsage:
             return False
         conditions = scope_conditions(company, marker)
         if marker["scope"] != "user":
-            conditions[-1] = or_(conditions[-1], ~self.visible(company))
+            conditions[-1] = or_(conditions[-1], ~self.unerased(company))
         return s.scalar(select(HistoryObservation.message_key).where(*conditions).limit(1)) is not None

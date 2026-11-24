@@ -117,6 +117,7 @@ export type {
   Ack,
   CoworkAdvance,
   CoworkCheckpoint,
+  ExactInput,
 } from "./ledger-support";
 
 /** All writes are numeric/categorical observations validated at the persistence boundary. */

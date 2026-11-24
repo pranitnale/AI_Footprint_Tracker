@@ -78,10 +78,11 @@ const closing = [
  * a body cut off without a stop.
  */
 async function page(
-  ending: "complete" | "stop" | "abort-before-answer" | "cut" | "long",
+  ending: "complete" | "stop" | "abort-before-answer" | "cut" | "long" | "fallback",
   waitMs = 0,
   // Since 21 Oct 2026 every line has version 2 (html[data-conversation-stream-protocol="2"]);
-  // the lines are otherwise the same as in version 1.
+  // the 21 Oct lines are otherwise the same as in version 1. The 3 Nov fallback case
+  // keeps markdown empty, as seen live that day.
   version: 1 | 2 = 1,
 ) {
   let controller!: ReadableStreamDefaultController<Uint8Array>;
@@ -148,7 +149,13 @@ async function page(
         return error?.name;
       }
     })();
-    send(opening);
+    send(ending === "fallback" ? [
+      ...opening.slice(0, 4),
+      content(1, "", "streaming", { dil: { fallbackMarkdown: "Synthetic" } }),
+      opening[5],
+      content(2, "", "streaming", { approvedUrls: [] }),
+      content(3, "", "streaming", { dil: { fallbackMarkdown: "Synthetic answer from fallback text." } }),
+    ] : opening);
     await tick();
     // The page moves to the chat's address once the stream named it.
     location.pathname = `/uc/${CHAT}`;
@@ -175,8 +182,14 @@ async function page(
       send([content(3 + LONG_PIECES, "", "complete"), ...closing.slice(1)]);
       controller.close();
       assert.equal(await pageRead, "ended");
-    } else if (ending === "complete") {
-      send(closing);
+    } else if (ending === "complete" || ending === "fallback") {
+      send(ending === "fallback" ? [
+        content(4, "", "complete", {
+          references: [{ modelDilV2: { fallbackMarkdown: "Synthetic citation metadata that must not count." } }],
+        }),
+        control("turn-latency", { turnLatency: { tags: { protocol: "synthetic" }, elapsed: 12 } }),
+        ...closing.slice(1),
+      ] : closing);
       controller.close();
       assert.equal(await pageRead, "ended");
     } else if (ending === "stop") {
@@ -361,6 +374,23 @@ test("21 Oct 2026: a version 2 signed-out ChatGPT reply is captured and counted 
   assert.equal(display.summary.requests, 1);
   assert.equal(display.summary.outcomes.completed, 1);
   assert.equal(display.summary.outcomes.interrupted_unconfirmed, 0);
+  assert.notEqual(display.summary.metrics.energy.value, null);
+});
+
+test("3 Nov 2026: a version 2 signed-out ChatGPT fallback-only reply is captured and stored with non-zero output", async (t) => {
+  const frames = await page("fallback", 0, 2);
+  const end = frames.find((m) => m.event === "end");
+  assert.ok(end, "the reply ends");
+  assert.equal(end.failure, null);
+  assert.equal(end.snapshot.state, "completed");
+  assert.equal(end.snapshot.text, "Synthetic answer from fallback text.");
+  assert.ok(!end.snapshot.limitations.includes("unknown_event_observed"));
+  const display = await store(t, frames);
+  assert.deepEqual(display.conversationIdentity, { site: "chatgpt", conversationId: CHAT });
+  assert.equal(display.summary.requests, 1);
+  assert.equal(display.summary.outcomes.completed, 1);
+  assert.notEqual(display.summary.tokens.output.value, null);
+  assert.notEqual(display.summary.tokens.output.value, "0");
   assert.notEqual(display.summary.metrics.energy.value, null);
 });
 

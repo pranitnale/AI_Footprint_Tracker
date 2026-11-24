@@ -241,3 +241,57 @@ export function parseDispatch(site: Site, url: URL, body: string): Dispatch {
   }
   return base;
 }
+
+const CLAUDE_PERFORM_ACTION =
+  "/claudeai-rpc/anthropic.bard.api.v1alpha.ConversationService/PerformAction";
+// A send is a few hundred bytes, about 8 KiB for a new chat; a larger body is not walked.
+const CLAUDE_ACTION_BYTES = 1048576;
+
+/**
+ * Whether a request of claude.ai's merged app (18 Nov 2026) sends a message. The app sends,
+ * stops and opens chats through one `PerformAction` call with a protobuf body. A body whose
+ * top level holds field 2 is a send: a new message, a retry or an edit (probe of 22 Nov
+ * 2026; opening a chat and the warm-up before a send hold field 15, a stop field 3). Only the
+ * top-level field numbers are walked. No value is read, so nothing of the message is kept.
+ * A body that is not bytes, or that is not a whole protobuf message, is not a send.
+ */
+export function claudeSendAction(url: URL, method: string, body: unknown): boolean {
+  if (method !== "POST" || url.pathname !== CLAUDE_PERFORM_ACTION) return false;
+  const bytes = ArrayBuffer.isView(body)
+    ? new Uint8Array(body.buffer, body.byteOffset, body.byteLength)
+    : body instanceof ArrayBuffer
+      ? new Uint8Array(body)
+      : null;
+  if (!bytes || !bytes.length || bytes.length > CLAUDE_ACTION_BYTES) return false;
+  let at = 0;
+  /** A varint of at most `limit` bytes; its value when it fits 32 bits, else -1. */
+  const varint = (limit: number): number | null => {
+    let value = 0;
+    for (let index = 0; index < limit; index++) {
+      if (at >= bytes.length) return null;
+      const byte = bytes[at++]!;
+      if (index < 4) value += (byte & 0x7f) * 2 ** (7 * index);
+      else if (byte & 0x7f) value = -1;
+      if (!(byte & 0x80)) return value;
+    }
+    return null;
+  };
+  let send = false;
+  while (at < bytes.length) {
+    const key = varint(5);
+    if (key === null || key < 8) return false;
+    const wire = key % 8;
+    if (key === 18) send = true;
+    if (wire === 0) {
+      if (varint(10) === null) return false;
+    } else if (wire === 1) at += 8;
+    else if (wire === 5) at += 4;
+    else if (wire === 2) {
+      const length = varint(5);
+      if (length === null || length < 0) return false;
+      at += length;
+    } else return false;
+    if (at > bytes.length) return false;
+  }
+  return send;
+}

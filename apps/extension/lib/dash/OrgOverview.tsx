@@ -4,7 +4,7 @@ import { formatInteger } from "@footprint/ui/formatters";
 import { Icon } from "@footprint/ui/icons";
 import type { ServerSummary } from "../dashboard/types";
 import { SITE_LABELS, SITE_ORDER, ageText } from "../ui/components";
-import { dashAxis, dashWindow, dayText } from "../ui/dash-periods";
+import { dashAxis, dashWindow, dayText, inPeriod } from "../ui/dash-periods";
 import { baseParts, baseText, baseValue, changeText, peopleOf, type Metric } from "../ui/figure-math";
 import { usageFigures, type UsageFigures } from "../ui/usage-figures";
 import { serverQuery, useScoped } from "./data";
@@ -133,7 +133,9 @@ export function OrgOverview({ ctx }: { ctx: PageContext }) {
   const window = dashWindow(ctx.period, dashboard.settings.timezone, now);
   const company = useServerSummary(ctx, "company", window, false, true);
   const before = useServerSummary(ctx, "company", window.previous, true, true);
-  const mine = useServerSummary(ctx, "my", window);
+  // The person's own figures load slower than the organization's (6 to 20 s on 15 Oct 2026), so
+  // their saved copy shows meanwhile, as the organization's does; the fresh answer replaces it.
+  const mine = useServerSummary(ctx, "my", window, false, true);
   const name = organizationName(dashboard.company);
   // A saved copy only stands in for figures. A saved "being updated", "not shared" or "no usage"
   // answer is not shown while the current one loads.
@@ -229,7 +231,7 @@ export function OrgOverview({ ctx }: { ctx: PageContext }) {
       <Tiles figures={figures} metric={metric} onPick={setMetric} plain />
 
       <div className="dh-two">
-        <YourPart ctx={ctx} org={figures} mine={myFigures} metric={metric} people={people} phrase={window.phrase} />
+        <YourPart ctx={ctx} org={figures} mine={myFigures} loading={!mine.data && !mine.error} metric={metric} people={people} phrase={inPeriod(window)} />
         <Compare org={figures} mine={myFigures} people={people} days={window.keys.length || null} />
       </div>
 
@@ -246,7 +248,7 @@ export function OrgOverview({ ctx }: { ctx: PageContext }) {
   );
 }
 
-function YourPart({ ctx, org, mine, metric, people, phrase }: { ctx: PageContext; org: UsageFigures; mine: UsageFigures | null; metric: Metric; people: number | null; phrase: string }) {
+function YourPart({ ctx, org, mine, loading, metric, people, phrase }: { ctx: PageContext; org: UsageFigures; mine: UsageFigures | null; loading: boolean; metric: Metric; people: number | null; phrase: string }) {
   const total = baseValue(org, metric);
   const own = mine ? baseValue(mine, metric) : null;
   const share = total && own !== null ? Math.min(100, Math.round((own / total) * 100)) : null;
@@ -256,7 +258,7 @@ function YourPart({ ctx, org, mine, metric, people, phrase }: { ctx: PageContext
         Your part
       </h2>
       <p className="dh-soft">
-        Your share of the organization's {METRIC_LABELS[metric].toLowerCase()} in the {phrase}.
+        Your share of the organization's {METRIC_LABELS[metric].toLowerCase()} {phrase}.
       </p>
       {share !== null && own !== null && total !== null ? (
         <>
@@ -284,6 +286,11 @@ function YourPart({ ctx, org, mine, metric, people, phrase }: { ctx: PageContext
             You used <b>{baseText(metric, own)}</b> of the organization's {baseText(metric, total)}.
           </p>
         </>
+      ) : loading ? (
+        // Until the person's own figures arrive, nothing is known about them yet (23 Nov 2026).
+        <div className="dh-loading" role="status">
+          Loading your figures
+        </div>
       ) : (
         <p className="dh-soft" role="status">
           {ctx.dashboard.queueCount ? "Your share appears once your records have synced." : "Your share is not available for this period."}

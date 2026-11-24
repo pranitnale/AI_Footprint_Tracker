@@ -1,5 +1,5 @@
 import { isCoworkSessionId } from "@footprint/capture-core";
-import { coworkListSession, coworkOwnRead } from "./cowork-own-read";
+import { coworkListSession, coworkOwnRead, coworkResume } from "./cowork-own-read";
 import { historyRequestConversation } from "./history-route";
 import { OWN_READ_PAGE_SPACING_MS, type OwnReadProvider } from "./own-read-page";
 
@@ -87,6 +87,8 @@ export function claudeOwnRead(deps: {
     pageReadConversation: (url, method, body) =>
       coworkListSession(url, method) ??
       historyRequestConversation("claude", url, method, body),
+    // Only a session's read resumes; a chat's saved copy is always read whole.
+    resume: coworkResume,
     async run(context) {
       if (isCoworkSessionId(context.conversationId))
         return coworkOwnRead(context, deps.origin, pageDelay);

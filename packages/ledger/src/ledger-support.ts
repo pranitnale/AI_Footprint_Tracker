@@ -83,7 +83,21 @@ export type HistoryRow = {
    * never inside it, and once kept it never changes.
    */
   companyKey?: string;
+  /**
+   * Message keys of the saved text rows this exact Claude prompt replaced (18 Nov 2026,
+   * `checkedReplaced`). They travel beside the row when it is uploaded, so the company server
+   * stops counting those text rows too.
+   */
+  replaces?: string[];
+  /**
+   * Claude's exact input for this reply's turn (owner decision of 23 Nov 2026). It is not part
+   * of the saved message: it travels beside it in an upload (`exact_inputs`, package EC), so
+   * the company's input figure for the turn is the same as this browser's.
+   */
+  exactInput?: ExactInput;
 };
+/** New input, input written to the cache and input read from it: what Claude processed. */
+export type ExactInput = { fresh: number; cacheWrite: number; cacheRead: number };
 /**
  * The counters of the latest Cowork result saved for a session (W5). Local only: the
  * next result's own counts are the difference to it, so it must change together with the
@@ -93,6 +107,8 @@ export type CoworkCheckpoint = {
   sequence: number;
   models: Array<{ model: string; output: number; reasoning: number | null }>;
   apiMs: number | null;
+  /** The cumulative input counters; a checkpoint saved before 23 Nov 2026 has none. */
+  inputs?: ExactInput;
 };
 /** The checkpoint a Cowork batch was calculated from and the one it leaves behind. */
 export type CoworkAdvance = { base: number | null; next: CoworkCheckpoint };
@@ -104,13 +120,23 @@ const coworkCount = (value: unknown): value is number =>
   (value as number) <= COWORK_COUNT_LIMIT;
 const exactKeys = (value: object, keys: string) =>
   Object.keys(value).sort().join(",") === keys;
+const validExactInput = (value: unknown): value is ExactInput =>
+  !!value &&
+  typeof value === "object" &&
+  !Array.isArray(value) &&
+  exactKeys(value, "cacheRead,cacheWrite,fresh") &&
+  coworkCount((value as ExactInput).fresh) &&
+  coworkCount((value as ExactInput).cacheWrite) &&
+  coworkCount((value as ExactInput).cacheRead);
 export function validCoworkCheckpoint(
   value: unknown,
 ): value is CoworkCheckpoint {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const v = value as CoworkCheckpoint;
   return (
-    exactKeys(v, "apiMs,models,sequence") &&
+    (Object.hasOwn(v, "inputs")
+      ? exactKeys(v, "apiMs,inputs,models,sequence") && validExactInput(v.inputs)
+      : exactKeys(v, "apiMs,models,sequence")) &&
     coworkCount(v.sequence) &&
     (v.apiMs === null || coworkCount(v.apiMs)) &&
     Array.isArray(v.models) &&
@@ -163,15 +189,20 @@ export function checkedCoworkCheckpoint(
  * Whether an erasure marker covers a saved message this browser read at `observedAt`. An
  * erasure is a clean slate when it is applied (owner decision of 22 Oct 2026): it covers the
  * messages read before it, and a chat read again afterwards counts again. A message the server
- * refused (`refused`) stays out. Markers written before 22 Oct 2026 carry no time: the erasure
- * that wrote them already removed what it covered, so they cover nothing read since.
+ * refused (`refused`) stays out, and so does a text row an exact row replaced (`replaced`),
+ * however often the chat's saved copy is read again. Markers written before 22 Oct 2026 carry
+ * no time: the erasure that wrote them already removed what it covered, so they cover nothing
+ * read since.
  */
 export function erasedWhenRead(
-  marker: { at?: unknown; refused?: unknown } | null | undefined,
+  marker:
+    | { at?: unknown; refused?: unknown; replaced?: unknown }
+    | null
+    | undefined,
   observedAt: string,
 ): boolean {
   if (!marker) return false;
-  if (marker.refused === true) return true;
+  if (marker.refused === true || marker.replaced === true) return true;
   return typeof marker.at === "number" && Date.parse(observedAt) <= marker.at;
 }
 /** Whether a range erasure covers a saved message; see erasedWhenRead. */
@@ -250,6 +281,71 @@ export function checkedCountBases(
   return checked;
 }
 const COMPANY_KEY = /^[0-9a-f]{64}$/;
+/**
+ * The saved text rows that exact rows of a page replace, keyed by the exact row's message key
+ * (18 Nov 2026: a Claude chat's session reports Claude's own counts for turns the chat's saved
+ * copy was counted for by text). A message of a Claude page names one other message, its own
+ * text copy, never a message of the page. A prompt does not name its reply's copy: the two
+ * may be saved in different batches, and the reply's text must stay counted until then.
+ */
+export function checkedReplaced(
+  page: HistoryPage,
+  replaced: Record<string, unknown> | undefined,
+): Record<string, string[]> {
+  const checked: Record<string, string[]> = Object.create(null);
+  if (!replaced) return checked;
+  const messages = new Map(
+    page.messages.map((message) => [message.message_key, message.role]),
+  );
+  for (const [key, value] of Object.entries(replaced)) {
+    if (
+      page.site !== "claude" ||
+      !messages.has(key) ||
+      !Array.isArray(value) ||
+      value.length !== 1 ||
+      value.some(
+        (name) =>
+          typeof name !== "string" ||
+          !COMPANY_KEY.test(name) ||
+          messages.has(name),
+      )
+    )
+      throw new Error("payload_rejected");
+    checked[key] = [...(value as string[])];
+  }
+  return checked;
+}
+/**
+ * Claude's exact input for the turns of a page's replies, keyed by the reply's message key
+ * (owner decision of 23 Nov 2026). Only a Claude reply that carries Claude's own output
+ * count takes one: the three counts come from the same counters as that output.
+ */
+export function checkedExactInputs(
+  page: HistoryPage,
+  inputs: Record<string, unknown> | undefined,
+): Record<string, ExactInput> {
+  const checked: Record<string, ExactInput> = Object.create(null);
+  if (!inputs) return checked;
+  const replies = new Set(
+    page.messages
+      .filter(
+        (message) =>
+          message.role === "response" &&
+          message.tokens.evidence === "provider_reported",
+      )
+      .map((message) => message.message_key),
+  );
+  for (const [key, value] of Object.entries(inputs)) {
+    if (page.site !== "claude" || !replies.has(key) || !validExactInput(value))
+      throw new Error("payload_rejected");
+    checked[key] = {
+      fresh: value.fresh,
+      cacheWrite: value.cacheWrite,
+      cacheRead: value.cacheRead,
+    };
+  }
+  return checked;
+}
 /**
  * Company keys of a page's messages (W11), checked like count bases: each names one
  * message of the page.
@@ -384,6 +480,9 @@ export function checkedHistoryRow(value: HistoryRow): HistoryRow {
     if (basis.success) row.countBasis = basis.data;
     else delete row.countBasis;
   }
+  // Unreadable input counts are dropped: the turn then keeps its text input.
+  if (value.exactInput !== undefined && !validExactInput(value.exactInput))
+    delete row.exactInput;
   return row;
 }
 export function historyAuthority(state: any): string {

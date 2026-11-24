@@ -22,7 +22,7 @@ The main criterion is **no silent errors**. Capture gaps, unknown scope, duplica
 | 6 | [Live browser audit](docs/implementation/LIVE-BROWSER-AUDIT-2026-09-09.md) and [sanitized fixture README](fixtures/browser-audit-2026-09-09/README.md) | What was actually observed on the four consumer sites, parser traps and unfinished live coverage |
 | 7 | [Research index](docs/research/README.md) and [context-aware energy conclusion](docs/research/CONTEXT-AWARE-ENERGY-RESEARCH-2026-09-09.md) | Sources, corrections, accepted/rejected approaches, input/cache limitations and why baseline coefficients remain unchanged |
 | 8 | [Brand/roles/design](docs/implementation/BRAND-ROLES-AND-DESIGN-HANDOFF.md), [canvas README](design-canvas/README.md), [review updates](docs/design/REVIEW-UPDATES-2026-09-09.md) | Locked Fern/Resource Gauge identity, draft screens, user edits/comments and interface behavior |
-| 9 | [Brevo setup](docs/implementation/BREVO-PRIVACY-SETUP.md), [writing/code standards](docs/implementation/WRITING-AND-CODE-STANDARDS.md), [open-source rules](docs/implementation/OPEN-SOURCE-AND-REUSE.md) | Privacy-oriented mail setup, plain copy, reuse/performance and complete source delivery |
+| 9 | [SMTP mail setup](docs/implementation/SMTP-MAIL-SETUP.md), [Brevo setup](docs/implementation/BREVO-PRIVACY-SETUP.md), [writing/code standards](docs/implementation/WRITING-AND-CODE-STANDARDS.md), [open-source rules](docs/implementation/OPEN-SOURCE-AND-REUSE.md) | Privacy-oriented mail setup, plain copy, reuse/performance and complete source delivery |
 
 Earlier research remains evidence, not an alternative current product spec. In particular the original independent audit must be read with its correction addendum linked in the research index. Do not restore no-email accounts, invitation-only enrollment, extra organization MFA, admin links in the extension, output-only "high accuracy" claims or default expiry rules copied from superseded prose. If current normative documents genuinely conflict, record the conflict and resolve it before implementing the affected behavior.
 
@@ -34,7 +34,7 @@ Visit the public site, read about the project and install the appropriate store 
 
 ### Organization and employee
 
-Updated 13 October 2026 (owner decision). The registrant enters company/contact details and work domain at `https://aifootprinttracker.com` and verifies the work mailbox using a Brevo code; there is no organization address to choose. Verified registration creates the first admin and signs them in to `/admin` at the same address. Only administrators sign in on the website. A non-admin who tries is told that members connect from the extension.
+Updated 13 October 2026 (owner decision). The registrant enters company/contact details and work domain at `https://aifootprinttracker.com` and verifies the work mailbox using an email code; there is no organization address to choose. Verified registration creates the first admin and signs them in to `/admin` at the same address. Only administrators sign in on the website. A non-admin who tries is told that members connect from the extension.
 
 The employee installs the same public extension package, chooses Connect organization, enters the work email and the emailed code, and confirms "Connect to {organization}?" after seeing what is shared. The organization is found from the email domain; whether a domain has an organization is revealed only after a correct code. The package does not contain a company secret. The same verified email in the same tenant connects additional browsers/machines to one user, each with its own installation credential. Old local personal records are not uploaded. Admins can see installation instructions in the web dashboard but never get an administration link inside the extension. On a self-hosted server, which runs one organization at its own domain or subdomain, a dedicated short-lived bootstrap carries the first admin from the registration origin to the tenant session without a second OTP or shared-domain cookie. A same-profile reconnect preserves its original installation ID and valid capture eras before resuming queued records; a reinstall after storage loss is a new installation for the same user.
 
@@ -84,7 +84,7 @@ Image generation/editing is first-release scope wherever the provider/plan expos
 | P1 | Complete sanitized capture corpus and per-mode/browser capability matrix | Actual twelve basic site/browser flows; every additional mode has a tested status; recorder gaps recorded |
 | P2 | Local namespaces, numerical ledger, revisions, outbox and health | Crash/quota/migration/idempotency tests; personal mode has no upload path |
 | P3 | Bundled local tokenizer assets and versioned mappings | Official parity where possible; substitutes explicitly calibrated or rough; no employee API calls |
-| P4 | Registration, Brevo OTP, tenant identity, connection handoff and scoped credentials | Same-email multi-browser tests; tenant/role/proof/replay isolation; real controlled mail tests before launch |
+| P4 | Registration, email OTP, tenant identity, connection handoff and scoped credentials | Same-email multi-browser tests; tenant/role/proof/replay isolation; real controlled mail tests before launch |
 | P5 | Provider-specific parsers and event normalization | Full-shape independent fixtures, history/branches/stop/images and no host interference |
 | P6 | Shared pure estimator methods and immutable approved bundles | TS/Python goldens, boundaries, assumption labels and fallback vector coherence; no unearned calibrated claim |
 | P7 | Durable upload acknowledgements, server canonicalization and rollups | Offline retry/crash/revision/duplicate/retention reconciliation; matching scope totals |
@@ -124,7 +124,7 @@ At this handoff the following questions have been sent to the owner and await co
 
 These are isolated policy choices. P0, local accounting, adapters and other implementation can start; the affected public onboarding/pricing/IP behavior must not launch on an invented decision. Record the answers in the product specification and update the fixtures/tests together.
 
-Other launch inputs: actual repository/store URLs and signing state, copyright/rights holder, real support/security/privacy contacts, operator allowlist/auth-policy acceptance, chosen hosting/DNS/TLS and protected secrets, approved Brevo sender/privacy setup, prices/entitlements and a separately approved billing integration if wanted. No real accounts, secrets or payment vendor are implied by placeholders.
+Other launch inputs: actual repository/store URLs and signing state, copyright/rights holder, real support/security/privacy contacts, operator allowlist/auth-policy acceptance, chosen hosting/DNS/TLS and protected secrets, approved mail sender/privacy setup (SMTP or Brevo), prices/entitlements and a separately approved billing integration if wanted. No real accounts, secrets or payment vendor are implied by placeholders.
 
 ## 8. Definition of complete
 

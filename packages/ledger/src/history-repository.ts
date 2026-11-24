@@ -64,10 +64,13 @@ import {
   historyCoverageChanged,
   checkedCountBases,
   checkedCompanyKeys,
+  checkedReplaced,
+  checkedExactInputs,
   checkedCoworkCheckpoint,
   validCoworkAdvance,
   type CoworkAdvance,
   type CoworkCheckpoint,
+  type ExactInput,
   liveReplyContent,
   sortLiveReplyContents,
   erasedWhenRead,
@@ -99,6 +102,8 @@ export class HistoryRepository {
       deferCoverage?: boolean;
       countBases?: Record<string, HistoryCountBasis>;
       companyKeys?: Record<string, string>;
+      replaced?: Record<string, string[]>;
+      exactInputs?: Record<string, ExactInput>;
       cowork?: CoworkAdvance;
     },
     validNow: () => boolean,
@@ -106,6 +111,8 @@ export class HistoryRepository {
     const page = HistoryPageSchema.parse(input);
     const bases = checkedCountBases(page, expected.countBases);
     const companyKeys = checkedCompanyKeys(page, expected.companyKeys);
+    const replaced = checkedReplaced(page, expected.replaced);
+    const exactInputs = checkedExactInputs(page, expected.exactInputs);
     if (expected.cowork !== undefined && !validCoworkAdvance(expected.cowork))
       throw new Error("payload_rejected");
     const cowork = expected.cowork && structuredClone(expected.cowork);
@@ -191,6 +198,7 @@ export class HistoryRepository {
       }
       let retained = 0;
       let committedRecords = 0;
+      let replacedRows = 0;
       messages: for (const record of page.messages) {
         const observed = Date.parse(record.observed_at);
         if (
@@ -225,6 +233,33 @@ export class HistoryRepository {
         )
           continue;
         retained++;
+        // An exact row replaces the text row it names, in the commit that saves it. The
+        // marker keeps that row out when the chat's saved copy is read again; both steps
+        // repeat safely.
+        const replaces = replaced[record.message_key];
+        for (const name of replaces ?? []) {
+          const textKey = `${scope.namespace}:history:${name}`;
+          const marker = await request(
+            tx.objectStore("deletion_markers").get(textKey),
+          );
+          if (marker?.replaced !== true)
+            tx.objectStore("deletion_markers").put({
+              key: textKey,
+              namespace: scope.namespace,
+              at: Date.now(),
+              replaced: true,
+            });
+          const text = (await request(
+            tx.objectStore("history_records").get(textKey),
+          )) as HistoryRow | undefined;
+          if (!text) continue;
+          tx.objectStore("history_records").delete(textKey);
+          tx.objectStore("history_outbox").delete(textKey);
+          const textScope = { ...scope, era: text.era };
+          await touchInput(tx, textScope, "history", name, true);
+          await touchHistoryLinks(tx, textScope, text.record);
+          replacedRows++;
+        }
         const old = (await request(
           tx.objectStore("history_records").get(key),
         )) as HistoryRow | undefined;
@@ -271,9 +306,14 @@ export class HistoryRepository {
             ? undefined
             : companyKeys[record.message_key];
           if (companyKey) updated.companyKey = companyKey;
-          if (updated.countBasis !== old!.countBasis || companyKey)
+          // A row replaced only now is named to the company once more, too.
+          const named =
+            replaces &&
+            canonicalJson(old!.replaces ?? null) !== canonicalJson(replaces);
+          if (named) updated.replaces = replaces;
+          if (updated.countBasis !== old!.countBasis || companyKey || named)
             tx.objectStore("history_records").put(updated);
-          if (companyKey && scope.mode === "company")
+          if ((companyKey || named) && scope.mode === "company")
             tx.objectStore("history_outbox").put({
               key,
               namespace: scope.namespace,
@@ -326,6 +366,15 @@ export class HistoryRepository {
         if (basis) row.countBasis = basis;
         const companyKey = old?.companyKey ?? companyKeys[record.message_key];
         if (companyKey) row.companyKey = companyKey;
+        if (replaces ?? old?.replaces) row.replaces = replaces ?? old!.replaces;
+        // The input counts describe the saved record, as the basis does: a conflict keeps
+        // the older ones, and a changed record without new counts has none.
+        const exactInput =
+          mode === "conflict"
+            ? old!.exactInput
+            : (exactInputs[record.message_key] ??
+              (mode === "duplicate" ? old?.exactInput : undefined));
+        if (exactInput) row.exactInput = exactInput;
         tx.objectStore("history_records").put(row);
         committedRecords++;
         const sourceScope = { ...scope, era: row.era };
@@ -401,7 +450,7 @@ export class HistoryRepository {
       if (!validNow()) throw new Error("policy_unavailable");
       // Reopening a chat re-imports unchanged messages. Leaving the epoch alone keeps
       // concurrent totals reads and calculation guards from retrying for no change.
-      if (committedRecords || coverageChanged)
+      if (committedRecords || coverageChanged || replacedRows)
         await invalidateSummaries(tx, scope.namespace);
       if (!validNow()) throw new Error("policy_unavailable");
       await done;

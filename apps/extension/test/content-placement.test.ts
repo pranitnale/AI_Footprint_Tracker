@@ -6,6 +6,7 @@ import {
   isVisibleComposerAnchor,
   placeFootprintHosts,
   resolveComposer,
+  surfaceBehind,
 } from "../lib/content-placement";
 
 const visibleStyle = (element: Element) => ({
@@ -620,6 +621,61 @@ test("Claude no-form fallback rejects an ambiguous semantic composer", () => {
   );
 });
 
+// On 3 Nov 2026 the signed-out home and thread composers kept their Lexical editor and
+// framed box, but lost ask-input. The ancestor structure is from that layout; text is synthetic.
+for (const action of ["Use voice mode", "Submit"])
+  test(`Perplexity's editor without an id resolves its live framed composer with ${action}`, () => {
+    const editor = '<div role="textbox" contenteditable="true" aria-label="Type @ for connectors" aria-placeholder="Type @ for connectors" spellcheck="true" data-lexical-editor="true" data-type-to-focus=""></div>';
+    const dom = new JSDOM(`<main>
+      <div id="ancestor10"><div id="ancestor9" data-composer="true">
+        <div id="ancestor8"><div id="ancestor7"><div id="ancestor6">
+          <div id="ancestor5" data-appearance="framed"><div id="ancestor4">
+            <div id="ancestor3"><div id="ancestor2"><div id="ancestor1">
+              ${editor}<div aria-hidden="true"></div>
+            </div></div><div>
+              <button type="button" aria-label="Add"></button>
+              <button type="button" aria-label="Search"></button>
+              <button type="button" aria-label="Computer"></button>
+              <button type="button" aria-label="Model"></button>
+            </div><div>
+              <button type="button" aria-label="Dictation"></button>
+              <button type="button" aria-label="${action}"></button>
+            </div></div><div aria-hidden="true"></div>
+          </div><div aria-hidden="true"></div></div>
+        </div><div><button type="button">Choose a project</button><button type="button">Plugins</button></div></div></div>
+      <div aria-hidden="true"></div></div><div aria-hidden="true"></div></div>
+    </main>`);
+    const doc = dom.window.document;
+    const textbox = doc.querySelector('[role="textbox"]')!;
+    if (action === "Submit") textbox.textContent = "Synthetic prompt";
+    const styles: Record<string, Partial<CSSStyleDeclaration>> = {
+      ancestor1: { position: "relative" },
+      ancestor2: { display: "flex", position: "relative", overflow: "hidden" },
+      ancestor3: { display: "grid", gridTemplateColumns: "600px 100px" },
+      ancestor4: { display: "grid", gridTemplateColumns: "700px", position: "relative" },
+      ancestor5: { display: "grid", gridTemplateColumns: "700px", position: "relative" },
+      ancestor6: { position: "relative" },
+      ancestor7: { position: "relative" },
+      ancestor8: { position: "relative" },
+    };
+    const readStyle = (element: Element) => ({
+      display: styles[element.id]?.display ?? "block",
+      position: styles[element.id]?.position ?? "static",
+      overflow: styles[element.id]?.overflow ?? "visible",
+      gridTemplateColumns: styles[element.id]?.gridTemplateColumns,
+      visibility: "visible",
+      opacity: "1",
+    });
+    for (const element of doc.querySelectorAll("div")) setComposerBounds(element);
+    const resolve = () => resolveComposer(doc, "perplexity", { width: 1400, height: 900 }, readStyle);
+    const composer = resolve();
+    assert.equal(composer?.editor, textbox);
+    assert.equal(composer?.anchor, doc.querySelector("#ancestor6"));
+    textbox.parentElement!.append(textbox.cloneNode(true));
+    assert.equal(resolve(), null, "two editors still fail closed");
+    dom.window.close();
+  });
+
 test("Perplexity resolves the safe wrapper around its unique grid composer", () => {
   const dom = new JSDOM(`
     <span id="insertion-parent">
@@ -895,4 +951,48 @@ test("composer discovery fails closed before styling an excessive candidate set"
     null,
   );
   assert.equal(styleReads, 0);
+});
+
+// The bar has no background of its own colour table: it takes what the page draws behind it
+// (owner request of 22 Nov 2026), so scrolled chat text never shows through.
+const readBackground = (element: Element) => element.getAttribute("data-bg") ?? "rgba(0, 0, 0, 0)";
+
+function hostIn(markup: string) {
+  const dom = new JSDOM(`<body data-bg="rgba(0, 0, 0, 0)">${markup}</body>`);
+  return dom.window.document.querySelector("#host")!;
+}
+
+test("the bar takes the nearest background the page draws behind it", () => {
+  const host = hostIn(
+    '<main data-bg="rgb(250, 250, 250)"><div data-bg="rgb(10, 10, 10)"><div><section id="host"></section></div></div></main>',
+  );
+  assert.equal(surfaceBehind(host, readBackground), "rgb(10, 10, 10)", "the nearest coloured ancestor, not a far one");
+  // The host's own background is not the surface it sits on.
+  host.setAttribute("data-bg", "rgb(1, 2, 3)");
+  assert.equal(surfaceBehind(host, readBackground), "rgb(10, 10, 10)");
+});
+
+test("a see-through background is blended over the page colour behind it", () => {
+  const host = hostIn(
+    '<main data-bg="rgb(200, 100, 50)"><div data-bg="rgba(0, 0, 0, 0.5)"><section id="host"></section></div></main>',
+  );
+  assert.equal(surfaceBehind(host, readBackground), "rgb(100, 50, 25)");
+  const clear = hostIn(
+    '<main data-bg="rgb(200, 100, 50)"><div data-bg="rgba(0, 0, 0, 0)"><div data-bg="transparent"><section id="host"></section></div></div></main>',
+  );
+  assert.equal(surfaceBehind(clear, readBackground), "rgb(200, 100, 50)", "clear layers are skipped");
+});
+
+test("the bar names no colour when the page gives none, so the page's own canvas shows", () => {
+  assert.equal(surfaceBehind(hostIn('<main><section id="host"></section></main>'), readBackground), null);
+  // Only see-through layers: what lies under them is unknown, never guessed.
+  assert.equal(
+    surfaceBehind(hostIn('<main data-bg="rgba(0, 0, 0, 0.4)"><section id="host"></section></main>'), readBackground),
+    null,
+  );
+});
+
+test("a colour in a newer notation is used as the page wrote it", () => {
+  const host = hostIn('<main data-bg="oklch(0.2 0 0)"><section id="host"></section></main>');
+  assert.equal(surfaceBehind(host, readBackground), "oklch(0.2 0 0)");
 });

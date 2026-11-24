@@ -1257,8 +1257,65 @@ export const HistoryPageSchema = z
       )
       .max(100)
       .optional(),
+    // Message keys of the member's saved Claude messages that this page's exact rows replace,
+    // once, so the server stops counting their text estimate. Keyed hashes like message_key,
+    // never ids or text. Left out when empty; a published browser never sends it.
+    replaced_message_keys: z.array(OpaqueKeySchema).max(200).optional(),
+    // Claude's exact input for the turn of an exact reply of this page (owner decision of 23 Nov
+    // 2026, package EC): new input, input written to the cache and input read from it, as
+    // Claude reports them. The server counts that input once for the turn, as the browser
+    // does: the reply's tool results and the prompt it answers add none of their own. Left
+    // out when empty; the published 0.1.0 never sends it.
+    exact_inputs: z
+      .array(
+        z.strictObject({
+          message_key: OpaqueKeySchema,
+          new: CounterSchema,
+          cache_write: CounterSchema,
+          cache_read: CounterSchema,
+        }),
+      )
+      .max(100)
+      .optional(),
   })
   .superRefine((v, ctx) => {
+    if (v.exact_inputs) {
+      const messages = new Map(v.messages.map((m) => [m.message_key, m]));
+      const named = v.exact_inputs.map((e) => e.message_key);
+      if (
+        v.site !== "claude" ||
+        new Set(named).size !== named.length ||
+        named.some((name) => {
+          const reply = messages.get(name);
+          return (
+            !reply ||
+            reply.role !== "response" ||
+            reply.prompt_key === null ||
+            reply.tokens.evidence !== "provider_reported"
+          );
+        })
+      )
+        ctx.addIssue({
+          code: "custom",
+          path: ["exact_inputs"],
+          message:
+            "Exact input names Claude replies of this page that carry Claude's own count, each once",
+        });
+    }
+    if (v.replaced_message_keys) {
+      const messages = new Set(v.messages.map((m) => m.message_key));
+      const named = v.replaced_message_keys;
+      if (
+        v.site !== "claude" ||
+        new Set(named).size !== named.length ||
+        named.some((name) => messages.has(name))
+      )
+        ctx.addIssue({
+          code: "custom",
+          path: ["replaced_message_keys"],
+          message: "Replaced keys name other saved Claude messages, each once",
+        });
+    }
     if (
       new Set(v.messages.map((m) => m.message_key)).size !==
         v.messages.length ||
@@ -1431,6 +1488,17 @@ export type HistoryView = {
    * was made, for Details only (14 October 2026); absent when there are none.
    */
   computer_files?: { content: number; size: number };
+  /**
+   * Claude's exact input of the loaded local replies that carry one, the three counts apart
+   * and the number of such replies, for Details only (owner decision of 23 Nov 2026). Their
+   * sum is already inside the input rows of `local`. Absent when no reply carries one.
+   */
+  exact_input?: {
+    new: number;
+    cache_write: number;
+    cache_read: number;
+    replies: number;
+  };
 };
 export function historyNumericPayloadHash(record: HistoryMessage): string {
   const { observed_at: _observed, ...numeric } = record;

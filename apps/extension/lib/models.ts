@@ -39,6 +39,10 @@ const CHATGPT: Readonly<Record<string, ModelId>> = Object.freeze({
   // GPT-6 Sol on paid plans per OpenAI's help article ("GPT-6 Sol powers Instant, Medium, High,
   // and Extra High"). gpt-6-mini and gpt-6-t-mini have no source yet and keep their stand-in.
   "gpt-6": "chatgpt-gpt-6-sol",
+  // Seen in /backend-api/models on 23 November 2026 as gpt-6.2-sol-wm and the like.
+  "gpt-6-2-sol": "chatgpt-gpt-6-2-sol",
+  "gpt-6-2-astra": "chatgpt-gpt-6-2-astra",
+  "gpt-6-1-terra": "chatgpt-gpt-6-1-terra",
   "gpt-6-1-sol": "chatgpt-gpt-6-1-sol",
   "gpt-6-sol": "chatgpt-gpt-6-sol",
   "gpt-6-luna": "chatgpt-gpt-6-luna",
@@ -123,6 +127,9 @@ const GPT_VARIANT: Readonly<Record<string, ModelId>> = Object.freeze({
 // mode. It uses the family model's record: Pro reasoning writes more reasoning output, which is
 // counted as far as the page shows it, so no multiplier applies.
 const CHATGPT_PRO: Readonly<Record<string, ModelId>> = Object.freeze({
+  "chatgpt-gpt-6-2-sol": "chatgpt-gpt-6-2-sol-pro",
+  "chatgpt-gpt-6-2-astra": "chatgpt-gpt-6-2-astra-pro",
+  "chatgpt-gpt-6-1-terra": "chatgpt-gpt-6-1-terra-pro",
   "chatgpt-gpt-6-1-sol": "chatgpt-gpt-6-1-sol-pro",
   "chatgpt-gpt-6-sol": "chatgpt-gpt-6-sol-pro",
   "chatgpt-gpt-6-luna": "chatgpt-gpt-6-luna-pro",
@@ -216,6 +223,12 @@ function claude(raw: string): ModelLabel | null {
 
 // Gemini shows a label, not an id: "3.6 Flash (New)", "Nano Banana 2", "Gemini Omni 1.1 Flash".
 const GEMINI: Readonly<Record<string, ModelId>> = Object.freeze({
+  // The app picker of 23 November 2026 shows "4 Hydrogen", "4 Hydrogen Thinking" and "4 Neon",
+  // and its button shows the name without the version ("Hydrogen Thinking").
+  "4 hydrogen": "gemini-4-hydrogen",
+  hydrogen: "gemini-4-hydrogen",
+  "4 neon": "gemini-4-neon",
+  neon: "gemini-4-neon",
   "3.8 flash": "gemini-3-8-flash",
   "3.7 flash": "gemini-3-7-flash",
   "3.6 flash": "gemini-3-6-flash",
@@ -308,6 +321,15 @@ const PERPLEXITY: Readonly<Record<string, ModelId>> = Object.freeze({
   comet_browser_agent: "perplexity-comet",
   comet_browser_agent_sonnet: "perplexity-claude-sonnet-5",
   comet_browser_agent_opus: "perplexity-claude-opus-4-8",
+  // Seen in /rest/models/config on 23 November 2026.
+  gpt6_2_sol: "perplexity-gpt-6-2-sol",
+  gpt6_2_astra: "perplexity-gpt-6-2-astra",
+  claudefable52: "perplexity-claude-fable-5-2",
+  claudefable51: "perplexity-claude-fable-5-1",
+  gemini4argon: "perplexity-gemini-4-argon",
+  gemini4carbon: "perplexity-gemini-4-carbon",
+  gemini4hydrogen: "perplexity-gemini-4-hydrogen",
+  geminineon: "perplexity-gemini-4-neon",
   gpt6_1_sol: "perplexity-gpt-6-1-sol",
   gpt6_sol: "perplexity-gpt-6-sol",
   gpt56_sol: "perplexity-gpt-5-6-sol",
@@ -383,12 +405,18 @@ const COMPUTER: Readonly<Record<string, ModelId>> = Object.freeze({
   sonnet_thinking: "perplexity-claude-sonnet-5",
   fable_5: "perplexity-claude-fable-5-1",
   astra: "perplexity-gpt-6-astra",
+  gpt_6_2_sol: "perplexity-gpt-6-2-sol",
+  gpt_6_2_astra: "perplexity-gpt-6-2-astra",
   gpt_6_1_sol: "perplexity-gpt-6-1-sol",
   gpt_6_sol: "perplexity-gpt-6-sol",
   gpt_56_sol: "perplexity-gpt-5-6-sol",
   gpt_55: "perplexity-gpt-5-5",
   gpt54: "perplexity-gpt-5-4",
   gemini_3_8_flash: "perplexity-gemini-3-8-flash",
+  gemini_4_argon: "perplexity-gemini-4-argon",
+  gemini_4_carbon: "perplexity-gemini-4-carbon",
+  gemini_4_hydrogen: "perplexity-gemini-4-hydrogen",
+  gemini_neon: "perplexity-gemini-4-neon",
   glm_5_3: "perplexity-glm-5-3",
   glm: "perplexity-glm-5-2",
   kimi_k3: "perplexity-kimi-k3",
@@ -436,6 +464,8 @@ const PERPLEXITY_GPT_VARIANT: Readonly<Record<string, ModelId>> = Object.freeze(
 });
 // Pro reasoning of a GPT family model on Perplexity (`gpt6_sol_pro`), see CHATGPT_PRO.
 const PERPLEXITY_PRO: Readonly<Record<string, ModelId>> = Object.freeze({
+  "perplexity-gpt-6-2-sol": "perplexity-gpt-6-2-sol-pro",
+  "perplexity-gpt-6-2-astra": "perplexity-gpt-6-2-astra-pro",
   "perplexity-gpt-6-1-sol": "perplexity-gpt-6-1-sol-pro",
   "perplexity-gpt-6-sol": "perplexity-gpt-6-sol-pro",
   "perplexity-gpt-6-astra": "perplexity-gpt-6-astra-pro",

@@ -61,12 +61,12 @@ The [methodology](https://aifootprinttracker.com/methodology) explains each step
 
 ## Install
 
-Chrome users can install from the [Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide). Edge and Firefox are not in their browser stores yet. The packages on the website are unsigned test packages, version 0.1.0. Review the source before you roll them out.
+Chrome and Microsoft Edge users can install from the [Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide). Edge installs extensions from that store, so it gets the same package and the same updates as Chrome. The extension is not in the Microsoft Edge Add-ons store or in the Firefox store. The packages on the website are unsigned test packages. Review the source before you roll them out.
 
-**Chrome (Chrome Web Store)**
+**Chrome and Edge (Chrome Web Store)**
 
 1. Open [AI Footprint Tracker in the Chrome Web Store](https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide).
-2. Choose Add to Chrome and confirm.
+2. Choose Add to Chrome and confirm. In Edge, first allow extensions from other stores when Edge asks.
 3. On the welcome page, choose Agree and start. Nothing is counted until you agree.
 
 **Chrome and Edge (manual test package)**
@@ -139,7 +139,7 @@ Start with the [self-hosted operations guide](docs/operations/SELF-HOSTING.md) a
 
 Copy the files in [`deploy/examples`](deploy/examples) to protected paths outside the checkout. Replace every placeholder. Keep settings, database passwords, TLS keys and the deletion journal out of the checkout and the Docker build context. Set a verification flag only after its DNS, TLS, mail, policy or restore check passed.
 
-The repository does not supply DNS, certificates, a Brevo account, backup storage or operator identities. These commands do not deploy or publish anything. The operations guide has the backup, restore, deletion journal, key, worker and incident procedures.
+The repository does not supply DNS, certificates, a mail server or Brevo account for sign-in codes, backup storage or operator identities. These commands do not deploy or publish anything. The operations guide has the backup, restore, deletion journal, key, worker and incident procedures.
 
 ## Repository guide
 

@@ -14,8 +14,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-24.04
-    # The full check takes about three hours on a 4-CPU runner.
-    timeout-minutes: 240
+    timeout-minutes: 45
     env:
       AIFT_POSTGRES_PASSWORD_FILE: /tmp/aift-postgres-password
       AIFT_SETTINGS_FILE: /tmp/aift-settings.json

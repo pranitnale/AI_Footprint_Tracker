@@ -41,7 +41,7 @@ def test_frozen_alembic_migration_creates_relational_schema(tmp_path):
         inspect(engine).get_foreign_keys("recorded_thread_relations")[0]["options"]["ondelete"] == "CASCADE"
     )
     with engine.connect() as connection:
-        assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 14
+        assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 16
     engine.dispose()
 
 
@@ -315,6 +315,6 @@ def test_current_timing_reset_preserves_authentication_and_erasure_protection(tm
         for name in ("companies", "memberships", "devices", "web_sessions", "historical_tombstones"):
             assert connection.execute(text(f'SELECT count(*) FROM "{name}"')).scalar_one() == 1
         assert connection.execute(text("SELECT count(*) FROM ingestion_receipts")).scalar_one() == 0
-        assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 14
+        assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 16
     assert "history_hash" in inspect(engine).get_pk_constraint("engine_estimates")["constrained_columns"]
     engine.dispose()

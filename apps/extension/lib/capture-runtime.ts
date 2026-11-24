@@ -1,6 +1,7 @@
 import {
   chatgptSignedOutStopConversation,
   claudeProxyDispatch,
+  claudeSendAction,
   isChatgptSignedOutSend,
   isChatgptSignedOutStop,
   isClaudeProxy,
@@ -36,6 +37,10 @@ import {
   type ProviderStreamCapture,
 } from "./provider-history-message";
 import { HISTORY_RESET_CHANNEL } from "./history-capture";
+import {
+  CLAUDE_LINK_CHANNEL,
+  type ClaudeLinkFacts,
+} from "./claude-session-links";
 import {
   COWORK_SENT_CHANNEL,
   type CaptureInterception,
@@ -253,17 +258,7 @@ export function installCapture(
           resolve(false);
         }
       }),
-    () => {
-      if (!probeNonce || !enabled) return;
-      window.postMessage(
-        {
-          channel: COWORK_SENT_CHANNEL,
-          nonce: probeNonce,
-          at: new Date().toISOString(),
-        } satisfies CoworkSent,
-        location.origin,
-      );
-    },
+    () => reportSent(),
     site === "chatgpt" ? rememberAnswer : undefined,
     site === "perplexity"
       ? {
@@ -307,6 +302,19 @@ export function installCapture(
               : Promise.resolve({ kind: "held" as const }),
         }
       : undefined,
+    (facts) => {
+      // Until a content script introduced itself nobody can check the message.
+      if (!probeNonce || !enabled) return false;
+      window.postMessage(
+        {
+          channel: CLAUDE_LINK_CHANNEL,
+          nonce: probeNonce,
+          ...facts,
+        } satisfies ClaudeLinkFacts,
+        location.origin,
+      );
+      return true;
+    },
   );
   const failures = new Set<string>();
   function health(failure: string) {
@@ -1075,10 +1083,32 @@ export function installCapture(
         );
     }
   }
+  // The page sent a message whose reply is read from saved history: a Cowork send, or a send
+  // of claude.ai's merged app (18 Nov 2026). The content script takes it as the observed send.
+  function reportSent() {
+    if (!probeNonce || !enabled) return;
+    window.postMessage(
+      {
+        channel: COWORK_SENT_CHANNEL,
+        nonce: probeNonce,
+        at: new Date().toISOString(),
+      } satisfies CoworkSent,
+      location.origin,
+    );
+  }
   const wrappedFetch: typeof fetch = function (this: Window, input, init) {
     const observedAt = Date.now(),
       uploadContext = uploads?.context();
     const network = nativeBody.request(input, init, location.href);
+    try {
+      if (
+        site === "claude" &&
+        network &&
+        network.url.origin === location.origin &&
+        claudeSendAction(network.url, network.method, network.body)
+      )
+        reportSent();
+    } catch {}
     let preparedUpload: ReturnType<ProviderUploadObserver["prepare"]> = null;
     try {
       preparedUpload = uploads?.prepare(network) ?? null;
@@ -1569,6 +1599,7 @@ export function installCapture(
       event.data.nonce.length === 36 &&
       enabled
     ) {
+      const introduced = probeNonce !== event.data.nonce;
       probeNonce = event.data.nonce;
       window.postMessage(
         {
@@ -1578,6 +1609,8 @@ export function installCapture(
         } satisfies CaptureReady,
         location.origin,
       );
+      // A content script that just started knows no session link yet.
+      if (introduced && site === "claude") historyText.announceLinks();
       return;
     }
     if (

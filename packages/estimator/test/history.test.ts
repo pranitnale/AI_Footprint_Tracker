@@ -148,3 +148,56 @@ test("W9 Studio rows without a live request count without waiting for a live mat
   assert.equal(total.summary.unresolved_overlap_message_count, "1");
   assert.equal(total.summary.matched_live_message_count, "0");
 });
+
+// Owner decision of 23 Nov 2026: where Claude reports a turn's own input, that count is the
+// turn's input, and the text counts it already holds are not added to it.
+test("historical: an exact input count stands for its turn's prompt text, images and tool results", () => {
+  const counted = (value: string, profile: string, scope = "observed_text") => ({
+    value,
+    evidence: "heuristic_estimate" as const,
+    scope: scope as "observed_text" | "provider_defined_subset",
+    completeness: "complete_for_scope" as const,
+    profile_id: profile as "observed-text-v1",
+    reason: null,
+  });
+  const base = message(true, "a");
+  const reply = (id: string) =>
+    HistoryMessageSchema.parse({
+      ...base,
+      message_key: id.repeat(64),
+      parts: historyResponseParts(base.tokens, {
+        tool_output: counted("40", "observed-text-v1"),
+      }),
+    });
+  const prompt = (id: string) =>
+    HistoryMessageSchema.parse({
+      ...base,
+      message_key: id.repeat(64),
+      role: "prompt",
+      parts: historyPromptParts(
+        counted("1120", "vendor-image-rules-1", "provider_defined_subset"),
+      ),
+    });
+  const total = new HistoryAccumulator();
+  total.add(prompt("b"), { inputCounted: true });
+  total.add(reply("a"), { exactInput: "94650" });
+  // A turn without an exact count keeps its text counts.
+  total.add(prompt("c"));
+  total.add(reply("d"));
+  assert.deepEqual(
+    total.summary.tokens
+      .map((t) => [t.role, t.part, t.evidence, t.value, t.known_message_count])
+      .sort(),
+    [
+      ["prompt", "image_input_tokens", "heuristic_estimate", "1120", "1"],
+      ["prompt", "total", "heuristic_estimate", "100", "1"],
+      ["prompt", "total", "provider_reported", "94650", "1"],
+      ["response", "tool_output", "heuristic_estimate", "40", "1"],
+      ["response", "total", "heuristic_estimate", "200", "2"],
+    ],
+  );
+  // Every message is still counted once, and requests and output are as before.
+  assert.equal(total.summary.calculated_message_count, "4");
+  assert.equal(total.summary.prompt_count, "2");
+  assert.equal(total.summary.response_count, "2");
+});

@@ -7,7 +7,7 @@ import type { Dashboard } from "../dashboard/types";
 import { PRIVACY_POLICY_PAGE, SCENARIO_NAMES } from "../ui/components";
 import { requestsPhrase } from "../ui/figure-math";
 import { DialogPoint, LgDialog } from "../ui/dialog";
-import { HOSTED_ORIGIN, isHostedOrigin } from "../dashboard/organization";
+import { HOSTED_ORIGIN, isHostedOrigin, organizationName } from "../dashboard/organization";
 import { DEFAULT_FEATURES, organizationTerms, type OrganizationTerms } from "../organization-terms";
 
 function message(caught: unknown) {
@@ -412,8 +412,12 @@ export function ConnectDialog({
   // A person waiting for a code can go back and use another email without cancelling first.
   const [another, setAnother] = useState(false);
   const [email, setEmail] = useState(pending?.email ?? "");
-  const [ownServer, setOwnServer] = useState(pending ? !isHostedOrigin(pending.origin) : false);
-  const [address, setAddress] = useState(pending && !isHostedOrigin(pending.origin) ? pending.origin : "https://");
+  // A connection in progress, or else the saved one (ended, or held back by a removed server
+  // permission), names the server to connect to again; a self-hosted one must not fall back to
+  // the hosted address.
+  const known = pending?.origin ?? company?.origin ?? null;
+  const [ownServer, setOwnServer] = useState(known ? !isHostedOrigin(known) : false);
+  const [address, setAddress] = useState(known && !isHostedOrigin(known) ? known : "https://");
   const [origin, setOrigin] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
@@ -442,6 +446,9 @@ export function ConnectDialog({
       await step();
     } catch (caught) {
       setError(message(caught));
+      // The error and a usable button come together: the reload below can take long, and the
+      // button must not keep saying "Waiting for the browser" beside the error meanwhile.
+      setBusy(false);
       // A refused step may have ended the connection in progress; show where it now stands.
       await onStarted().catch(() => {});
     } finally {
@@ -465,7 +472,12 @@ export function ConnectDialog({
     run(async () => {
       if (!origin) return;
       if (!(await requestPermission(origin))) throw new Error("Browser permission was not granted. No organization connection was started.");
-      await client.connect(origin, email);
+      const { restored } = await client.connect(origin, email);
+      if (restored) {
+        // Only the permission was missing; the server still holds this browser's connection.
+        await onDone(`Connected to ${organizationName(company)} again. Sharing resumes with the next sync.`);
+        return;
+      }
       setCode("");
       await onStarted();
       setAnother(false);

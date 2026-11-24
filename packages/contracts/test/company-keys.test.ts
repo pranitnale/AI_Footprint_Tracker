@@ -8,6 +8,7 @@ import {
   emptyGeneration,
   emptyTokenFields,
   historyResponseParts,
+  providerMeasurement,
   type AttemptObservation,
   type RequestObservation,
 } from "../src/index";
@@ -299,6 +300,122 @@ test("W11 a history page names each message's company key beside it, in TypeScri
       {
         ...valid,
         messages: [{ ...valid.messages[0]!, company_dedup_key: KEY }],
+      },
+      false,
+    ],
+  ];
+  const expected = cases.map(([, ok]) => ok);
+  assert.deepEqual(
+    cases.map(([value]) => HistoryPageSchema.safeParse(value).success),
+    expected,
+  );
+  assert.deepEqual(
+    python(
+      "page",
+      cases.map(([value]) => value),
+    ),
+    expected,
+  );
+});
+
+test("an exact Claude page names the saved text rows it replaces, in TypeScript and Python", () => {
+  const valid = page();
+  const own = valid.messages[0]!.message_key;
+  const other = "d".repeat(64);
+  const notClaude = {
+    ...valid,
+    site: "chatgpt",
+    messages: [{ ...valid.messages[0]!, site: "chatgpt" }],
+  };
+  const cases: Array<[unknown, boolean]> = [
+    [valid, true],
+    [{ ...valid, replaced_message_keys: [other] }, true],
+    [{ ...valid, replaced_message_keys: [] }, true],
+    [
+      {
+        ...valid,
+        replaced_message_keys: Array.from({ length: 200 }, (_, i) =>
+          i.toString(16).padStart(64, "0"),
+        ),
+      },
+      true,
+    ],
+    [
+      {
+        ...valid,
+        replaced_message_keys: Array.from({ length: 201 }, (_, i) =>
+          i.toString(16).padStart(64, "0"),
+        ),
+      },
+      false,
+    ],
+    [{ ...valid, replaced_message_keys: [other, other] }, false],
+    [{ ...valid, replaced_message_keys: [own] }, false],
+    [{ ...valid, replaced_message_keys: ["msg_1"] }, false],
+    [notClaude, true],
+    [{ ...notClaude, replaced_message_keys: [other] }, false],
+  ];
+  const expected = cases.map(([, ok]) => ok);
+  assert.deepEqual(
+    cases.map(([value]) => HistoryPageSchema.safeParse(value).success),
+    expected,
+  );
+  assert.deepEqual(
+    python(
+      "page",
+      cases.map(([value]) => value),
+    ),
+    expected,
+  );
+});
+
+// Owner decision of 23 Nov 2026 (package EC): company totals show the input the browser shows.
+// An exact Claude reply's input travels beside it as Claude's three counts. A page without them,
+// as the published 0.1.0 sends it, stays valid.
+test("an exact Claude reply's input travels beside it as three counts, in TypeScript and Python", () => {
+  const base = page();
+  const reply = {
+    ...base.messages[0]!,
+    prompt_key: "f".repeat(64),
+    tokens: providerMeasurement("247"),
+    parts: historyResponseParts(providerMeasurement("247")),
+  };
+  const valid = { ...base, messages: [reply] };
+  const entry = (change: object = {}) => ({
+    message_key: reply.message_key,
+    new: "40",
+    cache_write: "300",
+    cache_read: "1200",
+    ...change,
+  });
+  const cases: Array<[unknown, boolean]> = [
+    [base, true],
+    [valid, true],
+    [{ ...valid, exact_inputs: [entry()] }, true],
+    [{ ...valid, exact_inputs: [] }, true],
+    [{ ...valid, exact_inputs: [entry({ new: "0", cache_write: "0", cache_read: "0" })] }, true],
+    [{ ...valid, exact_inputs: [entry(), entry()] }, false],
+    [{ ...valid, exact_inputs: [entry({ message_key: "d".repeat(64) })] }, false],
+    [{ ...valid, exact_inputs: [entry({ new: "-1" })] }, false],
+    [{ ...valid, exact_inputs: [entry({ new: 40 })] }, false],
+    [{ ...valid, exact_inputs: [entry({ cache_read: "9223372036854775808" })] }, false],
+    [
+      {
+        ...valid,
+        exact_inputs: [{ message_key: reply.message_key, new: "40", cache_write: "300" }],
+      },
+      false,
+    ],
+    [{ ...valid, exact_inputs: [entry({ fresh: "40" })] }, false],
+    // Only a Claude reply with Claude's own count and the prompt it answers carries it.
+    [{ ...base, exact_inputs: [entry()] }, false],
+    [{ ...valid, messages: [{ ...reply, prompt_key: null }], exact_inputs: [entry()] }, false],
+    [
+      {
+        ...valid,
+        site: "chatgpt",
+        messages: [{ ...reply, site: "chatgpt" }],
+        exact_inputs: [entry()],
       },
       false,
     ],

@@ -23,6 +23,7 @@ import type {
   DerivedEntry,
   CoworkAdvance,
   CoworkCheckpoint,
+  ExactInput,
 } from "./ledger-support";
 import type {
   CaptureRepository,
@@ -334,6 +335,17 @@ export interface HistoryAdmission {
    * keeps the first key it gets; one that gets a key while unchanged is uploaded again.
    */
   companyKeys?: Record<string, string>;
+  /**
+   * The saved text rows that exact rows of this page replace, keyed by the exact row's
+   * message key, one each (`checkedReplaced`). The commit that saves the row removes its text
+   * copy and marks it, so a later read of the chat's saved copy does not bring it back.
+   */
+  replaced?: Record<string, string[]>;
+  /**
+   * Claude's exact input for the turns of this page's exact replies, keyed by the reply's
+   * message key (`checkedExactInputs`). Kept beside the row on this device only.
+   */
+  exactInputs?: Record<string, ExactInput>;
   /**
    * A Cowork batch with results: the checkpoint its counts were calculated from and the
    * one it leaves. The commit fails as `cowork_checkpoint_stale` when the saved

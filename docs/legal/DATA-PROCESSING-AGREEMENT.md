@@ -1,6 +1,6 @@
 # Data processing agreement
 
-This agreement under Article 28 of the General Data Protection Regulation (GDPR) applies to every organization that uses the hosted service of AI Footprint Tracker. Version of 18 October 2026.
+This agreement under Article 28 of the General Data Protection Regulation (GDPR) applies to every organization that uses the hosted service of AI Footprint Tracker. Version of 24 November 2026.
 
 ## 1. Parties and conclusion
 
@@ -63,7 +63,7 @@ We give the organization the information it needs to show that this agreement is
 
 ## 13. Transfers outside the EU
 
-We process the data in the EU. Transfers to countries outside the EU happen only under Articles 44 to 49 GDPR. At present this concerns only the sub-processors of Brevo listed in Annex 2.
+We process the data in the EU. Transfers to countries outside the EU happen only under Articles 44 to 49 GDPR. Our own mail server makes no such transfer; a sign-in code email is delivered to the recipient's own mail provider, wherever that provider keeps its mailboxes. At present a transfer can concern only the sub-processors of Brevo listed in Annex 2, and only while Brevo sends sign-in codes as a fallback.
 
 ## 14. Liability and precedence
 
@@ -88,5 +88,8 @@ Liability follows Article 82 GDPR and the Terms of use. For data protection, thi
 
 | Sub-processor | Service | Data | Location |
 | --- | --- | --- | --- |
-| Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, Germany (part of Sendinblue SAS, Paris) | Sends sign-in codes by email | The recipient's email address and the code. Tracking is off; delivery logs are kept 1 month. | EU. Some Brevo sub-processors are outside the EU (for example Cloudflare, USA) under the EU-US Data Privacy Framework or standard contractual clauses. |
-| Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany | Servers, database and backups | All data listed in section 3 | European Union |
+| Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, Germany (part of Sendinblue SAS, Paris) | Sends sign-in codes by email only as a fallback, when our own mail server cannot deliver them | The recipient's email address and the code. Tracking is off; delivery logs are kept 1 month. | EU. Some Brevo sub-processors are outside the EU (for example Cloudflare, USA) under the EU-US Data Privacy Framework or standard contractual clauses. |
+| IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Germany | Servers, database and backups since 24 November 2026 | All data listed in section 3 | Germany |
+| Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany | Servers until 24 November 2026. A copy of the database and its backups until 8 December 2026 at the latest, in case the move to the new servers must be undone. | All data listed in section 3 | European Union |
+
+We send sign-in codes from our own mail server, which runs on the IONOS servers listed above. Its delivery log holds the recipient's address, the time and the answer of the receiving mail system, and is kept for up to five weeks. An email that cannot be delivered comes back to our mail server; such a returned message is deleted after at most five weeks.

@@ -469,7 +469,7 @@ def purge_network_observations(service, confirm=False, page=1000):
 def main():
     from .analytics import Analytics
     from .config import Settings
-    from .mail import BrevoMail
+    from .mail import mail_delivery
     from .service import Service
 
     parser = argparse.ArgumentParser()
@@ -486,7 +486,7 @@ def main():
     if arguments.confirm and command != "purge-network-observations":
         parser.error("--confirm applies to purge-network-observations only")
     settings = Settings.from_environment()
-    service = Service(settings, Database(settings), BrevoMail(settings))
+    service = Service(settings, Database(settings), mail_delivery(settings))
     service.analytics = Analytics(service)
     if command == "health":
         with service.db.transaction(readonly=True) as session:

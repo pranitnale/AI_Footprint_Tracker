@@ -116,6 +116,12 @@ export function adminFigures(
   return figures;
 }
 
+/**
+ * Summary and activity figures in the server's newest method, so members whose extensions run
+ * different EcoLogits data add up (owner, 23 Nov 2026). Website and server deploy together.
+ */
+export const CURRENT_VIEW = { calculation_view: "current" } as const;
+
 /** The server query for a period window: calendar dates with an exclusive end, or all time. */
 export function periodQuery(window: { startDate?: string; endDate?: string }) {
   return window.startDate && window.endDate

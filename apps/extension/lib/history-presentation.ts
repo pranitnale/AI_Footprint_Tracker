@@ -100,6 +100,27 @@ export function notebookChatProblemNote(
     : null;
 }
 
+/** The bar's status for a Cowork session at a chat address that no proof links yet. */
+export const COWORK_SESSION_NOT_LINKED = "Cowork session not linked";
+
+/**
+ * The Details entry for a Cowork session from before Claude's merge of 18 Nov 2026 that is
+ * shown at a chat address while the page has not proven which session it is. It has no saved
+ * chat to read, and a reload proves nothing; the page proves the link when the session is
+ * opened from the list (live check of 23 Nov 2026), so the entry names that one action.
+ */
+export function coworkSessionNotLinkedNote(): {
+  chip: string;
+  text: string;
+  tone: "warn";
+} {
+  return {
+    chip: COWORK_SESSION_NOT_LINKED,
+    text: "Claude shows a Cowork session at this address, but the page has not told the tracker which session it is, so nothing in it is counted. Open the session once from where Claude lists its Cowork sessions. After that it is counted at this address too. Reloading this page does not link it.",
+    tone: "warn",
+  };
+}
+
 /**
  * Why the open chat has no figures, for Details when the bar shows No figures yet and no other
  * entry says why (owner: every chat without figures names its reason). Saved messages that all
@@ -507,7 +528,10 @@ export function presentHistorySummary(
             : item.part === "other_models"
               ? "Output of other models in loaded responses"
               : item.role === "prompt"
-                ? "Loaded prompt text"
+                ? // Claude's own count of everything it read (23 Nov 2026), not prompt text.
+                  item.evidence === "provider_reported"
+                  ? "Input Claude processed for loaded responses"
+                  : "Loaded prompt text"
                 : "Loaded response output",
       tokens:
         item.value === null

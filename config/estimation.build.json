@@ -5,8 +5,8 @@
     "ecologits"
   ],
   "ecologits_fallback": {
-    "policy_version": "ecologits-0-11-3-2026-10-22",
-    "review_date": "2026-10-14",
+    "policy_version": "ecologits-0-11-3-main-7b8bc036-2026-11-22",
+    "review_date": "2026-11-22",
     "provider_defaults": {
       "openai": {
         "strategy": "upstream_provider_flagship",
@@ -52,6 +52,24 @@
         },
         "basis": "model_not_named"
       },
+      "chatgpt-gpt-3-5": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-5-mini",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "chatgpt-gpt-4": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
       "chatgpt-gpt-5-3-mini": {
         "strategy": "upstream_profile",
         "profile": {
@@ -74,7 +92,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6-astra",
+          "model_name": "gpt-6.2-astra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -83,7 +101,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6-astra",
+          "model_name": "gpt-6.2-astra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -146,7 +164,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6.1-sol",
+          "model_name": "gpt-6.2-sol",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -155,7 +173,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6.1-sol",
+          "model_name": "gpt-6.2-sol",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -164,7 +182,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-5.6-terra",
+          "model_name": "gpt-6.1-terra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -173,10 +191,19 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-5.6-terra",
+          "model_name": "gpt-6.1-terra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
+      },
+      "chatgpt-o1": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-6.1-sol",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
       },
       "chatgpt-o3": {
         "strategy": "upstream_profile",
@@ -187,11 +214,29 @@
         },
         "basis": "family_benchmark"
       },
+      "chatgpt-o3-mini": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-4o-mini",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
       "chatgpt-o3-pro": {
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
           "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "chatgpt-o4-mini": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-4o-mini",
           "workload": "text"
         },
         "basis": "nearest_record"
@@ -209,7 +254,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-fable-5-1",
+          "model_name": "claude-fable-5-2",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -443,7 +488,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "anthropic",
-          "model_name": "claude-fable-5-1",
+          "model_name": "claude-fable-5-2",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -614,7 +659,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6-astra",
+          "model_name": "gpt-6.2-astra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -623,7 +668,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6-astra",
+          "model_name": "gpt-6.2-astra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -686,7 +731,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6.1-sol",
+          "model_name": "gpt-6.2-sol",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -695,7 +740,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-6.1-sol",
+          "model_name": "gpt-6.2-sol",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -704,7 +749,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-5.6-terra",
+          "model_name": "gpt-6.1-terra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -713,7 +758,7 @@
         "strategy": "upstream_profile",
         "profile": {
           "provider": "openai",
-          "model_name": "gpt-5.6-terra",
+          "model_name": "gpt-6.1-terra",
           "workload": "text"
         },
         "basis": "model_family_stand_in"
@@ -777,6 +822,15 @@
         "profile": {
           "provider": "openai",
           "model_name": "gpt-6-astra",
+          "workload": "text"
+        },
+        "basis": "nearest_record"
+      },
+      "perplexity-o4-mini": {
+        "strategy": "upstream_profile",
+        "profile": {
+          "provider": "openai",
+          "model_name": "gpt-4o-mini",
           "workload": "text"
         },
         "basis": "nearest_record"

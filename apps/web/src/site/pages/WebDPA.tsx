@@ -9,7 +9,7 @@ export function WebDPAPage({ navigate }: { navigate: Navigate }) {
         <span style={{ "fontSize": "13px", "fontWeight": "700", "letterSpacing": ".08em", "textTransform": "uppercase", "color": "#2E6B3F" }}>Legal</span>
         <h1 className="dsp" style={{ "margin": "0", "fontSize": "clamp(34px, 4vw, 52px)", "lineHeight": "1.08", "fontWeight": "800", "letterSpacing": "-.02em" }}>Data processing agreement</h1>
         <p className="lead">This agreement under Article 28 of the General Data Protection Regulation (GDPR) applies to every organization that uses the hosted service of AI Footprint Tracker. Version of{" "}
-          18 October 2026.</p></section>
+          24 November 2026.</p></section>
       <section className="wrap" style={{ "paddingBottom": "88px" }}>
         <div className="doc">
           <nav className="toc" aria-label="On this page">
@@ -75,7 +75,7 @@ export function WebDPAPage({ navigate }: { navigate: Navigate }) {
             <p>We give the organization the information it needs to show that this agreement is kept. The organization may carry out audits, or have them done by an auditor bound to confidentiality, with{" "}
               30 days' notice, at most once a year unless there is a specific reason, and at its own cost. Current documentation can replace an on-site audit.</p>
             <h2 id="13-transfers-outside-the-eu">13. Transfers outside the EU</h2>
-            <p>We process the data in the EU. Transfers to countries outside the EU happen only under Articles 44 to 49 GDPR. At present this concerns only the sub-processors of Brevo listed in Annex 2.</p>
+            <p>We process the data in the EU. Transfers to countries outside the EU happen only under Articles 44 to 49 GDPR. Our own mail server makes no such transfer; a sign-in code email is delivered to the recipient's own mail provider, wherever that provider keeps its mailboxes. At present a transfer can concern only the sub-processors of Brevo listed in Annex 2, and only while Brevo sends sign-in codes as a fallback.</p>
             <h2 id="14-liability-and-precedence">14. Liability and precedence</h2>
             <p>Liability follows Article 82 GDPR and the Terms of use. For data protection, this agreement takes precedence over the Terms of use.</p>
             <h2 id="annex-1-technical-and-organizational-measures">Annex 1: Technical and organizational measures</h2>
@@ -134,16 +134,22 @@ export function WebDPAPage({ navigate }: { navigate: Navigate }) {
                 <tbody>
                   <tr>
                     <td>Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, Germany (part of Sendinblue SAS, Paris)</td>
-                    <td>Sends sign-in codes by email</td>
+                    <td>Sends sign-in codes by email only as a fallback, when our own mail server cannot deliver them</td>
                     <td>The recipient's email address and the code. Tracking is off; delivery logs are kept 1 month.</td>
                     <td>EU. Some Brevo sub-processors are outside the EU (for example Cloudflare, USA) under the EU-US Data Privacy Framework or standard contractual clauses.</td></tr>
                   <tr>
+                    <td>IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, Germany</td>
+                    <td>Servers, database and backups since 24 November 2026</td>
+                    <td>All data listed in section 3</td>
+                    <td>Germany</td></tr>
+                  <tr>
                     <td>
                       Contabo GmbH, Welfenstraße 22, 81541 Munich, Germany</td>
-                    <td>Servers, database and backups</td>
+                    <td>Servers until 24 November 2026. A copy of the database and its backups until 8 December 2026 at the latest, in case the move to the new servers must be undone.</td>
                     <td>All data listed in section 3</td>
                     <td>
-                      European Union</td></tr></tbody></table></div></article></div></section>
+                      European Union</td></tr></tbody></table></div>
+            <p>We send sign-in codes from our own mail server, which runs on the IONOS servers listed above. Its delivery log holds the recipient's address, the time and the answer of the receiving mail system, and is kept for up to five weeks. An email that cannot be delivered comes back to our mail server; such a returned message is deleted after at most five weeks.</p></article></div></section>
     </>
   );
 }

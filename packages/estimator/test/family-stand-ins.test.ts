@@ -33,16 +33,17 @@ const resolve = (modelId: string | null, provider: string | null) =>
     catalog,
   );
 
-// Owner decision of 13 October 2026, computed from the EcoLogits 0.11.3 catalog.
+// Owner decision of 13 October 2026, computed from the catalog of upstream main 7b8bc03
+// (19 November 2026) on the EcoLogits 0.11.3 core.
 const TODAY: Record<string, string> = {
   "claude-haiku": "anthropic/claude-haiku-5-5",
   "claude-sonnet": "anthropic/claude-sonnet-5-5",
   "claude-opus": "anthropic/claude-opus-5-5",
-  "claude-fable": "anthropic/claude-fable-5-1",
-  "gpt-sol": "openai/gpt-6.1-sol",
-  "gpt-astra": "openai/gpt-6-astra",
+  "claude-fable": "anthropic/claude-fable-5-2",
+  "gpt-sol": "openai/gpt-6.2-sol",
+  "gpt-astra": "openai/gpt-6.2-astra",
   "gpt-luna": "openai/gpt-6-luna",
-  "gpt-terra": "openai/gpt-5.6-terra",
+  "gpt-terra": "openai/gpt-6.1-terra",
   "gemini-flash": "google_genai/gemini-3.8-flash",
   "gemini-flash-lite": "google_genai/gemini-3.5-flash-lite",
   "gemini-pro": "google_genai/gemini-3.1-pro-preview",
@@ -221,23 +222,28 @@ test("PR1 a GPT family with Pro reasoning is estimated as that family model, not
     ["chatgpt-gpt-6-pro", "openai/gpt-6-astra", "exact_record"],
     ["chatgpt-gpt-5-6-sol-pro", "openai/gpt-5.6-sol", "exact_record"],
     ["chatgpt-gpt-6-sol-pro", "openai/gpt-6-sol", "exact_record"],
+    ["chatgpt-gpt-6-2-sol-pro", "openai/gpt-6.2-sol", "exact_record"],
+    ["chatgpt-gpt-6-2-astra-pro", "openai/gpt-6.2-astra", "exact_record"],
+    ["chatgpt-gpt-6-1-terra-pro", "openai/gpt-6.1-terra", "exact_record"],
     ["chatgpt-gpt-6-1-sol-pro", "openai/gpt-6.1-sol", "exact_record"],
     ["chatgpt-gpt-6-luna-pro", "openai/gpt-6-luna", "exact_record"],
     ["chatgpt-gpt-5-6-luna-pro", "openai/gpt-5.6-luna", "exact_record"],
     ["chatgpt-gpt-5-6-terra-pro", "openai/gpt-5.6-terra", "exact_record"],
     ["perplexity-gpt-6-sol-pro", "openai/gpt-6-sol", "exact_record"],
+    ["perplexity-gpt-6-2-sol-pro", "openai/gpt-6.2-sol", "exact_record"],
+    ["perplexity-gpt-6-2-astra-pro", "openai/gpt-6.2-astra", "exact_record"],
     ["perplexity-gpt-6-1-sol-pro", "openai/gpt-6.1-sol", "exact_record"],
     ["perplexity-gpt-6-astra-pro", "openai/gpt-6-astra", "exact_record"],
     ["perplexity-gpt-5-6-sol-pro", "openai/gpt-5.6-sol", "exact_record"],
     ["perplexity-gpt-5-6-terra-pro", "openai/gpt-5.6-terra", "exact_record"],
-    ["chatgpt-gpt-sol-pro-unlisted", "openai/gpt-6.1-sol", FAMILY_STAND_IN_BASIS],
-    ["chatgpt-gpt-astra-pro-unlisted", "openai/gpt-6-astra", FAMILY_STAND_IN_BASIS],
+    ["chatgpt-gpt-sol-pro-unlisted", "openai/gpt-6.2-sol", FAMILY_STAND_IN_BASIS],
+    ["chatgpt-gpt-astra-pro-unlisted", "openai/gpt-6.2-astra", FAMILY_STAND_IN_BASIS],
     ["chatgpt-gpt-luna-pro-unlisted", "openai/gpt-6-luna", FAMILY_STAND_IN_BASIS],
-    ["chatgpt-gpt-terra-pro-unlisted", "openai/gpt-5.6-terra", FAMILY_STAND_IN_BASIS],
-    ["perplexity-gpt-sol-pro-unlisted", "openai/gpt-6.1-sol", FAMILY_STAND_IN_BASIS],
-    ["perplexity-gpt-astra-pro-unlisted", "openai/gpt-6-astra", FAMILY_STAND_IN_BASIS],
+    ["chatgpt-gpt-terra-pro-unlisted", "openai/gpt-6.1-terra", FAMILY_STAND_IN_BASIS],
+    ["perplexity-gpt-sol-pro-unlisted", "openai/gpt-6.2-sol", FAMILY_STAND_IN_BASIS],
+    ["perplexity-gpt-astra-pro-unlisted", "openai/gpt-6.2-astra", FAMILY_STAND_IN_BASIS],
     ["perplexity-gpt-luna-pro-unlisted", "openai/gpt-6-luna", FAMILY_STAND_IN_BASIS],
-    ["perplexity-gpt-terra-pro-unlisted", "openai/gpt-5.6-terra", FAMILY_STAND_IN_BASIS],
+    ["perplexity-gpt-terra-pro-unlisted", "openai/gpt-6.1-terra", FAMILY_STAND_IN_BASIS],
   ];
   for (const [id, record, basis] of cases) {
     assert.ok((MODEL_IDS as readonly string[]).includes(id), id);

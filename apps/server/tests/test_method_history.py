@@ -563,7 +563,15 @@ def test_failed_worker_page_stays_visible_and_can_retry(setup, monkeypatch):
     run(app.state.service)
     with app.state.db.transaction(readonly=True) as session:
         assert history.status(session, company, member, identifier)["status"] == "completed"
-        assert session.scalar(select(func.count()).select_from(EngineEstimate)) == 1
+        stored = select(func.count()).select_from(EngineEstimate)
+        assert session.scalar(stored.where(EngineEstimate.method_id == bundle["method_id"])) == 1
+        # The worker also keeps the organization calculated with the server's packaged method
+        # (MethodHistory.keep_current). The one other estimate is that job's.
+        packaged = identity(packaged_definition())["method_id"]
+        assert session.scalar(stored.where(EngineEstimate.method_id == packaged)) == 1
+        assert session.scalar(stored) == 2
+        (own,) = session.scalars(select(RecalculationJob).where(RecalculationJob.actor == "system"))
+        assert own.method_id == packaged and own.owner is None and own.data["status"] == "completed"
 
 
 def test_api_views_and_summary_export_without_person_analytics(setup):

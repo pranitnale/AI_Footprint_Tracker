@@ -10,7 +10,7 @@ const LISTS: ReadonlyArray<readonly [string, string, readonly string[]]> = [
     "Create protected secrets for the app, encryption, signing and forms.",
     "Give the organization its own domain or subdomain, such as footprint.example.com.",
     "Set the trusted entry point that forwards requests to the server.",
-    "Set up your own Brevo sender for sign-in codes.",
+    "Set up a sender for sign-in codes: your own mail server over SMTP, or a Brevo account.",
     "Choose retention, backups and where deletion records are stored.",
   ]],
   ["b", "Before people connect", [
@@ -58,7 +58,7 @@ export function WebSelfHostPage({ navigate }: { navigate: Navigate }) {
                 <span style={{ "fontSize": "14px", "color": "#1D4F80" }}>Usage and settings</span></div>
               <div className="node" style={{ "background": "#FFF6DB" }}>
                 <b style={{ "fontSize": "16px" }}>Email sender</b>
-                <span style={{ "fontSize": "14px", "color": "#6E4700" }}>Your Brevo account, for sign-in codes</span></div></div></div></div></section>
+                <span style={{ "fontSize": "14px", "color": "#6E4700" }}>Your mail server or Brevo account, for sign-in codes</span></div></div></div></div></section>
       <section className="wrap" style={{ "paddingBottom": "32px", "display": "grid", "gridTemplateColumns": "repeat(auto-fit, minmax(min(440px, 100%), 1fr))", "gap": "16px" }}>
         {LISTS.map(([key, title, items]) => {
           const done = items.filter((_, i) => checked.has(key + i)).length;

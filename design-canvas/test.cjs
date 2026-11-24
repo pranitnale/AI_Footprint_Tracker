@@ -109,9 +109,9 @@ test('earlier-request methodology preserves all 623 existing article review anch
   // Normalize only the reviewed catalog notice edits to retain the historical anchor check.
   const referenceIndex = originalLeaves.findIndex(text => text.startsWith('The transparent starting reference is the operational component of EcoLogits 0.11.1,'));
   assert.ok(referenceIndex >= 0);
-  assert.ok(originalLeaves[referenceIndex].includes('EcoLogits 0.11.3, commit d0b76e382442e63df688e9c37016f596223c8aff'));
+  assert.ok(originalLeaves[referenceIndex].includes('release 0.11.3, commit d0b76e382442e63df688e9c37016f596223c8aff, with the model catalog and grid data of commit 7b8bc036376d4b4dd08596323383c78ae1e116d7'));
   originalLeaves[referenceIndex] = 'The transparent starting reference is the operational component of EcoLogits 0.11.1, published on 7 July 2026 and pinned to commit 886d1ebfadb51a2d6407fcea6d9778c997c85c35. Its code separates GPU energy, model-memory allocation, non-GPU host energy and facility overhead. The equations below reproduce that reference’s functional form; they do not claim that a closed provider uses the assumed hardware or deployment settings.';
-  const catalogIndex = originalLeaves.indexOf('[3] EcoLogits contributors. Model registry at release 0.11.3, commit d0b76e382442e63df688e9c37016f596223c8aff.');
+  const catalogIndex = originalLeaves.indexOf('[3] EcoLogits contributors. Model registry at commit 7b8bc036376d4b4dd08596323383c78ae1e116d7 of 19 November 2026, after release 0.11.3.');
   assert.ok(catalogIndex >= 0);
   originalLeaves[catalogIndex] = '[3] EcoLogits contributors. Model registry at the pinned release.';
   // 4 October 2026: the audit leaf now dates the audit and points to the later usage reports.
@@ -128,6 +128,12 @@ test('earlier-request methodology preserves all 623 existing article review anch
     assert.ok(index >= 0, prefix);
     originalLeaves[index] = 'Image reference leaf revised on 20 October 2026';
   }
+  // 23 November 2026: organization totals follow the server's newest EcoLogits data (owner decision).
+  // The sentences were appended to the totals paragraph, so its anchor keeps its position.
+  const totalsIndex = originalLeaves.findIndex(text => text.startsWith('Arithmetic totals combine compatible quantities'));
+  assert.ok(totalsIndex >= 0);
+  assert.ok(originalLeaves[totalsIndex].endsWith('Organization totals are calculated by the organization’s server with its newest EcoLogits data, whatever version each member’s browser runs, so that all members’ figures add up. The figures each browser recorded stay stored, and a past period can therefore change after a data update. The bar under a chat and Details show the browser’s own calculation.'));
+  originalLeaves[totalsIndex] = originalLeaves[totalsIndex].replace(' Organization totals are calculated by the organization’s server with its newest EcoLogits data, whatever version each member’s browser runs, so that all members’ figures add up. The figures each browser recorded stay stored, and a past period can therefore change after a data update. The bar under a chat and Details show the browser’s own calculation.', '');
   const hash = require('node:crypto').createHash('sha256').update(JSON.stringify(originalLeaves)).digest('hex');
   assert.equal(hash, '06e21cc2d060b869705a55f234420cce571202209d74821f893cb87c3a5f3108');
 });

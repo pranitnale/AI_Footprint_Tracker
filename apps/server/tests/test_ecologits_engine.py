@@ -133,16 +133,16 @@ def test_perplexity_labels_use_own_records_stand_ins_or_the_family_benchmark(mod
         ("claude", "claude-haiku-unlisted", "anthropic", "claude-haiku-5-5"),
         ("claude", "claude-sonnet-unlisted", "anthropic", "claude-sonnet-5-5"),
         ("claude", "claude-opus-unlisted", "anthropic", "claude-opus-5-5"),
-        ("claude", "claude-fable-unlisted", "anthropic", "claude-fable-5-1"),
-        ("chatgpt", "chatgpt-gpt-sol-unlisted", "openai", "gpt-6.1-sol"),
-        ("chatgpt", "chatgpt-gpt-astra-unlisted", "openai", "gpt-6-astra"),
+        ("claude", "claude-fable-unlisted", "anthropic", "claude-fable-5-2"),
+        ("chatgpt", "chatgpt-gpt-sol-unlisted", "openai", "gpt-6.2-sol"),
+        ("chatgpt", "chatgpt-gpt-astra-unlisted", "openai", "gpt-6.2-astra"),
         ("chatgpt", "chatgpt-gpt-luna-unlisted", "openai", "gpt-6-luna"),
-        ("chatgpt", "chatgpt-gpt-terra-unlisted", "openai", "gpt-5.6-terra"),
+        ("chatgpt", "chatgpt-gpt-terra-unlisted", "openai", "gpt-6.1-terra"),
         ("gemini", "gemini-flash-unlisted", "google_genai", "gemini-3.8-flash"),
         ("gemini", "gemini-flash-lite-unlisted", "google_genai", "gemini-3.5-flash-lite"),
         ("gemini", "gemini-pro-unlisted", "google_genai", "gemini-3.1-pro-preview"),
         ("perplexity", "perplexity-claude-haiku-unlisted", "anthropic", "claude-haiku-5-5"),
-        ("perplexity", "perplexity-gpt-sol-unlisted", "openai", "gpt-6.1-sol"),
+        ("perplexity", "perplexity-gpt-sol-unlisted", "openai", "gpt-6.2-sol"),
         ("perplexity", "perplexity-gemini-flash-lite-unlisted", "google_genai", "gemini-3.5-flash-lite"),
     ],
 )
@@ -202,8 +202,8 @@ def test_unknown_variants_use_the_newest_record_of_their_variant_or_kind(site, m
         ("chatgpt", "chatgpt-gpt-6-sol-pro", "direct_mapping", "gpt-6-sol", "exact_record"),
         ("chatgpt", "chatgpt-gpt-6-luna-pro", "direct_mapping", "gpt-6-luna", "exact_record"),
         ("perplexity", "perplexity-gpt-6-sol-pro", "direct_mapping", "gpt-6-sol", "exact_record"),
-        ("chatgpt", "chatgpt-gpt-sol-pro-unlisted", "model_override", "gpt-6.1-sol", "model_family_stand_in"),
-        ("chatgpt", "chatgpt-gpt-astra-pro-unlisted", "model_override", "gpt-6-astra", "model_family_stand_in"),
+        ("chatgpt", "chatgpt-gpt-sol-pro-unlisted", "model_override", "gpt-6.2-sol", "model_family_stand_in"),
+        ("chatgpt", "chatgpt-gpt-astra-pro-unlisted", "model_override", "gpt-6.2-astra", "model_family_stand_in"),
         ("perplexity", "perplexity-gpt-luna-pro-unlisted", "model_override", "gpt-6-luna", "model_family_stand_in"),
     ],
 )
@@ -661,7 +661,11 @@ def test_alias_keeps_archived_overlays_and_counts_one_canonical_attempt(setup):
         assert len(originals) == 2
         assert [row.id for row in originals if row.status == "current"] == [expected]
         assert sum(row.status == "aliased" for row in originals) == 1
-        assert session.scalar(select(func.count()).select_from(EngineEstimate)) == 2
+        # Both archived overlays are kept. The upload may also have calculated the revised reply
+        # at once (MethodHistory.keep_current), which adds an estimate of the new revision.
+        archived = [payload_hash(attempt), payload_hash(other)]
+        kept = select(func.count()).select_from(EngineEstimate)
+        assert session.scalar(kept.where(EngineEstimate.observation_hash.in_(archived))) == 2
     totals = client.get("/v1/me/summary?period=all&calculation_view=original", headers=auth(credentials)).json()
     assert totals["attempt_count"] == "1"
 

@@ -72,12 +72,59 @@ export function coworkListSession(url: URL, method: string): string | null {
   return request?.kind === "events" ? request.session : null;
 }
 
+/**
+ * Whether a page of a resumed read holds a counted result that names a prompt the read has
+ * not seen. Such a prompt was sent before the place the read resumed from, queued while the
+ * turn before it was still running, so its saved chat messages would never be named. `seen`
+ * collects the ids of the user messages read so far, those a turn handoff carried included.
+ * Ids only; no text is read.
+ */
+export function coworkMissedPrompt(value: unknown, seen: Set<string>): boolean {
+  const data = (value as { data: unknown[] }).data;
+  for (const event of data) {
+    const payload = (event as { payload?: unknown } | null)?.payload;
+    if (!payload || typeof payload !== "object") continue;
+    const { type, uuid, request, modelUsage, user_message_uuids, user_message_uuid } =
+      payload as Record<string, any>;
+    if (type === "user") {
+      if (typeof uuid === "string") seen.add(uuid);
+    } else if (type === "control_request") {
+      if (Array.isArray(request?.messages))
+        for (const message of request.messages)
+          if (typeof message?.uuid === "string") seen.add(message.uuid);
+    } else if (
+      type === "result" &&
+      // A result with empty counters ran no model and stands for no turn.
+      modelUsage &&
+      typeof modelUsage === "object" &&
+      Object.keys(modelUsage).length
+    ) {
+      const named: unknown[] = Array.isArray(user_message_uuids)
+        ? user_message_uuids
+        : user_message_uuid !== undefined
+          ? [user_message_uuid]
+          : [];
+      if (named.some((id) => typeof id === "string" && !seen.has(id))) return true;
+    }
+  }
+  return false;
+}
+
+/** Where a resumed read starts: the sequence number of the last event already counted. */
+export const coworkResume = (value: unknown): value is number =>
+  Number.isSafeInteger(value) && (value as number) >= 1;
+
 export async function coworkOwnRead(
   context: OwnReadContext,
   origin: string,
   pageDelay: () => number,
 ): Promise<OwnReadOutcome> {
-  let cursor: number | null = null;
+  // A session counted before is read on from its last counted event. A cursor is the
+  // sequence number already seen, and an empty page means nothing new (probe of 22 Nov 2026).
+  let cursor: number | null = coworkResume(context.resume) ? context.resume : null;
+  // A resumed read goes back to the first event once, when it meets a prompt it has not seen.
+  const resumed = { now: cursor !== null, missed: false };
+  const seen = new Set<string>();
   for (let pages = 0; ; pages++) {
     if (pages >= COWORK_PAGE_LIMIT) return { kind: "read_partly" };
     if (pages > 0) {
@@ -95,10 +142,22 @@ export async function coworkOwnRead(
         headers: { "anthropic-version": API_VERSION },
       },
       (text) => {
-        const page = coworkEventsPage(JSON.parse(text), after);
+        const value = JSON.parse(text);
+        const page = coworkEventsPage(value, after);
+        if (page && resumed.now && coworkMissedPrompt(value, seen)) {
+          // This page is not handed to the reader; the pages from the first event are.
+          resumed.missed = true;
+          return { ok: false, outcome: { kind: "invalid" } };
+        }
         return page ? { ok: true, info: page } : { ok: false, outcome: { kind: "invalid" } };
       },
     );
+    if (resumed.missed) {
+      resumed.now = resumed.missed = false;
+      seen.clear();
+      cursor = null;
+      continue;
+    }
     if (!result.ok) return result.outcome;
     if (result.info.events < COWORK_PAGE_EVENTS || result.info.last === null)
       return { kind: "read" };

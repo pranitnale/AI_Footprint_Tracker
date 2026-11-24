@@ -92,7 +92,7 @@ Extend method/result contracts with:
 | `environment_scenario_id`, `factor_provenance_status` | Coherent factor vector, source snapshot and original-year status |
 | `reference_only` | True for a comparator not applicable enough to estimate this request; excluded from usage contribution |
 
-Do not report the fallback model as the model the employee selected. Personal/company tool breakdowns use the observed tool/model; method breakdowns identify the proxy separately. Historical method results are not silently overwritten when the cohort changes. Register a new method/cohort version and offer a separate recalculated view.
+Do not report the fallback model as the model the employee selected. Personal/company tool breakdowns use the observed tool/model; method breakdowns identify the proxy separately. Historical method results are not silently overwritten when the cohort changes. Register a new method/cohort version and offer a separate recalculated view. Organization totals use the organization server's newest method (owner decision of 23 November 2026): the server recalculates every current record with it and keeps the originals stored, so a past period can change after a data update, while the bar and Details show the browser's own calculation.
 
 ## 4. Image generation is first-release scope
 

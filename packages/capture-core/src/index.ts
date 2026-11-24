@@ -392,6 +392,7 @@ export {
   isNotebooklmChatPath,
   isProvisionalChatgptRoute,
   isUnsavedChatgptRoute,
+  routeShows,
   type RouteSite,
 } from "./routes";
 

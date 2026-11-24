@@ -1,14 +1,21 @@
 import "fake-indexeddb/auto";
 import assert from "node:assert/strict";
 import test from "node:test";
-import { Ledger, type Scope } from "@footprint/ledger";
+import { Ledger, historyAuthority, type Scope } from "@footprint/ledger";
 import {
   canonicalJson,
+  emptyGeneration,
+  historyResponseParts,
+  HistoryMessageSchema,
+  HistoryPageSchema,
   type OrganizationSelectionRequest,
   type OrganizationSelectionResponse,
 } from "@footprint/contracts";
 import {
+  BASELINE_METHOD_HASH,
+  BASELINE_METHOD_ID,
   createMethodRegistry,
+  estimateHistoricalText,
   LocalEstimateExecutor,
   type EstimateExecutor,
 } from "@footprint/estimator";
@@ -764,4 +771,182 @@ test("usage breakdown skips rows outside the window instead of creating empty bu
   const total = await scanSummary(db, scope.namespace, filters, undefined, false, undefined, undefined, observer);
   assert.equal(total.requests, 0);
   assert.deepEqual(observer.result(), { buckets: {}, sites: {}, models: {}, chats: [], modelSites: {}, siteLastAt: {}, siteLastMissed: {} });
+});
+
+// Every EcoLogits data update ships as a new packaged method in the same family while the
+// preference stays "build_default". Owner, 23 Nov 2026: the browser then recalculates its own
+// saved records by itself, whole chats, and nothing when the method did not change.
+test("a build with new EcoLogits data recalculates every saved input once", async () => {
+  const name = "engine-service-update-" + crypto.randomUUID();
+  const first = createMethodRegistry(config, mappings, media);
+  const later = createMethodRegistry(
+    config,
+    { ...mappings, review_date: "2099-12-31" },
+    media,
+  );
+  assert.equal(first.ecologits.engine_id, "ecologits");
+  assert.notEqual(first.ecologits.method_hash, later.ecologits.method_hash);
+  let calls = 0;
+  const open = async (registry: typeof first) => {
+    const db = await Ledger.open(name);
+    const executor = new LocalEstimateExecutor(registry);
+    const service = new EngineService(
+      db.estimation,
+      registry,
+      {
+        executionOrigin: "local",
+        estimate: (...args) => {
+          calls++;
+          return executor.estimate(...args);
+        },
+      },
+      async () => ({ scope: { ...scope }, token: "first", current: async () => {} }),
+    );
+    return {
+      db,
+      service,
+      close() {
+        service.dispose();
+        db.close();
+      },
+    };
+  };
+  const settle = async (service: EngineService) => {
+    for (let pass = 0; pass < 20; pass++) {
+      await service.maintainLocal();
+      if ((await service.status()).local.status === "complete") return;
+    }
+  };
+
+  // Build one: live replies and saved messages of two chats, estimated with its EcoLogits data.
+  let build = await open(first);
+  const executor = new LocalEstimateExecutor(first);
+  await build.db.policyTransaction([
+    { key: "personal", namespace: scope.namespace, secret: "a".repeat(64) },
+    {
+      key: "ownership-history",
+      eras: [
+        { scope, secret: "a".repeat(64), policyVersion: "1.0.0", start: 0, end: null },
+      ],
+    },
+  ]);
+  for (const chat of ["a", "d"]) {
+    const pair = records();
+    pair[0].conversation_key = chat.repeat(64);
+    const original = await executor.estimate({
+      family: "live",
+      request: pair[0],
+      attempt: pair[1],
+    });
+    await build.db.commit(scope, pair, [
+      {
+        store: "local_estimates",
+        value: {
+          key: `current:${scope.namespace}:${pair[1].attempt_id}`,
+          namespace: scope.namespace,
+          selection: "current",
+          estimate: original,
+        },
+      },
+    ]);
+    const answer = records()[1].tokens.answer_output;
+    const message = HistoryMessageSchema.parse({
+      schema_version: "3.0.0",
+      kind: "history_message",
+      timing: null,
+      message_key: (chat === "a" ? "b" : "e").repeat(64),
+      role: "response",
+      conversation_key: (chat === "a" ? "c" : "f").repeat(64),
+      key_version: "1",
+      site: "claude",
+      parent_key: null,
+      prompt_key: null,
+      provider_request_key: null,
+      provider_attempt_key: null,
+      occurred_at: "2026-09-01T00:00:00.000001Z",
+      date_basis: "message_created",
+      observed_at: "2026-09-14T16:00:00.000Z",
+      model_id: null,
+      proposed_method_id: BASELINE_METHOD_ID,
+      company_dedup_key: null,
+      proposed_method_hash: BASELINE_METHOD_HASH,
+      tokens: answer,
+      inline_file_text: null,
+      parts: historyResponseParts(answer),
+      generation: emptyGeneration(),
+      text_complete: true,
+      coverage_reasons: ["history_only"],
+    });
+    const page = HistoryPageSchema.parse({
+      schema_version: "3.0.0",
+      site: "claude",
+      conversation_key: message.conversation_key,
+      observed_at: message.observed_at,
+      deletion_epoch: 0,
+      branch_scope: "loaded_messages",
+      selected_leaf_key: null,
+      branch_message_keys: null,
+      root_message_key: null,
+      first_request_verified: false,
+      has_earlier: null,
+      has_later: null,
+      messages: [message],
+    });
+    const routing = await build.db.publicationSnapshot(scope.namespace);
+    await build.db.commitHistory(
+      scope,
+      page,
+      {
+        authority: historyAuthority(routing),
+        erasureVersion: routing.erasureVersion,
+        estimates: { [message.message_key]: estimateHistoricalText(message) },
+        envelopes: {
+          [message.message_key]: await executor.estimate({
+            family: "history",
+            record: message,
+          }),
+        },
+        healthCodes: [],
+      },
+      () => true,
+    );
+  }
+  await settle(build.service);
+  const originals = canonicalJson(
+    await build.db.estimation.viewPage({ scope, view: "original" }),
+  );
+  const inputs = (await build.db.estimation.viewPage({ scope, view: "selected" }))
+    .rows;
+  assert.equal(inputs.length, 4, "two live replies and two saved messages");
+  build.close();
+
+  // Build two: same preference, new packaged EcoLogits method.
+  build = await open(later);
+  calls = 0;
+  await settle(build.service);
+  assert.equal(calls, 4, "every saved input is calculated once with the new data");
+  const selected = await build.db.estimation.viewPage({ scope, view: "selected" });
+  assert.equal(selected.rows.length, 4);
+  for (const row of selected.rows) {
+    assert.equal(row.result?.requested_method.method_hash, later.ecologits.method_hash);
+    assert.equal(row.result?.requested_method.method_id, later.ecologits.method_id);
+  }
+  assert.equal(
+    canonicalJson(await build.db.estimation.viewPage({ scope, view: "original" })),
+    originals,
+    "originals stay byte for byte the same",
+  );
+  const status = await build.service.status();
+  assert.equal(status.local.status, "complete");
+  assert.equal(status.method?.method_hash, later.ecologits.method_hash);
+  await build.service.maintainLocal();
+  assert.equal(calls, 4, "a second pass calculates nothing");
+  build.close();
+
+  // The same build started again: the method did not change, so nothing is calculated.
+  build = await open(later);
+  await build.service.maintainLocal();
+  await build.service.maintainLocal();
+  assert.equal(calls, 4, "a restart with the same data calculates nothing");
+  build.close();
 });

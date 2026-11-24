@@ -88,7 +88,7 @@ test('owner decisions and actual implementation state remain visible', () => {
 });
 
 test('curated handoff links resolve to local files', () => {
-  const files = ['IMPLEMENTER-HANDOFF.md', 'IMPLEMENTATION-PLAN.md', 'docs/implementation/PRODUCT-AND-ENROLLMENT-SPEC.md', 'docs/implementation/CONTRACTS.md', 'docs/implementation/ACCEPTANCE-AND-FAILURES.md', 'docs/implementation/BREVO-PRIVACY-SETUP.md', 'docs/implementation/BRAND-ROLES-AND-DESIGN-HANDOFF.md', 'docs/implementation/OPEN-SOURCE-AND-REUSE.md', 'docs/research/README.md'];
+  const files = ['IMPLEMENTER-HANDOFF.md', 'IMPLEMENTATION-PLAN.md', 'docs/implementation/PRODUCT-AND-ENROLLMENT-SPEC.md', 'docs/implementation/CONTRACTS.md', 'docs/implementation/ACCEPTANCE-AND-FAILURES.md', 'docs/implementation/BREVO-PRIVACY-SETUP.md', 'docs/implementation/SMTP-MAIL-SETUP.md', 'docs/implementation/BRAND-ROLES-AND-DESIGN-HANDOFF.md', 'docs/implementation/OPEN-SOURCE-AND-REUSE.md', 'docs/research/README.md'];
   for (const file of files) {
     for (const match of read(file).matchAll(/\]\(([^)]+)\)/g)) {
       const href = match[1];

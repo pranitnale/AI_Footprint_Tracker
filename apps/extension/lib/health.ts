@@ -52,6 +52,36 @@ export const failureMessage = (code: ReasonCode) =>
   MESSAGES[code] ??
   "The operation could not be completed. Recorded data was kept. Check tracking health and retry.";
 /**
+ * Answers a page gets that are not problems, so they are never reported to tracking health. A
+ * cached=only summary read that finds no saved copy is the normal answer before the first fresh
+ * read of that period; until 23 Nov 2026 it was filed as a problem each time the person chose a
+ * new period, and the dashboard showed "1 problem".
+ */
+const ANSWERS: Readonly<Record<string, string>> = {
+  recalculation_pending:
+    "The selected recalculation is not ready. No current recalculated totals are available.",
+  method_unsupported: "The selected method is not installed for this connection.",
+  summary_not_cached:
+    "No saved copy of these figures is on this device yet. The current figures are loading.",
+};
+/** The reply the background sends a page for a request that failed (`error`). */
+export function failureReply(error: unknown, reporter: HealthReporter) {
+  if (error instanceof Error && Object.hasOwn(ANSWERS, error.message))
+    return {
+      code: error.message,
+      error: ANSWERS[error.message]!,
+      health: reporter.list(),
+    };
+  const code = failureCode(error);
+  reporter.report(error);
+  return {
+    code,
+    error: failureMessage(code),
+    detail: technicalDetail(error),
+    health: reporter.list(),
+  };
+}
+/**
  * Problems an AI page reported about one moment. Whether one still applies is known only to
  * the open tab, which the toolbar popup asks (owner, 12 October 2026), so the dashboard lists
  * them under Earlier problems even before a later reply closes them.

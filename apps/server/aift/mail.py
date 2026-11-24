@@ -1,8 +1,16 @@
 import re
+import smtplib
+import ssl
+from email.message import EmailMessage
+from email.policy import SMTP as SMTP_POLICY
+from email.utils import formataddr, formatdate, make_msgid
 
 import httpx
 
 from .security import Problem
+
+# Seconds to wait for the mail service, for the connection and for each answer.
+MAIL_TIMEOUT = 10
 
 # What each code is for, in the words the email uses: (subject, heading, what to do with the code).
 PURPOSES = {
@@ -114,13 +122,13 @@ class BrevoMail:
         if (
             not self.settings.mail_privacy_verified
             or not self.settings.brevo_key
-            or not self.settings.brevo_sender
+            or not self.settings.sender
         ):
             raise Problem("configuration_required", 503)
         subject, text, html = code_email(code, purpose)
         # The consent field alone does not disable tracking. Delivered-message evidence gates this adapter.
         body = {
-            "sender": {"name": "AI Footprint Tracker", "email": self.settings.brevo_sender},
+            "sender": {"name": "AI Footprint Tracker", "email": self.settings.sender},
             "to": [{"email": recipient, "contactPixelTrackingConsent": False}],
             "subject": subject,
             "textContent": text,
@@ -132,7 +140,7 @@ class BrevoMail:
                 "https://api.brevo.com/v3/smtp/email",
                 json=body,
                 headers={"api-key": self.settings.brevo_key},
-                timeout=10,
+                timeout=MAIL_TIMEOUT,
             )
         except (httpx.TimeoutException, httpx.NetworkError):
             return "delivery_unknown"
@@ -141,3 +149,108 @@ class BrevoMail:
         if response.status_code not in {200, 201, 202}:
             raise Problem("email_service_unavailable", 503)
         return "accepted"
+
+
+def refused(smtp_code):
+    # A 4xx answer is a temporary refusal: the server kept nothing, so sending again is safe.
+    return Problem("email_service_unavailable", 503, 400 <= smtp_code < 500)
+
+
+class SmtpMail:
+    """
+    Sends code emails through any standard mail server. The connection is always encrypted and the
+    server's certificate and host name are checked; there is no fallback to an unencrypted
+    connection. send() answers like BrevoMail: "accepted", "delivery_unknown" only when the
+    connection broke after the message data started, or a Problem when nothing was sent.
+    """
+
+    def __init__(self, settings):
+        self.settings = settings
+
+    def message(self, recipient, code, purpose):
+        sender = self.settings.sender
+        subject, text, html = code_email(code, purpose)
+        message = EmailMessage(policy=SMTP_POLICY)
+        message["From"] = formataddr(("AI Footprint Tracker", sender))
+        message["To"] = recipient
+        message["Subject"] = subject
+        message["Date"] = formatdate(usegmt=True)
+        # Without a domain, make_msgid uses the machine's host name, which would name the container.
+        message["Message-ID"] = make_msgid(domain=sender.rsplit("@", 1)[1])
+        # Asks receiving systems not to answer a code email with out-of-office or similar replies.
+        message["Auto-Submitted"] = "auto-generated"
+        message["X-Auto-Response-Suppress"] = "All"
+        message.set_content(text)
+        if getattr(self.settings, "mail_html_verified", False):
+            message.add_alternative(html, subtype="html")
+        return message
+
+    def send(self, recipient, code, purpose="login"):
+        settings = self.settings
+        if not settings.mail_privacy_verified or not settings.smtp_host or not settings.sender:
+            raise Problem("configuration_required", 503)
+        outcome = self.transfer(recipient, self.message(recipient, code, purpose).as_bytes())
+        # Raised here, outside the handlers in transfer, so the smtplib error (whose text can hold the
+        # recipient) is not attached to the Problem as its context.
+        if isinstance(outcome, Problem):
+            raise outcome
+        return outcome
+
+    def transfer(self, recipient, data):
+        settings = self.settings
+        context = ssl.create_default_context()
+        server = None
+        data_started = False
+        try:
+            if settings.smtp_security == "tls":
+                server = smtplib.SMTP_SSL(
+                    settings.smtp_host, settings.smtp_port, timeout=MAIL_TIMEOUT, context=context
+                )
+            else:
+                server = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=MAIL_TIMEOUT)
+                server.starttls(context=context)
+            # mail() does not greet by itself (only login() and sendmail() do), and a server may refuse
+            # MAIL before EHLO. After STARTTLS the earlier greeting no longer counts.
+            server.ehlo()
+            if settings.smtp_username:
+                server.login(settings.smtp_username, settings.smtp_password)
+            reply, _ = server.mail(settings.sender)
+            if reply != 250:
+                return refused(reply)
+            reply, _ = server.rcpt(recipient)
+            if reply not in {250, 251}:
+                return refused(reply)
+            data_started = True
+            # data() raises only when the DATA command itself is refused; the server's answer after the
+            # message body comes back as its return value. A refusal there means nothing was taken.
+            reply, _ = server.data(data)
+            if reply != 250:
+                return refused(reply)
+            try:
+                server.quit()
+            except OSError:
+                pass  # The message is already accepted; a failed goodbye changes nothing.
+            return "accepted"
+        except smtplib.SMTPResponseException as error:
+            return refused(error.smtp_code)
+        except smtplib.SMTPServerDisconnected:
+            return "delivery_unknown" if data_started else Problem("email_service_unavailable", 503, True)
+        except smtplib.SMTPException:
+            # STARTTLS or a usable login method is not offered: a setup fault that a retry cannot fix.
+            return Problem("email_service_unavailable", 503)
+        except OSError:
+            # Connection, TLS and certificate failures and timeouts. Before the message data started the
+            # server has nothing, so a retry is safe; after that, it may have accepted the message.
+            return "delivery_unknown" if data_started else Problem("email_service_unavailable", 503, True)
+        finally:
+            if server is not None:
+                server.close()
+
+
+def mail_delivery(settings):
+    """The delivery adapter that settings.mail_adapter names."""
+    if settings.mail_adapter == "fake":
+        return FakeMail()
+    if settings.mail_adapter == "smtp":
+        return SmtpMail(settings)
+    return BrevoMail(settings)

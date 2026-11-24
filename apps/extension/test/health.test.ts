@@ -6,6 +6,7 @@ import {
   HealthReporter,
   failureCode,
   failureMessage,
+  failureReply,
   persistedHealth,
   combineHealth,
   technicalDetail,
@@ -191,4 +192,34 @@ test("the technical detail names the error and hides addresses", () => {
   );
   assert.equal(technicalDetail("text"), null);
   assert.ok(technicalDetail(new Error("x".repeat(400)))!.length <= 160);
+});
+test("a cached-only summary read that finds no saved copy is an answer, not a problem", () => {
+  // Live, 23 Nov 2026: each new period in the Organization view added "1 problem".
+  let badges = 0;
+  const health = new HealthReporter(async () => {
+    badges++;
+  });
+  const missing = failureReply(new Error("summary_not_cached"), health);
+  assert.equal(missing.code, "summary_not_cached");
+  assert.equal(typeof missing.error, "string");
+  assert.ok(!("detail" in missing));
+  assert.deepEqual(health.list(), []);
+  assert.equal(badges, 0);
+  for (const answer of ["recalculation_pending", "method_unsupported"]) {
+    assert.equal(failureReply(new Error(answer), health).code, answer);
+    assert.deepEqual(health.list(), []);
+  }
+  // Every other failure is reported and answered with the same fields as before.
+  const reply = failureReply(new Error("payload_rejected"), health);
+  assert.deepEqual(Object.keys(reply), ["code", "error", "detail", "health"]);
+  assert.equal(reply.code, "payload_rejected");
+  assert.equal(reply.error, failureMessage("payload_rejected"));
+  assert.equal(reply.detail, "Error: payload_rejected");
+  assert.deepEqual(
+    reply.health.map((issue) => issue.code),
+    ["payload_rejected"],
+  );
+  const unknown = failureReply(new Error("boom"), health);
+  assert.equal(unknown.code, "ledger_integrity_failed");
+  assert.equal(badges, 2);
 });

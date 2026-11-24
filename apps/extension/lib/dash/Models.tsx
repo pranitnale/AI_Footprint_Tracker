@@ -2,7 +2,7 @@ import type { DisplayScenario } from "@footprint/contracts";
 import { formatInteger } from "@footprint/ui/formatters";
 import type { UsageBreakdownView } from "../dashboard/types";
 import { SITE_LABELS, SITE_ORDER } from "../ui/components";
-import { dashWindow } from "../ui/dash-periods";
+import { dashWindow, inPeriod } from "../ui/dash-periods";
 import { baseText, baseValue, modelSite, requestsPhrase, partFigures, partKeys, totalFigures } from "../ui/figure-math";
 import { modelName } from "../ui/model-names";
 import type { UsageFigures } from "../ui/usage-figures";
@@ -30,7 +30,7 @@ export function Models({ ctx, org = false }: { ctx: PageContext; org?: boolean }
   const mine = useBreakdown(ctx, window);
   const company = useServerSummary(ctx, "company", org ? window : null);
   const scenario = ctx.dashboard.settings.displayScenario;
-  if (org) return <OrgModels ctx={ctx} summary={company.data} error={company.error} retry={company.retry} mine={mine.data} phrase={window.phrase} />;
+  if (org) return <OrgModels ctx={ctx} summary={company.data} error={company.error} retry={company.retry} mine={mine.data} phrase={inPeriod(window)} />;
   if (!mine.data)
     return mine.error ? (
       <div className="dh-card dh-loading" role="alert">
@@ -72,7 +72,7 @@ export function Models({ ctx, org = false }: { ctx: PageContext; org?: boolean }
             <h2 id="md-used" className="lg-display">
               Tools and models you used
             </h2>
-            <p className="dh-soft">Requests in the {window.phrase}, split by the model that answered</p>
+            <p className="dh-soft">Requests {inPeriod(window)}, split by the model that answered</p>
           </div>
           <dl className="md-counts">
             <div>
@@ -381,7 +381,7 @@ function OrgModels({ ctx, summary, error, retry, mine, phrase }: { ctx: PageCont
           Tools used across the organization
         </h2>
         <p className="dh-soft">
-          Requests in the {phrase}, with your own count beside each. {requestsPhrase(total.requestsText)} in all.
+          Requests {phrase}, with your own count beside each. {requestsPhrase(total.requestsText)} in all.
         </p>
         <ToolTable sites={sites} total={total} />
         <ul className="mo-mine">

@@ -7,6 +7,7 @@ import {
   type DerivedSource,
 } from "@footprint/ledger";
 import {
+  isCoworkSessionId,
   isRouteConversationId,
   isDisplayBinding,
   parseConversationRoute,
@@ -81,6 +82,7 @@ import {
   type EstimateDetailSummary,
 } from "./estimate-details";
 import {
+  currentViewRefused,
   serverHistoryView,
   serverSummary,
   withSplitHistoryViews,
@@ -161,6 +163,11 @@ import {
   type ChatgptReadProgress,
   type KeyValueArea,
 } from "./chatgpt-read-progress";
+import {
+  createClaudeLinkStore,
+  validClaudeSessionTotals,
+  type ClaudeLinkStore,
+} from "./claude-session-links";
 import {
   longChatTipSettings,
   tipRequestLimit,
@@ -303,6 +310,7 @@ export class Coordinator {
   readonly ledger: ApplicationRepository;
   readonly history: HistoryService;
   private readonly chatgptProgress: ChatgptProgressStore;
+  private readonly claudeLinks: ClaudeLinkStore;
   private readonly longChatTips: LongChatTipStore;
   private uploadAssociations = new Map<
     string,
@@ -475,6 +483,7 @@ export class Coordinator {
     this.ledger = ledger;
     const chatStorage = dependencies.progressStorage ?? memoryKeyValueArea();
     this.chatgptProgress = createChatgptProgressStore(chatStorage);
+    this.claudeLinks = createClaudeLinkStore(chatStorage);
     this.longChatTips = createLongChatTipStore(chatStorage);
     this.counting = snapshotCountingRuntime(
       dependencies.counting ?? PACKAGED_COUNTING_RUNTIME,
@@ -496,6 +505,12 @@ export class Coordinator {
         historyCommitted: (scope, conversationKey) =>
           this.refreshFileDisplays(scope, conversationKey, conversationKey),
         trackingAllowed: () => this.trackingConsented(),
+        claudeSessionLinked: (scope, chatId, sessionId) =>
+          this.claudeSessionLinked(scope, chatId, sessionId),
+        claudeText: (scope, chatKey, event) =>
+          event === "research"
+            ? this.claudeLinks.research(scope.namespace, chatKey, Date.now())
+            : this.claudeLinks.textRead(scope.namespace, chatKey, Date.now()),
         organizationAgreed: (origin, features) =>
           this.organizationAgreed(origin, features),
         connectionAgreed: (version, origin) =>
@@ -3351,11 +3366,17 @@ export class Coordinator {
           ? { methodId: calculation.method.method_id }
           : {}),
       };
+      // A Claude chat with a session adds the session's saved rows and keeps this browser's
+      // figures, as its route summary does.
+      const linked = historyConversation
+        ? await this.claudeLinkedKey(selected, r.site, historyConversation)
+        : undefined;
       let history = historyConversation
         ? await this.history.localView(
             selected,
             historyConversation,
             historyFilters,
+            linked,
           )
         : undefined;
       const queueCount = await this.ledger.pendingCount(selected.namespace);
@@ -3385,7 +3406,7 @@ export class Coordinator {
           : remote?.server?.erasure_version === before.erasureVersion)
       )
         return "stale" as const;
-      if (serverCandidate?.history && historyConversation) {
+      if (serverCandidate?.history && historyConversation && !linked) {
         // The conversation endpoint supplies live and history totals from one
         // transaction. A separate history fetch could describe a different population.
         try {
@@ -3400,6 +3421,9 @@ export class Coordinator {
         }
       }
       const server =
+        // A linked Claude chat shows this browser's figures, as in routeSummary: the server
+        // holds the chat and its session as two conversations.
+        !linked &&
         serverCandidate &&
         usableServerHistory(history, !!thread && !serverCandidate.history)
           ? serverCandidate
@@ -4111,6 +4135,19 @@ export class Coordinator {
         }
         throw error;
       }
+      // A Claude chat with a session shows this browser's figures, also in organization
+      // mode: the server's summary of one conversation holds only one of the chat's two parts.
+      const linked = await this.claudeLinkedKey(scope, site, conversationKey);
+      if (linked && view.conversation.server)
+        view = {
+          ...view,
+          conversation: {
+            ...view.conversation,
+            source: "local" as const,
+            server: null,
+            cachedAt: null,
+          },
+        };
       let history;
       try {
         const serverHistory = view.conversation.server?.history;
@@ -4127,7 +4164,12 @@ export class Coordinator {
               filters,
               serverHistory,
             )
-          : await this.history.localView(scope, conversationKey, filters);
+          : await this.history.localView(
+              scope,
+              conversationKey,
+              filters,
+              linked,
+            );
         if (
           view.conversation.server &&
           !usableServerHistory(history, site === "perplexity" && !serverHistory)
@@ -4307,23 +4349,52 @@ export class Coordinator {
    * calculation work to settle first; when the figures still moved during every attempt, the
    * last build is returned marked "rebuilding" so the page shows it and reads again. A change
    * of data scope, routing or erasure still fails, because those figures must never be shown.
+   *
+   * A routing write during a build (connecting to an organization, a key refresh) makes the
+   * history view refuse with policy_unavailable; the next attempt reads the new state. Until
+   * 23 Nov 2026 the first such refusal showed "could not load" right after connecting. A build
+   * made before the refusal is dropped, since its figures may belong to the old routing, and a
+   * refusal in the last attempt is reported as itself. Only a refusal within the same scope is
+   * retried: after a change of organization, member or mode the whole answer is refused at once,
+   * so a retry can never return another scope's figures.
    */
   async dashboard(filters: Filters = {}) {
     let moved: Awaited<ReturnType<Coordinator["buildDashboard"]>>["result"] | undefined;
+    let refused: Error | undefined;
+    // The authority token covers connection trust, ownership and erasure, but not an access-token
+    // refresh or other routing writes within the same scope. A scope that cannot be read now
+    // fails in the build below, with its own error, as before.
+    const asked = await this.methods
+      .authority()
+      .then((authority) => authority.token)
+      .catch(() => null);
+    const sameScope = async () => {
+      try {
+        return asked !== null && (await this.methods.authority()).token === asked;
+      } catch {
+        return false;
+      }
+    };
     for (let retry = 0; retry < 3; retry++) {
       if (retry > 0) await this.engines.settleLocal(750);
+      refused = undefined;
       try {
         const built = await this.buildDashboard(filters);
         if (built.consistent) return built.result;
         moved = built.result;
       } catch (error) {
-        if (
+        if (error instanceof Error && error.message === "policy_unavailable") {
+          if (!(await sameScope())) throw error;
+          refused = error;
+          moved = undefined;
+        } else if (
           !(error instanceof Error) ||
           error.message !== "aggregate_inconsistent"
         )
           throw error;
       }
     }
+    if (refused) throw refused;
     if (!moved) throw new Error("aggregate_inconsistent");
     return {
       ...moved,
@@ -4615,6 +4686,98 @@ export class Coordinator {
   > {
     const authority = await this.methods.authority();
     const params = new URLSearchParams(query);
+    // What every answer must pass before it is shown: no erasure, routing or calculation change
+    // while it was read.
+    const finish = async <T extends Record<string, unknown>>(
+      result: T,
+      history: HistoryView,
+      before: Awaited<ReturnType<ApplicationRepository["publicationSnapshot"]>>,
+      calculation: {
+        view: "original" | "recalculated";
+        methodId: string | null;
+        methodHash: string | null;
+      },
+      guard?: Parameters<ApplicationRepository["publicationSnapshot"]>[4],
+      selection?: { current(): Promise<void> } | null,
+    ) => {
+      await selection?.current();
+      await authority.current();
+      const after = await this.ledger.publicationSnapshot(
+        authority.scope.namespace,
+        undefined,
+        undefined,
+        undefined,
+        guard,
+      );
+      if (after.erasing) throw new Error("deletion_in_progress");
+      if (
+        !after.calculationCurrent ||
+        this.routingIdentity(before) !== this.routingIdentity(after) ||
+        before.erasureVersion !== after.erasureVersion
+      )
+        throw new Error("aggregate_inconsistent");
+      return {
+        ...withSplitHistoryViews(result),
+        history,
+        scopeToken: authority.token,
+        calculation,
+      };
+    };
+    // In an organization, the organization's and the member's own totals come in the server's
+    // newest method (owner, 23 Nov 2026), so members on different extension versions add up. An
+    // explicit view from the caller is kept. A server from before that refuses the view once and
+    // is then asked as before.
+    const credentials = await this.company.credentials();
+    if (
+      !params.has("calculation_view") &&
+      credentials &&
+      !currentViewRefused(credentials.origin)
+    ) {
+      params.set("calculation_view", "current");
+      const before = await this.ledger.publicationSnapshot(
+        authority.scope.namespace,
+      );
+      // The device's own job on the server still serves the bar and Details; this summary does
+      // not wait for it.
+      if (view === "my") void this.engines.maintainOrganization().catch(() => {});
+      try {
+        const result = await serverSummary(
+          this.ledger,
+          this.company,
+          view,
+          "?" + params.toString(),
+        );
+        const methodId =
+          typeof result.method_id === "string" ? result.method_id : null;
+        const methodHash =
+          typeof result.method_hash === "string" ? result.method_hash : null;
+        // A method this browser packages must have the hash it packages; one it never saw is
+        // taken from the answer, whose rows serverSummary checked are all that one method.
+        for (const method of [
+          this.engines.methods.ecologits,
+          this.engines.methods.original,
+        ])
+          if (methodId === method.method_id && methodHash !== method.method_hash)
+            throw new Error("method_update_invalid");
+        // Only the server part is shown: local records in this browser's method would neither add
+        // to the server's method nor belong in it, and the pages read history.server.
+        return await finish(
+          result,
+          serverHistoryView(result.history),
+          before,
+          methodId && methodHash
+            ? { view: "recalculated", methodId, methodHash }
+            : { view: "original", methodId: null, methodHash: null },
+        );
+      } catch (error) {
+        if (
+          !(error instanceof Error) ||
+          error.message !== "current_view_unsupported"
+        )
+          throw error;
+        params.delete("calculation_view");
+      }
+    }
     const useDefault = view === "my" && !params.has("calculation_view");
     if (useDefault) await this.engines.maintainOrganization();
     const calculation = useDefault
@@ -4686,32 +4849,18 @@ export class Coordinator {
             result.history as any,
           )
         : serverHistoryView(result.history);
-    await selection?.current();
-    await authority.current();
-    const after = await this.ledger.publicationSnapshot(
-      authority.scope.namespace,
-      undefined,
-      undefined,
-      undefined,
-      calculation?.guard,
-    );
-    if (after.erasing) throw new Error("deletion_in_progress");
-    if (
-      !after.calculationCurrent ||
-      this.routingIdentity(before) !== this.routingIdentity(after) ||
-      before.erasureVersion !== after.erasureVersion
-    )
-      throw new Error("aggregate_inconsistent");
-    return {
-      ...withSplitHistoryViews(result),
+    return finish(
+      result,
       history,
-      scopeToken: authority.token,
-      calculation: {
+      before,
+      {
         view: selection ? "recalculated" : "original",
         methodId: selection?.methodId ?? null,
         methodHash: selection?.methodHash ?? null,
       },
-    };
+      calculation?.guard,
+      selection,
+    );
   }
   recalculation(methodId: string | null, operationId: string): Promise<any> {
     if (this.recalculationWork)
@@ -4932,6 +5081,38 @@ export class Coordinator {
       ? this.longChatTips.write(scope.namespace, conversation, action)
       : this.longChatTips.read(scope.namespace, conversation);
   }
+  /**
+   * The Connect dialog asked the browser again for the permission to reach the server of a
+   * connection that is still active. That connection then works again, so there is no code to
+   * send: its era takes over from personal mode again (the reverse of permissionRemoved). False
+   * when there is no such connection for this address, and the dialog goes on to send a code.
+   */
+  async connectionRestored(origin: string): Promise<boolean> {
+    await this.ready;
+    const c = await this.company.credentials();
+    if (
+      !c ||
+      c.origin !== origin ||
+      (c.enrollment_state && c.enrollment_state !== "active") ||
+      !(await this.dependencies.hasConsent(origin))
+    )
+      return false;
+    const history = (await this.ledger.readOwnershipHistory())!;
+    const last = history.eras.at(-1)?.scope;
+    if (last?.namespace === c.namespace && last.era === c.enrollment_era.id)
+      return true;
+    await this.ledger.applySessionChanges(
+      {
+        ownershipHistory: transitionOwnership(history, {
+          scope: { namespace: c.namespace, mode: "company", era: c.enrollment_era.id },
+          secret: c.user_hmac_key,
+          policyVersion: c.policy.policy_version,
+        }),
+      },
+      { deviceId: c.device_id, refreshToken: c.refresh_token },
+    );
+    return true;
+  }
   async permissionRemoved() {
     await this.ready;
     const history = (await this.ledger.readOwnershipHistory())!;
@@ -4990,6 +5171,123 @@ export class Coordinator {
       ? kept
       : { ...kept, before: null, top: null };
   }
+  /**
+   * Keeps which session backs a Claude chat (18 Nov 2026, lib/claude-session-links.ts), as
+   * the page's own chat list or the session's chat tag proved it, with Claude's running
+   * totals for the session when the page loaded them. Keyed identities and counts only.
+   *
+   * The answer says what is counted of the session so far, so the page reads its events only
+   * when something is missing: `after`, the position of the last counted result, where a read
+   * continues, and `counted`, the output tokens counted up to it, which equal Claude's own
+   * total when nothing is missing (probe of 22 Nov 2026). Both are null before the first read.
+   * `text` says that the chat's saved copy should be read by text once: the session was read,
+   * nothing of the chat's own copy is saved, and the session's first request is not known to
+   * be the chat's first message, as in a chat Claude moved into a session later. It is also
+   * true while a counted Research launch leaves the saved copy due (`research` on the kept
+   * link): the report is written into the chat's saved reply, outside the session.
+   *
+   * `proven` false: the page did not prove the link this time (a reload). Then nothing is
+   * written and the answer is `kept: false` unless this very link is already kept.
+   */
+  async claudeSessionLink(
+    chatId: unknown,
+    sessionId: unknown,
+    totals: unknown,
+    proven = true,
+  ): Promise<
+    | { kept: false }
+    | {
+        kept: true;
+        after: number | null;
+        counted: number | null;
+        text: boolean;
+      }
+  > {
+    if (
+      !isRouteConversationId("claude", chatId) ||
+      isCoworkSessionId(chatId) ||
+      !isCoworkSessionId(sessionId) ||
+      (totals !== null && !validClaudeSessionTotals(totals))
+    )
+      throw new Error("payload_rejected");
+    // Nothing about a chat is kept before the person agreed to tracking.
+    if (!(await this.trackingConsented())) return { kept: false };
+    const scope = await this.currentScope();
+    const sessionKey = await this.keyFor(
+      scope,
+      "claude",
+      "conversation",
+      sessionId,
+    );
+    const chatKey = await this.keyFor(scope, "claude", "conversation", chatId);
+    // A link the page did not prove this time is only confirmed: it must be the kept one.
+    if (
+      !proven &&
+      (await this.claudeLinks.read(scope.namespace, chatKey))?.session !==
+        sessionKey
+    )
+      return { kept: false };
+    // Only a link the page proved is written; a confirmation leaves the kept one as it is.
+    if (proven)
+      await this.claudeLinks.write(
+        scope.namespace,
+        chatKey,
+        sessionKey,
+        validClaudeSessionTotals(totals) ? totals : null,
+      );
+    const checkpoint = await this.ledger.coworkCheckpoint(scope, sessionKey);
+    // The session starts the chat when its proven first prompt replaced the chat's first
+    // saved message; then the saved copy holds nothing the session does not.
+    const start = (await this.ledger.historyCoverage(scope, sessionKey))?.page;
+    const startsChat =
+      !!start?.first_request_verified &&
+      !!start.root_message_key &&
+      !!(await this.ledger.findHistoryMessage(scope, start.root_message_key))
+        ?.replaces?.length;
+    return {
+      kept: true,
+      after: checkpoint?.sequence ?? null,
+      counted: checkpoint
+        ? checkpoint.models.reduce((sum, model) => sum + model.output, 0)
+        : null,
+      text:
+        // The address of a Cowork session from before the merge is a version 8 uuid, and no
+        // saved chat exists for it (probe of 22 Nov 2026); a chat's id is version 4.
+        (chatId as string)[14] === "4" &&
+        ((checkpoint !== null &&
+          !startsChat &&
+          !(await this.ledger.historyCoverage(scope, chatKey))) ||
+          // A Research launch was counted: its report is only in the chat's saved copy.
+          (await this.claudeLinks.read(scope.namespace, chatKey))?.research !==
+            undefined),
+    };
+  }
+  /** The session a kept link names for a Claude chat, as its conversation key, if any. */
+  private async claudeLinkedKey(
+    scope: Scope,
+    site: string,
+    chatKey: string,
+  ): Promise<string | undefined> {
+    return site === "claude"
+      ? (await this.claudeLinks.read(scope.namespace, chatKey))?.session
+      : undefined;
+  }
+  /** Whether the kept link of the chat names this session. */
+  private async claudeSessionLinked(
+    scope: Scope,
+    chatId: string,
+    sessionId: string,
+  ): Promise<boolean> {
+    const kept = await this.claudeLinks.read(
+      scope.namespace,
+      await this.keyFor(scope, "claude", "conversation", chatId),
+    );
+    return (
+      kept !== null &&
+      kept.session ===
+        (await this.keyFor(scope, "claude", "conversation", sessionId))
+    );
+  }
   async clearPersonal() {
     const scope = await this.currentScope();
     if (scope.mode !== "personal") throw new Error("policy_unavailable");
@@ -4999,8 +5297,10 @@ export class Coordinator {
     // and the connection releases one only when the server issues credentials for that
     // same membership, which confirms it is active (owner decision of 20 Oct 2026).
     await this.ledger.flagOrganizationMarkers();
-    // The read progress of ChatGPT chats and closed long-chat tips go with their records.
+    // The read progress of ChatGPT chats, kept Claude session links and closed long-chat
+    // tips go with their records.
     await this.chatgptProgress.erase(scope.namespace);
+    await this.claudeLinks.erase(scope.namespace);
     await this.longChatTips.erase(scope.namespace);
     const personal = {
       namespace: `personal:${crypto.randomUUID()}`,

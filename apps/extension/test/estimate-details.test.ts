@@ -334,6 +334,52 @@ test("Cowork notes: exact usage reports, grouped earlier turns and Cowork's own 
   );
 });
 
+// Live pass of 23 Nov 2026: Claude's own counts include hidden thinking, so a chat of exact
+// replies must not list "reasoning is a summary" as left out. A mixed chat limits the note to the
+// replies counted from text.
+test("coverage notes for a Claude chat follow how its replies were counted", () => {
+  const reasoning = (notes: string[]) => notes.filter((note) => /^Reasoning/.test(note));
+  assert.equal(reasoning(coverageNotes("claude", {}, [], { exact: 3, text: 0 })).length, 0);
+  assert.deepEqual(reasoning(coverageNotes("claude", {}, [], { exact: 3, text: 1 })), [
+    "Reasoning is counted from the summary the site shows in the replies counted from text. The provider bills the full reasoning, which is longer.",
+  ]);
+  for (const replies of [undefined, null, { exact: 0, text: 2 }])
+    assert.deepEqual(coverageNotes("claude", {}, [], replies), coverageNotes("claude"));
+  // The other notes stay, and no other site takes this reading.
+  assert.ok(coverageNotes("claude", {}, [], { exact: 3, text: 0 }).some((note) => /system prompts, memory/.test(note)));
+  assert.deepEqual(coverageNotes("chatgpt", {}, [], { exact: 3, text: 0 }), coverageNotes("chatgpt"));
+});
+
+// Side calls and hidden input follow the same rule: Claude's own counts and its exact input
+// include them, so only replies counted from text leave them out.
+test("coverage notes for a Claude chat say side calls and hidden input per kind of reply", () => {
+  const find = (notes: string[], pattern: RegExp) => notes.filter((note) => pattern.test(note));
+  const SIDE = /^Side calls such as/;
+  const INPUT = /system prompts, memory|Hidden input|hidden input/;
+  const allExact = coverageNotes("claude", {}, [], { exact: 3, text: 0, exactInput: 3 });
+  assert.deepEqual(find(allExact, SIDE), [], "side calls are inside Claude's counts, not left out");
+  assert.deepEqual(find(allExact, INPUT), [
+    "Claude's own input count includes what the site does not show, such as system prompts, memory, project knowledge and cached context. Reading input adds no energy in the EcoLogits method.",
+  ]);
+  const mixed = coverageNotes("claude", {}, [], { exact: 3, text: 1, exactInput: 2 });
+  assert.deepEqual(find(mixed, SIDE), [
+    "Side calls such as titles, suggestions and safety checks are not counted in the replies counted from text.",
+  ]);
+  assert.deepEqual(find(mixed, INPUT), [
+    "Hidden input such as system prompts, memory, project knowledge and retrieved sources is not shown by the site and is not counted in the 2 replies whose input is counted from text. Claude's own input count includes it in the others. Reading input adds no energy in the EcoLogits method.",
+  ]);
+  // Exact replies without an exact input (a turn read before 23 Nov 2026) keep today's input note.
+  assert.deepEqual(find(coverageNotes("claude", {}, [], { exact: 3, text: 0 }), INPUT), find(coverageNotes("claude"), INPUT));
+  assert.deepEqual(find(coverageNotes("claude", {}, [], { exact: 3, text: 0, exactInput: 0 }), INPUT), find(coverageNotes("claude"), INPUT));
+  // Text-counted chats and other sites are unchanged, and the provider-reported variant stays.
+  assert.deepEqual(coverageNotes("claude", {}, [], { exact: 0, text: 2, exactInput: 0 }), coverageNotes("claude"));
+  assert.deepEqual(coverageNotes("chatgpt", {}, [], { exact: 3, text: 0, exactInput: 3 }), coverageNotes("chatgpt"));
+  assert.match(
+    coverageNotes("claude", {}, ["main", "side_calls"], { exact: 3, text: 0, exactInput: 3 }).join(" "),
+    /counted where the provider reports them/,
+  );
+});
+
 test("coverage notes follow the decided rules for each site and reason", () => {
   const claude = coverageNotes("claude");
   assert.match(

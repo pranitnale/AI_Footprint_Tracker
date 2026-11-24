@@ -99,7 +99,13 @@ function providerFor(site: Site, origin: string): OwnReadProvider | null {
  */
 export function installOwnRead(deps: {
   site: Site;
-  historyText: { observe: HistoryObserve };
+  historyText: {
+    observe: HistoryObserve;
+    /** Whether the address shows a Claude session: its own, or its linked chat's. */
+    showsSession?: (pathname: string, conversationId: string) => boolean;
+    /** Takes the content script's word that the address shows this Claude session. */
+    linkSession?: (pathname: string, conversationId: string) => void;
+  };
   /** Perplexity's thread reader, which sees every saved thread the page reads. */
   threadHistory?: {
     start(input: string, init: { method: string }): ((result: Promise<Response>) => void) | null;
@@ -138,6 +144,12 @@ export function installOwnRead(deps: {
       return () => document.removeEventListener("visibilitychange", listener);
     },
     enabled: deps.enabled,
+    ...(deps.site === "claude" && deps.historyText.showsSession
+      ? { shows: deps.historyText.showsSession }
+      : {}),
+    ...(deps.site === "claude" && deps.historyText.linkSession
+      ? { vouched: deps.historyText.linkSession }
+      : {}),
   });
   deps.historyText.observe = (url, method, promise, observedAt, body, rejected, cloned) => {
     try {

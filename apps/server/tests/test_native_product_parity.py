@@ -308,16 +308,17 @@ def test_native_component_envelopes_match_typescript_methods():
 def _assert_glm_us_factors(result, record):
     """GLM through Perplexity uses its zai record, the USA grid and EcoLogits' US multi-cloud
     PUE and WUE (its huggingface_hub configuration), not Mistral's (owner, 15 October 2026)."""
-    from ecologits.electricity_mix_repository import electricity_mixes
     from ecologits.impacts.llm import compute_llm_impacts
-    from ecologits.model_repository import models
-    from ecologits.tracers.utils import PROVIDER_CONFIG_MAP, ImpactsOutput, llm_impacts
+    from ecologits.tracers.utils import PROVIDER_CONFIG_MAP, ImpactsOutput
 
+    # The packaged catalog, not the installed package's own data: since 19 November 2026 the
+    # GLM records carry the serving speed EcoLogits measured on Mistral's platform.
+    runtime = engine_adapter.native_bundle()
     component = result["components"][0]
     assert component["selection"]["profile"] == {"provider": "mistralai", "model_name": record, "workload": "text"}
-    model = models.find_model(provider="mistralai", model_name=record)
-    assert model.deployment is None or model.deployment.tps is None
-    us, usa = PROVIDER_CONFIG_MAP["huggingface_hub"], electricity_mixes.find_electricity_mix(zone="USA")
+    model = runtime.models.find_model(provider="mistralai", model_name=record)
+    assert model.deployment is not None and model.deployment.tps is not None
+    us, usa = PROVIDER_CONFIG_MAP["huggingface_hub"], runtime.mixes.find_electricity_mix(zone="USA")
     tokens = int(component["inputs"]["output_tokens"])
     latency = component["inputs"]["latency_seconds"]
     latency = None if latency is None else float(latency)
@@ -332,13 +333,13 @@ def _assert_glm_us_factors(result, record):
         if_electricity_mix_wue=usa.wue,
         datacenter_pue=us.datacenter_pue,
         datacenter_wue=us.datacenter_wue,
-        tps=None,
-        ttft=None,
+        tps=model.deployment.tps,
+        ttft=model.deployment.ttft,
     )
     expected = engine_adapter.serialize(ImpactsOutput.model_validate(impacts.model_dump()))
     for key in ("energy", "gwp", "wcf", "usage", "embodied"):
         assert component["raw"][key] == expected[key], key
-    mistral = engine_adapter.serialize(llm_impacts("mistralai", record, tokens, latency, electricity_mix_zone="USA"))
+    mistral = engine_adapter.serialize(runtime.llm("mistralai", record, tokens, latency, electricity_mix_zone="USA"))
     assert component["raw"]["usage"]["energy"] != mistral["usage"]["energy"]
     assert component["raw"]["wcf"] != mistral["wcf"]
 

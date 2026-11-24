@@ -69,7 +69,7 @@ If a benchmark dataset is gated or cannot be redistributed, document access cond
 
 Prepare Chrome Web Store, Edge Add-ons and Firefox Add-ons submissions from the published source. Record review/signing state accurately. Admin deployment addresses and credentials are supplied by each company, not hardcoded into the public repository or exposed as extension administration links. Ordinary employee extension access remains separate from authenticated admin access.
 
-The public website links the real repository and verified distribution pages. Hosted paid capacity/retention is a service entitlement, not an extra restriction on the MIT source. Self-hosters build all required website/operator/backend/extension code and use their own Brevo account without our private key or a mandatory call to our hosting. The same public extension package supports local-only and enrolled use; no reusable organization credential is baked into a download.
+The public website links the real repository and verified distribution pages. Hosted paid capacity/retention is a service entitlement, not an extra restriction on the MIT source. Self-hosters build all required website/operator/backend/extension code and use their own mail server or Brevo account without our credentials or a mandatory call to our hosting. The same public extension package supports local-only and enrolled use; no reusable organization credential is baked into a download.
 
 All checklist items above are project release requirements, not a claim that every open-source project is legally required to carry every listed community document. Complete O01-O06 and the existing privacy, security and browser suites before claiming the project is ready for public use.
 

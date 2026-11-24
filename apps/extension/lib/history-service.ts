@@ -31,6 +31,7 @@ import {
   resolveApplicationRepository,
   type ApplicationRepository,
   type CoworkAdvance,
+  type ExactInput,
   type RepositorySource,
   type Scope,
   type HistoryRow,
@@ -63,6 +64,7 @@ import {
 import {
   coworkCheckpointAfter,
   coworkCounted,
+  coworkHandedOver,
   coworkTurns,
 } from "./cowork-turns";
 import {
@@ -133,6 +135,10 @@ type PendingHistory = {
   observedAt: string;
   method: EngineMethodIdentity | null;
   documentId?: string;
+  /** The Claude chat whose address shows this session's page, once its link was checked. */
+  chat?: string;
+  /** A batch of this import counted a reply that launched a Claude Research task. */
+  research?: boolean;
   streamRows: Map<
     string,
     {
@@ -294,6 +300,26 @@ export class HistoryService {
      * starts, as while tracking is paused; absent, every import may start.
      */
     private trackingAllowed?: () => Promise<boolean>,
+    /**
+     * Whether a proven link names this session as the one behind this Claude chat
+     * (lib/claude-session-links.ts). Absent, no session page is taken at a chat's address.
+     */
+    private sessionLinked?: (
+      scope: Scope,
+      chatId: string,
+      sessionId: string,
+    ) => Promise<boolean>,
+    /**
+     * Told when a Claude chat's saved copy is due or was read (Claude Research in a chat with
+     * a session, 22 Nov 2026): "research", a session page newly counted a reply that launched
+     * a Research task, whose report only the chat's saved copy holds; "read", the chat's saved
+     * copy was read to its end. `chatKey` is the chat's conversation key.
+     */
+    private claudeText?: (
+      scope: Scope,
+      chatKey: string,
+      event: "research" | "read",
+    ) => Promise<void>,
   ) {
     this.ledger = resolveApplicationRepository(source);
     this.count = sharedCountLimit(count);
@@ -315,6 +341,11 @@ export class HistoryService {
     binding: DisplayBinding,
     sender: Sender,
     routeGuard?: RouteGuard,
+    /**
+     * The Claude chat whose address shows this session's page (18 Nov 2026: claude.ai shows
+     * sessions at chat addresses). The page still belongs to the session's own conversation.
+     */
+    linkedRoute?: string,
   ) {
     const url = new URL(sender.url ?? "invalid:");
     if (
@@ -327,8 +358,16 @@ export class HistoryService {
       url.username ||
       url.password ||
       siteForHost(url.hostname) !== message.site ||
-      parseConversationRoute(message.site, url.pathname)?.conversationId !==
-        message.conversationId
+      (linkedRoute === undefined
+        ? parseConversationRoute(message.site, url.pathname)?.conversationId !==
+          message.conversationId
+        : parseConversationRoute(message.site, url.pathname)?.conversationId !==
+            linkedRoute ||
+          // Only a Claude session's page is shown at a chat's address. Whether the session
+          // is that chat's own is checked below, against the kept link.
+          message.site !== "claude" ||
+          !isCoworkSessionId(message.conversationId) ||
+          isCoworkSessionId(linkedRoute))
     )
       return Promise.reject(new Error("payload_rejected"));
     message = structuredClone(message);
@@ -378,6 +417,17 @@ export class HistoryService {
         )
           throw new Error("policy_unavailable");
         current();
+        // Only the session a proven link names for this chat is taken at its address.
+        if (
+          linkedRoute !== undefined &&
+          !(await this.sessionLinked?.(
+            scope,
+            linkedRoute,
+            message.conversationId,
+          ))
+        )
+          throw new Error("payload_rejected");
+        current();
         const method = this.estimation
           ? EngineMethodIdentitySchema.parse(await this.estimation.admission())
           : null;
@@ -394,6 +444,7 @@ export class HistoryService {
           observedAt: message.observedAt,
           method,
           documentId: sender.documentId,
+          ...(linkedRoute !== undefined ? { chat: linkedRoute } : {}),
           streamRows: new Map(),
           providerRows: new Map(),
         });
@@ -896,6 +947,9 @@ export class HistoryService {
         const saved = await this.ledger.coworkCheckpoint(scope, conversation);
         current();
         const page = coworkTurns(message.page!, saved);
+        // A chat's converting turn adds no row, but the checkpoint moves past it, also when
+        // the page has nothing else to save (23 Nov 2026).
+        const handed = coworkHandedOver(message.page!, saved);
         // Counted results are never imported again, so after a reconnection their saved
         // replies are queued for the new enrolment here, as a reimport of other history
         // queues its messages.
@@ -925,7 +979,11 @@ export class HistoryService {
         }
         let base = saved?.sequence ?? null;
         try {
-          for (let offset = 0; offset < page.messages.length; offset += 100) {
+          for (
+            let offset = 0;
+            offset < page.messages.length || (offset === 0 && !!handed);
+            offset += 100
+          ) {
             const counted = await countHistoryPage(page, this.count, {
               counting: this.counting,
               validNow: current,
@@ -933,7 +991,11 @@ export class HistoryService {
               limit: 100,
             });
             current();
-            const next = coworkCheckpointAfter(counted.messages);
+            const next = coworkCheckpointAfter(
+              offset || !handed
+                ? counted.messages
+                : [...counted.messages, { cumulative: handed }],
+            );
             await this.commitCountedBatch(
               message,
               counted,
@@ -1001,6 +1063,13 @@ export class HistoryService {
   ) {
     const { scope } = start.ownership;
     const countBases: Record<string, HistoryCountBasis> = {};
+    // The text rows of the chat's saved copy that exact rows of this page replace, as the
+    // keys those rows were saved under (18 Nov 2026). Only for a session's page admitted at
+    // its chat's address, so the chat is the one a proven link names.
+    const replaced: Record<string, string[]> = {};
+    // Claude's exact input for the turns of this page's exact replies (23 Nov 2026).
+    const exactInputs: Record<string, ExactInput> = {};
+    const chat = start.chat;
     const key = (kind: string, id: string) =>
       start.identity(message.site, kind, id);
     const messageKey = (role: string, id: string) =>
@@ -1054,6 +1123,20 @@ export class HistoryService {
           ]);
         const basis = options.bases?.get(m.role + ":" + m.sourceId);
         if (basis) countBases[messageKeyValue] = basis;
+        // Each exact row retires its own text copy only. A read is saved in batches, so a
+        // prompt that also retired its reply's text copy could leave the reply uncounted
+        // when the batch with the exact reply is never saved.
+        if (chat && m.chat)
+          replaced[messageKeyValue] = [
+            await key(
+              "history-message",
+              JSON.stringify([
+                chat,
+                m.role,
+                m.role === "prompt" ? m.chat.prompt : m.chat.reply,
+              ]),
+            ),
+          ];
         const named = companySign
           ? savedCompanyId(message.site, cowork, m)
           : null;
@@ -1088,6 +1171,21 @@ export class HistoryService {
             : m.usage
               ? providerMeasurement(m.usage.output)
               : composeOutputTotal(parts!);
+        // Kept beside the row, on this device only: the saved message stays as the
+        // company's contract has it.
+        if (
+          cowork &&
+          m.role === "response" &&
+          m.usage &&
+          m.usage.input !== null &&
+          m.usage.cacheWrite !== null &&
+          m.usage.cacheRead !== null
+        )
+          exactInputs[messageKeyValue] = {
+            fresh: m.usage.input,
+            cacheWrite: m.usage.cacheWrite,
+            cacheRead: m.usage.cacheRead,
+          };
         const generation =
           m.role === "response"
             ? historyGeneration(
@@ -1182,6 +1280,8 @@ export class HistoryService {
             ...(options.deferCoverage ? { deferCoverage: true } : {}),
             ...(Object.keys(countBases).length ? { countBases } : {}),
             ...(Object.keys(companyKeys).length ? { companyKeys } : {}),
+            ...(Object.keys(replaced).length ? { replaced } : {}),
+            ...(Object.keys(exactInputs).length ? { exactInputs } : {}),
             ...(options.cowork ? { cowork: options.cowork } : {}),
           },
           commitCurrent,
@@ -1196,6 +1296,21 @@ export class HistoryService {
         // Only a read's last batch; the earlier ones of a long chat would show it again
         // for nothing.
         if (!options.deferCoverage) this.committed?.(scope, conversation);
+        // The link keeper learns of a counted Research launch, and of every read of a
+        // chat's saved copy, before this import answers, so the next link answer knows
+        // whether that copy is due. It never fails the import.
+        if (cowork && chat && counted.messages.some((m) => m.research))
+          start.research = true;
+        if (!options.deferCoverage && this.claudeText && message.site === "claude")
+          try {
+            if (!cowork) await this.claudeText(scope, conversation, "read");
+            else if (chat && start.research)
+              await this.claudeText(
+                scope,
+                await key("conversation", chat),
+                "research",
+              );
+          } catch {}
         // A saved page closes earlier storage problems, and estimates made afresh close
         // estimation problems (owner decision of 16 Oct 2026). Codes this page reported
         // itself stay open.
@@ -1760,11 +1875,34 @@ export class HistoryService {
                 company_dedup_key: e.companyKey!,
               }))
           : [];
+        // The text rows these exact prompts replaced travel with them, so the server stops
+        // counting those rows in the same request that brings the exact ones.
+        const replaced = [
+          ...new Set(entries.flatMap((e) => e.replaces ?? [])),
+        ].slice(0, 200);
+        // Claude's exact input travels beside each exact reply (package EC, owner decision of
+        // 23 Nov 2026), so the company counts a turn's input as this browser does.
+        const exact = entries
+          .filter(
+            (e) =>
+              e.exactInput &&
+              e.record.role === "response" &&
+              e.record.prompt_key !== null &&
+              e.record.tokens.evidence === "provider_reported",
+          )
+          .map((e) => ({
+            message_key: e.record.message_key,
+            new: String(e.exactInput!.fresh),
+            cache_write: String(e.exactInput!.cacheWrite),
+            cache_read: String(e.exactInput!.cacheRead),
+          }));
         return HistoryPageSchema.parse({
           ...coverage.page,
           messages: entries.map((e) => e.record),
           deletion_epoch: credentials?.policy.deletion_epoch,
           ...(keys.length ? { company_dedup_keys: keys } : {}),
+          ...(replaced.length ? { replaced_message_keys: replaced } : {}),
+          ...(exact.length ? { exact_inputs: exact } : {}),
         });
       };
       let page = build();
@@ -1835,73 +1973,122 @@ export class HistoryService {
      * from their content or by their size, from each reply's count basis; Details only.
      */
     computerFiles?: { content: number; size: number },
+    /**
+     * The session behind a Claude chat (`claude-session-links.ts`). Its saved rows are added
+     * to the chat's, so the chat's totals hold its text part and its exact part, each once.
+     */
+    linked?: string,
+    /**
+     * Receives Claude's exact input of the counted replies that carry one, the three counts
+     * apart, for Details only. Their sum is in the summary's input rows either way.
+     */
+    exactInput?: NonNullable<HistoryView["exact_input"]>,
   ): Promise<HistorySummary> {
     const accumulator = new HistoryAccumulator(PACKAGED_CLAUDE_TOKEN_FACTOR);
     router?.reset();
-    let after: string | null = null,
-      total = 0;
+    let total = 0;
     const selected: HistoryRow[] = [];
+    let active: HistoryRow[] = [];
     const pendingKeys = new Set<string>();
-    for (;;) {
-      const rows: HistoryRow[] = await this.ledger.historyPage(
-        scope,
-        conversation,
-        after,
-      );
-      if (!rows.length) break;
-      const queued = pending
-        ? await this.ledger.historyQueued(
-            scope,
-            rows.map((r) => r.key),
-          )
-        : null;
-      if (queued) for (const key of queued) pendingKeys.add(key);
-      for (const row of rows) {
-        if (conversation && row.record.conversation_key !== conversation)
-          continue;
-
-        selected.push(row);
-        if (++total > 10000) {
-          router?.fail();
-          return { ...emptyHistorySummary(), status: "unavailable" };
-        }
-      }
-      if (rows.length < 100) break;
-      after = rows.at(-1)!.key;
-    }
-    const coverage = conversation
-      ? await this.ledger.historyCoverage(scope, conversation)
-      : undefined;
-    let active = selected;
-    if (
-      coverage?.page.branch_scope === "selected_branch" &&
-      coverage.page.selected_leaf_key
-    ) {
-      const byKey = new Map(
-        selected.map((row) => [row.record.message_key, row]),
-      );
-      const keys = new Set<string>();
-      let cursor: string | null = coverage.page.selected_leaf_key;
-      while (cursor && byKey.has(cursor) && !keys.has(cursor)) {
-        keys.add(cursor);
-        cursor = byKey.get(cursor)!.record.parent_key;
-      }
-      active = selected.filter((row) => keys.has(row.record.message_key));
-      accumulator.summary.first_request_verified =
-        coverage.page.first_request_verified &&
-        cursor === null &&
-        keys.has(coverage.page.root_message_key!);
-      accumulator.summary.branch_scope = "selected_branch";
-    } else if (coverage) {
-      accumulator.summary.branch_scope = coverage.page.branch_scope;
-      accumulator.summary.first_request_verified =
-        coverage.page.first_request_verified &&
-        selected.some(
-          (r) =>
-            r.record.message_key === coverage.page.root_message_key &&
-            r.record.role === "prompt" &&
-            r.status === "current",
+    // The saved coverage of each part, as [start proven, branch scope]. A linked chat counts
+    // only the parts that hold rows: a chat that is all session has no text part to prove.
+    const covered: Array<[boolean, HistorySummary["branch_scope"]]> = [];
+    // A linked chat's saved copy read from its first message proves the chat's start, whatever
+    // its session's events prove of their own start: a chat Claude moved into a session later
+    // holds its first message only there (live check of 23 Nov 2026).
+    let chatProven = false;
+    // The chat's first message, when its saved copy was read from it but holds no row for it:
+    // the session's exact prompt replaced that row, which proves the start as well (live
+    // check of 23 Nov 2026, a chat backed by its session from its first message).
+    let chatRoot: string | null = null;
+    for (const part of conversation && linked
+      ? [conversation, linked]
+      : [conversation]) {
+      const saved: HistoryRow[] = [];
+      let after: string | null = null;
+      for (;;) {
+        const rows: HistoryRow[] = await this.ledger.historyPage(
+          scope,
+          part,
+          after,
         );
+        if (!rows.length) break;
+        const queued = pending
+          ? await this.ledger.historyQueued(
+              scope,
+              rows.map((r) => r.key),
+            )
+          : null;
+        if (queued) for (const key of queued) pendingKeys.add(key);
+        for (const row of rows) {
+          if (part && row.record.conversation_key !== part) continue;
+
+          saved.push(row);
+          if (++total > 10000) {
+            router?.fail();
+            return { ...emptyHistorySummary(), status: "unavailable" };
+          }
+        }
+        if (rows.length < 100) break;
+        after = rows.at(-1)!.key;
+      }
+      const coverage = part
+        ? await this.ledger.historyCoverage(scope, part)
+        : undefined;
+      let shown = saved;
+      let proven: (typeof covered)[number] | null = null;
+      if (
+        coverage?.page.branch_scope === "selected_branch" &&
+        coverage.page.selected_leaf_key
+      ) {
+        const byKey = new Map(saved.map((row) => [row.record.message_key, row]));
+        const keys = new Set<string>();
+        let cursor: string | null = coverage.page.selected_leaf_key;
+        while (cursor && byKey.has(cursor) && !keys.has(cursor)) {
+          keys.add(cursor);
+          cursor = byKey.get(cursor)!.record.parent_key;
+        }
+        shown = saved.filter((row) => keys.has(row.record.message_key));
+        proven = [
+          coverage.page.first_request_verified &&
+            cursor === null &&
+            keys.has(coverage.page.root_message_key!),
+          "selected_branch",
+        ];
+      } else if (coverage)
+        proven = [
+          coverage.page.first_request_verified &&
+            saved.some(
+              (r) =>
+                r.record.message_key === coverage.page.root_message_key &&
+                r.record.role === "prompt" &&
+                r.status === "current",
+            ),
+          coverage.page.branch_scope,
+        ];
+      if (proven && (!linked || saved.length)) covered.push(proven);
+      if (linked && part === conversation && proven?.[0] && saved.length)
+        chatProven = true;
+      else if (linked && part === conversation && saved.length)
+        chatRoot = coverage?.page.first_request_verified
+          ? (coverage.page.root_message_key ?? null)
+          : null;
+      else if (
+        part === linked &&
+        chatRoot &&
+        saved.some(
+          (row) =>
+            row.record.role === "prompt" && row.replaces?.includes(chatRoot!),
+        )
+      )
+        chatProven = true;
+      for (const row of saved) selected.push(row);
+      for (const row of shown) active.push(row);
+    }
+    if (covered.length) {
+      accumulator.summary.first_request_verified =
+        chatProven || covered.every(([verified]) => verified);
+      accumulator.summary.branch_scope = covered[0]![1];
     }
     active = active.filter(
       (row) =>
@@ -1926,6 +2113,19 @@ export class HistoryService {
     const regenerated = regeneratedHistoryReplies(
       selected.map((row) => row.record),
     );
+    // Prompts whose reply holds Claude's exact input for the turn (owner decision of
+    // 23 Nov 2026). That count is everything the model read in the turn, so such a prompt
+    // adds no text count beside it. A reply names its first prompt only, so a prompt
+    // queued into a running turn keeps its text count.
+    const exactPrompts = new Set<string>();
+    for (const row of active)
+      if (
+        row.exactInput &&
+        row.status !== "conflict" &&
+        row.record.role === "response" &&
+        row.record.prompt_key
+      )
+        exactPrompts.add(row.record.prompt_key);
     const view = await this.calculationView(scope, filters);
     let pendingResources = !view.ready;
     // Each page of at most 100 rows costs two reads instead of up to three per row.
@@ -1996,12 +2196,31 @@ export class HistoryService {
             estimate = [];
           } else estimate = historicalResources(result, row.record);
         }
+        const exact =
+          row.record.role === "response" ? row.exactInput : undefined;
         const options = {
           conflict: row.status === "conflict",
           overlap,
           estimate,
           regenerated: regenerated.has(row.record.message_key),
+          ...(exact
+            ? {
+                exactInput: String(
+                  exact.fresh + exact.cacheWrite + exact.cacheRead,
+                ),
+              }
+            : {}),
+          ...(row.record.role === "prompt" &&
+          exactPrompts.has(row.record.message_key)
+            ? { inputCounted: true }
+            : {}),
         };
+        if (exactInput && exact && !overlap && row.status !== "conflict") {
+          exactInput.new += exact.fresh;
+          exactInput.cache_write += exact.cacheWrite;
+          exactInput.cache_read += exact.cacheRead;
+          exactInput.replies++;
+        }
         router?.add(
           row.record,
           view.original ? row.original : row.record,
@@ -2194,13 +2413,17 @@ export class HistoryService {
   ): Promise<HistoryView> {
     return this.buildView(scope, conversation, filters, server, false);
   }
-  /** Capture publication reads saved evidence without waiting for the organization server. */
+  /**
+   * Capture publication reads saved evidence without waiting for the organization server.
+   * `linked`: the session behind a Claude chat, whose saved rows are added (see `local`).
+   */
   async localView(
     scope: Scope,
     conversation?: string,
     filters: Filters = {},
+    linked?: string,
   ): Promise<HistoryView> {
-    return this.buildView(scope, conversation, filters, undefined, true);
+    return this.buildView(scope, conversation, filters, undefined, true, linked);
   }
   private async buildView(
     scope: Scope,
@@ -2208,6 +2431,7 @@ export class HistoryService {
     filters: Filters,
     server: HistorySummary | undefined,
     localOnly: boolean,
+    linked?: string,
   ): Promise<HistoryView> {
     const generation = this.generation;
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -2215,6 +2439,7 @@ export class HistoryService {
       const calculation = await this.calculationView(scope, filters);
       const models: string[] = [];
       const computerFiles = { content: 0, size: 0 };
+      const exactInput = { new: 0, cache_write: 0, cache_read: 0, replies: 0 };
       const local = await this.local(
           scope,
           conversation,
@@ -2223,10 +2448,21 @@ export class HistoryService {
           undefined,
           models,
           computerFiles,
+          linked,
+          exactInput,
         ),
         pending =
           scope.mode === "company"
-            ? await this.local(scope, conversation, filters, true)
+            ? await this.local(
+                scope,
+                conversation,
+                filters,
+                true,
+                undefined,
+                undefined,
+                undefined,
+                linked,
+              )
             : null;
       let synced = server ? HistorySummarySchema.parse(server) : null;
       let status: HistoryView["server_status"] =
@@ -2345,6 +2581,7 @@ export class HistoryService {
         ...(computerFiles.content || computerFiles.size
           ? { computer_files: computerFiles }
           : {}),
+        ...(exactInput.replies ? { exact_input: exactInput } : {}),
       };
     }
     throw new Error("aggregate_inconsistent");

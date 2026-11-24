@@ -25,6 +25,21 @@ from .security import Problem
 
 ROOT = Path(__file__).resolve().parents[3]
 SUPPORTED_NATIVE_VERSION = "0.11.3"
+# The generated catalog of the plain 0.11.3 release, which the published 0.1.0 extension's method
+# names. Once a qualified catalog is packaged, that method still runs on the installed package's
+# own data, so 0.1.0 uploads keep counting in company totals (owner decision of 22 November 2026).
+RELEASE_CATALOG_SHA256 = "9699498db57c028c565be7550412de49e9035cba7b0aaa34a28cb728616c8dbd"
+# The plain release's own data files, from the lock that generated that catalog. The release
+# runtime runs only on these bytes, so a patched package or an overlay copied into it fails
+# closed instead of estimating the archived method with another catalog.
+RELEASE_DATA_SHA256 = {
+    "ecologits/data/models.json": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774",
+    "ecologits/data/electricity_mixes.json": "993c9b4bc8aede3e8aa6a32af9dbe705a8a7d22d495c4ae36fe5861ff931394f",
+    "ecologits/data/video_models.json": "809f02e0beea9413b452c28b97e1e1ebd47a5cd89f8a0dd1b734998a38ef7bef",
+}
+# Only the catalog and its converter may differ from the packaged core; every other field pins
+# the Python code and package the server runs (see _native_source_data).
+RELEASE_CATALOG_FIELDS = ("catalog_sha256", "converter_version")
 MAX_SAFE_INTEGER = 9007199254740991
 # Perplexity serves models of many vendors, so its replies name no provider by site.
 PROVIDERS = {"chatgpt": "openai", "claude": "anthropic", "gemini": "google_genai", "notebooklm": "google_genai"}
@@ -359,11 +374,49 @@ class NativeRuntime:
 
 @lru_cache(maxsize=1)
 def native_bundle():
+    return _runtime(release=False)
+
+
+@lru_cache(maxsize=1)
+def release_bundle():
+    """The installed release's own catalog, for archived methods of the plain release."""
+    return _runtime(release=True)
+
+
+def runtime_for(definition):
+    """The verified runtime of a definition's catalog: the packaged one or the plain release's."""
+    packaged = packaged_definition()
+    if definition["water_total_policy"] != packaged["water_total_policy"]:
+        raise Problem("engine_unavailable", 409, True)
+    core = definition["core"]
+    if core == packaged["core"]:
+        return native_bundle()
+    def code(value):
+        return {field: item for field, item in value.items() if field not in RELEASE_CATALOG_FIELDS}
+
+    if core["catalog_sha256"] == RELEASE_CATALOG_SHA256 and code(core) == code(packaged["core"]):
+        return release_bundle()
+    raise Problem("engine_unavailable", 409, True)
+
+
+def _runtime(release):
     try:
         if importlib.metadata.version("ecologits") != SUPPORTED_NATIVE_VERSION:
             raise ImportError()
         installed = Path(importlib.metadata.distribution("ecologits").locate_file("ecologits"))
         lock, data, generated = _native_source_data(installed)
+        if release:
+            # Without a packaged overlay the plain release is the packaged catalog itself. The
+            # installed Python was checked above; its data files must be the release's own bytes.
+            if not lock.get("catalog_overlay_files"):
+                raise ValueError("No qualified catalog is packaged")
+            data = {}
+            for name in CATALOG_FILES:
+                content = _source_bytes(installed, name.removeprefix("ecologits/"))
+                if hashlib.sha256(content).hexdigest() != RELEASE_DATA_SHA256[name]:
+                    raise ValueError("Installed release catalog changed")
+                data[name] = json.loads(content)
+            generated = None
         from ecologits.electricity_mix_repository import ElectricityMix, ElectricityMixRepository
         from ecologits.estimations.video import video_impacts
         from ecologits.impacts.llm import compute_llm_impacts
@@ -398,7 +451,7 @@ def native_bundle():
             for mix in mixes.list_electricity_mixes()
         ]
         video_data = data["ecologits/data/video_models.json"]
-        if (
+        if generated is not None and (
             generated["models"] != [model.model_dump(mode="json") for model in models.list_models()]
             or generated["aliases"] != (catalog.get("aliases") or [])
             or generated["electricity_mixes"] != normalized_mixes
@@ -450,12 +503,7 @@ def _has_profile(runtime, profile):
 
 
 def require_native(definition):
-    if (
-        definition["core"] != packaged_definition()["core"]
-        or definition["water_total_policy"] != packaged_definition()["water_total_policy"]
-    ):
-        raise Problem("engine_unavailable", 409, True)
-    runtime = native_bundle()
+    runtime = runtime_for(definition)
     policy = definition["fallback"]
     if not all(provider in policy["provider_defaults"] for provider in PROVIDERS.values()):
         raise Problem("method_update_invalid", 422)
@@ -480,7 +528,7 @@ def require_native(definition):
 
 def resolve_profile(definition, model_id, provider, workload):
     """Mirrors resolveModelProfile: no ranking and no switch to a different provider."""
-    runtime = native_bundle()
+    runtime = runtime_for(definition)
     policy = definition["fallback"]
 
     def choose(profile, selection, basis):
@@ -877,7 +925,7 @@ def calculate_components(
         return engine_components.unique([*reasons, execution_reason]), [], None
     engine = ComponentEngine(
         definition,
-        native_bundle(),
+        runtime_for(definition),
         serialize,
         lambda model_id, provider, workload: resolve_profile(definition, model_id, provider, workload),
     )

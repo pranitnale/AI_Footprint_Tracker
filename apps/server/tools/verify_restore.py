@@ -273,7 +273,7 @@ def main():
     from aift.analytics import Analytics
     from aift.config import Settings
     from aift.db import Database
-    from aift.mail import BrevoMail
+    from aift.mail import mail_delivery
     from aift.service import Service
 
     settings = Settings.from_environment()
@@ -281,7 +281,7 @@ def main():
         parser.error("An explicitly approved PostgreSQL restore target is required")
     database = Database(settings)
     try:
-        service = Service(settings, database, BrevoMail(settings))
+        service = Service(settings, database, mail_delivery(settings))
         service.analytics = Analytics(service)
         result = verify_restored(service, args.max_worker_ticks)
     finally:

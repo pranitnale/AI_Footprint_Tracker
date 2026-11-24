@@ -163,6 +163,7 @@ test("a Cowork list becomes prompts and replies in event order with each result'
       { model: "claude-haiku-4-5-20251001", output: 10, reasoning: null },
     ],
     apiMs: 7000,
+    inputs: { fresh: 6, cacheWrite: 0, cacheRead: 0 },
   });
   // A result without its final text wrote none.
   assert.equal(last!.text, "");
@@ -635,6 +636,7 @@ test("sessions that answered their hidden first message without naming it prove 
             },
           ],
           apiMs: session.first * 1000,
+          inputs: { fresh: 3, cacheWrite: 0, cacheRead: 0 },
         },
         name,
       );
@@ -792,6 +794,7 @@ test("Cowork counters: model ids, canonical names for suffixed ids, sums and unk
       { model: "claude-haiku-4-5-20251001", output: 7, reasoning: null },
     ],
     apiMs: null,
+    inputs: { fresh: 9, cacheWrite: 0, cacheRead: 0 },
   });
   assert.equal(reply!.promptSourceId, null);
   assert.equal(reply!.parentRole, null);
@@ -1074,10 +1077,18 @@ test("validCoworkCumulative accepts only the counters the reader builds", () => 
   };
   assert.equal(validCoworkCumulative(valid), true);
   assert.equal(validCoworkCumulative({ ...valid, apiMs: null }), true);
+  // The three input counters are there only when every model of the result reported them.
+  const inputs = { fresh: 150, cacheWrite: 4000, cacheRead: 90500 };
+  assert.equal(validCoworkCumulative({ ...valid, inputs }), true);
   for (const bad of [
     null,
     [],
     { ...valid, extra: 1 },
+    { ...valid, inputs: null },
+    { ...valid, inputs: { fresh: 150, cacheWrite: 4000 } },
+    { ...valid, inputs: { ...inputs, extra: 1 } },
+    { ...valid, inputs: { ...inputs, cacheRead: -1 } },
+    { ...valid, inputs: { ...inputs, fresh: "150" } },
     { ...valid, sequence: -1 },
     { ...valid, sequence: "3" },
     { ...valid, apiMs: 1.5 },
@@ -1089,4 +1100,338 @@ test("validCoworkCumulative accepts only the counters the reader builds", () => 
     { ...valid, models: [{ ...valid.models[0], output: 2_000_000_000 }] },
   ])
     assert.equal(validCoworkCumulative(bad), false, JSON.stringify(bad));
+});
+
+// Since 18 Nov 2026 a Claude chat is backed by a session. Its user events name the chat's
+// saved prompt and reply, and the app puts a reminder block before the typed prompt (probe
+// of 22 Nov 2026).
+test("a turn of a Claude chat names the saved messages it stands for, without the app's reminder block", () => {
+  const SONNET = "claude-sonnet-5-5";
+  const reminder =
+    "<system-reminder>\nSynthetic time zone and send time.\n</system-reminder>";
+  const turn = (prompt: number, reply: number) => ({
+    bard_message_id: id(prompt),
+    bard_assistant_message_id: id(reply),
+  });
+  const events = new CoworkEvents();
+  for (const event of [
+    envelope(1, init(SONNET)),
+    envelope(
+      2,
+      user(
+        2,
+        [
+          { type: "text", text: reminder },
+          { type: "text", text: "synthetic chat prompt" },
+        ],
+        turn(102, 103),
+      ),
+    ),
+    envelope(3, result(3, [2], { [SONNET]: usage(23) })),
+    // A stopped reply: the worker's note is a user event no result names, and the result
+    // is an error without a final text.
+    envelope(4, user(4, [{ type: "text", text: "synthetic second prompt" }], turn(104, 105))),
+    envelope(5, user(5, [{ type: "text", text: "[Request interrupted by user]" }])),
+    envelope(
+      6,
+      result(6, [4], { [SONNET]: usage(63) }, {
+        subtype: "error_during_execution",
+        is_error: true,
+        result: undefined,
+      }),
+    ),
+    // A Cowork prompt names no chat message and keeps every text block.
+    envelope(
+      7,
+      user(7, [
+        { type: "text", text: reminder },
+        { type: "text", text: "synthetic task" },
+      ]),
+    ),
+    envelope(8, result(8, [7], { [SONNET]: usage(70) })),
+    // One id alone, or an id of another kind, stands for no saved message.
+    envelope(
+      9,
+      user(9, [{ type: "text", text: "synthetic fourth prompt" }], {
+        bard_message_id: "bmsg_0123456789abcdef",
+      }),
+    ),
+    envelope(10, result(10, [9], { [SONNET]: usage(75) })),
+  ])
+    assert.equal(events.add(event), true);
+  const page = events.page(SESSION, OBSERVED);
+  assert.deepEqual(
+    page.messages.map((m) => [m.role, m.sourceId, m.text, m.chat ?? null]),
+    [
+      ["prompt", id(2), "synthetic chat prompt", { prompt: id(102), reply: id(103) }],
+      ["response", id(3), "Synthetic answer 3", { prompt: id(102), reply: id(103) }],
+      ["prompt", id(4), "synthetic second prompt", { prompt: id(104), reply: id(105) }],
+      ["response", id(6), "", { prompt: id(104), reply: id(105) }],
+      ["prompt", id(7), reminder + "\nsynthetic task", null],
+      ["response", id(8), "Synthetic answer 8", null],
+      ["prompt", id(9), "synthetic fourth prompt", null],
+      ["response", id(10), "Synthetic answer 10", null],
+    ],
+  );
+  // The stopped reply still carries the session's counters, so its tokens are counted.
+  assert.equal(page.messages[3]!.cumulative!.models[0]!.output, 63);
+});
+
+// A chat Claude moves into a session in the middle of a turn (seen live on 23 Nov 2026): the
+// turn arrives as a handoff request, not as a user event, after two synthetic messages that
+// ran no model. Structure only.
+test("a chat moved into a session mid-turn proves its start from the handoff, and later turns name their saved messages", () => {
+  const OPUS = "claude-opus-5-5";
+  const reminder =
+    "<system-reminder>\nSynthetic time zone and send time.\n</system-reminder>";
+  const sdk = (n: number, role: "user" | "assistant", content: unknown) => ({
+    type: role,
+    uuid: id(n),
+    message: { role, content },
+  });
+  const handoff = (first: unknown) => ({
+    type: "control_request",
+    request_id: "synthetic",
+    request: {
+      subtype: "turn_handoff",
+      messages: [
+        first,
+        sdk(21, "assistant", [{ type: "tool_use", id: "toolu_1", name: "Artifact", input: {} }]),
+        sdk(22, "user", [{ type: "tool_result", tool_use_id: "toolu_1", content: "ok" }]),
+        sdk(23, "assistant", [{ type: "tool_use", id: "toolu_2", name: "Artifact", input: {} }]),
+      ],
+      tool_use_ids: ["toolu_2"],
+    },
+  });
+  const idle = (n: number, prompt: number) =>
+    result(n, [prompt], {}, { num_turns: 0, usage: { output_tokens: 0 } });
+  const session = (first: unknown) => {
+    const events = new CoworkEvents();
+    for (const event of [
+      envelope(1, { type: "env_manager_log", text: "synthetic" }),
+      envelope(2, { type: "control_request", request: { subtype: "set_permission_mode" } }),
+      envelope(3, user(13, [{ type: "text", text: "synthetic preload" }], { isSynthetic: true })),
+      envelope(4, user(14, [{ type: "text", text: "synthetic preload" }], { isSynthetic: true })),
+      envelope(5, handoff(first)),
+      envelope(6, idle(24, 13)),
+      envelope(7, idle(26, 14)),
+      // The first counted result names the handed prompt and the handed tool results.
+      envelope(8, result(41, [20, 22], { [OPUS]: usage(843, 202) })),
+      envelope(
+        9,
+        user(43, [{ type: "text", text: "synthetic next prompt" }], {
+          bard_message_id: id(110),
+          bard_assistant_message_id: id(111),
+        }),
+      ),
+      envelope(10, result(49, [43], { [OPUS]: usage(856, 202) })),
+    ])
+      assert.equal(events.add(event), true);
+    return events.page(SESSION, OBSERVED);
+  };
+  const page = session(
+    sdk(20, "user", [
+      { type: "text", text: reminder },
+      { type: "text", text: "synthetic handed prompt" },
+    ]),
+  );
+  assert.equal(page.firstRequestVerified, true);
+  assert.equal(page.rootSourceId, id(20));
+  assert.deepEqual(
+    page.messages.map((m) => [m.role, m.sourceId, m.text, m.chat ?? null, m.handoff ?? null]),
+    [
+      ["prompt", id(20), "synthetic handed prompt", null, null],
+      ["response", id(41), "Synthetic answer 41", null, true],
+      ["prompt", id(43), "synthetic next prompt", { prompt: id(110), reply: id(111) }, null],
+      ["response", id(49), "Synthetic answer 49", { prompt: id(110), reply: id(111) }, null],
+    ],
+  );
+  // The handed turn's result holds what the session wrote after the handoff. It is marked
+  // as the converting turn, so the background counts the chat's saved reply by its text.
+  assert.equal(page.messages[1]!.cumulative!.models[0]!.output, 843);
+  // A handoff whose prompt cannot be read may hide a request: the start stays unproven,
+  // and the counts are kept.
+  const unread = session({ type: "user", message: { role: "user", content: [] } });
+  assert.equal(unread.firstRequestVerified, false);
+  assert.deepEqual(
+    unread.messages.map((m) => m.sourceId),
+    [id(41), id(43), id(49)],
+  );
+});
+
+// The converting turn can write many events (an artifact), so one read of the events list
+// may take several pages (cursor), and the page world may report results between them.
+test("the converting turn is known from its handoff across pages of one read; after a gap it keeps its exact count", () => {
+  const SONNET = "claude-sonnet-5-5";
+  const handoff = {
+    type: "control_request",
+    request_id: "synthetic",
+    request: {
+      subtype: "turn_handoff",
+      messages: [
+        {
+          type: "user",
+          uuid: id(2),
+          message: { role: "user", content: [{ type: "text", text: "synthetic handed prompt" }] },
+        },
+      ],
+    },
+  };
+  const later = [
+    envelope(4, result(4, [2], { [SONNET]: usage(300) })),
+    envelope(5, user(5, [{ type: "text", text: "synthetic next prompt" }])),
+    envelope(6, result(6, [5], { [SONNET]: usage(433) })),
+  ];
+  // The handoff on the first page, the results on the second.
+  const events = new CoworkEvents();
+  for (const event of [envelope(1, init(SONNET)), envelope(2, handoff), envelope(3, { type: "rate_limit_event" })])
+    assert.equal(events.add(event), true);
+  assert.deepEqual(events.page(SESSION, OBSERVED).messages, []);
+  for (const event of later) assert.equal(events.add(event), true);
+  const paged = events.page(SESSION, OBSERVED);
+  assert.deepEqual(
+    paged.messages.map((m) => [m.role, m.sourceId, m.handoff ?? null]),
+    [
+      ["prompt", id(2), null],
+      ["response", id(4), true],
+      ["prompt", id(5), null],
+      ["response", id(6), null],
+    ],
+  );
+  // A prompt with a user event of its own is a turn of the session, even when a handoff
+  // named the same message.
+  const own = new CoworkEvents();
+  for (const event of [
+    envelope(1, init(SONNET)),
+    envelope(2, handoff),
+    envelope(3, user(2, [{ type: "text", text: "synthetic handed prompt" }])),
+    ...later,
+  ])
+    own.add(event);
+  assert.ok(own.page(SESSION, OBSERVED).messages.every((m) => m.handoff === undefined));
+  // The handoff was skipped unread: the reader cannot tell the turn, so its result keeps
+  // the exact count as before.
+  const gap = new CoworkEvents();
+  gap.add(envelope(1, init(SONNET)));
+  gap.gap();
+  for (const event of later) gap.add(event);
+  assert.ok(gap.page(SESSION, OBSERVED).messages.every((m) => m.handoff === undefined));
+});
+
+// Claude Research in a chat with a session (probe of 22 Nov 2026): the session holds only the
+// launch, a main-loop tool call, and its result. The research runs as a task outside the
+// session and its report is written into the chat's saved reply. So the launch's exact reply
+// does not name that saved reply, which stays counted by its text.
+test("a turn that launches a Research task does not name its saved reply; other turns do", () => {
+  const SONNET = "claude-sonnet-5-5";
+  const turn = (prompt: number, reply: number) => ({
+    bard_message_id: id(prompt),
+    bard_assistant_message_id: id(reply),
+  });
+  const calls = (name: string, extra: object = {}) => ({
+    type: "assistant",
+    parent_tool_use_id: null,
+    message: {
+      role: "assistant",
+      content: [
+        { type: "text", text: "synthetic" },
+        { type: "tool_use", id: "toolu_synthetic", name, input: {} },
+      ],
+    },
+    ...extra,
+  });
+  const list = [
+    envelope(1, init(SONNET)),
+    envelope(2, user(2, [{ type: "text", text: "synthetic research prompt" }], turn(102, 103))),
+    envelope(3, calls("mcp__claude_ai__launch_extended_search_task")),
+    envelope(4, result(4, [2], { [SONNET]: usage(573, 51) })),
+    envelope(5, user(5, [{ type: "text", text: "synthetic next prompt" }], turn(104, 105))),
+    // Another tool, and a sub-agent's call of that name, launch nothing.
+    envelope(6, calls("mcp__claude_ai__web_search")),
+    envelope(7, calls("launch_extended_search_task", { parent_tool_use_id: "toolu_parent" })),
+    envelope(8, result(8, [5], { [SONNET]: usage(600, 51) })),
+  ];
+  const events = new CoworkEvents();
+  const facts = () => {
+    for (const event of list) assert.equal(events.add(event), true);
+    return events
+      .page(SESSION, OBSERVED)
+      .messages.filter((message) => message.role === "response")
+      .map((message) => [message.sourceId, message.chat ?? null, message.research ?? null]);
+  };
+  const expected = [
+    [id(4), null, true],
+    [id(8), { prompt: id(104), reply: id(105) }, null],
+  ];
+  assert.deepEqual(facts(), expected);
+  // The same events read again are classed the same way.
+  assert.deepEqual(facts(), expected);
+  // The launch's prompt still names its saved prompt.
+  const again = new CoworkEvents();
+  for (const event of list) again.add(event);
+  assert.deepEqual(again.page(SESSION, OBSERVED).messages[0]!.chat, {
+    prompt: id(102),
+    reply: id(103),
+  });
+});
+
+// Owner decision of 23 Nov 2026: the input of a chat with exact figures is everything Claude
+// processed, so the reader keeps the three input counters beside the output.
+test("a result keeps the three input counters, added over its models, or none of them", () => {
+  const read = (modelUsage: unknown) => {
+    const events = new CoworkEvents();
+    for (const item of [
+      envelope(1, user(1, "Synthetic prompt")),
+      envelope(2, result(2, [1], modelUsage)),
+    ])
+      assert.equal(events.add(item), true);
+    return events.page(SESSION, OBSERVED).messages[1]!.cumulative!;
+  };
+  const sonnet = {
+    ...usage(200, 30),
+    inputTokens: 120,
+    cacheCreationInputTokens: 4000,
+    cacheReadInputTokens: 90000,
+  };
+  const haiku = {
+    ...usage(10),
+    inputTokens: 30,
+    cacheCreationInputTokens: 0,
+    cacheReadInputTokens: 500,
+  };
+  const all = read({
+    "claude-sonnet-5-5": sonnet,
+    "claude-haiku-4-5-20251001": haiku,
+  });
+  assert.deepEqual(all.inputs, {
+    fresh: 150,
+    cacheWrite: 4000,
+    cacheRead: 90500,
+  });
+  assert.equal(validCoworkCumulative(all), true);
+  // One model without a counter, or with one that is not a count: the result is still read
+  // with its output, and its input stays unknown instead of a part of the sum.
+  for (const broken of [
+    { inputTokens: undefined },
+    { cacheCreationInputTokens: undefined },
+    { cacheReadInputTokens: undefined },
+    { cacheReadInputTokens: -1 },
+    { inputTokens: "30" },
+    { cacheReadInputTokens: 2_000_000_000 },
+  ]) {
+    const partial = read({
+      "claude-sonnet-5-5": sonnet,
+      "claude-haiku-4-5-20251001": { ...haiku, ...broken },
+    });
+    assert.equal(
+      Object.hasOwn(partial, "inputs"),
+      false,
+      JSON.stringify(Object.keys(broken)),
+    );
+    assert.deepEqual(
+      partial.models.map((model) => model.output),
+      [200, 10],
+    );
+    assert.equal(validCoworkCumulative(partial), true);
+  }
 });

@@ -87,9 +87,13 @@ export function parseConversationRoute(
 ): { site: RouteSite; conversationId: string } | null {
   if (site === "perplexity") {
     // A Perplexity Computer task opens at /computer/tasks/{id} and is a thread like any
-    // other: the page reads it with /rest/thread/{id} (seen 14 Oct 2026).
+    // other: the page reads it with /rest/thread/{id} (seen 14 Oct 2026). Since November
+    // 2026 every thread shows at /session/{id}: a new thread moves from /search/new/{local
+    // id} to /session/{id}, and the page rewrites /search/{id} and /computer/tasks/{id} to
+    // /session/{id} on load. The id, the stream and the thread read are unchanged (seen
+    // live 23 Nov 2026), so the older addresses stay routes of the same thread.
     const match = new RegExp(
-      "^/(?:search|computer/tasks)/(" + uuid + ")$",
+      "^/(?:search|session|computer/tasks)/(" + uuid + ")$",
     ).exec(pathname);
     // This route selects separately verified recorded-thread links, never a conversation-key alias.
     return match ? { site, conversationId: match[1]! } : null;
@@ -117,4 +121,27 @@ export function parseConversationRoute(
     return match ? { site, conversationId: match[1]! } : null;
   }
   return null;
+}
+
+/**
+ * Whether the page at `pathname` shows a conversation: its own route, or, since claude.ai
+ * shows sessions at chat addresses (18 Nov 2026), a Claude chat route whose proven session
+ * link names that session. The link comes from the caller, who holds the proof (a chat list
+ * row or the session's chat tag); the route's own id is never replaced by it.
+ */
+export function routeShows(
+  site: Site,
+  pathname: string,
+  conversationId: unknown,
+  linkedSession: string | null = null,
+): boolean {
+  const route = parseConversationRoute(site, pathname)?.conversationId;
+  if (route === undefined || typeof conversationId !== "string") return false;
+  if (route === conversationId) return true;
+  return (
+    site === "claude" &&
+    uuidId.test(route) &&
+    coworkId.test(conversationId) &&
+    linkedSession === conversationId
+  );
 }

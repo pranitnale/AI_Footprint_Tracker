@@ -532,3 +532,36 @@ test("ranged history follows the display scenario and falls back to the midpoint
   );
   assert.match(legacy.resources[0]!.provenance, /Scenario totals are unavailable/);
 });
+
+// Owner decision of 23 Nov 2026: Claude's own input count stands on the prompt side of the
+// totals. It is not prompt text, so the list names it for what it is.
+test("Claude's exact input is listed under its own name, beside prompt text counted by text", () => {
+  const row = {
+    role: "prompt" as const,
+    part: "total" as const,
+    known_message_count: "1",
+    unknown_message_count: "0",
+  };
+  const presented = presentHistorySummary(
+    summary({
+      tokens: [
+        { ...row, profile_id: null, evidence: "provider_reported", value: "94650" },
+        {
+          ...row,
+          profile_id: "o200k-base-4.0.0-reference",
+          evidence: "heuristic_estimate",
+          value: "12",
+        },
+      ],
+    }),
+  );
+  assert.deepEqual(
+    presented.tokens.map((item) => [item.role, item.evidence]),
+    [
+      ["Input Claude processed for loaded responses", "Reported by the provider"],
+      ["Loaded prompt text", "Local heuristic estimate"],
+    ],
+  );
+  // The bar's In adds both.
+  assert.ok(presented.compact.includes(`\u2248 ${formatInteger("94662")}/`));
+});

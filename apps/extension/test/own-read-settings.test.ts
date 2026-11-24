@@ -8,7 +8,6 @@ import { memoryKeyValueArea } from "../lib/chatgpt-read-progress";
 import {
   OWN_READ_COOLDOWN_MS,
   OWN_READ_PAUSE_MAX_MS,
-  ownReadSettingKey,
   validOwnReadOutcome,
   type OwnReadOutcome,
 } from "../lib/own-read";
@@ -55,18 +54,15 @@ test("load full chat history: absent or older settings read as on, per site and 
   assert.equal(ownReadAllowed(some, "chatgpt"), true);
   const off = ownReadSettings({ ownRead: false });
   for (const key of OWN_READ_SETTING_KEYS) assert.equal(ownReadAllowed(off, key), false, key);
-  assert.deepEqual(OWN_READ_SETTING_KEYS, ["chatgpt", "claude", "cowork", "gemini", "perplexity", "notebooklm"]);
-  assert.equal(validOwnReadSites({ chatgpt: false, cowork: true }), true);
-  for (const bad of [null, [], { other: true }, { chatgpt: "no" }, "chatgpt"])
+  assert.deepEqual(OWN_READ_SETTING_KEYS, ["chatgpt", "claude", "gemini", "perplexity", "notebooklm"]);
+  assert.equal(validOwnReadSites({ chatgpt: false, claude: true }), true);
+  for (const bad of [null, [], { other: true }, { chatgpt: "no" }, "chatgpt", { cowork: false }])
     assert.equal(validOwnReadSites(bad), false, JSON.stringify(bad));
-  // claude.ai carries two switches: its chats and its Cowork sessions.
-  assert.deepEqual(ownReadSettingKeys("claude"), ["claude", "cowork"]);
+  // One switch per site: since the merged Claude app (22 Nov 2026) "Claude" covers chats and Cowork.
+  assert.deepEqual(ownReadSettingKeys("claude"), ["claude"]);
   assert.deepEqual(ownReadSettingKeys("perplexity"), ["perplexity"]);
-  assert.deepEqual(ownReadSettingKeys("cowork"), ["cowork"]);
+  assert.deepEqual(ownReadSettingKeys("cowork"), []);
   assert.deepEqual(ownReadSettingKeys("example"), []);
-  assert.equal(ownReadSettingKey("claude", CHAT), "claude");
-  assert.equal(ownReadSettingKey("claude", COWORK), "cowork");
-  assert.equal(ownReadSettingKey("gemini", "c_0123456789abcdef"), "gemini");
   assert.equal(ownReadSettingAnswer({ on: true }), true);
   assert.equal(ownReadSettingAnswer({ on: false }), false);
   for (const bad of [undefined, null, { enabled: false }, { on: "yes" }, { on: true, extra: 1 }])
@@ -101,7 +97,7 @@ test("coordinator: load full chat history is on by default, also for an older in
   try {
     const fresh = await c.settings();
     assert.equal(fresh.ownRead, true);
-    assert.deepEqual(Object.values(fresh.ownReadSites), Array(6).fill(true));
+    assert.deepEqual(Object.values(fresh.ownReadSites), Array(5).fill(true));
     const stored = (await db.get<any>("policy", "settings"))!;
     assert.equal(stored.ownRead, true, "a new installation stores the field");
     // An installation from before 17 Oct 2026 has neither field: it reads as on.
@@ -113,10 +109,11 @@ test("coordinator: load full chat history is on by default, also for an older in
     assert.deepEqual(await c.updateSettings({ ownReadSites: { perplexity: false } }), { ownReadChanged: true });
     assert.deepEqual(await c.ownReadSetting("perplexity"), { on: false });
     assert.deepEqual(await c.ownReadSetting("chatgpt"), { on: true }, "other sites keep theirs");
-    assert.deepEqual(await c.updateSettings({ ownReadSites: { cowork: false } }), { ownReadChanged: true });
-    assert.deepEqual(await c.ownReadSetting("cowork"), { on: false });
+    assert.deepEqual(await c.updateSettings({ ownReadSites: { claude: false } }), { ownReadChanged: true });
+    assert.deepEqual(await c.ownReadSetting("claude"), { on: false });
     assert.deepEqual(await c.ownReadSetting("perplexity"), { on: false }, "a later save keeps earlier sites");
-    assert.deepEqual(await c.ownReadSetting("claude"), { on: true }, "Cowork has its own switch");
+    await assert.rejects(c.updateSettings({ ownReadSites: { cowork: false } as never }), /full chat history/);
+    assert.deepEqual(await c.updateSettings({ ownReadSites: { claude: true } }), { ownReadChanged: true });
     assert.deepEqual(await c.updateSettings({ timezone: "Europe/Berlin" }), { ownReadChanged: false });
     assert.deepEqual(await c.updateSettings({ ownRead: false }), { ownReadChanged: true });
     for (const key of OWN_READ_SETTING_KEYS)
@@ -160,7 +157,7 @@ test("own read: with Load full chat history off nothing is requested and the bar
   });
   try {
     await tick();
-    assert.deepEqual(asked.sort(), ["claude", "cowork"], "claude.ai's switches are read at once");
+    assert.deepEqual(asked, ["claude"], "claude.ai's one switch is read at once");
     assert.equal(s.request("nav-1", CHAT, { mode: "missing" }), false, "History not loaded at once");
     s.advance(60_000);
     await tick();
@@ -255,19 +252,89 @@ test("own read: a long read checks the switch again with each progress report", 
   }
 });
 
-test("own read: a Cowork session follows its own switch", async () => {
-  const off = new Set(["cowork"]);
-  const s = claude(async (key) => !off.has(key), (id) => (id.startsWith("cse_") ? `/cowork/${id}` : `/chat/${id}`));
+test("own read: with the Claude switch off a session is not read after a turn, and is once it is on", async () => {
+  let on = false;
+  const s = claude(async () => on);
+  const turn = (navigation: string) =>
+    s.request(navigation, CHAT, { mode: "after_turn", session: COWORK, turn: "23" });
+  try {
+    await tick();
+    assert.equal(turn("nav-1"), false);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 0);
+    assert.deepEqual(s.read.off("nav-1"), { key: "claude", mode: "after_turn" });
+    const before = s.changes;
+    on = true;
+    s.read.settingChanged();
+    await until(() => s.changes > before);
+    assert.equal(turn("nav-1"), true);
+    s.advance(0);
+    await until(() => s.posted.length === 1);
+    assert.equal(s.posted[0]!.message.conversationId, COWORK);
+  } finally {
+    s.close();
+  }
+});
+
+test("own read: a Cowork session follows the Claude switch", async () => {
+  let on = false;
+  const asked: string[] = [];
+  const s = claude(async (key) => {
+    asked.push(key);
+    return on;
+  }, (id) => (id.startsWith("cse_") ? `/cowork/${id}` : `/chat/${id}`));
   try {
     await tick();
     assert.equal(s.request("nav-1", COWORK), false);
-    assert.deepEqual(s.read.off("nav-1"), { key: "cowork", mode: "missing" });
-    assert.equal(s.request("nav-2", CHAT), true, "Claude chats are still read");
+    assert.deepEqual(s.read.off("nav-1"), { key: "claude", mode: "missing" });
+    assert.equal(s.request("nav-2", CHAT), false, "a chat follows the same switch");
+    assert.deepEqual([...new Set(asked)], ["claude"], "no other switch is asked");
+    const before = s.changes;
+    on = true;
+    s.read.settingChanged();
+    await until(() => s.changes > before);
+    assert.equal(s.request("nav-3", COWORK), true);
     s.advance(0);
     await until(() => s.posted.length === 1);
-    assert.equal(s.posted[0]!.message.conversationId, CHAT);
+    assert.equal(s.posted[0]!.message.conversationId, COWORK);
   } finally {
     s.close();
+  }
+});
+
+test("one Claude switch: on unless either old switch was off", async () => {
+  // An installation from before 22 Nov 2026 saved Claude and Cowork separately. They are one
+  // switch now, so a chat or a session that was off stays off, and the old value is not kept.
+  const read = (ownReadSites: unknown) => ownReadSettings({ ownReadSites }).ownReadSites;
+  assert.equal(read({}).claude, true);
+  assert.equal(read({ claude: true, cowork: true }).claude, true);
+  assert.equal(read({ claude: false, cowork: true }).claude, false);
+  assert.equal(read({ claude: true, cowork: false }).claude, false);
+  assert.equal(read({ claude: false, cowork: false }).claude, false);
+  assert.equal(read({ cowork: false }).claude, false);
+  assert.equal("cowork" in read({ cowork: false }), false);
+  assert.deepEqual(Object.keys(read({})), ["chatgpt", "claude", "gemini", "perplexity", "notebooklm"]);
+
+  const { db, c } = await coordinator();
+  try {
+    const stored = (await db.get<any>("policy", "settings"))!;
+    await db.put("policy", { ...stored, ownReadSites: { claude: true, cowork: false } });
+    assert.deepEqual(await c.ownReadSetting("claude"), { on: false }, "Cowork was off, so Claude is off");
+    // The next save writes the five switches, so the old Cowork value is gone.
+    await c.updateSettings({ timezone: "Europe/Berlin" });
+    const saved = (await db.get<any>("policy", "settings"))!;
+    assert.deepEqual(saved.ownReadSites, {
+      chatgpt: true,
+      claude: false,
+      gemini: true,
+      perplexity: true,
+      notebooklm: true,
+    });
+    await c.updateSettings({ ownReadSites: { claude: true } });
+    assert.deepEqual(await c.ownReadSetting("claude"), { on: true });
+  } finally {
+    db.close();
   }
 });
 

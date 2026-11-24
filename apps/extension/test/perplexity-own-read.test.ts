@@ -67,6 +67,8 @@ test("perplexity own read: the request is the page's own read of the thread's fi
     THREAD,
   );
   assert.equal(ownReadConversation("perplexity", `/search/${THREAD}`), THREAD);
+  // Threads show at /session/<id> since November 2026, with the same id and read.
+  assert.equal(ownReadConversation("perplexity", `/session/${THREAD}`), THREAD);
   assert.equal(ownReadConversation("perplexity", "/discover"), null);
 });
 

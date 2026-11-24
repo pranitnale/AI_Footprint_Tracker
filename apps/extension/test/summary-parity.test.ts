@@ -20,6 +20,8 @@ import { largeProfile } from "./perf/large-profile";
 // removed image benchmark references left out: only the dashboard hashes changed, no figure.
 // Made again on 22 October 2026 for EcoLogits 0.11.3: request, attempt, chat and prompt counts are
 // unchanged; only the electricity, carbon and water figures and their hashes moved with the catalog.
+// Made again on 23 November 2026 for the catalog of 19 November 2026: only energy figures and
+// their hashes moved, with the new serving speeds.
 const golden: Record<string, Record<string, ParityEntry>> = JSON.parse(
   readFileSync(new URL("./fixtures/summary-parity.json", import.meta.url), "utf8"),
 );

@@ -832,3 +832,376 @@ def test_a_browser_that_only_uploaded_saved_messages_counts_as_synced(setup):
     assert synced() == 1
     with app.state.db.transaction(readonly=True) as session:
         assert get(session, "device", c["device_id"], company.id).data["last_reporting_at"] == instant(now[0])
+
+
+# Exact Claude rows replace, once, the text rows a published build counted for the same chat
+# messages (Claude merged app, 22 Nov 2026). The text chat is "b" * 64, its exact session "5" * 64.
+TEXT_KEYS = ["a" * 64, "c" * 64]
+
+
+def claude_page(now, records, conversation="b" * 64, replaced=None, epoch=0):
+    for record in records:
+        record.update(site="claude", conversation_key=conversation)
+    body = {**page(now, records, epoch), "site": "claude", "conversation_key": conversation}
+    if replaced is not None:
+        body["replaced_message_keys"] = replaced
+    return body
+
+
+def text_page(now):
+    return claude_page(now, [message(now, "a" * 64, "prompt"), message(now, "c" * 64)])
+
+
+def exact_page(now, replaced=TEXT_KEYS, keys=("6" * 64, "7" * 64)):
+    records = [message(now, keys[0], "prompt"), message(now, keys[1])]
+    return claude_page(now, records, "5" * 64, replaced)
+
+
+def statuses_of(response):
+    assert response.status_code == 200, response.text
+    assert set(response.json()) == {"schema_version", "deletion_epoch", "results"}
+    return [r["status"] for r in response.json()["results"]]
+
+
+def me_totals(client, c):
+    response = client.get("/v1/me/summary?period=all", headers=auth(c))
+    assert response.status_code == 200, response.text
+    return response.json()["history"]
+
+
+def company_totals(client, c):
+    response = client.get("/v1/company/summary?period=all", headers=auth(c))
+    assert response.status_code == 200, response.text
+    return response.json()["history"]
+
+
+def counts(totals):
+    return totals["observed_prompt_count"], totals["observed_response_count"]
+
+
+def replacement_owners(app):
+    from aift.db import HistoryReplacement
+
+    with app.state.db.transaction(readonly=True) as s:
+        return sorted(r.owner for r in s.scalars(select(HistoryReplacement)))
+
+
+def coworker(app, company):
+    from fastapi.testclient import TestClient
+
+    employee = TestClient(app, base_url=company.origin)
+    employee.headers["Origin"] = company.origin
+    member_login(app, employee, "another@example.org")
+    credentials, _ = connect(app, employee)
+    return employee, credentials
+
+
+def test_a_replaced_text_row_leaves_every_total(setup):
+    app, client, company, member, now, c = paired(setup)
+    assert statuses_of(send(client, c, text_page(now[0]))) == ["applied", "applied"]
+    assert me_totals(client, c)["response_count"] == "1"
+    # Receipts of the exact page are unchanged by the replacement it carries.
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["applied", "applied"]
+    for totals in (me_totals(client, c), company_totals(client, c)):
+        assert counts(totals) == ("1", "1")
+        assert (totals["prompt_count"], totals["response_count"]) == ("1", "1")
+    assert summary(client, c)["status"] == "empty"
+    exported = client.get("/v1/me/history/export", headers=auth(c)).json()["records"]
+    assert sorted(r["observation"]["message_key"] for r in exported) == ["6" * 64, "7" * 64]
+    assert replacement_owners(app) == [member.id, member.id]
+
+
+def test_a_0_1_0_page_without_the_field_is_accepted_as_before(setup):
+    app, client, company, member, now, c = paired(setup)
+    body = text_page(now[0])
+    assert "replaced_message_keys" not in body
+    assert statuses_of(send(client, c, body)) == ["applied", "applied"]
+    assert statuses_of(send(client, c, body)) == ["duplicate", "duplicate"]
+    assert me_totals(client, c)["response_count"] == "1"
+    assert replacement_owners(app) == []
+
+
+@pytest.mark.parametrize(
+    "replaced, site",
+    [
+        (["8" * 64], "perplexity"),
+        (["8" * 64, "8" * 64], "claude"),
+        (["6" * 64], "claude"),
+        ([f"{i:064x}" for i in range(201)], "claude"),
+    ],
+)
+def test_a_replacement_the_contract_refuses_stores_nothing(setup, replaced, site):
+    app, client, company, member, now, c = paired(setup)
+    body = exact_page(now[0], replaced)
+    for record in body["messages"]:
+        record["site"] = site
+    body["site"] = site
+    assert send(client, c, body).status_code == 422
+    with app.state.db.transaction(readonly=True) as s:
+        assert s.scalar(select(func.count()).select_from(HistoryObservation)) == 0
+    assert replacement_owners(app) == []
+
+
+def test_a_replaced_row_sent_again_stays_hidden(setup):
+    app, client, company, member, now, c = paired(setup)
+    assert statuses_of(send(client, c, text_page(now[0]))) == ["applied", "applied"]
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["applied", "applied"]
+    # A published build on another installation of the member uploads the text again: it gets
+    # its normal receipt and stays out of every total. The replacement repeats safely.
+    other, _ = connect(app, client)
+    assert statuses_of(send(client, other, text_page(now[0]))) == ["duplicate", "duplicate"]
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["duplicate", "duplicate"]
+    # A replacement can also arrive before the text row it names.
+    assert statuses_of(send(client, c, exact_page(now[0], ["9" * 64]))) == ["duplicate", "duplicate"]
+    late = claude_page(now[0], [message(now[0], "9" * 64)])
+    assert statuses_of(send(client, other, late)) == ["applied"]
+    assert counts(me_totals(client, c)) == ("1", "1")
+    assert summary(client, c)["status"] == "empty"
+
+
+def test_deleting_a_person_removes_their_replacements_and_a_range_keeps_them(setup):
+    from datetime import timedelta
+
+    app, client, company, member, now, c = paired(setup)
+    assert statuses_of(send(client, c, text_page(now[0]))) == ["applied", "applied"]
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["applied", "applied"]
+    person = {
+        "scope": "user",
+        "user_id": member.id,
+        "start": "1970-01-01T00:00:00.000Z",
+        "end": instant(now[0]),
+        "epoch": 1,
+        "created_at": instant(now[0]),
+        "record_ids": [],
+        "record_owners": {},
+        "job_id": str(uuid4()),
+    }
+
+    def erase(marker):
+        with app.state.db.transaction(scope=company.id) as s:
+            tenant = get(s, "company", company.id)
+            if not get(s, "deletion", marker["job_id"]):
+                put(s, "deletion", marker["job_id"], marker, company.id, member.id)
+            while app.state.service.analytics.history.erase_page(s, tenant, marker):
+                pass
+
+    erase(person)
+    assert replacement_owners(app) == []
+    # A clean slate: the chat read again by text counts again.
+    now[0] += timedelta(seconds=1)
+    assert statuses_of(send(client, c, text_page(now[0]))) == ["applied", "applied"]
+    assert me_totals(client, c)["response_count"] == "1"
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["applied", "applied"]
+    assert me_totals(client, c)["response_count"] == "1"
+    # A replay of the deletion keeps what was replaced after it was made. A range keeps the
+    # replacements, as it keeps tombstones: dropping them would let a published build's
+    # re-upload of the text count beside the exact rows read again.
+    erase(person)
+    ranged = {
+        **person,
+        "scope": "range",
+        "start": "2019-01-01T00:00:00.000Z",
+        "end": "2021-01-01T00:00:00.000Z",
+        "epoch": 2,
+        "created_at": instant(now[0]),
+        "job_id": str(uuid4()),
+    }
+    erase(ranged)
+    assert replacement_owners(app) == [member.id, member.id]
+
+
+def test_a_member_cannot_hide_another_members_rows(setup):
+    app, client, company, member, now, c = paired(setup)
+    employee, other = coworker(app, company)
+    assert statuses_of(send(client, c, text_page(now[0]))) == ["applied", "applied"]
+    # The coworker's exact page names keys of messages only the first member has.
+    assert statuses_of(send(employee, other, exact_page(now[0]))) == ["applied", "applied"]
+    assert replacement_owners(app) == [other["user_id"], other["user_id"]]
+    assert counts(me_totals(client, c)) == ("1", "1")
+    assert counts(company_totals(client, c)) == ("2", "2")
+    employee.close()
+
+
+def test_a_hidden_text_row_keeps_its_company_key_election(setup):
+    from datetime import timedelta
+
+    app, client, company, member, now, c = paired(setup)
+    employee, other = coworker(app, company)
+    keyed = {"company_dedup_keys": [{"message_key": "c" * 64, "company_dedup_key": "1" * 64}]}
+    assert statuses_of(send(client, c, {**text_page(now[0]), **keyed})) == ["applied", "applied"]
+    now[0] += timedelta(seconds=1)
+    # The coworker opened the same chat later, so the first member's copy of the reply counts (W11).
+    assert statuses_of(send(employee, other, {**text_page(now[0]), **keyed})) == ["applied", "applied"]
+    assert counts(company_totals(client, c)) == ("2", "1")
+    # The first member's exact rows replace its text. Its hidden reply keeps the election, so the
+    # coworker's copy of the same reply does not start counting beside the exact reply.
+    assert statuses_of(send(client, c, exact_page(now[0]))) == ["applied", "applied"]
+    assert counts(company_totals(client, c)) == ("2", "1")
+    # A later election of the same key, here from the coworker reading the chat again, agrees.
+    assert statuses_of(send(employee, other, {**text_page(now[0]), **keyed})) == ["duplicate", "duplicate"]
+    assert counts(company_totals(client, c)) == ("2", "1")
+    employee.close()
+
+
+REPLY_KEY = {"company_dedup_keys": [{"message_key": "c" * 64, "company_dedup_key": "1" * 64}]}
+
+
+def keyed_text(now):
+    return {**text_page(now), **REPLY_KEY}
+
+
+def exact_keyed_page(now):
+    """Exact rows that replace the text rows; the exact reply carries the company key of the
+    saved reply it replaces, and the provider's count of its output."""
+    body = exact_page(now)
+    measured = {
+        "value": "500",
+        "evidence": "provider_reported",
+        "scope": "provider_request",
+        "completeness": "complete_for_scope",
+        "profile_id": None,
+        "reason": None,
+    }
+    reply = body["messages"][1]
+    reply.update(tokens=measured, parts=history_response_parts(measured))
+    return {**body, "company_dedup_keys": [{"message_key": "7" * 64, "company_dedup_key": "1" * 64}]}
+
+
+def reply_tokens(totals):
+    return next(t["value"] for t in totals["tokens"] if (t["role"], t["part"]) == ("response", "total"))
+
+
+def test_an_exact_reply_with_the_replaced_rows_company_key_counts_once(setup):
+    app, client, company, member, now, c = paired(setup)
+    assert statuses_of(send(client, c, keyed_text(now[0]))) == ["applied", "applied"]
+    assert statuses_of(send(client, c, exact_keyed_page(now[0]))) == ["applied", "applied"]
+    # The member's hidden text reply and exact reply share the key; the turn counts once, with
+    # the exact figures.
+    for totals in (me_totals(client, c), company_totals(client, c)):
+        assert counts(totals) == ("1", "1")
+        assert reply_tokens(totals) == "500"
+
+
+@pytest.mark.parametrize("coworker_first", [True, False])
+def test_a_coworkers_text_copy_of_an_exactly_counted_reply_counts_once(setup, coworker_first):
+    from datetime import timedelta
+
+    app, client, company, member, now, c = paired(setup)
+    employee, other = coworker(app, company)
+    uploads = [(client, c), (employee, other)]
+    for sender, credentials in reversed(uploads) if coworker_first else uploads:
+        assert statuses_of(send(sender, credentials, keyed_text(now[0]))) == ["applied", "applied"]
+        now[0] += timedelta(seconds=1)
+    assert statuses_of(send(client, c, exact_keyed_page(now[0]))) == ["applied", "applied"]
+    # Prompts carry no key here, so each member's prompt counts; the reply counts once, exactly.
+    totals = company_totals(client, c)
+    assert counts(totals) == ("2", "1")
+    assert reply_tokens(totals) == "500"
+    employee.close()
+
+
+def test_a_replaced_text_row_sent_again_by_a_published_build_leaves_the_turn_counted_once(setup):
+    app, client, company, member, now, c = paired(setup)
+    employee, other = coworker(app, company)
+    assert statuses_of(send(client, c, keyed_text(now[0]))) == ["applied", "applied"]
+    assert statuses_of(send(client, c, exact_keyed_page(now[0]))) == ["applied", "applied"]
+    # A 0.1.0 browser of the same member uploads the text with its key again, and then the
+    # coworker's copy arrives; each upload elects the key again.
+    published, _ = connect(app, client)
+    assert statuses_of(send(client, published, keyed_text(now[0]))) == ["duplicate", "duplicate"]
+    assert statuses_of(send(employee, other, keyed_text(now[0]))) == ["applied", "applied"]
+    assert statuses_of(send(client, published, keyed_text(now[0]))) == ["duplicate", "duplicate"]
+    assert (counts(me_totals(client, c)), reply_tokens(me_totals(client, c))) == (("1", "1"), "500")
+    totals = company_totals(client, c)
+    assert counts(totals) == ("2", "1")
+    assert reply_tokens(totals) == "500"
+    employee.close()
+
+
+def exact_input_fixture(now):
+    """The Claude chat the browser's parity test sums too (exact-input-company.test.ts), with this
+    server's packaged method and clock."""
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[3] / "packages/contracts/test/fixtures/exact-input-company.json"
+    fixture = json.loads(path.read_text(encoding="utf-8"))
+    for body in fixture["pages"]:
+        body["observed_at"] = instant(now)
+        for m in body["messages"]:
+            m.update(
+                observed_at=instant(now),
+                proposed_method_id=BASELINE_METHOD_ID,
+                proposed_method_hash=BASELINE_METHOD_HASH,
+            )
+    return fixture
+
+
+def exact_input_paired(setup):
+    from datetime import UTC, datetime
+
+    # The fixture's chat took place on 23 November 2026; the member connects after it.
+    setup[4][0] = datetime(2026, 11, 23, 12, tzinfo=UTC)
+    return paired(setup)
+
+
+def input_rows(totals):
+    """The summary's input side, as the fixture names it."""
+    rows = [
+        t
+        for t in totals["tokens"]
+        if t["role"] == "prompt" or t["part"] in ("tool_output", "image_input_tokens")
+    ]
+    return sorted(rows, key=lambda t: (t["role"], t["part"], t["evidence"], t["profile_id"] or ""))
+
+
+def exact_input_count(app):
+    from aift.db import HistoryExactInput
+
+    with app.state.db.transaction(readonly=True) as s:
+        return s.scalar(select(func.count()).select_from(HistoryExactInput))
+
+
+def test_a_replys_exact_input_replaces_its_prompt_and_tool_results_as_in_the_browser(setup):
+    app, client, company, member, now, c = exact_input_paired(setup)
+    fixture = exact_input_fixture(now[0])
+    for body in fixture["pages"]:
+        # Receipts carry no input count, so a page with one is received as one without it.
+        assert "conflict" not in statuses_of(send(client, c, body))
+    # Each exact reply adds Claude's count as one input row and drops its tool results; the prompt
+    # it names adds nothing, also one that came on an earlier page. A later count of a reply wins.
+    expected = fixture["expected"]
+    for totals in (me_totals(client, c), company_totals(client, c)):
+        assert input_rows(totals) == input_rows({"tokens": expected["input_rows"]})
+        assert (totals["prompt_count"], totals["response_count"]) == (
+            expected["prompt_count"],
+            expected["response_count"],
+        )
+    named = {e["message_key"] for p in fixture["pages"] for e in p.get("exact_inputs", ())}
+    assert exact_input_count(app) == len(named)
+
+
+def test_erasing_a_reply_removes_its_exact_input(setup):
+    app, client, company, member, now, c = exact_input_paired(setup)
+    for body in exact_input_fixture(now[0])["pages"]:
+        statuses_of(send(client, c, body))
+    assert exact_input_count(app) > 0
+    occurred = sorted(m["occurred_at"] for p in exact_input_fixture(now[0])["pages"] for m in p["messages"])
+    marker = {
+        "scope": "range",
+        "user_id": member.id,
+        "start": "2000-01-01T00:00:00.000Z",
+        "end": instant(now[0]),
+        "epoch": 1,
+        "created_at": instant(now[0]),
+        "record_ids": [],
+        "record_owners": {},
+        "job_id": str(uuid4()),
+    }
+    assert marker["start"] <= occurred[0] and occurred[-1] < marker["end"]
+    with app.state.db.transaction(scope=company.id) as s:
+        tenant = get(s, "company", company.id)
+        put(s, "deletion", marker["job_id"], marker, company.id, member.id)
+        while app.state.service.analytics.history.erase_page(s, tenant, marker):
+            pass
+    assert exact_input_count(app) == 0

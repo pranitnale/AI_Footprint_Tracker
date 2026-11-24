@@ -320,6 +320,9 @@ try {
   adoptionTargetPaths.add("source-to-port-map.json");
   for (const retainedPath of Object.keys(acceptedRetention.retained_files))
     adoptionTargetPaths.add(`upstream/${snapshotDirectory}/${retainedPath}`);
+  // Added before the preconditions are read: a qualified catalog on the accepted release finds
+  // this file already adopted, and a missing precondition would make adopt refuse it.
+  if (pypiMetadata) adoptionTargetPaths.add(`upstream/pypi-${version}.json`);
   const adoptionPreconditions = {};
   for (const targetPath of [...adoptionTargetPaths].sort()) {
     const full = containedPath(coreRoot, targetPath);
@@ -340,7 +343,6 @@ try {
     privateTargetPaths.push(
       `${privateDirectory}/catalog-${catalogCommit}.tar.gz`,
     );
-  if (pypiMetadata) adoptionTargetPaths.add(`upstream/pypi-${version}.json`);
   if (pypiMetadata)
     privateTargetPaths.push(`${privateDirectory}/pypi-${version}.json`);
   const privateAdoptionPreconditions = {};

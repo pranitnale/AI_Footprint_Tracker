@@ -38,6 +38,10 @@ import type { ComputerFileDownload } from "./own-read-page";
 import type { XHRTextObserver } from "./xhr-text-stream";
 import { createCoworkHistory } from "./cowork-history";
 import {
+  createClaudeSessionLinks,
+  type ClaudeLinkFacts,
+} from "./claude-session-links";
+import {
   GEMINI_HISTORY_PATH,
   chatgptEarlierPage,
   createRouteWatch,
@@ -88,6 +92,12 @@ export function createHistoryTextObserver(
     ): Promise<ReadonlyMap<string, ComputerFileCounted> | null>;
     download(link: string, bytes: number): Promise<ComputerFileDownload>;
   },
+  /**
+   * Tells the content script which session backs which Claude chat (18 Nov 2026); returns
+   * whether it could be told.
+   */
+  claudeLinks: (facts: Pick<ClaudeLinkFacts, "links" | "totals">) => boolean = () =>
+    false,
 ) {
   const cloneResponse = Response.prototype.clone;
   const getReader = ReadableStream.prototype.getReader;
@@ -172,11 +182,16 @@ export function createHistoryTextObserver(
       emit(message);
     } catch {}
   };
+  const natives = { cloneResponse, getReader, read, cancel, cancelStream };
+  const sessionLinks = createClaudeSessionLinks(claudeLinks, natives);
   const cowork = createCoworkHistory(
     send,
-    { cloneResponse, getReader, read, cancel, cancelStream },
+    natives,
     routes,
     coworkSent,
+    {},
+    // A session is also shown at the address of the chat it backs.
+    (id) => sessionLinks.shows(location.pathname, id),
   );
   const observer = {
     observe(
@@ -202,6 +217,10 @@ export function createHistoryTextObserver(
         !Number.isFinite(observedAt)
       )
         return;
+      // The chat list and a session object say which session backs a chat; the copy is
+      // read beside whatever else this request is.
+      if (site === "claude" && !rejected)
+        sessionLinks.observe(url, method, promise, body);
       // Cowork sessions have their own event reader (W5).
       if (site === "claude" && !rejected && cowork.observe(url, method, promise))
         return;
@@ -260,6 +279,14 @@ export function createHistoryTextObserver(
       xhr = null;
     },
     xhrDirect: () => xhr?.direct() === true,
+    /** Posts every known session link again, for a content script that just started. */
+    announceLinks: () => sessionLinks.announce(),
+    /** Whether the address shows a Claude conversation: its own route, or its linked chat's. */
+    showsSession: (pathname: string, conversationId: string) =>
+      sessionLinks.shows(pathname, conversationId),
+    /** The content script vouches that the address shows this session (a kept link). */
+    linkSession: (pathname: string, conversationId: string) =>
+      sessionLinks.trust(pathname, conversationId),
     /** A navigation reset keeps waiting reads for the chat now shown; every other cancel drops them. */
     cancel(keepCurrentRoute = false) {
       generation++;

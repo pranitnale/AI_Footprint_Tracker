@@ -2,6 +2,7 @@ import base64
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal, localcontext
 from functools import wraps
+from itertools import islice
 from uuid import UUID
 from zoneinfo import ZoneInfo
 
@@ -44,7 +45,7 @@ from .file_text import (
 from .file_text import (
     projections as file_projections,
 )
-from .method_history import MethodHistory, select_records
+from .method_history import CURRENT_VIEW_PATHS, MethodHistory, select_records
 from .policies import capture_policy_valid, usage_retention
 from .security import Problem, canonical, connection_ip, digest, instant, parse_time, uid
 
@@ -165,6 +166,16 @@ class Analytics:
 
     def route(self, s, ctx, path, body, query, company, member, device):
         method = ctx["method"]
+        if (
+            method == "GET"
+            and query.get("calculation_view") == "current"
+            and path in CURRENT_VIEW_PATHS
+        ):
+            # The organization's figures in the server's method. Every other path refuses the
+            # value like any unknown view: a chat's own figures stay the browser's calculation.
+            query = self.methods.current_view(s, company, query)
+            if "_error" in query:
+                return query
         if path == "/v1/me/estimation-selection":
             from .engine_selection import handle_selection
 
@@ -627,6 +638,10 @@ class Analytics:
         }
         for day in days:
             self.rebuild_day(s, company, member, day)
+        if accepted:
+            # The member's new records get their estimate in the server's method now, so the
+            # organization's figures in that method do not wait for the worker's next tick.
+            self.methods.keep_current(s, company, member.id)
         return {
             "batch_id": body["batch_id"],
             "server_time": instant(self.service.now()),
@@ -1459,6 +1474,52 @@ class Analytics:
         periods.append((start, end, rows))
         return rows
 
+    # A period with more records than this is not kept for a request; its parts read their own.
+    PERIOD_RECORDS = 10000
+
+    def period_records(self, s, company, query, owner, since, method_id):
+        """
+        A recalculated summary's records with their estimates in the method, or None outside a
+        read memo and for a period over PERIOD_RECORDS, where _canonical_summary() reads its own.
+        Inside a memo, a period's records are read and their estimates looked up once, and the
+        summary and each of its day, tool and model splits take theirs from that read with the
+        conditions of selected(), in the order of that read. On 23 November 2026 every split read
+        its records again: 301 statements for an organization summary in the server's method on
+        the test organization, against about 70 for the same summary from the daily rollups.
+        """
+        from .history_matching import remembered, remembering
+
+        if not remembering(s):
+            return None
+        start, end = self.bounds(company, query)
+        periods = remembered(s, ("period records", company.id, owner, since, method_id), list)
+        for lo, hi, rows in periods:
+            if lo <= start and end <= hi:
+                break
+        else:
+            period = {k: v for k, v in query.items() if k not in {"site", "model"}}
+            _, _, result, _ = self.selected(s, company, period, owner, since=since)
+            # Held together while the estimates are looked up: the session holds rows weakly, and
+            # an attempt whose request came in another batch of the read asked for it again.
+            found = list(islice(result, self.PERIOD_RECORDS + 1))
+            rows = None
+            if len(found) > self.PERIOD_RECORDS:
+                result.close()
+            else:
+                rows = list(select_records(s, found, method_id))
+            periods.append((start, end, rows))
+        if rows is None:
+            return None
+        site, model = query.get("site"), query.get("model")
+        # Instants are of one width, so text order is time order.
+        return [
+            record
+            for record in rows
+            if start <= record.occurred_at < end
+            and (not site or record.site == site)
+            and (not model or (record.model is None if model == "__unknown__" else record.model == model))
+        ]
+
     @exact_decimal
     def splits(self, s, company, member, query, whole, private=True, owner=None):
         """
@@ -1773,14 +1834,15 @@ class Analytics:
         owner = member.id if personal else query.get("user_id")
         # As in summary(): one person's figures for an administrator start after the switch.
         person_since = self.person_floor(s, company)[0] if owner and not personal else None
-        if records_override is None:
-            start, end, records, parents = self.selected(
+        start, end = self.bounds(company, query)
+        records = records_override
+        if records is None and method_id and not conversation and not include_expired:
+            records = self.period_records(s, company, query, owner, person_since, method_id)
+        if records is None:
+            _, _, records, _ = self.selected(
                 s, company, query, owner, conversation, include_expired=include_expired, since=person_since
             )
             records = select_records(s, records, method_id)
-        else:
-            start, end = self.bounds(company, query)
-            records = records_override
         snapshot = {
             "snapshot_id": uid(),
             "generated_at": instant(self.service.now()),

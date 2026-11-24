@@ -3,10 +3,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   comparisonLine,
+  countedHow,
+  replyKinds,
   countedParts,
   countedSummary,
   DETAILS_STYLES,
   detailsModels,
+  exactFromStart,
   detailsStatusGroups,
   detailsStatuses,
   detailsSyncState,
@@ -112,6 +115,49 @@ test("what was counted marks hidden parts as empty, never as an error, per tool"
   assert.deepEqual(countedParts("notebooklm", "NotebookLM", null).map((p) => p.mark), ["full", "full", "half", "empty", "empty"]);
   // A notebook's saved chat (14 Oct 2026) can be loaded only in part, like other chats.
   assert.deepEqual(countedParts("notebooklm", "NotebookLM", false)[0], { label: "Your messages and the earlier chat", mark: "half", state: "earlier chat not loaded" });
+});
+
+// Live pass of 23 Nov 2026: Claude's own counts include hidden thinking, so a chat of exact replies
+// must not say its reasoning is a summary. A chat of text counts keeps the old line, and a mixed
+// chat says both.
+test("what was counted says for each Claude chat whether its reasoning is exact", () => {
+  const reasoning = (replies?: { exact: number; text: number } | null) =>
+    countedParts("claude", "Claude", true, replies).find((part) => part.label === "Reasoning")!;
+  const summaryOnly = { label: "Reasoning", mark: "half", state: "summary only" };
+  assert.deepEqual(reasoning(), summaryOnly);
+  assert.deepEqual(reasoning(null), summaryOnly);
+  assert.deepEqual(reasoning({ exact: 0, text: 3 }), summaryOnly);
+  assert.deepEqual(reasoning({ exact: 3, text: 0 }), { label: "Reasoning", mark: "full", state: "from Claude's own counts" });
+  assert.deepEqual(reasoning({ exact: 3, text: 1 }), { label: "Reasoning", mark: "half", state: "exact in 3 replies, summary only in 1 reply" });
+  assert.deepEqual(reasoning({ exact: 1, text: 2 }), { label: "Reasoning", mark: "half", state: "exact in 1 reply, summary only in 2 replies" });
+  // Other sites never take this reading.
+  assert.deepEqual(countedParts("chatgpt", "ChatGPT", true, { exact: 3, text: 0 }), countedParts("chatgpt", "ChatGPT", true));
+});
+
+// Same pattern for side calls: Claude's own counts include them (modelUsage covers side calls).
+test("what was counted says for each Claude chat whether side calls are counted", () => {
+  const sideCalls = (replies?: { exact: number; text: number } | null) =>
+    countedParts("claude", "Claude", true, replies).find((part) => /^Side calls/.test(part.label))!;
+  const hidden = { label: "Side calls: titles, safety checks", mark: "empty", state: "not shown by Claude" };
+  assert.deepEqual(sideCalls(), hidden);
+  assert.deepEqual(sideCalls(null), hidden);
+  assert.deepEqual(sideCalls({ exact: 0, text: 3 }), hidden);
+  assert.deepEqual(sideCalls({ exact: 3, text: 0 }), { label: "Side calls: titles, suggestions", mark: "full", state: "inside Claude's own counts" });
+  assert.deepEqual(sideCalls({ exact: 3, text: 1 }), { label: "Side calls: titles, suggestions", mark: "half", state: "inside Claude's counts in 3 replies, not counted in 1 reply" });
+  assert.deepEqual(sideCalls({ exact: 1, text: 2 }), { label: "Side calls: titles, suggestions", mark: "half", state: "inside Claude's counts in 1 reply, not counted in 2 replies" });
+  // A chat of exact replies hides nothing, so the summary says everything is counted.
+  assert.equal(countedSummary(countedParts("claude", "Claude", true, { exact: 3, text: 0 }), "Claude"), "Everything Claude shows is counted.");
+  assert.equal(countedSummary(countedParts("claude", "Claude", true, { exact: 0, text: 3 }), "Claude"), "Everything Claude shows. Claude hides 1 part.");
+  assert.deepEqual(countedParts("chatgpt", "ChatGPT", true, { exact: 3, text: 0 }), countedParts("chatgpt", "ChatGPT", true));
+});
+
+test("the start of a Claude chat counts as read when its exact replies add up to Claude's own total", () => {
+  const kinds = (exactReplies: number, textReplies: number, outputCounted: number | null) => ({ exactReplies, textReplies, outputCounted });
+  assert.equal(exactFromStart(kinds(3, 0, 4200), 4200), true);
+  assert.equal(exactFromStart(kinds(3, 0, 4000), 4200), false, "work Claude ran is not counted here");
+  assert.equal(exactFromStart(kinds(3, 0, 4200), null), false, "no total to compare with");
+  assert.equal(exactFromStart(kinds(3, 1, 4200), 4200), false, "a text reply may come from a part that was not read");
+  assert.equal(exactFromStart(kinds(0, 0, null), 0), false);
 });
 
 test("Details opens with the bar's state in plain words, problems first, and nothing when up to date", () => {
@@ -288,8 +334,10 @@ test("Load full chat history off: Details names the switch, the fix that works o
   const shared = ownReadOffStatus("gemini", "missing", true);
   assert.equal(shared.reload, undefined);
   assert.doesNotMatch(shared.text, /Reload/);
-  assert.equal(ownReadOffStatus("cowork", "after_import").settings, "Turn on Load full chat history for Claude Cowork");
-  assert.equal(ownReadOffStatus("cowork", "after_import").reload, true);
+  // One Claude switch covers chats and Cowork sessions (22 Nov 2026), so there is one name.
+  assert.equal(ownReadOffStatus("claude", "after_import").settings, "Turn on Load full chat history for Claude");
+  assert.equal(ownReadOffStatus("claude", "after_import").reload, true);
+  assert.doesNotMatch(ownReadOffStatus("claude", "missing").text, /Cowork/);
   assert.match(ownReadOffStatus("notebooklm", "after_import").text, /this notebook's saved chat, if it has one/);
   assert.equal(ownReadOffStatus("notebooklm", "after_import").reload, true);
   // A long ChatGPT chat loads its earlier messages when the person scrolls up.
@@ -302,7 +350,7 @@ test("Load full chat history off: Details names the switch, the fix that works o
   assert.equal(perplexity.reload, undefined);
   assert.doesNotMatch(perplexity.text, /[Rr]eload/);
   assert.equal(perplexity.settings, "Turn on Load full chat history for Perplexity");
-  for (const key of ["chatgpt", "claude", "cowork", "gemini", "perplexity", "notebooklm"] as const)
+  for (const key of ["chatgpt", "claude", "gemini", "perplexity", "notebooklm"] as const)
     assert.doesNotMatch(ownReadOffStatus(key, "missing").text, /\u2014/);
   // Live QA of 19 Oct 2026: with the main switch off the site's own switch is already on and
   // cannot be changed, so the entry names the main switch.
@@ -349,4 +397,148 @@ test("a signed-out ChatGPT chat's unsaved earlier messages are listed without a 
     detailsStatusGroups("", "Earlier messages not saved").notCounted.map((s) => s.chip),
     ["Earlier messages not counted"],
   );
+});
+
+// "How this was counted" on Claude (22 Nov 2026): one drop-down that says where the figures come
+// from, for each kind of chat, and never shows a failed read as an exact count.
+const CLAUDE_OWN = { output: 4200, input: 310, cacheRead: 60_000_000, cacheWrite: 1_500 };
+const counted = (over: Partial<Parameters<typeof countedHow>[0]> = {}) =>
+  countedHow({ exactReplies: 0, textReplies: 0, claude: null, outputCounted: null, unlinked: false, switchOff: false, laterWork: false, ...over });
+
+test("how this was counted: an exact chat says Claude's own counts are used and where In comes from", () => {
+  const exact = counted({ exactReplies: 3 })!;
+  assert.equal(exact.summary, "Exact, from Claude");
+  assert.deepEqual(exact.lines, [
+    "Output and reasoning are Claude's own token counts for this chat, side calls included. Input is your prompts and tool results, counted on your computer.",
+  ]);
+});
+
+test("how this was counted: a chat counted from text says so and what is missing", () => {
+  const text = counted({ textReplies: 2 })!;
+  assert.equal(text.summary, "Estimated from text");
+  assert.deepEqual(text.lines, [
+    "Claude gives no token counts for this chat. The tracker counted the text Claude shows. Hidden reasoning is not included.",
+  ]);
+  // A chat that could not be matched to its session keeps the text figures and says why.
+  assert.deepEqual(counted({ textReplies: 2, unlinked: true })!.lines.at(-1), "Claude's own counts for this chat could not be matched to it.");
+  assert.equal(counted({ exactReplies: 2, unlinked: true })!.lines.some((line) => /matched/.test(line)), false, "an exact chat was matched");
+});
+
+test("how this was counted: a mixed chat names how many replies are exact and how many are estimated", () => {
+  const mixed = counted({ exactReplies: 4, textReplies: 2 })!;
+  assert.equal(mixed.summary, "Part exact, part estimated");
+  assert.deepEqual(mixed.lines, [
+    "4 replies use Claude's own token counts. 2 replies were counted from their text, because Claude has no counts for them.",
+  ]);
+  assert.match(counted({ exactReplies: 1, textReplies: 1 })!.lines[0]!, /^1 reply uses .* 1 reply was counted from its text, because Claude has no counts for it/);
+});
+
+test("how this was counted: Claude's higher total shows the two numbers, and the cause only when it is known", () => {
+  const higher = counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted: 4000 })!;
+  assert.ok(higher.lines.includes("Claude's own total for this chat is 4,200 output tokens. 4,000 are counted here."));
+  assert.equal(higher.lines.some((line) => /after the last reply/.test(line)), false, "no cause is claimed without proof");
+  const later = counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted: 4000, laterWork: true })!;
+  assert.ok(later.lines.includes("Claude's own total for this chat is 4,200 output tokens. 4,000 are counted here. The rest ran after the last reply and is counted with the next one."));
+  // Equal totals, or a total that is lower, say nothing.
+  for (const outputCounted of [4200, 5000, null])
+    assert.equal(counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted })!.lines.some((line) => /own total/.test(line)), false);
+});
+
+test("how this was counted: Claude's own input totals are numbers, and In stays prompts and tool results", () => {
+  const all = counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted: 4200 })!;
+  assert.ok(all.lines.includes("Claude reports 310 new input tokens, 1,500 tokens written to its cache and 60,000,000 tokens read from it. In shows your prompts and tool results only."));
+  const some = counted({ exactReplies: 1, claude: { output: 5, input: 7, cacheRead: null, cacheWrite: null }, outputCounted: 5 })!;
+  assert.ok(some.lines.includes("Claude reports 7 new input tokens. In shows your prompts and tool results only."));
+  const none = counted({ exactReplies: 1, claude: { output: 5, input: null, cacheRead: null, cacheWrite: null }, outputCounted: 5 })!;
+  assert.equal(none.lines.some((line) => /new input/.test(line)), false);
+});
+
+// Owner decision of 23 Nov 2026: for replies with exact input, In is everything Claude processed.
+const EXACT_INPUT = { new: 310, cache_write: 1_500, cache_read: 60_000_000, replies: 3 };
+const CACHE_NOTE = "The cache tokens are context Claude read again, so In is larger than what you typed.";
+
+test("how this was counted: exact input says In is everything Claude processed, with the three numbers", () => {
+  const exact = counted({ exactReplies: 3, exactInput: EXACT_INPUT })!;
+  assert.equal(exact.summary, "Exact, from Claude");
+  assert.deepEqual(exact.lines, [
+    "Output and reasoning are Claude's own token counts for this chat, side calls included.",
+    `In is everything Claude processed for this chat: 310 new input tokens, 1,500 tokens written to its cache and 60,000,000 tokens read from it. ${CACHE_NOTE}`,
+  ]);
+  for (const line of exact.lines) assert.doesNotMatch(line, /prompts and tool results only|counted on your computer/);
+  // One reply is a reply, not "1 replies", and the company is never said to see these numbers.
+  const one = counted({ exactReplies: 1, exactInput: { ...EXACT_INPUT, replies: 1 } })!;
+  assert.doesNotMatch(one.lines.join(" "), /replies|company/);
+});
+
+test("how this was counted: a mixed chat says which replies have exact input and how the others are counted", () => {
+  const mixed = counted({ exactReplies: 3, textReplies: 2, exactInput: EXACT_INPUT })!;
+  assert.equal(mixed.summary, "Part exact, part estimated");
+  assert.deepEqual(mixed.lines, [
+    "3 replies use Claude's own token counts. 2 replies were counted from their text, because Claude has no counts for them.",
+    `In is everything Claude processed for 3 replies: 310 new input tokens, 1,500 tokens written to its cache and 60,000,000 tokens read from it. ${CACHE_NOTE} The other 2 replies are counted from the text of your prompts and tool results, on your computer.`,
+  ]);
+  // Exact replies whose result had no counters are counted from text as well.
+  const gap = counted({ exactReplies: 4, exactInput: EXACT_INPUT })!;
+  assert.match(gap.lines.at(-1)!, /for 3 replies: .* The other reply is counted from the text of your prompts and tool results, on your computer\.$/);
+});
+
+test("how this was counted: without exact input the wording stays, and the session totals keep their line", () => {
+  assert.deepEqual(counted({ exactReplies: 3 })!.lines, [
+    "Output and reasoning are Claude's own token counts for this chat, side calls included. Input is your prompts and tool results, counted on your computer.",
+  ]);
+  const own = counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted: 4200 })!;
+  assert.ok(own.lines.some((line) => /In shows your prompts and tool results only\.$/.test(line)));
+  // With exact input the three numbers come from the saved replies, so the session's own
+  // input numbers are not listed a second time and the sentence that is no longer true is gone.
+  const both = counted({ exactReplies: 3, claude: CLAUDE_OWN, outputCounted: 4200, exactInput: EXACT_INPUT })!;
+  assert.equal(both.lines.some((line) => /prompts and tool results only|Claude reports/.test(line)), false);
+  assert.equal(both.lines.filter((line) => /new input tokens/.test(line)).length, 1);
+  for (const line of both.lines) assert.doesNotMatch(line, /—|–/);
+});
+
+test("how this was counted: with Load full chat history off it shows the total the page loaded", () => {
+  const off = counted({ textReplies: 1, claude: CLAUDE_OWN, outputCounted: 90, switchOff: true })!;
+  assert.equal(off.summary, "Estimated from text");
+  assert.ok(off.lines.includes("Claude reports 4,200 output tokens for this chat."));
+  assert.equal(off.lines.some((line) => /counted here/.test(line)), false, "no rows are made from the running total");
+  assert.equal(counted({ textReplies: 1, switchOff: true })!.lines.some((line) => /reports/.test(line)), false, "nothing to show without a loaded total");
+});
+
+test("how this was counted: nothing counted yet gives no drop-down, and no line uses a dash", () => {
+  assert.equal(counted(), null);
+  const every = counted({ exactReplies: 2, textReplies: 1, claude: CLAUDE_OWN, outputCounted: 10, laterWork: true, unlinked: true })!;
+  for (const line of [every.summary, ...every.lines]) assert.doesNotMatch(line, /\u2014|\u2013/);
+});
+
+test("how this was counted: replies are told apart by the evidence of the saved response totals", () => {
+  const item = (role: string, part: string, evidence: string, known: string, value: string | null) =>
+    ({ role, part, evidence, value, known_message_count: known });
+  assert.deepEqual(
+    replyKinds([
+      item("response", "total", "provider_reported", "3", "4000"),
+      item("response", "total", "heuristic_estimate", "2", "120"),
+      item("prompt", "total", "heuristic_estimate", "5", "300"),
+      item("response", "tool_output", "provider_reported", "9", "77"),
+      item("response", "total", "unknown", "4", null),
+    ]),
+    { exactReplies: 3, textReplies: 2, outputCounted: 4000 },
+    "only response totals count, unknown evidence is neither",
+  );
+  assert.deepEqual(replyKinds([item("response", "total", "heuristic_estimate", "1", "9")]), { exactReplies: 0, textReplies: 1, outputCounted: null });
+  assert.deepEqual(replyKinds([]), { exactReplies: 0, textReplies: 0, outputCounted: null });
+});
+
+test("with Load full chat history off, a Claude chat whose session events are read says its own counts are not read and offers no reload", () => {
+  // The page never loads a session's events itself, so Reload page would not help (core package 2).
+  const status = ownReadOffStatus("claude", "after_turn");
+  assert.equal(status.reload, undefined);
+  assert.doesNotMatch(status.text, /[Rr]eload/);
+  assert.match(status.text, /^Load full chat history is off for Claude, so the tracker did not ask Claude for this chat's own token counts, so they are not read while the switch is off\.$/);
+  assert.equal(status.settings, "Turn on Load full chat history for Claude");
+  const main = ownReadOffStatus("claude", "after_turn", false, true);
+  assert.match(main.text, /^Load full chat history automatically is off for every site, so the tracker did not ask Claude for this chat's own token counts/);
+  assert.doesNotMatch(status.text, /\u2014/);
+  // Other modes of Claude, and other sites, keep their entry.
+  assert.equal(ownReadOffStatus("claude", "missing").reload, true);
+  assert.equal(ownReadOffStatus("claude", "after_import").reload, true);
 });

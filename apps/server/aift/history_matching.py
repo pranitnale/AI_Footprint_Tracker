@@ -371,8 +371,15 @@ def prefetch(session, rows):
             wanted.setdefault(r.tenant, set()).add((r.owner, r.site, r.payload["provider_request_key"]))
     keyed = _seed(session, memo, "requests", wanted, Observation.stable_key, kind="request")
 
+    _seed_tombstones(
+        session, memo, [*(a for found in attempts for a in found), *parents, *(q for found in keyed for q in found)]
+    )
+
+
+def _seed_tombstones(session, memo, records):
+    """Reads together whether each of the live records has a deletion tombstone, and remembers
+    each answer as _tombstoned would return it."""
     wanted = {}
-    records = [*(a for found in attempts for a in found), *parents, *(q for found in keyed for q in found)]
     for record in records:
         if record is not None:
             wanted.setdefault(record.tenant, set()).add((record.owner, record.kind, record.id))
@@ -391,6 +398,45 @@ def prefetch(session, rows):
             )
         for k in keys:
             memo[("tombstone", tenant, *k)] = k in found
+
+
+def prefetch_linked(session, attempts):
+    """
+    Reads together what linked_history would read for each of the live attempts: their requests,
+    and for the saved replies that name an attempt's key what resolve_history_live reads
+    (prefetch). A recalculated summary asks for the saved reply of every attempt of its period,
+    and asked one attempt at a time each linked reply cost four queries. On 23 November 2026 an
+    organization summary in the server's method read saved messages 78 times and deletion
+    tombstones 80 times, of 221 statements in all. The per-attempt code runs unchanged and finds
+    the answers. Outside a read memo this does nothing.
+    """
+    memo = session.info.get(_MEMO)
+    if memo is None:
+        return
+    wanted = {}
+    for attempt in attempts:
+        if attempt.parent is not None:
+            wanted.setdefault(attempt.tenant, set()).add((attempt.owner, attempt.parent))
+    # Remembered requests also stay in the session, which holds rows weakly, so the lookup of an
+    # attempt's request by its key (engine_history.request_for) asks the database nothing.
+    # prefetch reads the tombstones only of the requests it reads itself, so theirs are read here.
+    _seed_tombstones(session, memo, _seed(session, memo, "record", wanted, Observation.id, kind="request"))
+    rows = {}
+    for attempt in attempts:
+        attempt_key = attempt.payload.get("provider_attempt_key")
+        if not attempt_key or attempt.parent is None:
+            continue
+        request = _record(session, attempt.tenant, attempt.owner, "request", attempt.parent)
+        if request is None:
+            continue
+        for row in _history_rows(
+            session, attempt.tenant, attempt.owner, site=request.payload["site"], provider_attempt_key=attempt_key
+        ):
+            rows[(row.tenant, row.owner, row.message_key)] = row
+    # _history_rows returns current rows of the person whose stored hash holds, which is what
+    # seed_visible_rows needs to answer the search for each row's own message key.
+    seed_visible_rows(session, rows.values())
+    prefetch(session, list(rows.values()))
 
 
 def chunked(keys, value, size=500):

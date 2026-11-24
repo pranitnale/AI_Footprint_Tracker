@@ -149,8 +149,27 @@ export type CountedPart = { label: string; mark: Mark; state: string };
  * What each tool lets the tracker count, from the decided coverage rules (the coverage notes in
  * estimate-details.ts say the same in full). An empty mark is a part the tool hides, never an error.
  */
-export function countedParts(surface: string, siteName: string, earlierLoaded: boolean | null): CountedPart[] {
+export function countedParts(
+  surface: string,
+  siteName: string,
+  earlierLoaded: boolean | null,
+  /** A Claude chat's replies by how they were counted; Claude's own counts include hidden thinking and side calls. */
+  claudeReplies?: { exact: number; text: number; exactInput?: number } | null,
+): CountedPart[] {
   const hidden = `not shown by ${siteName}`;
+  const plural = (n: number) => `${n} ${n === 1 ? "reply" : "replies"}`;
+  const claudeExact = surface === "claude" && !!claudeReplies && claudeReplies.exact > 0;
+  const sideCalls: CountedPart = !claudeExact
+    ? { label: "Side calls: titles, safety checks", mark: "empty", state: hidden }
+    : claudeReplies!.text === 0
+      ? { label: "Side calls: titles, suggestions", mark: "full", state: "inside Claude's own counts" }
+      : { label: "Side calls: titles, suggestions", mark: "half", state: `inside Claude's counts in ${plural(claudeReplies!.exact)}, not counted in ${plural(claudeReplies!.text)}` };
+  const reasoning: CountedPart =
+    surface !== "claude" || !claudeReplies || claudeReplies.exact === 0
+      ? { label: "Reasoning", mark: "half", state: "summary only" }
+      : claudeReplies.text === 0
+        ? { label: "Reasoning", mark: "full", state: "from Claude's own counts" }
+        : { label: "Reasoning", mark: "half", state: `exact in ${plural(claudeReplies.exact)}, summary only in ${plural(claudeReplies.text)}` };
   const messages: CountedPart =
     earlierLoaded === false ? { label: "Your messages and the earlier chat", mark: "half", state: "earlier chat not loaded" } : { label: "Your messages and the earlier chat", mark: "full", state: "counted" };
   const answers: CountedPart = { label: "Answers", mark: "full", state: "counted" };
@@ -184,9 +203,9 @@ export function countedParts(surface: string, siteName: string, earlierLoaded: b
       return [
         messages,
         answers,
-        { label: "Reasoning", mark: "half", state: "summary only" },
+        reasoning,
         { label: "Searches and tool steps shown", mark: "full", state: "counted" },
-        { label: "Side calls: titles, safety checks", mark: "empty", state: hidden },
+        sideCalls,
       ];
   }
 }
@@ -196,6 +215,126 @@ export function countedSummary(parts: readonly CountedPart[], siteName: string) 
   const hidden = parts.filter((p) => p.mark === "empty").length;
   if (!hidden) return `Everything ${siteName} shows is counted.`;
   return `Everything ${siteName} shows. ${siteName} hides ${hidden} part${hidden === 1 ? "" : "s"}.`;
+}
+
+export type CountedHowInput = {
+  /** Replies counted from Claude's own token counts, and replies counted from their text. */
+  exactReplies: number;
+  textReplies: number;
+  /** Claude's own totals for the chat's session as the page loaded them; null when none were seen. */
+  claude: { output: number; input: number | null; cacheRead: number | null; cacheWrite: number | null } | null;
+  /** Output tokens counted here; null when not known. */
+  outputCounted: number | null;
+  /** The chat could not be matched to the session that holds Claude's counts. */
+  unlinked?: boolean;
+  /** Load full chat history is off for Claude. */
+  switchOff?: boolean;
+  /** The code knows that Claude's total is ahead only because work ran after the last reply. */
+  laterWork?: boolean;
+  /**
+   * Claude's exact input of the saved replies that carry one (`exact_input` of the history view),
+   * the three counts apart and the number of such replies. Absent when no reply carries one.
+   */
+  exactInput?: { new: number; cache_write: number; cache_read: number; replies: number } | null;
+};
+
+/**
+ * How many saved replies are exact (Claude's own counts) and how many were counted from their
+ * text, and the output of the exact ones, from the evidence of a history summary's response
+ * totals. Evidence that is neither (unknown) is counted as neither.
+ */
+export function replyKinds(
+  tokens: readonly {
+    role: string;
+    part: string;
+    evidence: string;
+    value: string | null;
+    known_message_count: string;
+  }[],
+): { exactReplies: number; textReplies: number; outputCounted: number | null } {
+  let exactReplies = 0;
+  let textReplies = 0;
+  let outputCounted: number | null = null;
+  for (const item of tokens) {
+    if (item.role !== "response" || item.part !== "total") continue;
+    const replies = Number(item.known_message_count);
+    if (item.evidence === "provider_reported") {
+      exactReplies += replies;
+      if (item.value !== null) outputCounted = (outputCounted ?? 0) + Number(item.value);
+    } else if (item.evidence === "heuristic_estimate") textReplies += replies;
+  }
+  return { exactReplies, textReplies, outputCounted };
+}
+
+/**
+ * Whether the replies of a Claude chat that has a session cover the chat from its start: all are
+ * exact and add up to Claude's own total for the chat, so no work of the chat is left out. Only
+ * then can the status "start of this chat could not be read" be dropped, because a chat that is
+ * all session has no saved text to prove its start, and the summary calls that "not verified".
+ */
+export function exactFromStart(
+  kinds: { exactReplies: number; textReplies: number; outputCounted: number | null },
+  claudeOutput: number | null,
+): boolean {
+  return kinds.exactReplies > 0 && kinds.textReplies === 0 && claudeOutput !== null && kinds.outputCounted === claudeOutput;
+}
+
+/**
+ * The drop-down "How this was counted" on Claude (owner request of 22 Nov 2026): where the
+ * figures of this chat come from, for each kind of chat. Null while nothing is counted. The
+ * line about Claude's higher total names a cause only when the caller knows it.
+ */
+export function countedHow(input: CountedHowInput): { summary: string; lines: string[] } | null {
+  const { exactReplies: exact, textReplies: text, claude } = input;
+  if (exact + text === 0) return null;
+  const exactInput = input.exactInput?.replies ? input.exactInput : null;
+  const reply = (n: number) => `${n} ${n === 1 ? "reply" : "replies"}`;
+  const [summary, kind] =
+    text === 0
+      ? [
+          "Exact, from Claude",
+          `Output and reasoning are Claude's own token counts for this chat, side calls included.${exactInput ? "" : " Input is your prompts and tool results, counted on your computer."}`,
+        ]
+      : exact === 0
+        ? [
+            "Estimated from text",
+            "Claude gives no token counts for this chat. The tracker counted the text Claude shows. Hidden reasoning is not included.",
+          ]
+        : [
+            "Part exact, part estimated",
+            `${reply(exact)} ${exact === 1 ? "uses" : "use"} Claude's own token counts. ${text} ${text === 1 ? "reply was counted from its text, because Claude has no counts for it" : "replies were counted from their text, because Claude has no counts for them"}.`,
+          ];
+  const lines = [kind];
+  if (exactInput) {
+    // The three numbers are on this device only, so the line never says the company sees them.
+    const others = Math.max(0, exact + text - exactInput.replies);
+    const scope = others === 0 ? "this chat" : reply(exactInput.replies);
+    lines.push(
+      `In is everything Claude processed for ${scope}: ${formatInteger(exactInput.new)} new input tokens, ${formatInteger(exactInput.cache_write)} tokens written to its cache and ${formatInteger(exactInput.cache_read)} tokens read from it. The cache tokens are context Claude read again, so In is larger than what you typed.${others ? ` The other ${others === 1 ? "reply is" : `${others} replies are`} counted from the text of your prompts and tool results, on your computer.` : ""}`,
+    );
+  }
+  if (input.unlinked && exact === 0)
+    lines.push("Claude's own counts for this chat could not be matched to it.");
+  if (claude) {
+    if (input.switchOff)
+      lines.push(`Claude reports ${formatInteger(claude.output)} output tokens for this chat.`);
+    else if (input.outputCounted !== null && claude.output > input.outputCounted)
+      lines.push(
+        `Claude's own total for this chat is ${formatInteger(claude.output)} output tokens. ${formatInteger(input.outputCounted)} are counted here.${input.laterWork ? " The rest ran after the last reply and is counted with the next one." : ""}`,
+      );
+    // With exact input the saved replies already give the three numbers, so they are not listed
+    // a second time from the session's running totals.
+    const parts = exactInput ? [] : [
+      claude.input === null ? null : `${formatInteger(claude.input)} new input tokens`,
+      claude.cacheWrite === null ? null : `${formatInteger(claude.cacheWrite)} tokens written to its cache`,
+      claude.cacheRead === null ? null : `${formatInteger(claude.cacheRead)} tokens read from it`,
+    ].filter((part): part is string => part !== null);
+    if (parts.length)
+      lines.push(
+        `Claude reports ${parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}` : parts[0]}. In shows your prompts and tool results only.`,
+      );
+  }
+  return { summary, lines };
 }
 
 /** Readable model names, each once, in order of appearance. */
@@ -468,7 +607,7 @@ export function statusNodes(doc: Document, statuses: readonly DetailsStatus[], r
 }
 
 /** Sites where reloading the page makes it load a chat's messages again. */
-const RELOAD_LOADS: ReadonlySet<OwnReadSettingKey> = new Set(["claude", "cowork", "gemini", "notebooklm"]);
+const RELOAD_LOADS: ReadonlySet<OwnReadSettingKey> = new Set(["claude", "gemini", "notebooklm"]);
 
 /**
  * The Details entry when "Load full chat history" is off for the site and a chat's messages are
@@ -488,9 +627,14 @@ export function ownReadOffStatus(
   const lead = mainSwitch
     ? `Load full chat history automatically is off for every site, so the tracker did not ask ${name} for`
     : `Load full chat history is off for ${name}, so the tracker did not ask ${name} for`;
-  const reload = RELOAD_LOADS.has(key) || (key === "chatgpt" && mode !== "after_import");
+  // A Claude chat whose session events are read after each turn: the page never loads those
+  // events itself, so reloading would not help.
+  const sessionRead = key === "claude" && mode === "after_turn";
+  const reload = !sessionRead && (RELOAD_LOADS.has(key) || (key === "chatgpt" && mode !== "after_import"));
   const text =
-    key === "chatgpt" && mode === "after_import"
+    sessionRead
+      ? `${lead} this chat's own token counts, so they are not read while the switch is off.`
+      : key === "chatgpt" && mode === "after_import"
       ? `${lead} the earlier messages of this chat. Scroll to the first message to count it.`
       : key === "perplexity"
         ? `${lead} this thread's messages.`

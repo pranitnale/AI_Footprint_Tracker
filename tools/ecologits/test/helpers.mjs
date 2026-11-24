@@ -6,11 +6,13 @@ import {
   readFile,
   writeFile,
   readdir,
+  rm,
 } from "node:fs/promises";
 import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 import {
   containedPath,
+  extractTarGz,
   readJson,
   sha256File,
   validateRelativePath,
@@ -24,18 +26,22 @@ import {
  * The source archive must also be the accepted one, because in-place adoption refuses a
  * snapshot with a different file set (a PyPI sdist adds PKG-INFO to a commit archive).
  * Adoption keeps both archives as developer-private evidence inside the Git directory,
- * which a linked worktree reaches only through the common Git directory.
+ * which a linked worktree reaches only through the common Git directory. A qualified
+ * combination adds the archive of its catalog commit, and the tests stage that combination.
  */
 export async function acceptedRelease(workspace) {
   const lock = await readJson(
     join(workspace, "packages/ecologits-core/upstream/lock.json"),
   );
+  const qualified = lock.release_kind === "qualified_combination";
   if (
-    lock.release_kind !== "release_candidate" ||
-    lock.core_commit !== lock.catalog_commit
+    qualified
+      ? lock.core_commit === lock.catalog_commit || !lock.qualified_label
+      : lock.release_kind !== "release_candidate" ||
+        lock.core_commit !== lock.catalog_commit
   )
     throw new Error(
-      "The maintenance tests stage an accepted single-commit release",
+      "The maintenance tests stage an accepted release or qualified combination",
     );
   const privateDirectory = validateRelativePath(
     lock.private_artifact_directory,
@@ -64,11 +70,20 @@ export async function acceptedRelease(workspace) {
     directory,
     `ecologits-${lock.upstream_version}.tar.gz`,
   );
-  const available = existsSync(sourceArchive) && existsSync(packageArchive);
+  const catalogArchive = qualified
+    ? join(directory, `catalog-${lock.catalog_commit}.tar.gz`)
+    : null;
+  const available =
+    existsSync(sourceArchive) &&
+    existsSync(packageArchive) &&
+    (catalogArchive === null || existsSync(catalogArchive));
   if (available) {
     for (const [path, expected] of [
       [sourceArchive, lock.artifacts.source_core.sha256],
       [packageArchive, lock.artifacts.package.sha256],
+      ...(qualified
+        ? [[catalogArchive, lock.artifacts.source_catalog.sha256]]
+        : []),
     ])
       if ((await sha256File(path)) !== expected)
         throw new Error(
@@ -76,12 +91,50 @@ export async function acceptedRelease(workspace) {
         );
   }
   return {
+    kind: lock.release_kind,
     version: lock.upstream_version,
     commit: lock.core_commit,
+    catalogCommit: lock.catalog_commit,
+    qualifiedLabel: lock.qualified_label ?? null,
+    overlayFiles: lock.catalog_overlay_files ?? [],
+    snapshotDirectory: lock.snapshot_directory,
     sourceArchive,
+    catalogArchive,
     packageArchive,
     available,
   };
+}
+
+/** The update.mjs selection and source arguments that stage the accepted lock unchanged. */
+export function acceptedSelection(release) {
+  return release.catalogArchive
+    ? [
+        "--core-commit",
+        release.commit,
+        "--catalog-commit",
+        release.catalogCommit,
+        "--qualified-label",
+        release.qualifiedLabel,
+        "--core-source-archive",
+        release.sourceArchive,
+        "--catalog-source-archive",
+        release.catalogArchive,
+      ]
+    : ["--commit", release.commit, "--source-archive", release.sourceArchive];
+}
+
+/**
+ * The accepted upstream tree: the core source, with a qualified combination's catalog files.
+ * Candidates derived from it then differ from the accepted catalog only by their own change.
+ */
+export async function extractAcceptedSource(release, destination) {
+  await extractTarGz(release.sourceArchive, destination);
+  if (!release.catalogArchive) return;
+  const catalog = `${destination}-catalog`;
+  await extractTarGz(release.catalogArchive, catalog);
+  for (const file of release.overlayFiles)
+    await copyFile(containedPath(catalog, file), containedPath(destination, file));
+  await rm(catalog, { recursive: true, force: true });
 }
 
 function octal(value, width) {

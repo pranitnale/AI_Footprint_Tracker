@@ -40,7 +40,7 @@ import { fetchAllPages, MEMBER_PAGE_LIMIT, useCursorPage } from "./paging";
 import { previousMonthRange } from "@footprint/ui/dates";
 import { AdminModels } from "./admin/AdminModels";
 import { Card, ChipMenu, PeriodMenu, ScenarioMenu, ToolMenu, UpdatingNote } from "./admin/controls";
-import { SITE_LABELS, adminFigures, baseText, dashWindow, modelName, periodQuery, type AdminSummary } from "./admin/figures";
+import { SITE_LABELS, adminFigures, baseText, dashWindow, modelName, periodQuery, CURRENT_VIEW, type AdminSummary } from "./admin/figures";
 import { cachedSince, useAdminView, useFigures } from "./admin/state";
 import { ActionReauthSteps, useActionReauth } from "./admin/reauth";
 import { OrganizationDeletion } from "./admin/AdminOrganization";
@@ -418,9 +418,9 @@ export function AdminRequests({ api }: { api: ApiClient }) {
   const key = JSON.stringify(filters);
   // The summary for all models lists the models to choose from. Without a chosen model it is also
   // the page's summary, so the same request is not sent twice.
-  const allModels = filters ? "/v1/admin/summary" + queryString({ ...filters, model: undefined }) : null;
+  const allModels = filters ? "/v1/admin/summary" + queryString({ ...filters, ...CURRENT_VIEW, model: undefined }) : null;
   const models = useFigures(api, allModels, () => api.get<AdminSummary>(allModels!));
-  const oneModel = filters && model ? "/v1/admin/summary" + queryString(filters) : null;
+  const oneModel = filters && model ? "/v1/admin/summary" + queryString({ ...filters, ...CURRENT_VIEW }) : null;
   const chosen = useFigures(api, oneModel, () => api.get<AdminSummary>(oneModel!));
   const summary = model ? chosen : models;
   const members = useApi(() =>
@@ -1897,8 +1897,15 @@ export function AdminPolicies({ api, session }: { api: ApiClient; session?: Sess
 export function AdminExports({ api, session }: { api: ApiClient; session?: Session }) {
   const [result, setResult] = useState<any>(null),
     [pending, setPending] = useState<Record<string, unknown> | null>(null),
-    [calculationView, setCalculationView] = useState("original");
+    [chosenView, setCalculationView] = useState<string | null>(null);
   const methods = useApi(() => api.get<MethodInventory>("/v1/methods"));
+  // The server keeps a completed recalculation in its default method for every organization
+  // (23 Nov 2026), so the export starts on it once the server lists that method; the original
+  // view stays one choice away.
+  const defaultMethod = methods.data?.methods.some((method) => method.method_id === methods.data?.default_method_id)
+    ? methods.data?.default_method_id
+    : undefined;
+  const calculationView = chosenView ?? (defaultMethod ? "recalculated" : "original");
   // The form only collects the choices; the export starts after a fresh code in the dialog.
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1943,7 +1950,7 @@ export function AdminExports({ api, session }: { api: ApiClient; session?: Sessi
         {calculationView === "recalculated" && (
           <label>
             Installed method
-            <select name="method_id" required>
+            <select name="method_id" required key={defaultMethod ?? ""} defaultValue={defaultMethod}>
               {(methods.data?.methods ?? []).map((method) => (
                 <option key={method.method_id} value={method.method_id}>
                   {method.method_id}

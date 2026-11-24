@@ -82,15 +82,15 @@ const CASES: Record<Site, [string, string, string][]> = {
     ["gpt-6", "chatgpt-gpt-6-sol", `gpt-6-sol ${EXACT}`],
     ["gpt-6-thinking", "chatgpt-gpt-6-sol", `gpt-6-sol ${EXACT}`],
     ["gpt-6-instant", "chatgpt-gpt-6-sol", `gpt-6-sol ${EXACT}`],
-    ["gpt-6-2-sol", "chatgpt-gpt-sol-unlisted", `gpt-6.1-sol ${SAME_FAMILY}`],
-    [
-      "gpt-6.2-sol-thinking-wm",
-      "chatgpt-gpt-sol-unlisted",
-      `gpt-6.1-sol ${SAME_FAMILY}`,
-    ],
-    ["gpt-7-astra", "chatgpt-gpt-astra-unlisted", `gpt-6-astra ${SAME_FAMILY}`],
+    // ChatGPT's model list of 23 November 2026 offers GPT-6.2 Sol, GPT-6.2 Astra and GPT-6.1 Terra.
+    ["gpt-6-2-sol", "chatgpt-gpt-6-2-sol", `gpt-6.2-sol ${EXACT}`],
+    ["gpt-6.2-sol-thinking-wm", "chatgpt-gpt-6-2-sol", `gpt-6.2-sol ${EXACT}`],
+    ["gpt-6.2-astra-wm", "chatgpt-gpt-6-2-astra", `gpt-6.2-astra ${EXACT}`],
+    ["gpt-6.1-terra-wm", "chatgpt-gpt-6-1-terra", `gpt-6.1-terra ${EXACT}`],
+    ["gpt-6-3-sol", "chatgpt-gpt-sol-unlisted", `gpt-6.2-sol ${SAME_FAMILY}`],
+    ["gpt-7-astra", "chatgpt-gpt-astra-unlisted", `gpt-6.2-astra ${SAME_FAMILY}`],
     ["gpt-6-1-luna", "chatgpt-gpt-luna-unlisted", `gpt-6-luna ${SAME_FAMILY}`],
-    ["gpt-6-terra", "chatgpt-gpt-terra-unlisted", `gpt-5.6-terra ${SAME_FAMILY}`],
+    ["gpt-6-terra", "chatgpt-gpt-terra-unlisted", `gpt-6.1-terra ${SAME_FAMILY}`],
     // Owner correction of 14 October 2026: "gpt-6-sol-pro is not a different underlying model
     // from GPT-6 Sol. It is GPT-6 Sol running with reasoning.mode set to pro." A Pro after a family
     // name is that family model at its version, or the family's newest record when the version
@@ -105,11 +105,14 @@ const CASES: Record<Site, [string, string, string][]> = {
     ["gpt-6-luna-pro", "chatgpt-gpt-6-luna-pro", `gpt-6-luna ${EXACT}`],
     ["gpt-5-6-terra-pro", "chatgpt-gpt-5-6-terra-pro", `gpt-5.6-terra ${EXACT}`],
     ["gpt-6-astra-pro", "chatgpt-gpt-6-pro", `gpt-6-astra ${EXACT}`],
-    ["gpt-6-2-sol-pro", "chatgpt-gpt-sol-pro-unlisted", `gpt-6.1-sol ${SAME_FAMILY}`],
+    ["gpt-6-2-sol-pro", "chatgpt-gpt-6-2-sol-pro", `gpt-6.2-sol ${EXACT}`],
+    ["gpt-6-1-terra-pro", "chatgpt-gpt-6-1-terra-pro", `gpt-6.1-terra ${EXACT}`],
+    ["gpt-6-3-sol-pro", "chatgpt-gpt-sol-pro-unlisted", `gpt-6.2-sol ${SAME_FAMILY}`],
     ["gpt-7-luna-pro", "chatgpt-gpt-luna-pro-unlisted", `gpt-6-luna ${SAME_FAMILY}`],
     // A GPT-6 Pro of an unlisted version runs on Astra like GPT-6 Pro. A Pro of a generation
     // without a known family still uses the newest Pro record of its own.
-    ["gpt-6-2-pro", "chatgpt-gpt-astra-pro-unlisted", `gpt-6-astra ${SAME_FAMILY}`],
+    ["gpt-6-2-pro", "chatgpt-gpt-6-2-astra-pro", `gpt-6.2-astra ${EXACT}`],
+    ["gpt-6-3-pro", "chatgpt-gpt-astra-pro-unlisted", `gpt-6.2-astra ${SAME_FAMILY}`],
     ["gpt-7-pro", "chatgpt-gpt-pro-unlisted", `gpt-5.5-pro ${SAME_VARIANT}`],
     ["gpt-5-7-pro", "chatgpt-gpt-pro-unlisted", `gpt-5.5-pro ${SAME_VARIANT}`],
     ["gpt-6-luna-mini", "chatgpt-gpt-mini-unlisted", `gpt-5.4-mini ${SAME_VARIANT}`],
@@ -125,10 +128,13 @@ const CASES: Record<Site, [string, string, string][]> = {
     // model, also after a family or an unlisted version ("high" as in o3-mini-high).
     ["gpt-6-sol-high", "chatgpt-gpt-6-sol", `gpt-6-sol ${EXACT}`],
     ["gpt-6-1-sol-thinking-high", "chatgpt-gpt-6-1-sol", `gpt-6.1-sol ${EXACT}`],
-    ["gpt-7-astra-high", "chatgpt-gpt-astra-unlisted", `gpt-6-astra ${SAME_FAMILY}`],
+    ["gpt-7-astra-high", "chatgpt-gpt-astra-unlisted", `gpt-6.2-astra ${SAME_FAMILY}`],
   ],
   claude: [
     ["claude-fable-5-1", "claude-fable-5-1", `claude-fable-5-1 ${EXACT}`],
+    // Listed since the catalog of 19 November 2026; it no longer uses the Fable 5.1 stand-in.
+    ["claude-fable-5-2", "claude-fable-5-2", `claude-fable-5-2 ${EXACT}`],
+    ["claude-fable-5-2-fast", "claude-fable-5-2", `claude-fable-5-2 ${EXACT}`],
     ["claude-opus-5-5", "claude-opus-5-5", `claude-opus-5-5 ${EXACT}`],
     ["claude-opus-5-5-fast", "claude-opus-5-5", `claude-opus-5-5 ${EXACT}`],
     ["claude-opus-4-5-20251101", "claude-opus-4-5", `claude-opus-4-5 ${EXACT}`],
@@ -186,7 +192,7 @@ const CASES: Record<Site, [string, string, string][]> = {
     ["claude-haiku-5-9", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
     ["claude-3-7-haiku", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
     ["claude-sonnet-6", "claude-sonnet-unlisted", `claude-sonnet-5-5 ${SAME_FAMILY}`],
-    ["claude-fable-6-fast", "claude-fable-unlisted", `claude-fable-5-1 ${SAME_FAMILY}`],
+    ["claude-fable-6-fast", "claude-fable-unlisted", `claude-fable-5-2 ${SAME_FAMILY}`],
     // Owner decision of 14 October 2026: "-thinking" is a reasoning setting, as "-fast" is a
     // speed setting; the catalog has no Claude thinking record.
     ["claude-haiku-6-thinking", "claude-haiku-unlisted", `claude-haiku-5-5 ${SAME_FAMILY}`],
@@ -215,6 +221,11 @@ const CASES: Record<Site, [string, string, string][]> = {
     ["claude-nova-1", "claude-unlisted", `claude-opus-5-5 ${UNKNOWN}`],
   ],
   gemini: [
+    // The Gemini app picker of 23 November 2026; the button shows "Hydrogen Thinking".
+    ["4 Hydrogen", "gemini-4-hydrogen", `gemini-4-hydrogen ${EXACT}`],
+    ["4 Hydrogen Thinking", "gemini-4-hydrogen", `gemini-4-hydrogen ${EXACT}`],
+    ["Hydrogen Thinking", "gemini-4-hydrogen", `gemini-4-hydrogen ${EXACT}`],
+    ["4 Neon (New)", "gemini-4-neon", `gemini-4-neon ${EXACT}`],
     [
       "3.5 Flash-Lite",
       "gemini-3-5-flash-lite",
@@ -325,12 +336,38 @@ const CASES: Record<Site, [string, string, string][]> = {
       "perplexity-claude-sonnet-5-5",
       `claude-sonnet-5-5 ${EXACT}`,
     ],
-    ["gpt7astra_fast", "perplexity-gpt-astra-unlisted", `gpt-6-astra ${SAME_FAMILY}`],
+    ["gpt7astra_fast", "perplexity-gpt-astra-unlisted", `gpt-6.2-astra ${SAME_FAMILY}`],
     // Owner decision of 14 October 2026: Nano Banana Pro is Gemini 3 Pro Image.
     [
       "nanobananapro",
       "perplexity-nano-banana-pro",
       `gemini-3-pro-image-preview ${EXACT}`,
+    ],
+    // Perplexity's model list of 23 November 2026.
+    ["gemini4argon", "perplexity-gemini-4-argon", `gemini-4-argon ${EXACT}`],
+    ["gemini4carbon", "perplexity-gemini-4-carbon", `gemini-4-carbon ${EXACT}`],
+    [
+      "gemini4hydrogenthinking",
+      "perplexity-gemini-4-hydrogen",
+      `gemini-4-hydrogen ${EXACT}`,
+    ],
+    ["geminineon", "perplexity-gemini-4-neon", `gemini-4-neon ${EXACT}`],
+    ["claudefable52", "perplexity-claude-fable-5-2", `claude-fable-5-2 ${EXACT}`],
+    [
+      "claudefable51thinking",
+      "perplexity-claude-fable-5-1",
+      `claude-fable-5-1 ${EXACT}`,
+    ],
+    ["gpt6_2_astra", "perplexity-gpt-6-2-astra", `gpt-6.2-astra ${EXACT}`],
+    [
+      "pplx_asi_gpt_6_2_sol",
+      "perplexity-gpt-6-2-sol",
+      `gpt-6.2-sol ${EXACT}`,
+    ],
+    [
+      "pplx_asi_gemini_neon",
+      "perplexity-gemini-4-neon",
+      `gemini-4-neon ${EXACT}`,
     ],
     [
       "gemini38flash",
@@ -444,7 +481,8 @@ const CASES: Record<Site, [string, string, string][]> = {
       "perplexity-gemini-3-5-flash",
       `gemini-3.5-flash ${EXACT}`,
     ],
-    ["o4mini", "perplexity-o4-mini", `o4-mini ${EXACT}`],
+    // o4-mini left the catalog on 19 November 2026; the record closest in figures stands in.
+    ["o4mini", "perplexity-o4-mini", `gpt-4o-mini ${NEAREST}`],
     ["o3pro", "perplexity-o3-pro", `gpt-6-astra ${NEAREST}`],
     ["pplx_asi", "perplexity-claude-opus-5-5", `claude-opus-5-5 ${EXACT}`],
     ["pplx_asi_opus", "perplexity-claude-opus-5-5", `claude-opus-5-5 ${EXACT}`],
@@ -581,9 +619,10 @@ const CASES: Record<Site, [string, string, string][]> = {
     ["gpt56_terra_pro", "perplexity-gpt-5-6-terra-pro", `gpt-5.6-terra ${EXACT}`],
     ["pplx_asi_gpt_6_sol_pro", "perplexity-gpt-6-sol-pro", `gpt-6-sol ${EXACT}`],
     ["pplx_asi_astra_pro_fast", "perplexity-gpt-6-astra-pro", `gpt-6-astra ${EXACT}`],
-    ["gpt6_2_sol_pro", "perplexity-gpt-sol-pro-unlisted", `gpt-6.1-sol ${SAME_FAMILY}`],
+    ["gpt6_2_sol_pro", "perplexity-gpt-6-2-sol-pro", `gpt-6.2-sol ${EXACT}`],
+    ["gpt6_3_sol_pro", "perplexity-gpt-sol-pro-unlisted", `gpt-6.2-sol ${SAME_FAMILY}`],
     ["gpt6_luna_pro", "perplexity-gpt-luna-pro-unlisted", `gpt-6-luna ${SAME_FAMILY}`],
-    ["gpt6_pro", "perplexity-gpt-astra-pro-unlisted", `gpt-6-astra ${SAME_FAMILY}`],
+    ["gpt6_pro", "perplexity-gpt-astra-pro-unlisted", `gpt-6.2-astra ${SAME_FAMILY}`],
     ["gpt7pro", "perplexity-gpt-pro-unlisted", `gpt-5.5-pro ${SAME_VARIANT}`],
     ["gpt6_luna_mini", "perplexity-gpt-mini-unlisted", `gpt-5.4-mini ${SAME_VARIANT}`],
     [
@@ -615,23 +654,24 @@ const CASES: Record<Site, [string, string, string][]> = {
     [
       "pplx_asi_fable_6",
       "perplexity-claude-fable-unlisted",
-      `claude-fable-5-1 ${SAME_FAMILY}`,
+      `claude-fable-5-2 ${SAME_FAMILY}`,
     ],
     // Computer ids lose their speed and effort suffixes before the family check.
     [
       "pplx_asi_fable_6_thinking_fast",
       "perplexity-claude-fable-unlisted",
-      `claude-fable-5-1 ${SAME_FAMILY}`,
+      `claude-fable-5-2 ${SAME_FAMILY}`,
     ],
+    ["gpt6_2_sol", "perplexity-gpt-6-2-sol", `gpt-6.2-sol ${EXACT}`],
     [
-      "gpt6_2_sol",
+      "gpt6_3_sol",
       "perplexity-gpt-sol-unlisted",
-      `gpt-6.1-sol ${SAME_FAMILY}`,
+      `gpt-6.2-sol ${SAME_FAMILY}`,
     ],
     [
       "gpt7astrathinking",
       "perplexity-gpt-astra-unlisted",
-      `gpt-6-astra ${SAME_FAMILY}`,
+      `gpt-6.2-astra ${SAME_FAMILY}`,
     ],
     [
       "pplx_asi_luna",
@@ -641,7 +681,7 @@ const CASES: Record<Site, [string, string, string][]> = {
     [
       "gpt57_terra",
       "perplexity-gpt-terra-unlisted",
-      `gpt-5.6-terra ${SAME_FAMILY}`,
+      `gpt-6.1-terra ${SAME_FAMILY}`,
     ],
     ["gpt53codex", "perplexity-gpt-codex-unlisted", `gpt-5.3-codex ${SAME_VARIANT}`],
     // A family word outside a GPT or Computer id names no family.

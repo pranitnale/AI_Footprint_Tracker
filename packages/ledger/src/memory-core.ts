@@ -164,7 +164,7 @@ export interface MemoryState {
   erasedRequests: Set<string>;
   erasedAttempts: Set<string>;
   /** As the IndexedDB markers: when the erasure was applied; see erasedWhenRead. */
-  erasedHistory: Map<string, { at: number; refused?: true }>;
+  erasedHistory: Map<string, { at: number; refused?: true; replaced?: true }>;
   erasedProvider: Map<string, { at: number }>;
   ranges: Array<{
     scope: Scope;

@@ -753,13 +753,13 @@
     },
     "ecologits/data/electricity_mixes.json": {
       "reason": "core-data",
-      "sha256": "993c9b4bc8aede3e8aa6a32af9dbe705a8a7d22d495c4ae36fe5861ff931394f",
-      "size": 56492
+      "sha256": "fbe8b1da4c4649dd4f59f983b669034466e07ec9f36dc4f7a06672f34275f11c",
+      "size": 56494
     },
     "ecologits/data/models.json": {
       "reason": "core-data",
-      "sha256": "1d11503799bfad365b5ce89dbe398675a4ccb58f5a32e4bbba9a81783977c774",
-      "size": 204619
+      "sha256": "53de38421096358f4723bbd6f0888c32777762377b1d5e5bed93034345ecf523",
+      "size": 184586
     },
     "ecologits/data/video_models.json": {
       "reason": "core-data",
@@ -853,7 +853,7 @@
     }
   },
   "schema_version": 1,
-  "snapshot_directory": "ecologits-0.11.3",
+  "snapshot_directory": "ecologits-0.11.3-qualified-main-7b8bc036",
   "source_artifact": {
     "filename": "ecologits-0.11.3.tar.gz",
     "origin": "https://files.pythonhosted.org/packages/99/a2/89d5266c93e43f6f5267453fbabbe0554fe39145a36491a263c3994bcf41/ecologits-0.11.3.tar.gz",

@@ -50,6 +50,18 @@ export interface RuntimeCallbacks {
    * recorded threads take nothing before it; absent, they take everything as before.
    */
   trackingAllowed?(): Promise<boolean>;
+  /** Whether a proven link names the session as the one behind the Claude chat. */
+  claudeSessionLinked?(
+    scope: Scope,
+    chatId: string,
+    sessionId: string,
+  ): Promise<boolean>;
+  /** A Claude chat's saved copy is due (a counted Research launch) or was read. */
+  claudeText?(
+    scope: Scope,
+    chatKey: string,
+    event: "research" | "read",
+  ): Promise<void>;
   /**
    * Whether the organization agreement covers the server's operator switches
    * (lib/organization-terms.ts); the organization client holds sharing while it does not.
@@ -138,6 +150,8 @@ export function composeRuntime(
     (scope, conversationKey) =>
       callbacks.historyCommitted?.(scope, conversationKey),
     callbacks.trackingAllowed,
+    callbacks.claudeSessionLinked,
+    callbacks.claudeText,
   );
   company.historyMaintenance = () => history.sync();
   company.trackingAllowed = callbacks.trackingAllowed;

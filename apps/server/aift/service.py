@@ -45,6 +45,28 @@ REGISTRATION_DOMAIN_MAIL_DAILY = 5
 # browser unused for ten years would have to connect again.
 REFRESH_SECONDS = 10 * 365 * 86400
 REPLACED_REFRESH_SECONDS = 30 * 86400
+# A refresh answer that never reached the browser is answered again while the token it handed out
+# stays unused (11 Nov 2026). A day covers a laptop that slept overnight; after that the encrypted
+# copy goes and a repeat is a reuse again.
+LOST_REFRESH_ANSWER_SECONDS = 86400
+
+
+def revocation_code(family, device, member):
+    """
+    Why a browser's tokens no longer work. A family revoked for a reuse names that while its browser
+    and member are still active, so a browser that missed the first answer does not read as removed
+    by an administrator; every real removal stays enrollment_revoked.
+    """
+    if (
+        family
+        and family.data.get("revoked_for") == "reuse"
+        and device
+        and device.data["status"] == "active"
+        and member
+        and member.data["status"] == "active"
+    ):
+        return "refresh_reuse_detected"
+    return "enrollment_revoked"
 
 # Owner, 14 Oct 2026: an organization administrator stays signed in on the website for 7 days from
 # sign-in, with no shorter idle limit. This is safe only because every action that removes access,
@@ -471,7 +493,7 @@ class Service:
                 or not member
                 or member.data["status"] != "active"
             ):
-                raise Problem("enrollment_revoked", 403)
+                raise Problem(revocation_code(family, device, member), 403)
             return company, member, device
         raw = ctx.get("operator_cookie" if operator else "cookie")
         if raw and ctx.get("request_origin") not in {None, origin}:
@@ -1378,11 +1400,26 @@ class Service:
             or not member
             or member.data["status"] != "active"
         ):
-            raise Problem("enrollment_revoked", 403)
+            raise Problem(revocation_code(family, device, member), 403)
         if row.data["used"]:
             if row.data["operation"] == data["operation_id"] and self.alive(row.data["cache_expires"]):
-                return self.secrets.decrypt(row.data["cache"])
-            family.data = {**family.data, "revoked": True}
+                cached = self.secrets.decrypt(row.data["cache"])
+                rotated = row.data.get("rotated_at")
+                if not rotated or parse_time(rotated) > self.now() - timedelta(seconds=120):
+                    return cached
+                # The 120-second window alone was not enough: the answer may never have reached the
+                # browser (its 20-second timeout fired while this request waited, or the laptop
+                # slept), and it repeats the same operation at its next sync, often minutes or hours
+                # later. Revoking then ended a working connection (production, 11 Nov 2026). While
+                # the token handed out is unused, nobody else has it in use, so this is that browser
+                # asking again, not a reuse. If the answer did reach the browser and someone replays
+                # a captured request, the copy is caught once both sides use the handed-out token.
+                successor = get(s, "refresh", digest(cached["refresh_token"]), company.id)
+                if successor and not successor.data["used"] and self.alive(successor.data["expires"]):
+                    return cached
+            # Kept with the family, so a browser whose answer to this was lost too is told the same
+            # again instead of reading as removed by an administrator.
+            family.data = {**family.data, "revoked": True, "revoked_for": "reuse"}
             return {"_error": "refresh_reuse_detected", "_status": 403}
         # Shown to administrators with the browser's first connection; never with an IP address.
         device.data = {**device.data, "last_seen_at": instant(self.now())}
@@ -1398,7 +1435,8 @@ class Service:
             "expires": self.expires(REPLACED_REFRESH_SECONDS),
             "operation": data["operation_id"],
             "cache": self.secrets.encrypt(result),
-            "cache_expires": self.expires(120),
+            "rotated_at": instant(self.now()),
+            "cache_expires": self.expires(LOST_REFRESH_ANSWER_SECONDS),
         }
         return result
 

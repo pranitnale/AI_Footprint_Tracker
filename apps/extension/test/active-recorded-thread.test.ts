@@ -1111,6 +1111,33 @@ test("a Perplexity follow-up joins the thread the browser says the tab shows aft
   }
 });
 
+// Since November 2026 the page shows every thread at /session/<id> (seen live 23 Nov 2026).
+test("a Perplexity follow-up joins the thread when the browser shows it at /session/<id>", async () => {
+  const f = await setup();
+  try {
+    const shown = (id: string) =>
+      f.promoted().filter((d) => d.displayBinding.captureId === id);
+    const opening = await f.capture(undefined, f.sender, f.binding, {
+      output: f.route,
+    });
+    await f.observe([opening.frontend]);
+    const home = { ...f.sender, url: "https://www.perplexity.ai/" };
+    f.c.noteTabAddress(57, "https://www.perplexity.ai/session/" + f.route);
+    const follow = await f.capture(undefined, home, f.binding, {
+      parent: f.route,
+    });
+    assert.equal(shown(follow.id).at(-1)?.conversationIdentity.conversationId, f.route);
+    // A sender loaded at the new address names the thread too.
+    const loaded = { ...f.sender, url: "https://www.perplexity.ai/session/" + f.route, tab: { id: 60 } };
+    const direct = await f.capture(undefined, loaded, f.binding, {
+      parent: f.route,
+    });
+    assert.equal(shown(direct.id).at(-1)?.conversationIdentity.conversationId, f.route);
+  } finally {
+    f.db.close();
+  }
+});
+
 test("a Perplexity follow-up whose link fails when it is sent is linked again when its reply ends", async () => {
   const f = await setup();
   try {

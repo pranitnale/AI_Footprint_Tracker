@@ -492,6 +492,33 @@ def validate_history_page(value):
             raise ContractError()
     if any(m["company_dedup_key"] is not None for m in messages):
         raise ContractError()
+    # Exact Claude rows name the member's saved text rows they replace: other messages, each once.
+    replaced = value.get("replaced_message_keys")
+    if replaced is not None and (
+        value["site"] != "claude"
+        or len(set(replaced)) != len(replaced)
+        or set(replaced) & {m["message_key"] for m in messages}
+    ):
+        raise ContractError()
+    # Claude's exact input travels beside an exact reply of this page, once (package EC, 23 Nov
+    # 2026): a Claude reply with Claude's own count and the prompt it answers.
+    exact = value.get("exact_inputs")
+    if exact is not None:
+        replies = {m["message_key"]: m for m in messages}
+        named = [entry["message_key"] for entry in exact]
+        if (
+            value["site"] != "claude"
+            or len(set(named)) != len(named)
+            or any(
+                name not in replies
+                or replies[name]["role"] != "response"
+                or replies[name]["prompt_key"] is None
+                or replies[name]["tokens"]["evidence"] != "provider_reported"
+                for name in named
+            )
+            or any(int(entry[part]) > MAX_COUNTER for entry in exact for part in ("new", "cache_write", "cache_read"))
+        ):
+            raise ContractError()
     if value["first_request_verified"] and value["root_message_key"] is None:
         raise ContractError()
     if value["branch_message_keys"] is not None and len(set(value["branch_message_keys"])) != len(

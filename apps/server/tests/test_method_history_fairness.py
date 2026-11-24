@@ -104,7 +104,9 @@ def test_unavailable_live_originals_do_not_starve_history_during_maintenance(set
             )
             == 1
         )
-        assert session.get(RecalculationJob, identifier).data["processed"] == 1
+        # The saved message was calculated once: by the member's job, or by the server's own job
+        # for the same method (MethodHistory.keep_current), which the worker advances first.
+        assert sum(job.data["processed"] for job in session.scalars(select(RecalculationJob))) == 1
 
 
 @pytest.mark.parametrize("budget", [1, PAGE_SIZE])

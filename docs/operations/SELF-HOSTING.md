@@ -1,6 +1,6 @@
 # Self-hosted operations
 
-This repository provides source and container definitions for one self-hosted organization. It does not deploy a service or obtain DNS, TLS certificates, a PostgreSQL backup target or a Brevo account.
+This repository provides source and container definitions for one self-hosted organization. It does not deploy a service or obtain DNS, TLS certificates, a PostgreSQL backup target or a mail server for sign-in codes.
 
 ## Required inputs
 
@@ -17,6 +17,15 @@ Generate three independent secret values with a cryptographic secret manager:
 - `deletion_signing_key`: a base64url encoded 32-byte Ed25519 seed.
 
 Never reuse the database password or one of these keys. Never pass secrets as command arguments or commit the completed files. The example starts self-host capacity at 500, the supported target. Lower it when the deployment has a smaller approved operating limit. Usage is retained until an administrator deletes it. With `ip_collection_enabled` off (the default) the server collects no connection IP addresses, so no IP key is needed: `ip_key`, `ip_keys`, `active_ip_key_version`, `ip_restore_required_until` and `ip_retention_days` are ignored if an older settings file still contains them. See "Person analytics and IP collection" below before switching `person_analytics_enabled` or `ip_collection_enabled` on.
+
+### Mail for sign-in codes
+
+The server sends one-time sign-in codes by email and needs a mail service for it. Choose one with `mail_adapter`:
+
+- `"smtp"` (the example's choice): any standard mail server that accepts authenticated submission, such as your organization's own server or a mail host's. Set `smtp_host`, `smtp_port` (587 by default), `smtp_security` (`"starttls"` for port 587 or `"tls"` for port 465), `smtp_username` and `smtp_password` if the server needs a login, and `mail_sender`. The connection is always encrypted and the server's certificate must be valid for `smtp_host`; there is no unencrypted mode. See the [SMTP mail setup](../implementation/SMTP-MAIL-SETUP.md).
+- `"brevo"`: Brevo's transactional email API. Set `brevo_key` and `mail_sender` (a settings file that names the sender `brevo_sender` still works). See the [Brevo setup](../implementation/BREVO-PRIVACY-SETUP.md).
+
+If `mail_adapter` is missing, the server uses `"brevo"`, so a settings file from an earlier release keeps its meaning. Production startup requires the sender and the host (SMTP) or key (Brevo). Either way, set `mail_privacy_verified` to true only after a delivered code email was checked and holds no link, image or tracking.
 
 Before changing `routing_verified`, `mail_privacy_verified`, `policy_confirmed` or `restore_journal_verified` to true, complete the corresponding DNS/TLS, delivered-mail, policy and restore checks. These fields record completed work. They do not perform it. Production startup fails while required checks are false.
 
@@ -41,7 +50,7 @@ Load the protected environment with `docker compose --env-file /protected/path/c
 
 The migration service must complete before the API or worker starts. The current schema head is `0007`. The worker performs bounded retention, deletion preview, export, rollup and method-recalculation work every five seconds. API readiness remains unavailable if the worker heartbeat is older than the configured maximum.
 
-Self-hosted operation uses the configured tenant and registration origins. Administrators sign in at the tenant host; members connect from the extension with their work email and a code, after entering the tenant host as their organization's own server. The work email domain of the first administrator is the organization's domain, and only addresses on that domain can connect. There is no mandatory connection to our hosted product server. Brevo remains the explicitly configured OTP provider, and administrators must arrange their own verified sender and delivery/privacy settings. Hosted free capacity is separately configured as 50 enrolled memberships; it does not replace the self-hosted example's 500-member limit.
+Self-hosted operation uses the configured tenant and registration origins. Administrators sign in at the tenant host; members connect from the extension with their work email and a code, after entering the tenant host as their organization's own server. The work email domain of the first administrator is the organization's domain, and only addresses on that domain can connect. There is no mandatory connection to our hosted product server. Sign-in codes go through the mail service the operator configures (see "Mail for sign-in codes" above), and the operator arranges its own sender and delivery and privacy settings. Hosted free capacity is separately configured as 50 enrolled memberships; it does not replace the self-hosted example's 500-member limit.
 
 Check the real virtual hosts and certificate routing from an authorized machine:
 
@@ -109,6 +118,8 @@ Usage recorded while person analytics was off is not shown by person afterwards,
 The IP-key procedure in `apps/server/IP-KEY-ROTATION.md` applies only while `ip_collection_enabled` is on. With it off, connection addresses stored earlier are shown to no one. `docker compose run --rm api .venv/bin/python -m aift.maintenance purge-network-observations` counts them, and the same command with `--confirm` deletes every stored row. Run the deleting form once, only after the owner has confirmed it; it cannot be undone.
 
 Authentication encryption, identity lookup and deletion-signing keys have no automated online rotation command in this release. Replacing them directly can make sessions, encrypted identities or deletion receipts unrecoverable. Treat their rotation as a planned migration with a verified backup and rollback design. A suspected compromise requires ingress isolation and incident review before any replacement.
+
+Organization totals use the server's newest method (23 November 2026). After an update that brings new EcoLogits data, the worker recalculates every organization's current records once, about 100 records every 5 seconds per organization (about two to three minutes for a few thousand records). Until that is done, organization summaries in the current view answer 409 `recalculation_pending` and the extension shows each member's last saved copy; the administrator pages keep what they show. Originals stay stored, and records that arrive later are calculated in their upload. A rollback to the previous image needs no database downgrade for this.
 
 Follow `apps/server/METHOD-UPDATES.md` for data-only method installation. A signed deployment approval proves the configured signer, not scientific validation. Back up installed bundles and pinned trust material so historical recalculated views remain reproducible.
 

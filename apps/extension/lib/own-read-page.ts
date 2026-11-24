@@ -245,8 +245,24 @@ export function createOwnReadPage(deps: {
   now?: () => number;
   /** The largest body a read holds; the site's limit by default. */
   byteLimit?: number;
+  /**
+   * Whether the address shows the conversation. By default only its own address does; Claude
+   * also shows a session at the address of the chat a proven link gives it (18 Nov 2026).
+   */
+  shows?: (pathname: string, conversationId: string) => boolean;
+  /**
+   * Told the conversation of each read the content script asks for, before `shows` is asked.
+   * The request comes over the private port, so it is the content script's word: on Claude
+   * it names a session whose link to the chat shown the background kept (a reload forgets
+   * what the page itself proved).
+   */
+  vouched?: (pathname: string, conversationId: string) => void;
 }) {
   const { provider } = deps;
+  const shows =
+    deps.shows ??
+    ((pathname: string, conversationId: string) =>
+      ownReadConversation(provider.site, pathname) === conversationId);
   const now = deps.now ?? Date.now;
   const byteLimit = deps.byteLimit ?? ownReadByteLimit(provider.site);
   // Taken now so later page overrides never run inside the read.
@@ -344,8 +360,7 @@ export function createOwnReadPage(deps: {
       flight === current &&
       !current.stopped &&
       deps.enabled() &&
-      ownReadConversation(provider.site, deps.pathname()) ===
-        current.conversationId;
+      shows(deps.pathname(), current.conversationId);
     // One request with its own time limit, which covers its body; a stop aborts it.
     const request = () => {
       const controller = new AbortController();
@@ -570,11 +585,12 @@ export function createOwnReadPage(deps: {
       answer({ kind: "page_read" });
       return true;
     }
+    deps.vouched?.(deps.pathname(), conversationId);
     if (
       !deps.enabled() ||
       flight ||
       windowFull(at) ||
-      ownReadConversation(provider.site, deps.pathname()) !== conversationId ||
+      !shows(deps.pathname(), conversationId) ||
       !deps.visible()
     ) {
       answer({ kind: "declined" });
@@ -723,10 +739,7 @@ export function createOwnReadPage(deps: {
     receive,
     /** The address changed; a read for a chat no longer shown is stopped. */
     routeChanged() {
-      if (
-        flight &&
-        ownReadConversation(provider.site, deps.pathname()) !== flight.conversationId
-      )
+      if (flight && !shows(deps.pathname(), flight.conversationId))
         stop({ kind: "navigated" });
     },
     cancel() {

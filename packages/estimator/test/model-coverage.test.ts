@@ -13,31 +13,10 @@ const FAMILIES = new Set(["openai", "anthropic", "google_genai"]);
 // Records of the three families that the consumer apps do not offer under their own name.
 // A record that becomes reachable from a site must move out of this list (D6).
 const NOT_OFFERED: Readonly<Record<string, string>> = {
-  "openai/gpt-3.5-turbo-instruct": "API completion model",
-  "openai/gpt-35-turbo": "Azure name of gpt-3.5-turbo",
-  "openai/gpt-35-turbo-16k": "Azure name of an API snapshot",
-  "openai/gpt-35-turbo-instruct": "Azure name of an API completion model",
-  "openai/gpt-3.5-turbo-16k": "API snapshot",
-  "openai/gpt-4-turbo": "API name; ChatGPT labelled it gpt-4",
-  "openai/gpt-4.1-nano": "API only",
-  "openai/gpt-4o-mini-search-preview": "API search model",
-  "openai/gpt-4o-search-preview": "API search model",
   "openai/gpt-4o-mini-transcribe": "speech input model, not generated output",
-  "openai/gpt-5-chat-latest":
-    "API alias of the ChatGPT instant model (B4 maps instant to gpt-5)",
-  "openai/gpt-5.1-chat-latest": "API alias of the ChatGPT instant model",
-  "openai/gpt-5.2-chat-latest": "API alias of the ChatGPT instant model",
-  "openai/gpt-5.3-chat-latest": "API alias of the ChatGPT instant model",
-  "openai/gpt-5-codex": "Codex model, outside the browser apps (E9)",
-  "openai/gpt-5.1-codex": "Codex model, outside the browser apps (E9)",
-  "openai/gpt-5.1-codex-max": "Codex model, outside the browser apps (E9)",
-  "openai/gpt-5.1-codex-mini": "Codex model, outside the browser apps (E9)",
-  "openai/gpt-5.2-codex": "Codex model, outside the browser apps (E9)",
   // gpt-5.3-codex, gpt-5.4-nano, gemini-3-pro-image-preview and gemini-3.1-flash-image-preview
   // stand in for unknown variants (owner decision of 14 October 2026), so they are reachable.
   "openai/gpt-5-search-api": "API search model",
-  "openai/o4-mini-deep-research":
-    "API research model; Deep Research names its own model (E1)",
   "google_genai/gemini-2.5-flash-image":
     "image model; images use the image method (D1)",
   "google_genai/gemini-3.1-flash-lite":
@@ -105,6 +84,31 @@ test("D6 every OpenAI, Anthropic and Google record is reachable or listed as not
   for (const key of Object.keys(NOT_OFFERED)) {
     const [provider, name] = key.split("/") as [string, string];
     assert.ok(findModel(provider, name), `stale not-offered entry ${key}`);
+  }
+});
+
+// Upstream removed these records on 19 November 2026. Each id uses the remaining record whose
+// figure is closest at 100, 500 and 2000 output tokens (owner approval of 22 November 2026).
+test("retired OpenAI models use the record closest in figures", () => {
+  const fallback = methods.ecoDefinition.fallback;
+  for (const [id, record] of [
+    ["chatgpt-gpt-3-5", "gpt-5-mini"],
+    ["chatgpt-gpt-4", "gpt-6-astra"],
+    ["chatgpt-o1", "gpt-6.1-sol"],
+    ["chatgpt-o3-mini", "gpt-4o-mini"],
+    ["chatgpt-o4-mini", "gpt-4o-mini"],
+    ["perplexity-o4-mini", "gpt-4o-mini"],
+  ] as const) {
+    assert.equal(Object.hasOwn(methods.mappings.bindings, id), false, id);
+    assert.deepEqual(
+      fallback.model_overrides[id],
+      {
+        strategy: "upstream_profile",
+        profile: { provider: "openai", model_name: record, workload: "text" },
+        basis: "nearest_record",
+      },
+      id,
+    );
   }
 });
 

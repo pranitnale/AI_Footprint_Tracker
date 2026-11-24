@@ -12,11 +12,13 @@ import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { extractTarGz, jsonBytes, readJson } from "../lib/common.mjs";
+import { jsonBytes, readJson } from "../lib/common.mjs";
 import {
   acceptedRelease,
+  acceptedSelection,
   archiveDirectory,
   copyCore,
+  extractAcceptedSource,
   runNode,
 } from "./helpers.mjs";
 
@@ -63,9 +65,11 @@ async function dependencies(target) {
   }
 }
 
-for (const kind of ["release_candidate", "qualified_combination"])
+// "accepted" stages the lock's own release or qualified combination again, which must change
+// nothing; "qualified_combination" adds a synthetic record on top of the accepted catalog.
+for (const kind of ["accepted", "qualified_combination"])
   test(
-    `RL16 RL23 ${kind} adoption reaches the default product view and preserves Original`,
+    `RL16 RL23 ${kind === "accepted" ? `accepted ${release.kind}` : kind} adoption reaches the default product view and preserves Original`,
     {
       timeout: 180_000,
       skip: release.available
@@ -78,7 +82,7 @@ for (const kind of ["release_candidate", "qualified_combination"])
       const before = await productCopy(root, "before");
       const after = await productCopy(root, "after");
       const candidate = join(root, "upstream-candidate");
-      await extractTarGz(release.sourceArchive, candidate);
+      await extractAcceptedSource(release, candidate);
       const modelPath = join(candidate, "ecologits/data/models.json");
       const catalog = await readJson(modelPath);
       const direct = structuredClone(
@@ -113,18 +117,14 @@ for (const kind of ["release_candidate", "qualified_combination"])
                 "b".repeat(40),
                 "--qualified-label",
                 "product-adoption-proof",
-              ]
-            : ["--commit", release.commit]),
-          "--python-project",
-          join(core, "oracle"),
-          ...(kind === "qualified_combination"
-            ? [
                 "--core-source-archive",
                 release.sourceArchive,
                 "--catalog-source-archive",
                 catalogArchive,
               ]
-            : ["--source-archive", release.sourceArchive]),
+            : acceptedSelection(release)),
+          "--python-project",
+          join(core, "oracle"),
           "--package-archive",
           release.packageArchive,
         ],

@@ -238,6 +238,15 @@ export type FailedAnswer = Error & {
   serverCode?: string;
   code?: string;
 };
+/**
+ * How a connection that lost access is held. A revoked token family (refresh_reuse_detected) is
+ * no removal: the server saw a replaced token again, for example after a refresh answer was lost
+ * on the way (11 Nov 2026). Settings then says the connection ended, not that an administrator
+ * removed the browser.
+ */
+function endedState(error: unknown): "revoked" | "reconnect_needed" {
+  return serverErrorCode(error) === "refresh_reuse_detected" ? "reconnect_needed" : "revoked";
+}
 /** Whether a failed call means this browser lost access to the organization. */
 export function isAccessEnded(error: unknown): boolean {
   return (
@@ -510,7 +519,13 @@ export class CompanyClient {
       throw new Error(
         "Enter your work email, for example name@your-organization.com.",
       );
-    if (await this.credentials())
+    // A connection the server ended (revoked, or tokens it no longer knows) stays stored so
+    // Settings can say why; it must not block connecting again (owner bug report, 22 Nov 2026).
+    const current = await this.credentials();
+    const ended =
+      current?.enrollment_state === "revoked" ||
+      current?.enrollment_state === "reconnect_needed";
+    if (current && !ended)
       throw new Error("Disconnect this company before connecting another.");
     const prior = await this.pending();
     // A code the server accepted holds a connection there; it is cancelled, not replaced. A
@@ -555,7 +570,35 @@ export class CompanyClient {
       retry_at: result.retry_at,
       state: "code_sent",
     };
-    await this.repository.applySessionChanges({ pendingConnection: pending });
+    if (!current || !ended) {
+      await this.repository.applySessionChanges({ pendingConnection: pending });
+      return pending;
+    }
+    // The ended link becomes what Disconnect leaves behind, without asking the server, which
+    // already ended it: verifyCode offers it for resuming and the server decides whether this
+    // browser keeps its id or connects as a new one. Done only once the server sent a code, so
+    // a failed request keeps the explanation in Settings.
+    await this.repository.applySessionChanges(
+      {
+        pendingConnection: pending,
+        credentials: null,
+        reconnects: [
+          {
+            origin: current.origin,
+            value: {
+              ...current,
+              disconnect_pending: false,
+              disconnect_operation_id: crypto.randomUUID(),
+              access_token: "",
+              refresh_token: "",
+            },
+          },
+        ],
+        refreshOperation: null,
+        pendingPolicy: null,
+      },
+      { deviceId: current.device_id, refreshToken: current.refresh_token },
+    );
     return pending;
   }
   /**
@@ -810,6 +853,11 @@ export class CompanyClient {
       ...c,
       disconnect_pending: true,
       disconnect_operation_id: crypto.randomUUID(),
+      // A refresh whose answer never arrived is repeated with the same operation id: the server
+      // answers that repeat again, while a new id for the same old token is a reuse that revokes
+      // the browser (11 Nov 2026).
+      disconnect_refresh_id:
+        (await this.repository.readRefreshOperation())?.id ?? null,
     };
     const history = await this.repository.readOwnershipHistory();
     const personal = await this.repository.readPersonal();
@@ -983,7 +1031,7 @@ export class CompanyClient {
       this.paused = false;
       return result;
     } catch (error) {
-      if (isAccessEnded(error)) await this.holdEnrollment(c, "revoked");
+      if (isAccessEnded(error)) await this.holdEnrollment(c, endedState(error));
       else if (isSharingPaused(error)) this.paused = true;
       throw error;
     }
@@ -1382,7 +1430,19 @@ export class CompanyClient {
         await this.repository.health(c.namespace, "deletion_in_progress");
         return;
       }
-    } catch {
+    } catch (error) {
+      // The server no longer knows this browser's receipt: its organization was purged, or its
+      // browsers were removed by hand (29 Oct 2026). Every sync stopped here while the browser
+      // still said "Connected", so the connection ends and Connect is offered instead.
+      // An ended connection keeps its own reason and is not reported again at every sync.
+      if (
+        (error as FailedAnswer | null)?.status === 403 &&
+        serverErrorCode(error) === "deletion_receipt_denied"
+      ) {
+        if (!c.enrollment_state || c.enrollment_state === "active")
+          await this.holdEnrollment(c, "reconnect_needed");
+        return;
+      }
       await this.repository.health(c.namespace, "deletion_in_progress");
       return;
     }
@@ -1631,7 +1691,7 @@ export class CompanyClient {
     error: unknown,
     otherwise: "policy_unavailable" | "sync_delayed",
   ) {
-    if (isAccessEnded(error)) await this.holdEnrollment(c, "revoked");
+    if (isAccessEnded(error)) await this.holdEnrollment(c, endedState(error));
     else if ((error as any)?.status === 401)
       await this.holdEnrollment(c, "reconnect_needed");
     else if (isSharingPaused(error)) {

@@ -735,24 +735,59 @@ test("actual client enrollment and authenticated bundle delivery through SQLite 
     await c.history.sync();
     assert.equal((await db.pendingHistory(historyScope)).length, 0);
     assert.equal((await db.pendingHistoryCoverage(historyScope)).length, 0);
-    let loaded = await c.routeSummary(
+    // Recalculation must finish before a coherent remote pair replaces local data. A method that
+    // is not the server's default still waits for this member's own recalculation after the
+    // upload, on the endpoints the pair is read from (same readiness check, personal).
+    const signedQuery = `?period=all&calculation_view=recalculated&method_id=${info.methodId}`;
+    // The reconnect above is a new connection, whose signed methods are read again first, as
+    // after the first connect.
+    assert.equal(
+      (await c.refreshMethods()).methods.some((m) => m.id === info.methodId),
+      true,
+    );
+    await assert.rejects(
+      c.selectedServerSummary("my", signedQuery),
+      /recalculation_pending/,
+    );
+    // Since 23 Nov 2026 the server calculates an upload in its default method inside the upload,
+    // and its organization job for that method completed at the earlier worker tick. The packaged
+    // method's pair is therefore ready at once, without another worker tick, and both parts name
+    // that one method.
+    const packaged = c.engines.methods.ecologits;
+    const loaded = await c.routeSummary(
       "claude",
       historyConversation,
       historyBinding(),
     );
-    assert.equal(loaded.conversation.server, null);
-    assert.equal(loaded.history.server, null);
     assert.equal(loaded.history.local.observed_response_count, "1");
-    // Recalculation must finish before a coherent remote pair replaces local data.
+    assert.ok(loaded.conversation.server);
+    assert.equal(
+      (loaded.conversation.server as { method_hash?: unknown }).method_hash,
+      packaged.method_hash,
+    );
+    assert.ok(loaded.history.server?.resources.length);
+    for (const resource of loaded.history.server!.resources)
+      assert.equal(resource.method_hash, packaged.method_hash);
     await c.engines.maintainOrganization();
-    for (let pass = 0; pass < 3 && !loaded.history.server; pass++) {
+    // A worker tick advances an organization's jobs from a saved cursor in job-id order and wraps
+    // only when no job is left after it (cursor_page in apps/server/aift/maintenance.py). Job ids
+    // are random, so when a job created since the previous tick sorts after the cursor, the next
+    // tick advances only that one and the signed job follows a tick later. So up to three ticks
+    // are allowed, as the earlier wait for the pair did.
+    let signed: Awaited<ReturnType<typeof c.selectedServerSummary>> | undefined;
+    for (let pass = 0; pass < 3 && !signed; pass++) {
       await call({ advance_worker: true });
-      loaded = await c.routeSummary(
-        "claude",
-        historyConversation,
-        historyBinding(),
-      );
+      signed = await c.selectedServerSummary("my", signedQuery).catch((error) => {
+        if (error instanceof Error && error.message === "recalculation_pending")
+          return undefined;
+        throw error;
+      });
     }
+    assert.equal(
+      signed?.calculation.view,
+      "recalculated",
+      "the other method is ready once the worker recalculated this member's records",
+    );
     assert.equal(loaded.summary.requests, 0);
     assert.equal(loaded.history.local.observed_response_count, "1");
     assert.equal(loaded.history.server?.observed_response_count, "1");

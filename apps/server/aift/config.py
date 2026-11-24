@@ -34,8 +34,20 @@ class Settings:
     operator_emails: tuple[str, ...] = ()
     extension_origins: tuple[str, ...] = ()
     trusted_proxy_cidrs: tuple[str, ...] = ()
+    # "smtp" sends through any standard mail server, "brevo" through Brevo's HTTP API (24 Nov 2026:
+    # both stay supported). The default stays "brevo" so a settings file written before SMTP support
+    # keeps its meaning; the example settings file chooses "smtp".
     mail_adapter: str = "brevo"
-    brevo_key: str = ""
+    mail_sender: str = ""
+    smtp_host: str = ""
+    smtp_port: int = 587
+    # "starttls" upgrades the connection on the submission port; "tls" is encrypted from the start
+    # (usually port 465). An unencrypted connection is not offered.
+    smtp_security: str = "starttls"
+    smtp_username: str = ""
+    smtp_password: str = field(default="", repr=False)
+    brevo_key: str = field(default="", repr=False)
+    # The older name of mail_sender, still read when mail_sender is empty.
     brevo_sender: str = ""
     ip_retention_days: int | None = None
     member_capacity: int | None = None
@@ -86,6 +98,12 @@ class Settings:
             raise ValueError("configuration_required: registration mail share below the global budget")
         if self.mode == "self_hosted" and not self.self_host_origin:
             raise ValueError("configuration_required: self_host_origin")
+        if self.mail_adapter not in {"smtp", "brevo", "fake"}:
+            raise ValueError("configuration_required: mail_adapter is smtp, brevo or fake")
+        if self.smtp_security not in {"starttls", "tls"}:
+            raise ValueError("configuration_required: smtp_security is starttls or tls")
+        if not isinstance(self.smtp_port, int) or not 1 <= self.smtp_port <= 65535:
+            raise ValueError("configuration_required: smtp_port")
         if self.environment == "production":
             essentials = [
                 self.database_url.startswith("postgresql"),
@@ -104,9 +122,10 @@ class Settings:
                 self.support_contact,
                 self.privacy_contact,
                 self.security_contact,
-                self.mail_adapter == "brevo",
-                self.brevo_key,
-                self.brevo_sender,
+                self.mail_adapter in {"smtp", "brevo"},
+                self.sender,
+                self.smtp_host or self.mail_adapter != "smtp",
+                self.brevo_key or self.mail_adapter != "brevo",
                 self.operator_risk_accepted or self.mode == "self_hosted",
             ]
             if not all(essentials):
@@ -126,6 +145,11 @@ class Settings:
             raise ValueError("configuration_required: member capacity")
         if self.ip_collection_enabled and (not self.ip_retention_days or self.ip_retention_days < 1):
             raise ValueError("configuration_required: IP retention")
+
+    @property
+    def sender(self):
+        """The From address of code emails, for both mail adapters."""
+        return self.mail_sender or self.brevo_sender
 
     def ip_keyring(self):
         import re

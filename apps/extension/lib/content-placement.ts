@@ -7,6 +7,44 @@ export function placeFootprintHosts(
   form.insertAdjacentElement("afterend", barHost);
 }
 
+const RGB = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:\s*[,/]\s*([\d.]+)(%?))?\s*\)$/i;
+
+/**
+ * The colour the page draws behind the bar, so the bar can paint the same colour and chat text
+ * scrolled behind it never shows through (owner request, 22 November 2026). The nearest
+ * ancestor with a background wins; a see-through one is blended over the colour behind it. The
+ * colour comes from the page, not from a table per site. Null when the page names none (or only
+ * see-through layers), which leaves the page's own canvas colour to the bar.
+ */
+export function surfaceBehind(
+  host: Element,
+  readBackground: (element: Element) => string = (element) =>
+    element.ownerDocument.defaultView?.getComputedStyle(element).backgroundColor ?? "",
+): string | null {
+  const veils: number[][] = [];
+  let depth = 0;
+  for (let element = host.parentElement; element && depth < 40; element = element.parentElement, depth++) {
+    const value = readBackground(element).trim();
+    if (!value || value === "transparent") continue;
+    const match = RGB.exec(value);
+    // A newer notation (oklch, color()) cannot be blended here, so it is used as written.
+    if (!match) return value;
+    const alpha = match[4] === undefined ? 1 : Number(match[4]) / (match[5] ? 100 : 1);
+    if (alpha <= 0) continue;
+    const channels = [Number(match[1]), Number(match[2]), Number(match[3])];
+    if (alpha < 1) {
+      veils.push([...channels, alpha]);
+      continue;
+    }
+    const [red, green, blue] = veils.reduceRight(
+      (below, [r, g, b, a]) => [r! * a! + below[0]! * (1 - a!), g! * a! + below[1]! * (1 - a!), b! * a! + below[2]! * (1 - a!)],
+      channels,
+    );
+    return `rgb(${Math.round(red!)}, ${Math.round(green!)}, ${Math.round(blue!)})`;
+  }
+  return null;
+}
+
 type ComposerSite =
   "chatgpt" | "claude" | "gemini" | "perplexity" | "notebooklm";
 
@@ -50,8 +88,9 @@ const CHATGPT_FALLBACK_EDITOR_SELECTOR =
   'form div.ProseMirror[contenteditable="true"][role="textbox"]';
 const CLAUDE_COMPOSER_SELECTOR =
   'fieldset[data-perf-region="composer"][data-cds-dock-group]';
+// Perplexity dropped the editor's ask-input id (live, 3 Nov 2026); its role and Lexical mark remain.
 const PERPLEXITY_EDITOR_SELECTOR =
-  'div#ask-input[role="textbox"][contenteditable="true"][data-lexical-editor="true"]';
+  'div[role="textbox"][contenteditable="true"][data-lexical-editor="true"]';
 const PERPLEXITY_SUBMIT_SELECTOR = 'button[type="button"][aria-label="Submit"]';
 // The composer box was data-appearance="raised" on 12 October 2026 and "framed" on 16 October.
 const PERPLEXITY_BOX_SELECTOR =

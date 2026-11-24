@@ -114,10 +114,19 @@ const optionalMessageKeys = (m: object) => [
     "inputImages",
     "coverageReasons",
     "cumulative",
+    "chat",
+    "research",
+    "handoff",
     "computerFiles",
     "contentId",
   ].filter((key) => Object.hasOwn(m, key)),
 ];
+/** The saved chat messages a Claude session turn stands for: two different message ids. */
+const validChatTurn = (value: unknown) =>
+  exact(value, ["prompt", "reply"]) &&
+  uuid(value.prompt) &&
+  uuid(value.reply) &&
+  value.prompt !== value.reply;
 const ASSET_ID = /^[A-Za-z0-9_-]{1,128}$/;
 /**
  * The largest size a Perplexity Computer text file may state, and the largest the text
@@ -419,6 +428,14 @@ export function validHistoryTextPage(value: unknown): value is HistoryTextPage {
           m.role !== "response" ||
           !validCoworkCumulative(m.cumulative)
         : cowork && m.role === "response") ||
+      // Only a Cowork event page names the chat messages a turn stands for.
+      (Object.hasOwn(m, "chat") && (!cowork || !validChatTurn(m.chat))) ||
+      // Only a reply of a Cowork event page says that it launched a Research task.
+      (Object.hasOwn(m, "research") &&
+        (!cowork || m.role !== "response" || m.research !== true)) ||
+      // Only a reply of a Cowork event page says that it is a chat's converting turn.
+      (Object.hasOwn(m, "handoff") &&
+        (!cowork || m.role !== "response" || m.handoff !== true)) ||
       !sourceId(value.site, m.sourceId, m.role) ||
       !["prompt", "response"].includes(m.role) ||
       !nullableId(value.site, m.promptSourceId, "prompt") ||

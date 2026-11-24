@@ -4,9 +4,10 @@
  * may ask a site for the messages of an opened chat that the page did not load. With it off the
  * tracker still counts everything the site loads by itself. One main switch and one switch per site; both are on
  * by default, and an installation saved before this setting existed has neither field, which
- * reads as on. Claude Cowork has its own switch although its read runs on claude.ai: its
- * sessions are told apart from chats by their id (`cse_...`), so the person can keep one off
- * and the other on.
+ * reads as on. Since 22 November 2026 claude.ai has one switch, "Claude", for its chats and
+ * its Cowork sessions: the merged app opens both at one address, so they cannot be told apart
+ * reliably. An installation that saved a separate Cowork value reads as off when either old
+ * switch was off, and its next save drops the old value.
  *
  * Perplexity Computer file downloads are a separate feature and do not read this setting.
  */
@@ -14,7 +15,6 @@
 export const OWN_READ_SETTING_KEYS = [
   "chatgpt",
   "claude",
-  "cowork",
   "gemini",
   "perplexity",
   "notebooklm",
@@ -25,7 +25,6 @@ export type OwnReadSettingKey = (typeof OWN_READ_SETTING_KEYS)[number];
 export const OWN_READ_SETTING_NAMES: Record<OwnReadSettingKey, string> = {
   chatgpt: "ChatGPT",
   claude: "Claude",
-  cowork: "Claude Cowork",
   gemini: "Gemini",
   perplexity: "Perplexity",
   notebooklm: "NotebookLM",
@@ -59,7 +58,11 @@ export function ownReadSettings(stored: {
   return {
     ownRead: stored.ownRead !== false,
     ownReadSites: Object.fromEntries(
-      OWN_READ_SETTING_KEYS.map((key) => [key, sites[key] !== false]),
+      OWN_READ_SETTING_KEYS.map((key) => [
+        key,
+        // Before 22 Nov 2026 Cowork had its own switch; one off switch keeps Claude off.
+        sites[key] !== false && (key !== "claude" || sites.cowork !== false),
+      ]),
     ) as Record<OwnReadSettingKey, boolean>,
   };
 }
@@ -86,9 +89,8 @@ export function validOwnReadSites(
   );
 }
 
-/** The switches that may govern reads on a site: claude.ai serves Claude and Cowork. */
+/** The switch that governs reads on a site. */
 export function ownReadSettingKeys(site: string | null | undefined): OwnReadSettingKey[] {
-  if (site === "claude") return ["claude", "cowork"];
   return isKey(site) ? [site] : [];
 }
 

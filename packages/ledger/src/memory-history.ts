@@ -18,6 +18,8 @@ import {
   historyCoverageChanged,
   checkedCountBases,
   checkedCompanyKeys,
+  checkedReplaced,
+  checkedExactInputs,
   checkedCoworkCheckpoint,
   validCoworkAdvance,
   liveReplyContent,
@@ -219,6 +221,8 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
         guard = clone(expected);
       const bases = checkedCountBases(page, guard.countBases);
       const companyKeys = checkedCompanyKeys(page, guard.companyKeys);
+      const replaced = checkedReplaced(page, guard.replaced);
+      const exactInputs = checkedExactInputs(page, guard.exactInputs);
       if (guard.cowork !== undefined && !validCoworkAdvance(guard.cowork))
         throw new Error("payload_rejected");
       if (
@@ -282,13 +286,25 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
             });
           }
           let retained = 0,
-            committed = 0;
+            committed = 0,
+            replacedRows = 0;
           for (const record of page.messages) {
             const observed = Date.parse(record.observed_at);
             if (observed < r.ownership.start || observed > k.now() + 300000)
               throw new Error("policy_unavailable");
             if (historyErased(s, scope, record)) continue;
             retained++;
+            // An exact row replaces the text row it names (as in the IndexedDB ledger).
+            const replaces = replaced[record.message_key];
+            for (const name of replaces ?? []) {
+              const textKey = `${scope.namespace}:history:${name}`;
+              if (!s.erasedHistory.get(textKey)?.replaced)
+                s.erasedHistory.set(textKey, { at: k.now(), replaced: true });
+              const text = s.histories.get(textKey);
+              if (!text) continue;
+              removeHistory(s, text, false);
+              replacedRows++;
+            }
             const key = `${scope.namespace}:history:${record.message_key}`,
               old = s.histories.get(key);
             if (
@@ -335,9 +351,13 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
                 ? undefined
                 : companyKeys[record.message_key];
               if (companyKey) updated.companyKey = companyKey;
-              if (updated.countBasis !== old!.countBasis || companyKey)
+              const named =
+                replaces &&
+                canonicalJson(old!.replaces ?? null) !== canonicalJson(replaces);
+              if (named) updated.replaces = replaces;
+              if (updated.countBasis !== old!.countBasis || companyKey || named)
                 s.histories.set(key, updated);
-              if (companyKey && scope.mode === "company") {
+              if ((companyKey || named) && scope.mode === "company") {
                 const { countBasis: _local, ...queued } = updated;
                 s.historyQueue.set(key, {
                   row: {
@@ -394,6 +414,15 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
             const companyKey =
               old?.companyKey ?? companyKeys[record.message_key];
             if (companyKey) row.companyKey = companyKey;
+            if (replaces ?? old?.replaces)
+              row.replaces = replaces ?? old!.replaces;
+            // As in the IndexedDB ledger: the input counts describe the saved record.
+            const exactInput =
+              mode === "conflict"
+                ? old!.exactInput
+                : (exactInputs[record.message_key] ??
+                  (mode === "duplicate" ? old?.exactInput : undefined));
+            if (exactInput) row.exactInput = exactInput;
             s.histories.set(key, row);
             committed++;
             const sourceScope = rowScope(row);
@@ -466,7 +495,8 @@ export function createMemoryHistory(k: MemoryKernel): HistoryStorageRepository {
           }
           // Reopening a chat re-imports unchanged messages. Leaving the epoch alone keeps
           // concurrent totals reads and calculation guards from retrying for no change.
-          if (committed || coverageChanged) invalidate(s, scope.namespace);
+          if (committed || coverageChanged || replacedRows)
+            invalidate(s, scope.namespace);
           if (!validNow()) throw new Error("policy_unavailable");
         },
         () => {

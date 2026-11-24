@@ -742,6 +742,8 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   // Pinned again on 22 October 2026 for EcoLogits 0.11.3: both input hashes name the catalog and
   // policy, and the totals include 120 GPT-5.5 text tokens, whose speeds changed. The image
   // component and the Original figures are the same as before.
+  // Pinned again on 23 November 2026 for the catalog of 19 November 2026: the input hash names
+  // the new catalog and policy, and the totals move with GPT-5.5's new measured speed.
   const input = live("chatgpt", "chatgpt-gpt-5-5", "120", {
     text_components: [],
     media: [
@@ -805,14 +807,14 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   const result = await estimate(observed);
   assert.equal(
     result.input_hash,
-    "2150c0f0dfef18dc0960a3a318a9f65fb52962ead4c5c62f600aaec811b33126",
+    "d2033d8d792bede8d37249f7e7ff2638d29bbe77e58f9482952f839ba1f34e85",
   );
   assert.deepEqual(figures(result.metrics), {
-    energy: ["0.007807211471370187", "0.0075317062562485874", "0.008082716686491787"],
-    carbon: ["3.0010920895947004", "2.8951878849019574", "3.106996294287443"],
+    energy: ["0.007787687081126284", "0.007512181866004685", "0.008063192296247884"],
+    carbon: ["2.9935869139849443", "2.8876827092922013", "3.099491118677687"],
     water_direct: none,
     water_upstream: none,
-    water_total: ["0.02815488648881993", "0.027161341215034076", "0.029148431762605783"],
+    water_total: ["0.028084476331096352", "0.0270909310573105", "0.029078021604882206"],
   });
   assert.deepEqual(figures(component(result.components, "image_0").metrics), {
     energy: ["0.006976799999999999", null, null],
@@ -828,7 +830,7 @@ test("D1 image figures and input hashes stay the same after the image benchmark 
   EstimationEnvelopeSchema.parse(original);
   assert.equal(
     original.input_hash,
-    "ca98a045f25c01c414e8894da4f060cacc0c276c31d56710dc4bc08a9b1e6ef1",
+    "c098a611caf22516da878f9c1233a83ff137686f9b75b159ceb71d6e79396a0f",
   );
   assert.deepEqual(figures(original.metrics), {
     energy: ["0.000093361070985012", null, null],

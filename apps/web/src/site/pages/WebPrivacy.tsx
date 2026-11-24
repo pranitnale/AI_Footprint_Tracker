@@ -46,7 +46,7 @@ export function WebPrivacyPage({ navigate }: { navigate: Navigate }) {
           <p className="p">When several colleagues see the same message, it should count once. Your browser sends a keyed fingerprint of the site's message id for this, never the id itself.</p></div>
         <div className="card pc">
           <b className="dsp" style={{ "fontSize": "20px" }}>Signing in</b>
-          <p className="p">Your work email is stored apart from usage records. Brevo delivers the one-time sign-in codes and never receives usage or chat content.</p></div></section>
+          <p className="p">Your work email is stored apart from usage records. Our own mail server delivers the one-time sign-in codes, with Brevo as a fallback. Neither receives usage or chat content.</p></div></section>
       <section className="wrap" style={{ "paddingBottom": "40px" }}>
         <div style={{ "display": "flex", "gap": "16px", "alignItems": "flex-start", "padding": "20px 24px", "borderRadius": "20px", "background": "#E7EFF8", "color": "#173F66" }}>
           <svg className="i" viewBox="0 0 24 24" style={{ "width": "24px", "height": "24px", "color": "#1D4F80", "marginTop": "2px" }}><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" /></svg>

@@ -6,7 +6,7 @@ import { dom } from "./dom-env";
 import React from "react";
 import { act, cleanup, configure, fireEvent, render, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { dashboard as dashboardFixture, fakeTransport, serverHistory, type Scenario } from "./ui-fixtures";
+import { dashboard as dashboardFixture, fakeTransport, serverHistory, serverSummary as summaryFixture, type Scenario } from "./ui-fixtures";
 import type { Transport } from "../lib/dashboard/client";
 import { ORG_RECHECK_MS } from "../lib/dash/OrgOverview";
 import { serverHistoryView, validatedSummary, withSplitHistoryViews } from "../lib/server-summary";
@@ -343,14 +343,13 @@ test("Load full chat history has a main switch and a checkbox per site, all on b
   const boxes = within(sites).getAllByRole("checkbox") as HTMLInputElement[];
   assert.deepEqual(
     boxes.map((box) => [box.closest("label")!.textContent, box.checked]),
-    [["ChatGPT", true], ["Claude", true], ["Claude Cowork", true], ["Gemini", true], ["Perplexity", true], ["NotebookLM", true]],
+    [["ChatGPT", true], ["Claude", true], ["Gemini", true], ["Perplexity", true], ["NotebookLM", true]],
   );
   await user().click(within(sites).getByRole("checkbox", { name: "Perplexity" }));
   await view().findByText("Full chat history no longer loads automatically on Perplexity");
   assert.deepEqual(lastChanges(calls).ownReadSites, {
     chatgpt: true,
     claude: true,
-    cowork: true,
     gemini: true,
     perplexity: false,
     notebooklm: true,
@@ -585,6 +584,85 @@ test("a connection the organization ended says so in Settings and offers to conn
   cleanup();
   await show({ dashboard: { ended: "reconnect_needed" } }, { hash: "settings" });
   assert.ok(await view().findByText(/^The connection to Example Consulting has ended/));
+  cleanup();
+  // The server still holds this connection, but the browser no longer lets the extension reach it.
+  await show({ dashboard: { ended: "permission_missing" } }, { hash: "settings" });
+  assert.ok(await view().findByText(/^This browser no longer lets the extension reach the server of Example Consulting/));
+  assert.equal(view().queryByText(/^Not connected\./), null);
+  assert.ok(view().getByRole("button", { name: /^Connect again$/ }));
+});
+
+test("the organization page says why a connection ended instead of plain Not connected (22 Nov 2026)", async () => {
+  for (const [ended, text] of [
+    ["revoked", /^This browser was removed from Example Consulting/],
+    ["reconnect_needed", /^The connection to Example Consulting has ended/],
+    ["permission_missing", /^This browser no longer lets the extension reach the server of Example Consulting/],
+  ] as const) {
+    // The organization side of the overview, where a browser outside organization mode is offered Connect.
+    await show({ dashboard: { ended } }, { prefs: { "ui:dashboard": { scope: "org" } } });
+    await view().findByRole("heading", { name: "See your organization's AI footprint together" });
+    assert.ok(view().getByText(text));
+    assert.equal(view().queryByText("Not connected"), null);
+    assert.ok(view().getByText("Disconnected"));
+    assert.ok(view().getByRole("button", { name: /Connect again/ }));
+    cleanup();
+  }
+});
+
+test("a refused code request shows its error with a usable button, never beside Waiting for the browser (22 Nov 2026)", async () => {
+  const base = fakeTransport();
+  let refused = false;
+  const transport: Transport = async (action, payload) => {
+    if (action === "connect") {
+      refused = true;
+      throw new Error("Too many attempts from this browser. Wait a few minutes and try again.");
+    }
+    // The dashboard read after the refusal can take long; the dialog must not wait for it.
+    if (action === "dashboard" && refused) return new Promise(() => {});
+    return base(action, payload);
+  };
+  await show({}, { transport, hash: "settings" });
+  await view().findByRole("heading", { name: "Organization" });
+  await user().click(view().getByRole("button", { name: /^Connect$/ }));
+  const dialog = view().getByRole("dialog", { name: "Connect your organization" });
+  await enter(within(dialog).getByRole("textbox", { name: "Work email" }), "sam@example-consulting.com");
+  await user().click(within(dialog).getByRole("button", { name: "Continue" }));
+  const permission = view().getByRole("dialog", { name: "Allow the extension to reach the server" });
+  await user().click(within(permission).getByRole("button", { name: "Continue" }));
+  await within(permission).findByText(/Too many attempts from this browser/);
+  await waitFor(() => assert.equal(within(permission).queryByRole("button", { name: "Waiting for the browser" }), null));
+  assert.equal((within(permission).getByRole("button", { name: "Continue" }) as HTMLButtonElement).disabled, false);
+});
+
+test("connecting again starts from the saved connection's own server, not the hosted address", async () => {
+  const calls = await show({ dashboard: { ended: "permission_missing", companyOrigin: "https://aift.example.org" } }, { hash: "settings" });
+  await view().findByRole("heading", { name: "Organization" });
+  await user().click(view().getByRole("button", { name: /^Connect again$/ }));
+  const dialog = view().getByRole("dialog", { name: "Connect your organization" });
+  assert.equal((within(dialog).getByRole("textbox", { name: "Server address" }) as HTMLInputElement).value, "https://aift.example.org");
+  await enter(within(dialog).getByRole("textbox", { name: "Work email" }), "sam@example-consulting.com");
+  await user().click(within(dialog).getByRole("button", { name: "Continue" }));
+  const permission = view().getByRole("dialog", { name: "Allow the extension to reach the server" });
+  assert.match(permission.textContent!, /data on aift\.example\.org/);
+  await user().click(within(permission).getByRole("button", { name: "Continue" }));
+  await waitFor(() => assert.ok(calls.some((c) => c.action === "connect")));
+  assert.equal((calls.find((c) => c.action === "connect")!.payload as { origin: string }).origin, "https://aift.example.org");
+  assert.ok(await view().findByText(/^Connected to Example Consulting again\./));
+});
+
+test("Connect finishes at once when it only had to allow the extension to reach the server again", async () => {
+  const calls = await show({ dashboard: { ended: "permission_missing" } }, { hash: "settings" });
+  await view().findByRole("heading", { name: "Organization" });
+  await user().click(view().getByRole("button", { name: /^Connect again$/ }));
+  const dialog = view().getByRole("dialog", { name: "Connect your organization" });
+  await enter(within(dialog).getByRole("textbox", { name: "Work email" }), "sam@example-consulting.com");
+  await user().click(within(dialog).getByRole("button", { name: "Continue" }));
+  const permission = view().getByRole("dialog", { name: "Allow the extension to reach the server" });
+  await user().click(within(permission).getByRole("button", { name: "Continue" }));
+  await waitFor(() => assert.ok(calls.some((c) => c.action === "connect")));
+  assert.ok(await view().findByText(/^Connected to Example Consulting again\./));
+  assert.equal(view().queryByRole("dialog", { name: "Enter the code from your email" }), null);
+  assert.equal(calls.some((c) => c.action === "verify-code"), false);
 });
 
 test("disconnecting can sync first and then leaves organization mode", async () => {
@@ -793,6 +871,59 @@ test("the organization overview shows the saved copy at once with its age, then 
   assert.equal(orgChange(), null);
   releasePrevious();
   await waitFor(() => assert.match(orgChange() ?? "", /more than/));
+});
+
+/** A transport whose fresh "my" summary waits until released, then answers `fresh` (or fails). */
+function heldMine(scenario: Scenario, fresh: "figures" | "fail" = "figures") {
+  const base = fakeTransport(scenario);
+  let open!: () => void;
+  const gate = new Promise<void>((resolve) => (open = resolve));
+  const transport: Transport = async (action, payload) => {
+    if (action !== "my-summary" || /[?&]cached=only(&|$)/.test(String(payload?.query ?? ""))) return base(action, payload);
+    scenario.calls?.push({ action, payload });
+    await gate;
+    if (fresh === "fail") throw new Error("organization_unavailable");
+    return summaryFixture("my", { kwh: 2.5 });
+  };
+  return { transport, release: () => open() };
+}
+const yourPart = () => view().getByRole("region", { name: "Your part" });
+
+// Live, 23 Nov 2026: returning to a period showed "Your share is not available for this period"
+// for about 3 s, then the figure.
+test("your part says it is loading while your own figures load, never that they are unavailable", async () => {
+  const scenario: Scenario = { dashboard: { mode: "company" } };
+  const { transport, release } = heldMine(scenario);
+  await show(scenario, { transport, prefs: { "ui:dashboard": { scope: "org" } } });
+  await view().findByRole("heading", { name: "Your part" });
+  assert.match(yourPart().textContent!, /Loading your figures/);
+  assert.doesNotMatch(yourPart().textContent!, /not available/);
+  release();
+  await waitFor(() => assert.match(yourPart().textContent!, /2\.5/));
+});
+
+test("your part shows the saved copy of your figures at once, and the fresh answer replaces it", async () => {
+  const scenario: Scenario = { dashboard: { mode: "company" }, orgCached: SAVED, myCached: true };
+  const { transport, release } = heldMine(scenario);
+  await show(scenario, { transport, prefs: { "ui:dashboard": { scope: "org" } } });
+  await view().findByRole("heading", { name: "Your part" });
+  await waitFor(() => assert.match(yourPart().textContent!, /1\.04/));
+  assert.doesNotMatch(yourPart().textContent!, /not available|Loading your figures/);
+  // Saved and fresh copies of different ages never give a share over 100%.
+  for (const percent of yourPart().textContent!.match(/\d+(?=%)/g) ?? []) assert.ok(Number(percent) <= 100, percent);
+  release();
+  await waitFor(() => assert.match(yourPart().textContent!, /2\.5/));
+  assert.doesNotMatch(yourPart().textContent!, /1\.04/);
+});
+
+test("your part says your share is not available when your own figures could not load", async () => {
+  const scenario: Scenario = { dashboard: { mode: "company" } };
+  const { transport, release } = heldMine(scenario, "fail");
+  await show(scenario, { transport, prefs: { "ui:dashboard": { scope: "org" } } });
+  await view().findByRole("heading", { name: "Your part" });
+  release();
+  await waitFor(() => assert.match(yourPart().textContent!, /Your share is not available for this period\./));
+  assert.doesNotMatch(yourPart().textContent!, /Loading your figures/);
 });
 
 test("a saved organization copy goes when the fresh answer fails", async () => {

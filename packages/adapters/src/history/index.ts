@@ -30,6 +30,17 @@ export {
 export { ChatgptTurns, type ChatgptHistoryRow } from "./chatgpt";
 export { CoworkEvents, coworkRequest, validCoworkCumulative } from "./cowork";
 export {
+  claudeChatListLinks,
+  claudeLinkRequest,
+  claudeReadSessionLink,
+  claudeReadSessionRequest,
+  claudeSessionObject,
+  CLAUDE_READ_SESSION_ANSWER_BYTES,
+  validClaudeSessionTotals,
+  type ClaudeSessionLink,
+  type ClaudeSessionTotals,
+} from "./claude-session-link";
+export {
   claudeHistoryRow,
   claudePromptOf,
   claudeResearchTask,

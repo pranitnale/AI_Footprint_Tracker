@@ -307,7 +307,7 @@
             "strategy": "upstream_provider_flagship",
             "profile": {
               "provider": "openai",
-              "model_name": "gpt-5.2-chat-latest",
+              "model_name": "gpt-5.2",
               "workload": "text"
             }
           },
@@ -354,7 +354,7 @@
             "strategy": "upstream_provider_flagship",
             "profile": {
               "provider": "openai",
-              "model_name": "gpt-5.2-chat-latest",
+              "model_name": "gpt-5.2",
               "workload": "text"
             }
           },
@@ -421,7 +421,7 @@
             "strategy": "upstream_provider_flagship",
             "profile": {
               "provider": "openai",
-              "model_name": "gpt-5.2-chat-latest",
+              "model_name": "gpt-5.2",
               "workload": "text"
             }
           },

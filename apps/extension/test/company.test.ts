@@ -3,7 +3,7 @@ import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { countByTextLength, unavailableCount } from "./counting-fixture";
 import { archivedEstimation, settleStartup } from "./archived-engine-fixture";
-import { Ledger, digest, historyAuthority } from "@footprint/ledger";
+import { Ledger, digest, healthSolved, historyAuthority } from "@footprint/ledger";
 import {
   CompanyClient,
   companyOrigin,
@@ -152,7 +152,9 @@ async function setup() {
     else if (path === "/v1/deletions/status") {
       const instruction = {
         company_id: companyId,
-        device_id: deviceId,
+        // The browser the receipt names, as the server signs it; a browser connected again as a
+        // new one names its new device id.
+        device_id: body.device_id,
         deletion_epoch: 0,
         current_deletion_epoch: 0,
         has_more: false,
@@ -573,6 +575,35 @@ test("I06 refresh commits new credentials and operation completion atomically", 
   assert.equal(await s.db.application.readRefreshOperation(), undefined);
   s.db.close();
 });
+test("a refresh whose answer never arrived is repeated with the same operation id, also by Disconnect (23 Nov 2026)", async () => {
+  // The server answers a lost refresh again only for the same operation id; a new id for the same
+  // old token is a reuse and revokes the browser (production, 11 Nov 2026).
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  await expireAccess(s);
+  const lost = () =>
+    new Response("<html><body>Gateway timeout</body></html>", {
+      status: 504,
+      headers: { "Content-Type": "text/html" },
+    });
+  const refreshIds = () =>
+    s.calls
+      .filter((c) => new URL(c.url).pathname === "/v1/auth/refresh")
+      .map((c) => c.body.operation_id as string);
+  s.answer("/v1/auth/refresh", lost());
+  await s.client.sync();
+  const first = refreshIds();
+  assert.equal(first.length, 1);
+  // The next sync repeats it with the same id.
+  s.answer("/v1/auth/refresh", lost());
+  await s.client.sync();
+  assert.deepEqual(refreshIds(), [first[0], first[0]]);
+  // Disconnect needs a fresh access token first; it repeats the same refresh too.
+  s.answer("/v1/connections/disconnect", serverError("authentication_required", 401));
+  await s.client.disconnect();
+  assert.deepEqual(refreshIds(), [first[0], first[0], first[0]]);
+  s.db.close();
+});
 /**
  * An administrator removing this browser or suspending its member deletes the tokens on the server,
  * so the next call or refresh is refused. The connection must end once: held, personal mode, no
@@ -638,10 +669,9 @@ test("a refresh refused as enrollment_revoked ends the connection without retryi
 });
 test("every refusal that means this browser lost access ends the connection", async () => {
   // Checked against apps/server: enrollment_revoked (removed browser or member),
-  // refresh_reuse_detected (revoked token family), installation_required, identity_unavailable.
+  // installation_required, identity_unavailable.
   for (const code of [
     "enrollment_revoked",
-    "refresh_reuse_detected",
     "installation_required",
     "identity_unavailable",
   ]) {
@@ -650,6 +680,21 @@ test("every refusal that means this browser lost access ends the connection", as
     s.answer("/v1/config", serverError(code, 403));
     await s.client.sync();
     await assertConnectionEnded(s, "revoked", "enrollment_revoked");
+    s.db.close();
+  }
+});
+test("a revoked token family ends the connection without saying an administrator removed the browser (23 Nov 2026)", async () => {
+  // refresh_reuse_detected: the server saw a replaced token again, for example after a refresh
+  // answer was lost on the way (production, 11 Nov 2026). Nobody removed the browser, so Settings
+  // says the connection ended and offers Connect again, not "removed, ask your administrator".
+  for (const where of ["/v1/config", "/v1/auth/refresh"]) {
+    const s = await setup();
+    await connectCompany(s.client, s.origin);
+    if (where === "/v1/auth/refresh") await expireAccess(s);
+    s.answer(where, serverError("refresh_reuse_detected", 403));
+    await s.client.sync();
+    await assertConnectionEnded(s, "reconnect_needed", "auth_reconnect_required");
+    assert.equal(await connectCompany(s.client, s.origin), "connected");
     s.db.close();
   }
 });
@@ -845,6 +890,220 @@ test("the dashboard reports a removed connection in personal mode", async () => 
     const view = await coordinator.dashboard({});
     assert.equal(view.mode, "personal");
     assert.equal(view.company?.enrollment_state, "revoked");
+  } finally {
+    coordinator.engines.dispose();
+    s.db.close();
+  }
+});
+/** Ends the connection the way the server refuses it: a removed browser, or tokens it no longer knows. */
+async function endConnection(
+  s: Awaited<ReturnType<typeof setup>>,
+  state: "revoked" | "reconnect_needed",
+) {
+  if (state === "revoked")
+    s.answer("/v1/config", serverError("enrollment_revoked", 403));
+  else {
+    s.answer("/v1/config", serverError("authentication_required", 401));
+    s.answer("/v1/auth/refresh", serverError("authentication_required", 401));
+  }
+  await s.client.sync();
+  assert.equal((await s.client.credentials())?.enrollment_state, state);
+}
+test("a browser whose connection ended connects again with the same email (22 Nov 2026)", async () => {
+  // The Settings card says "Connect again" for both states; before this fix the code request
+  // refused with "Disconnect this company before connecting another" and there was no way out.
+  for (const state of ["revoked", "reconnect_needed"] as const) {
+    const s = await setup();
+    await connectCompany(s.client, s.origin);
+    await endConnection(s, state);
+    const before = s.calls.length;
+    assert.equal(await connectCompany(s.client, s.origin), "connected");
+    const create = s.calls
+      .slice(before)
+      .find((c) => new URL(c.url).pathname === "/v1/connections")!;
+    // The ended link is offered for resuming, as after Disconnect; the server decides whether the
+    // browser keeps its id or connects as a new one.
+    assert.equal(create.body.resume_device_id, s.credentials.device_id);
+    assert.equal(
+      create.body.installation_reconnect_secret,
+      s.credentials.installation_reconnect_secret,
+    );
+    const now = (await s.client.credentials())!;
+    assert.equal(now.enrollment_state ?? "active", "active");
+    assert.equal(now.access_token, s.credentials.access_token);
+    assert.equal(
+      (await s.db.get<any>("policy", "ownership-history")).eras.at(-1).scope.mode,
+      "company",
+    );
+    const sent = s.calls.length;
+    await s.client.sync();
+    assert.ok(
+      s.calls.slice(sent).some((c) => c.authorization !== null),
+      "the new connection shares again",
+    );
+    s.db.close();
+  }
+});
+test("an ended connection connects again to another address as a new browser, or as another member", async () => {
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  await endConnection(s, "revoked");
+  // Another organization's own server: the ended link belongs to the first one, so nothing of
+  // it is offered for resuming there.
+  const other = "https://other.example";
+  const calls: Array<{ path: string; body: any }> = [];
+  const client = new CompanyClient(s.db, (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = new URL(String(input));
+    assert.equal(url.origin, other);
+    calls.push({ path: url.pathname, body: init?.body ? JSON.parse(String(init.body)) : undefined });
+    return s.transport(s.origin + url.pathname, init);
+  }) as typeof fetch);
+  s.answer(
+    "/v1/connections",
+    verifiedConnection(other, s.credentials.deletion_public_key, { connectionId: "elsewhere" }),
+  );
+  const companyId = crypto.randomUUID(),
+    userId = crypto.randomUUID();
+  s.answer("/v1/connections/exchange", {
+    ...s.credentials,
+    company_id: companyId,
+    user_id: userId,
+    device_id: crypto.randomUUID(),
+    enrollment_era: { id: crypto.randomUUID(), start: new Date().toISOString(), end: null },
+  });
+  assert.equal(await connectCompany(client, other), "connected");
+  const create = calls.find((c) => c.path === "/v1/connections")!;
+  assert.equal("resume_device_id" in create.body, false);
+  assert.equal("installation_reconnect_secret" in create.body, false);
+  const now = (await client.credentials())!;
+  assert.equal(now.origin, other);
+  assert.equal(now.namespace, `company:${companyId}:${userId}`);
+  assert.equal(now.enrollment_state ?? "active", "active");
+  s.db.close();
+
+  // The same organization, signed in as another member: the server answers a new member and a
+  // new browser, and this browser keeps that connection under the new member.
+  const t = await setup();
+  await connectCompany(t.client, t.origin);
+  await endConnection(t, "reconnect_needed");
+  const member = crypto.randomUUID();
+  t.answer("/v1/connections/exchange", {
+    ...t.credentials,
+    user_id: member,
+    device_id: crypto.randomUUID(),
+    enrollment_era: { id: crypto.randomUUID(), start: new Date().toISOString(), end: null },
+  });
+  assert.equal(await connectCompany(t.client, t.origin), "connected");
+  const again = (await t.client.credentials())!;
+  assert.equal(again.namespace, `company:${t.credentials.company_id}:${member}`);
+  assert.equal(again.enrollment_state ?? "active", "active");
+  assert.equal(
+    (await t.db.get<any>("policy", "ownership-history")).eras.at(-1).scope.namespace,
+    again.namespace,
+  );
+  t.db.close();
+});
+test("a code request that fails keeps an ended connection as it was", async () => {
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  await endConnection(s, "reconnect_needed");
+  s.answer("/v1/connections/otp/request", serverError("otp_rate_limited", 429));
+  await assert.rejects(s.client.requestCode(s.origin, TEST_WORK_EMAIL));
+  assert.equal((await s.client.credentials())?.enrollment_state, "reconnect_needed");
+  assert.equal(await s.client.pending(), undefined);
+  s.db.close();
+});
+test("an active connection still refuses a second one", async () => {
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  await assert.rejects(
+    s.client.requestCode(s.origin, TEST_WORK_EMAIL),
+    /Disconnect this company before connecting another/,
+  );
+  s.db.close();
+});
+test("owner case of 22 Nov 2026: the server lost this browser, and the same email connects it again as a new browser", async () => {
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  await s.client.sync();
+  // The server forgot the browser's tokens (the 29 Oct 2026 reset deleted its device by hand).
+  await endConnection(s, "reconnect_needed");
+  // It answers the same person with a new browser, as apps/server does for a missing device.
+  const fresh = {
+    ...s.credentials,
+    device_id: crypto.randomUUID(),
+    access_token: "access-again",
+    refresh_token: "refresh-again",
+    installation_reconnect_secret: "n".repeat(43),
+    deletion_receipt_credential: "e".repeat(43),
+    enrollment_era: {
+      id: crypto.randomUUID(),
+      start: new Date().toISOString(),
+      end: null,
+    },
+  };
+  s.answer("/v1/connections/exchange", fresh);
+  assert.equal(await connectCompany(s.client, s.origin), "connected");
+  const now = (await s.client.credentials())!;
+  assert.equal(now.device_id, fresh.device_id);
+  assert.equal(now.enrollment_state ?? "active", "active");
+  assert.equal(now.namespace, s.credentials.namespace, "the same person");
+  const sent = s.calls.length;
+  await s.client.sync();
+  const later = s.calls.slice(sent);
+  assert.ok(
+    later.some(
+      (c) =>
+        new URL(c.url).pathname === "/v1/health/reports" &&
+        c.authorization === "Bearer access-again",
+    ),
+  );
+  assert.equal(
+    (await s.db.list<any>("health", s.credentials.namespace)).some(
+      (h) => h.code === "auth_reconnect_required" && !healthSolved(h),
+    ),
+    false,
+    "the renewal problem is solved once the new connection works",
+  );
+  s.db.close();
+});
+test("a deletion receipt the server no longer knows ends the connection instead of staying connected", async () => {
+  // A purged organization, or the 29 Oct 2026 reset, removes the browser's receipt: every sync
+  // stopped at the deletion check and the browser said "Connected" for good.
+  const s = await setup();
+  await connectCompany(s.client, s.origin);
+  s.answer("/v1/deletions/status", serverError("deletion_receipt_denied", 403));
+  await s.client.sync();
+  await assertConnectionEnded(s, "reconnect_needed", "auth_reconnect_required");
+  assert.equal(await connectCompany(s.client, s.origin), "connected");
+  s.db.close();
+});
+test("a connection whose server permission was removed and granted again in Connect works again without a code", async () => {
+  const s = await setup();
+  let consent = true;
+  const coordinator = new Coordinator(s.db, {
+    hasConsent: async () => consent,
+    count: unavailableCount,
+    sendDisplay: async () => {},
+    transport: s.transport,
+  });
+  try {
+    await connectCompany(coordinator.company, s.origin);
+    consent = false;
+    await coordinator.permissionRemoved();
+    const view = await coordinator.dashboard({});
+    assert.equal(view.mode, "personal");
+    assert.equal(view.company?.enrollment_state, "active");
+    // The Connect dialog asked the browser for the permission again before its code request.
+    consent = true;
+    assert.equal(await coordinator.connectionRestored(s.origin), true);
+    assert.equal((await coordinator.dashboard({})).mode, "company");
+    assert.equal(
+      (await s.db.get<any>("policy", "ownership-history")).eras.at(-1).scope.era,
+      s.credentials.enrollment_era.id,
+    );
+    // Another address is not this connection.
+    assert.equal(await coordinator.connectionRestored("https://other.example"), false);
   } finally {
     coordinator.engines.dispose();
     s.db.close();
@@ -1373,7 +1632,10 @@ test("G1 company read aloud still uploads and shows the server when its recent v
  * count, so a display shows which read it came from. A read can be held at the server,
  * or run a step before it answers, to change the local calculation while it is open.
  */
-async function companyReply(s: Awaited<ReturnType<typeof setup>>) {
+async function companyReply(
+  s: Awaited<ReturnType<typeof setup>>,
+  site: "chatgpt" | "claude" = "chatgpt",
+) {
   let reads = 0;
   let beforeAnswer: ((read: number) => Promise<void> | void) | null = null;
   const order: string[] = [];
@@ -1418,7 +1680,10 @@ async function companyReply(s: Awaited<ReturnType<typeof setup>>) {
     tab: { id: 33 },
     frameId: 0,
     documentId: "company-reply-sync",
-    url: `https://chatgpt.com/c/${conversationId}`,
+    url:
+      site === "chatgpt"
+        ? `https://chatgpt.com/c/${conversationId}`
+        : `https://claude.ai/chat/${conversationId}`,
   };
   const id = crypto.randomUUID();
   const binding = {
@@ -1433,10 +1698,10 @@ async function companyReply(s: Awaited<ReturnType<typeof setup>>) {
     id,
     revision: 1,
     event: "dispatch",
-    site: "chatgpt",
+    site,
     at: new Date().toISOString(),
     dispatch: {
-      site: "chatgpt",
+      site,
       action: "send",
       input: "Synthetic question",
       conversationId,
@@ -1466,7 +1731,7 @@ async function companyReply(s: Awaited<ReturnType<typeof setup>>) {
       state: event === "end" ? "completed" : "generating",
       conversationId,
       outputId: "answer-1",
-      attemptId: "answer-1",
+      ...(site === "chatgpt" ? { attemptId: "answer-1" } : {}),
     },
   });
   return {
@@ -1480,6 +1745,7 @@ async function companyReply(s: Awaited<ReturnType<typeof setup>>) {
       era: s.credentials.enrollment_era.id,
     },
     replyId: id,
+    conversationId,
     capture: (message: unknown) =>
       coordinator.capture(message as any, sender, binding),
     dispatch,
@@ -1537,6 +1803,46 @@ for (const progress of [false, true])
       assert.equal(last.summary.requests, 1);
       assert.equal(last.summary.attempts, 1);
       assert.equal(await c.health("sync_delayed"), false);
+    } finally {
+      c.coordinator.engines.dispose();
+      s.db.close();
+    }
+  });
+
+// A Claude chat that a session backs is two conversations on the server, the chat and its
+// session, so the server's figures for the chat alone would leave the session out. Such a
+// chat shows this browser's figures, in a reply's display as on opening (22 Nov 2026).
+for (const linked of [false, true])
+  test(`company display of a Claude reply ${linked ? "in a chat linked to a session keeps this browser's figures" : "shows the server figures"}`, async () => {
+    const s = await setup();
+    const c = await companyReply(s, "claude");
+    try {
+      if (linked)
+        await c.coordinator.claudeSessionLink(
+          c.conversationId,
+          "cse_0123456789ABCDEFghijklmn",
+          null,
+        );
+      await c.capture(c.dispatch);
+      await c.capture(c.end(2, "Synthetic answer."));
+      await c.coordinator.settleConversationDisplays();
+      const served = () =>
+        c.displays.some(
+          (display) =>
+            display.displayBinding?.captureId === c.replyId &&
+            display.conversation?.server,
+        );
+      if (linked) {
+        assert.equal(served(), false);
+        const last = c.displays.at(-1);
+        assert.equal(last.displayBinding.captureId, c.replyId);
+        assert.equal(last.conversation.server, null);
+        assert.equal(last.summary.requests, 1);
+      } else {
+        for (let i = 0; i < 200 && !served(); i++)
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        assert.equal(served(), true);
+      }
     } finally {
       c.coordinator.engines.dispose();
       s.db.close();

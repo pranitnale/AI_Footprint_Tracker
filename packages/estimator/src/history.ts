@@ -5,6 +5,7 @@ import {
   canonicalJson,
   claudeHistoryMessage,
   historyTokenParts,
+  providerMeasurement,
   type ClaudeTokenFactor,
   type HistoricalResourceV2,
   type HistoryMessage,
@@ -224,6 +225,15 @@ export class HistoryAccumulator {
       estimate?: HistorySummary["resources"];
       /** A regenerated Claude reply (`regeneratedHistoryReplies`): one request of its own. */
       regenerated?: boolean;
+      /**
+       * Claude's own input count for this reply's turn: new input, cache writes and cache
+       * reads added (owner decision of 23 Nov 2026). It is everything the model read in the
+       * turn, so it adds one provider-reported prompt row, and the reply's tool results,
+       * which are inside it, add no row.
+       */
+      exactInput?: string;
+      /** A prompt whose reply carries `exactInput`: its text and images add no row. */
+      inputCounted?: boolean;
     } = {},
   ) {
     const out = this.summary;
@@ -276,17 +286,27 @@ export class HistoryAccumulator {
         : "uncalculated_message_count",
     );
     const counted = claudeHistoryMessage(record, this.claudeTokenFactor);
-    for (const [part, measurement] of historyTokenParts(counted)) {
+    const exact = record.role === "response" ? options.exactInput : undefined;
+    const rows: Array<
+      [HistoryMessage["role"], ...ReturnType<typeof historyTokenParts>[number]]
+    > =
+      record.role === "prompt" && options.inputCounted
+        ? []
+        : historyTokenParts(counted)
+            .filter(([part]) => !exact || part !== "tool_output")
+            .map(([part, measurement]) => [record.role, part, measurement]);
+    if (exact) rows.push(["prompt", "total", providerMeasurement(exact)]);
+    for (const [role, part, measurement] of rows) {
       let token = out.tokens.find(
         (t) =>
-          t.role === record.role &&
+          t.role === role &&
           t.part === part &&
           t.profile_id === measurement.profile_id &&
           t.evidence === measurement.evidence,
       );
       if (!token) {
         token = {
-          role: record.role,
+          role,
           part,
           profile_id: measurement.profile_id,
           evidence:

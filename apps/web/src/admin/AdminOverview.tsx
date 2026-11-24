@@ -21,6 +21,7 @@ import {
   modelName,
   peopleOf,
   periodQuery,
+  CURRENT_VIEW,
   type AdminFigures,
   type AdminSummary,
   type DashWindow,
@@ -95,7 +96,7 @@ export function useSummary(
   extra: Record<string, string> = {},
   totalsOnly = false,
 ) {
-  const path = window ? "/v1/admin/summary" + queryString({ ...periodQuery(window), ...(site ? { site } : {}), ...extra }) : null;
+  const path = window ? "/v1/admin/summary" + queryString({ ...periodQuery(window), ...(site ? { site } : {}), ...CURRENT_VIEW, ...extra }) : null;
   // A totals-only read is a different request from the full one, so it is kept under its own key.
   const key = path && (totalsOnly ? "totals " + path : path);
   return useFigures<AdminSummary>(api, key, () =>

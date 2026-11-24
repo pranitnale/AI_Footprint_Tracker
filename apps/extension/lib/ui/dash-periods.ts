@@ -155,6 +155,27 @@ export function dashWindow(period: DashPeriod, timezone: string, now: Date): Das
   }
 }
 
+/**
+ * The period after a noun in a sentence: "today", "in the last 7 days", "this month", "from
+ * 1 to 31 October", "on 6 September", "over all time". The bare phrase read "in the this month".
+ */
+export function inPeriod(window: DashWindow): string {
+  switch (window.period.kind) {
+    case "today":
+    case "month":
+      return window.phrase;
+    case "7d":
+    case "30d":
+      return `in the ${window.phrase}`;
+    case "all":
+      return `over ${window.phrase}`;
+    default:
+      return window.startDate && window.endDate && addCalendarDays(window.startDate, 1) === window.endDate
+        ? `on ${window.phrase}`
+        : `from ${window.phrase}`;
+  }
+}
+
 /** One calendar month, for the monthly recap and "Last month". */
 export function monthWindow(month: string, timezone: string, label = `${monthName(month)} ${month.slice(0, 4)}`, period: DashPeriod = { kind: "custom", from: `${month}-01`, to: addCalendarDays(`${addMonths(month, 1)}-01`, -1) }): DashWindow {
   const first = `${month}-01`;

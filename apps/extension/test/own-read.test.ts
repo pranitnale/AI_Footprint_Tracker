@@ -4,6 +4,7 @@ import {
   OWN_READ_CHANNEL,
   OWN_READ_COOLDOWN_MS,
   OWN_READ_IMPORT_START_MS,
+  OWN_READ_TURN_SPACING_MS,
   OWN_READ_PAUSE_MAX_MS,
   OWN_READ_REPLY_MS,
   OWN_READ_RETRY_MS,
@@ -361,6 +362,239 @@ test("own read: a resume value goes to the page world, and its reports come back
     assert.equal("resume" in plain.posted.at(-1)!.message, false);
   } finally {
     plain.close();
+  }
+});
+
+// Since 18 Nov 2026 a Claude chat is backed by a session whose events hold Claude's own token
+// counts. They are read after each reply ("after_turn"), named by Claude's running total.
+const SESSION = "cse_0123456789ABCDEFghijklmn";
+
+test("own read: a second turn in one navigation is read, and one total only once", async () => {
+  const s = claudeScheduler({ random: 0 });
+  let counted: number | null = null;
+  const turn = (total: string, navigation = "nav-1") =>
+    s.request(navigation, CHAT, {
+      mode: "after_turn",
+      session: SESSION,
+      turn: total,
+      resume: () => counted,
+    });
+  try {
+    assert.equal(turn("23"), true);
+    s.advance(0);
+    await tick();
+    // The session is read, not the chat the address names, and from its first event.
+    assert.deepEqual(s.posted[0]!.message, {
+      channel: OWN_READ_CHANNEL,
+      site: "claude",
+      conversationId: SESSION,
+    });
+    assert.equal(turn("579"), true, "the running read is awaited first");
+    s.advance(1000);
+    assert.equal(s.posted.length, 1);
+    await s.reply({ kind: "read" });
+    assert.match(s.read.note("nav-1")!.text, /Claude keeps its own token counts/);
+    assert.equal(s.read.note("nav-1")!.failed, false);
+    counted = 3;
+    s.advance(OWN_READ_IMPORT_START_MS);
+    assert.equal(turn("23"), false, "the same total asks for nothing more");
+    assert.equal(s.posted.length, 1);
+    // The next reply: read although the session was read seconds ago, after the counted event.
+    assert.equal(turn("579"), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    assert.deepEqual(s.posted[1]!.message, {
+      channel: OWN_READ_CHANNEL,
+      site: "claude",
+      conversationId: SESSION,
+      resume: 3,
+    });
+    // Only a session id is read in place of the chat the address names.
+    assert.equal(
+      s.request("nav-2", CHAT, { mode: "after_turn", session: OTHER_CHAT, turn: "1" }),
+      false,
+    );
+  } finally {
+    s.close();
+  }
+});
+
+test("own read: a read after a turn follows the session's last read by 10 s, and a pause still holds it", async () => {
+  const s = claudeScheduler({ random: 0 });
+  const turn = (total: string) =>
+    s.request("nav-1", CHAT, { mode: "after_turn", session: SESSION, turn: total });
+  try {
+    turn("23");
+    s.advance(0);
+    await tick();
+    await s.reply({ kind: "read" });
+    s.advance(4000);
+    assert.equal(turn("579"), true, "waiting for the spacing");
+    s.advance(OWN_READ_TURN_SPACING_MS - 4001);
+    await tick();
+    assert.equal(s.posted.length, 1, "not before 10 s have passed");
+    s.advance(1);
+    // The spacing ended; the read goes out from the scheduler's next timer.
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    // Claude asks for fewer requests: the next turn's read waits for the pause like any other.
+    await s.reply({ kind: "http", status: 429, shouldRetry: true });
+    assert.equal(turn("2947"), false);
+    assert.match(s.read.note("nav-1")!.text, /refused or limited an earlier read/);
+    s.advance(OWN_READ_TURN_SPACING_MS);
+    await tick();
+    assert.equal(s.posted.length, 2);
+  } finally {
+    s.close();
+  }
+});
+
+// Claude's own total rests a few tokens above the count after a side call, so a chat opened
+// again would ask for its session each time. The five minutes after a read hold that.
+test("own read: the five minutes after a read hold the first read of a new navigation, also one after a turn", async () => {
+  const s = claudeScheduler({ random: 0 });
+  const turn = (total: string, navigation: string) =>
+    s.request(navigation, CHAT, { mode: "after_turn", session: SESSION, turn: total });
+  try {
+    turn("23", "nav-1");
+    s.advance(0);
+    await tick();
+    await s.reply({ kind: "read" });
+    s.advance(OWN_READ_TURN_SPACING_MS + 1000);
+    // The chat is opened again with a higher total: the session was read a moment ago.
+    assert.equal(turn("32", "nav-2"), false);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 1);
+    // A reply sent in that navigation is read all the same.
+    assert.equal(turn("579", "nav-2"), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    // After the five minutes a new navigation reads again.
+    await s.reply({ kind: "read" });
+    s.advance(OWN_READ_COOLDOWN_MS + 1);
+    assert.equal(turn("600", "nav-3"), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 3);
+  } finally {
+    s.close();
+  }
+});
+
+// A chat opened again makes no read when nothing is missing. A reply then sent there, within
+// the five minutes after a read of an earlier navigation, is new: only the short spacing
+// holds its read, or the reply would be counted at the next turn or opening, or never.
+test("own read: a reply sent after reopening a chat is read 10 s after the last read, inside the five minutes", async () => {
+  const s = claudeScheduler({ random: 0 });
+  try {
+    s.request("nav-1", CHAT, { mode: "after_turn", session: SESSION, turn: "23" });
+    s.advance(0);
+    await tick();
+    await s.reply({ kind: "read" });
+    s.advance(4000);
+    // Away and back: a new navigation that has tried no read. A reply is sent and ends.
+    assert.equal(
+      s.request("nav-2", CHAT, {
+        mode: "after_turn",
+        session: SESSION,
+        turn: "579",
+        sent: true,
+      }),
+      true,
+    );
+    s.advance(OWN_READ_TURN_SPACING_MS - 4001);
+    await tick();
+    assert.equal(s.posted.length, 1, "not before 10 s have passed");
+    s.advance(1);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    // The same holds for a chat without a session, read whole after its turn.
+    await s.reply({ kind: "read" });
+    s.request("nav-3", OTHER_CHAT, { mode: "after_turn", turn: "turn:1", sent: true });
+    s.advance(0);
+    await tick();
+    await s.reply({ kind: "read" });
+    s.advance(OWN_READ_TURN_SPACING_MS);
+    assert.equal(
+      s.request("nav-4", OTHER_CHAT, { mode: "after_turn", turn: "turn:2", sent: true }),
+      true,
+    );
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.at(-1)!.message.conversationId, OTHER_CHAT);
+    assert.equal(s.posted.length, 4);
+  } finally {
+    s.close();
+  }
+});
+
+test("own read: the chat's saved copy may be read after a settled session read, and one total is still read for once", async () => {
+  const s = claudeScheduler({ random: 0 });
+  const turn = (total: string) =>
+    s.request("nav-1", CHAT, { mode: "after_turn", session: SESSION, turn: total });
+  try {
+    turn("23");
+    s.advance(0);
+    await tick();
+    await s.reply({ kind: "read" });
+    // A chat Claude moved into a session later: its saved copy is asked for next.
+    assert.equal(s.request("nav-1", CHAT, { mode: "after_import" }), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    assert.deepEqual(s.posted[1]!.message, {
+      channel: OWN_READ_CHANNEL,
+      site: "claude",
+      conversationId: CHAT,
+    });
+    await s.reply({ kind: "read" });
+    s.advance(OWN_READ_IMPORT_START_MS);
+    // The total that was read asks for nothing more, and neither does the saved copy.
+    assert.equal(turn("23"), false);
+    assert.equal(s.request("nav-1", CHAT, { mode: "after_import" }), false);
+    assert.equal(s.posted.length, 2);
+    // The next total is read.
+    assert.equal(turn("579"), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 3);
+    assert.equal(s.posted[2]!.message.conversationId, SESSION);
+  } finally {
+    s.close();
+  }
+});
+
+test("own read: a chat without a session is read again after each turn of the merged app", async () => {
+  const s = claudeScheduler({ random: 0 });
+  const turn = (name: string) =>
+    s.request("nav-1", CHAT, { mode: "after_turn", turn: name });
+  try {
+    assert.equal(turn("turn:1"), true);
+    s.advance(0);
+    await tick();
+    // The chat the address names, read whole: Claude has no counts for it.
+    assert.deepEqual(s.posted[0]!.message, {
+      channel: OWN_READ_CHANNEL,
+      site: "claude",
+      conversationId: CHAT,
+    });
+    await s.reply({ kind: "read" });
+    assert.match(s.read.note("nav-1")!.text, /gives no token counts for this text/);
+    s.advance(OWN_READ_TURN_SPACING_MS);
+    assert.equal(turn("turn:1"), false);
+    // The next turn, well inside the five minutes after the last read.
+    assert.equal(turn("turn:2"), true);
+    s.advance(0);
+    await tick();
+    assert.equal(s.posted.length, 2);
+    assert.equal(s.posted[1]!.message.conversationId, CHAT);
+  } finally {
+    s.close();
   }
 });
 
@@ -1037,6 +1271,59 @@ test("own read capture: the page's organization is used and the answer takes the
     const finish = win.messages.find((m) => m?.channel === CLAUDE_STREAM_CHANNEL && m.event === "finish");
     assert.equal(finish.leafId, REPLY);
     assert.equal(calls.length, 2, "one page request and one own read");
+  } finally {
+    win.dispatchEvent(new Event("pagehide"));
+  }
+});
+
+// claude.ai's merged app sends through one PerformAction call with a protobuf body. The page
+// capture reports a send to the content script and hands the page's own call on as it was made.
+test("own read capture: the merged app's send is reported, and the page's request goes through unchanged", async () => {
+  const calls: Array<{ input: unknown; init?: RequestInit }> = [];
+  const native = ((input: unknown, init?: RequestInit) => {
+    calls.push({ input, init });
+    return Promise.resolve(new Response(new Uint8Array([0x0a, 0])));
+  }) as typeof fetch;
+  const { win } = installPage(native);
+  try {
+    const action =
+      "https://claude.ai/claudeai-rpc/anthropic.bard.api.v1alpha.ConversationService/PerformAction";
+    const sent = () =>
+      win.messages.filter((m) => m?.channel === "ai-footprint-cowork-sent-v1").length;
+    // Top-level fields 1 and 2: a send.
+    const body = new Uint8Array([0x0a, 2, 0x61, 0x62, 0x12, 1, 0x63]);
+    const init = {
+      method: "POST",
+      headers: { "content-type": "application/proto" },
+      body,
+    };
+    // Before a content script introduced itself nobody could check the signal.
+    await win.fetch(action, { method: "POST", body });
+    assert.equal(sent(), 0);
+    calls.length = 0;
+    const probe = new Event("message");
+    Object.assign(probe, {
+      source: win,
+      origin: "https://claude.ai",
+      data: { channel: "ai-footprint-probe-v1", nonce: "a".repeat(36) },
+    });
+    win.dispatchEvent(probe);
+    const response = await win.fetch(action, init);
+    assert.equal(sent(), 1);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0]!.input, action);
+    assert.equal(calls[0]!.init, init, "the page's own init, not a copy");
+    assert.deepEqual([...body], [0x0a, 2, 0x61, 0x62, 0x12, 1, 0x63]);
+    assert.deepEqual([...new Uint8Array(await response.arrayBuffer())], [0x0a, 0]);
+    // Opening a chat (field 15), a stop (field 3) and another call are no send.
+    await win.fetch(action, { method: "POST", body: new Uint8Array([0x7a, 1, 0x63]) });
+    await win.fetch(action, { method: "POST", body: new Uint8Array([0x1a, 1, 0x63]) });
+    await win.fetch(action.replace("PerformAction", "ReportViewing"), {
+      method: "POST",
+      body,
+    });
+    assert.equal(sent(), 1);
+    assert.equal(calls.length, 4);
   } finally {
     win.dispatchEvent(new Event("pagehide"));
   }

@@ -174,9 +174,16 @@ export function createDashboardClient(transport: Transport) {
     resumeEngine: async () => engineStatus(await transport("resume-engine")),
     settings: async (changes: Settings) =>
       ok(await transport("settings", { changes })),
-    /** Sends the email code; calling it again for the same origin sends a new code. */
-    connect: async (origin: string, email: string) =>
-      ok(await transport("connect", { origin, email })),
+    /**
+     * Sends the email code; calling it again for the same origin sends a new code. restored: no
+     * code was needed, because the browser had only lost the permission for a connection the
+     * server still holds, and the dialog allowed it again.
+     */
+    connect: async (origin: string, email: string) => {
+      const value = await transport("connect", { origin, email });
+      ok(value);
+      return { restored: (value as { restored?: unknown }).restored === true };
+    },
     verifyCode: async (code: string) =>
       ok(await transport("verify-code", { code })),
     /**

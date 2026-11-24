@@ -429,10 +429,11 @@ export function createRemoteEstimateExecutor(
     )
       reject("method_update_invalid");
     const parsed = JSON.parse(catalogJson);
+    // No commit check here: a qualified combination's catalog names its catalog commit, not
+    // the core commit in the identity, and the hash above already binds the exact bytes.
     if (
       parsed.schema_version !== definition.core.catalog_schema ||
-      parsed.upstream_version !== definition.core.upstream_version ||
-      parsed.upstream_commit !== definition.core.requested_git_commit
+      parsed.upstream_version !== definition.core.upstream_version
     )
       reject("method_update_invalid");
     const runtime = core.createCatalogRuntime(parsed);

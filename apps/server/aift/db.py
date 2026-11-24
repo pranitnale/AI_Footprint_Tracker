@@ -2,6 +2,7 @@ from contextlib import contextmanager
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     Boolean,
     CheckConstraint,
     ForeignKeyConstraint,
@@ -25,7 +26,7 @@ class Base(DeclarativeBase):
 
 # The schema the code expects. The newest migration sets it, and readiness and the restore
 # gate refuse any other, so one place names it.
-SCHEMA_VERSION = 14
+SCHEMA_VERSION = 16
 
 
 class Guard(Base):
@@ -637,3 +638,30 @@ class HistoryTombstone(Base):
     owner: Mapped[str] = mapped_column(String(36), primary_key=True)
     message_key: Mapped[str] = mapped_column(String(64), primary_key=True)
     epoch: Mapped[int] = mapped_column(Integer)
+
+
+class HistoryReplacement(Base):
+    """A saved Claude message of one member whose text estimate that member's exact rows
+    replace. The row it names, now or later, counts in no total. observed_at is the server time
+    of the upload, so a replay of an earlier person deletion keeps later replacements."""
+
+    __tablename__ = "historical_replacements"
+    tenant: Mapped[str] = mapped_column(String(36), primary_key=True)
+    owner: Mapped[str] = mapped_column(String(36), primary_key=True)
+    message_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    observed_at: Mapped[str] = mapped_column(String(24))
+
+
+class HistoryExactInput(Base):
+    """Claude's own input count for one saved reply of one member: new input, written to its
+    cache and read from it. Kept beside the message, not in it, so payload hashes and receipts
+    stay as they are. A later upload of the same reply brings the current count."""
+
+    __tablename__ = "historical_exact_inputs"
+    tenant: Mapped[str] = mapped_column(String(36), primary_key=True)
+    owner: Mapped[str] = mapped_column(String(36), primary_key=True)
+    message_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    # Counts arrive as decimal strings up to 2**63 - 1 (MAX_COUNTER), beyond PostgreSQL's Integer.
+    fresh: Mapped[int] = mapped_column(BigInteger)
+    cache_write: Mapped[int] = mapped_column(BigInteger)
+    cache_read: Mapped[int] = mapped_column(BigInteger)

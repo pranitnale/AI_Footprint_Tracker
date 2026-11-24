@@ -119,7 +119,7 @@ class CompanyDedup:
                     HistoryObservation.tenant == company.id,
                     HistoryObservation.company_key.in_(keys),
                     HistoryObservation.status == "current",
-                    self.analytics.history.visible(company),
+                    self.analytics.history.unerased(company),
                 )
             ):
                 visible.add((owner, message_key))

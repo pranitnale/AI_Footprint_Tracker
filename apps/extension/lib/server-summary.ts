@@ -216,8 +216,8 @@ function summaryQuery(query: string): string {
   const view = params.get("calculation_view") ?? "original",
     method = params.get("method_id");
   if (
-    !["original", "recalculated"].includes(view) ||
-    (view === "original" && method !== null) ||
+    !["original", "recalculated", "current"].includes(view) ||
+    (view !== "recalculated" && method !== null) ||
     (view === "recalculated" &&
       (!method || !/^[a-z0-9][a-z0-9.-]{0,127}$/.test(method)))
   )
@@ -791,6 +791,40 @@ export const SUMMARY_RESPONSE_BYTES = 8 * 1024 * 1024;
  * in full instead, so each costs one refused request per session, not one per summary.
  */
 const splitsUnsupported = new Set<string>();
+/**
+ * Organization servers (by origin) that refused calculation_view=current in this service worker's
+ * life. Servers from before 23 Nov 2026 answer 422 unsupported_filter to it; the caller then asks
+ * as it did before (`currentViewRefused`), so each costs one refused request per session.
+ */
+const currentUnsupported = new Set<string>();
+export const currentViewRefused = (origin: string) =>
+  currentUnsupported.has(origin);
+/**
+ * The current view is the server's newest method, which this browser may never have seen, so it
+ * cannot be checked against an installed method. What can be checked: every resource row of the
+ * answer, of each split and of its saved history names the answer's own method, so a total is
+ * never a mix. Answers that hold no current totals (rebuilding, suppressed) carry no method.
+ */
+function oneMethod(result: Record<string, any>): boolean {
+  if (result.aggregate_status !== "current")
+    return result.calculation_view === undefined || result.calculation_view === "recalculated";
+  if (result.calculation_view !== "recalculated") return false;
+  const same = (id: unknown, hash: unknown) =>
+    id === result.method_id && hash === result.method_hash;
+  const rows = (summary: Record<string, any>) =>
+    (Array.isArray(summary.resources) ? summary.resources : []).every((row: any) => {
+      const requested = row?.method_group?.requested_method;
+      if (requested !== undefined) return same(requested.method_id, requested.method_hash);
+      return same(row?.method_group?.method_id, row?.method_group?.method_hash);
+    }) &&
+    (summary.history?.resources ?? []).every((row: any) => same(row.method_id, row.method_hash));
+  return (
+    rows(result) &&
+    SUMMARY_SPLITS.every(({ field }) =>
+      Object.values((result[field] ?? {}) as Record<string, Record<string, any>>).every(rows),
+    )
+  );
+}
 
 export async function serverSummary(
   repository: RepositorySource,
@@ -822,6 +856,7 @@ export async function serverSummary(
   }
   const epoch = credentials.policy.deletion_epoch;
   const totalsOnly = new URLSearchParams(canonical).get("splits") === "none";
+  const current = new URLSearchParams(canonical).get("calculation_view") === "current";
   if (totalsOnly && splitsUnsupported.has(credentials.origin))
     canonical = withoutSplits(canonical);
   if (
@@ -887,8 +922,21 @@ export async function serverSummary(
     );
     answered = true;
     const result = validatedSummary(answer);
+    // A very old self-hosted server may ignore a view it does not know and answer the original
+    // view (labelled original, or unlabelled with current totals). That answer is never shown: it
+    // counts as a refusal of the view, like the 422 below, and the caller asks as before.
     if (
-      calculation
+      current &&
+      (result.calculation_view === "original" ||
+        (result.calculation_view === undefined && result.aggregate_status === "current"))
+    ) {
+      currentUnsupported.add(credentials.origin);
+      throw new Error("current_view_unsupported");
+    }
+    if (
+      current
+        ? !oneMethod(result)
+        : calculation
         ? result.calculation_view !== "recalculated" ||
           result.method_id !== calculation.methodId ||
           result.method_hash !== calculation.methodHash ||
@@ -922,6 +970,17 @@ export async function serverSummary(
       erasure_version: erasureVersion,
     };
   } catch (error) {
+    if (error instanceof Error && error.message === "current_view_unsupported") throw error;
+    // A server from before the current view refuses it. It knows splits=none since
+    // 15 Oct 2026, so this refusal always means the view; the caller asks as before.
+    if (
+      current &&
+      (error as { status?: unknown }).status === 422 &&
+      (error as { serverCode?: unknown }).serverCode === "unsupported_filter"
+    ) {
+      currentUnsupported.add(credentials.origin);
+      throw new Error("current_view_unsupported");
+    }
     // A server from before splits=none refuses the parameter. Ask once more for the full summary,
     // which holds the same totals, and remember the refusal for this session.
     if (
@@ -948,8 +1007,13 @@ export async function serverSummary(
       error instanceof Error &&
       error.message === "payload_rejected" &&
       (error as { status?: unknown }).status === undefined;
+    // The current view is being recalculated after a data update. The last saved copy of the same
+    // summary is complete and in one method (the previous one), and the pages show its age.
+    const recalculating =
+      current && error instanceof Error && error.message === "recalculation_pending";
     if (
       !unreadable &&
+      !recalculating &&
       error instanceof Error &&
       [
         "auth_reconnect_required",

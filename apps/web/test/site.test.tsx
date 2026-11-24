@@ -69,22 +69,29 @@ test("every link on the website goes to a site route, a heading on the page or a
   }
 });
 
-test("downloads offer only the Chrome Web Store and show Edge and Firefox as coming soon", () => {
+test("downloads send Chrome and Edge to the Chrome Web Store and show Firefox as coming soon", () => {
   const html = renderToStaticMarkup(<WebDownloadsPage navigate={() => {}} />);
   const page = JSDOM.fragment(html);
-  const storeLink = page.querySelector('a[href="https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide"]');
-  assert.ok(storeLink);
-  assert.equal(storeLink.textContent, "Add to Chrome");
-  assert.equal(storeLink.getAttribute("class"), "btn pri");
-  assert.equal(storeLink.getAttribute("target"), "_blank");
-  assert.equal(storeLink.getAttribute("rel"), "noopener noreferrer");
+  const cards = [...page.querySelectorAll(".bc")];
+  assert.equal(cards.length, 3);
+  // Edge installs from the Chrome Web Store, so both cards lead to the one store page.
+  for (const [index, label] of ["Add to Chrome", "Add to Edge"].entries()) {
+    const storeLink = cards[index]!.querySelector("a");
+    assert.ok(storeLink, label);
+    assert.equal(storeLink.getAttribute("href"), "https://chromewebstore.google.com/detail/ai-footprint-tracker/hcipdbbjkdjifcmallagehhjbdhodide");
+    assert.equal(storeLink.textContent, label);
+    assert.equal(storeLink.getAttribute("class"), "btn pri");
+    assert.equal(storeLink.getAttribute("target"), "_blank");
+    assert.equal(storeLink.getAttribute("rel"), "noopener noreferrer");
+    assert.equal(cards[index]!.querySelector("button"), null);
+  }
+  assert.match(html, /allow extensions from other stores/);
   assert.equal(page.querySelectorAll("a[download]").length, 0);
   assert.doesNotMatch(html, /test package|unsigned|Load unpacked|about:debugging/i);
-  for (const card of [...page.querySelectorAll(".bc")].slice(1)) {
-    const button = card.querySelector("button");
-    assert.equal(button?.textContent, "Coming soon");
-    assert.equal(button?.hasAttribute("disabled"), true);
-  }
+  const firefox = cards[2]!;
+  assert.equal(firefox.querySelector("a"), null);
+  assert.equal(firefox.querySelector("button")?.textContent, "Coming soon");
+  assert.equal(firefox.querySelector("button")?.hasAttribute("disabled"), true);
 });
 
 test("self-hosting links to the existing operations guide", () => {
@@ -106,7 +113,7 @@ test("privacy copy keeps every disclosure of the earlier page", () => {
   assert.match(html, /never one person.{1,6}s usage, and the server enforces this/);
   assert.match(html, /in an organization of one or two people they can reveal one person.{1,6}s usage/);
   assert.match(html, /Connection IP addresses are not collected/);
-  assert.match(html, /Brevo delivers the one-time sign-in codes and never receives usage or chat content/);
+  assert.match(html, /Our own mail server delivers the one-time sign-in codes, with Brevo as a fallback. Neither receives usage or chat content/);
   assert.match(html, /Exported files that were already downloaded cannot be recalled/);
 });
 

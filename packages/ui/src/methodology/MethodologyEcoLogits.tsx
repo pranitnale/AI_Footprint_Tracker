@@ -16,7 +16,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
       {bar}
       <header style={{ "background": "#0F2A1C", "color": "#F4F5EF", "padding": "clamp(36px, 5vw, 64px) clamp(16px, 4vw, 56px) clamp(32px, 4vw, 48px)", "position": "relative", "overflow": "hidden" }}><div style={{ "position": "absolute", "right": "-120px", "top": "-140px", "width": "520px", "height": "520px", "borderRadius": "50%", "border": "64px solid rgba(185,226,124,.06)" }} />
         <div style={{ "maxWidth": "1160px", "margin": "0 auto", "display": "flex", "flexDirection": "column", "gap": "22px", "position": "relative" }}>
-          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 22 October 2026 · EcoLogits 0.11.3</span>
+          <span style={{ "fontSize": "14px", "fontWeight": "600", "color": "#B9CDBE" }}>Methodology · updated 22 November 2026 · EcoLogits 0.11.3</span>
           <h1 className="mth-dsp" style={{ "margin": "0", "fontSize": "clamp(40px, 6vw, 64px)", "lineHeight": "1.04", "fontWeight": "700", "letterSpacing": "-0.02em", "maxWidth": "900px" }}>How we estimate the footprint of your AI chats</h1>
           <p style={{ "margin": "0", "fontSize": "20px", "lineHeight": "31px", "color": "#DDE8DF", "maxWidth": "760px" }}>The tracker counts the text that you and the AI write. It finds the model that answered. Then it uses EcoLogits, an open-source method, to calculate electricity, carbon and water. Plain words come first. The equations come after.</p>
           <div style={{ "padding": "22px 24px", "borderRadius": "18px", "background": "rgba(185,226,124,.10)", "border": "1px solid rgba(185,226,124,.40)", "display": "flex", "flexWrap": "wrap", "gap": "18px 32px", "alignItems": "center", "justifyContent": "space-between" }}>
@@ -25,7 +25,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "22px", "height": "22px" }}><path d="M12 3 4 7v5c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V7l-8-4z" /><path d="m9 12 2 2 4-4" /></svg></span>
               <div style={{ "display": "flex", "flexDirection": "column", "gap": "6px" }}>
                 <b className="mth-dsp" style={{ "fontSize": "22px", "lineHeight": "28px", "color": "#F4F5EF" }}>Built on the EcoLogits methodology</b>
-                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations and parameters of EcoLogits 0.11.3, an open-source project. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
+                <span style={{ "fontSize": "15px", "lineHeight": "23px", "color": "#DDE8DF" }}>All electricity, carbon and water figures use the calculations of EcoLogits 0.11.3, an open-source project, with its model and grid data of 19 November 2026, which no release contains yet. The tracker adds two things: it counts the tokens in your browser, and it finds the EcoLogits record for each reply.</span></div></div>
             <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "10px" }}>
               <a href="https://ecologits.ai" target="_blank" rel="noopener noreferrer" style={{ "height": "42px", "padding": "0 16px", "borderRadius": "12px", "display": "inline-flex", "alignItems": "center", "gap": "8px", "fontSize": "15px", "fontWeight": "600", "textDecoration": "none", "background": "#B9E27C", "color": "#0F2A1C" }}>ecologits.ai
                 <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a>
@@ -77,7 +77,7 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
             <p className="mth-p">
               <span className="mth-cs" style={{ background: mark("k1") }}>EcoLogits is an open-source method and library.</span>
               <button className="mth-ct" data-cite="k1" type="button" onClick={() => pick("k1")} aria-pressed={cite === "k1"} aria-label="Source 9">9</button> It calculates the environmental impact of one request to an AI model.{" "}
-              <span className="mth-cs" style={{ background: mark("k2") }}>The tracker uses its equations and its parameters from release 0.11.3.</span>
+              <span className="mth-cs" style={{ background: mark("k2") }}>The tracker uses its equations from release 0.11.3 and its model and grid data from commit 7b8bc03 of 19 November 2026, which no release contains yet.</span>
               <button className="mth-ct" data-cite="k2" type="button" onClick={() => pick("k2")} aria-pressed={cite === "k2"} aria-label="Source 5">5</button> This part shows each equation and explains each value.</p>
             {cite === "k1" && (
             <>
@@ -480,9 +480,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">7</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 7 · EcoLogits data on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, commit 7b8bc03 of 19 November 2026: carbon and water of each grid</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/7b8bc036376d4b4dd08596323383c78ae1e116d7/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k11")} aria-label="Close the source">×</button></div></>)}</section>
           <section id="m-water" className="mth-sec">
@@ -535,9 +535,9 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn">7</span>
                 <div style={{ "flex": "1", "minWidth": "0", "display": "flex", "flexDirection": "column", "gap": "3px" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#6E4700" }}>Source 7 · EcoLogits data on GitHub</span>
-                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
+                  <span style={{ "fontSize": "14px", "lineHeight": "20px" }}>data/electricity_mixes.json, commit 7b8bc03 of 19 November 2026: carbon and water of each grid</span>
                   <span style={{ "fontSize": "13px", "color": "#4A5A4E" }}>It supports the text in yellow.</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
+                  <a href="https://github.com/mlco2/ecologits/blob/7b8bc036376d4b4dd08596323383c78ae1e116d7/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "alignSelf": "flex-start", "display": "inline-flex", "alignItems": "center", "gap": "6px", "fontSize": "14px", "fontWeight": "600" }}>Open the data on GitHub
                     <svg className="mth-i" viewBox="0 0 24 24" aria-hidden="true" style={{ "width": "14px", "height": "14px" }}><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg></a></div>
                 <button className="mth-sclose" type="button" onClick={() => pick("k13")} aria-label="Close the source">×</button></div></>)}
             <p className="mth-p">For 1 kWh of IT energy, the water is 3.54 to 4.57 L for Anthropic, 4.33 L for OpenAI and 4.41 L for Google.</p></section>
@@ -717,8 +717,8 @@ export function MethodologyEcoLogits({ links, bar, credit, reference }: { links:
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>7</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>
                   <span style={{ "fontSize": "12px", "fontWeight": "700", "color": "#4A5A4E" }}>EcoLogits data on GitHub</span>
-                  <span>data/electricity_mixes.json, release 0.11.3: carbon and water of each grid</span>
-                  <a href="https://github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/0.11.3/ecologits/data/electricity_mixes.json</a></div></div>
+                  <span>data/electricity_mixes.json, commit 7b8bc03 of 19 November 2026: carbon and water of each grid</span>
+                  <a href="https://github.com/mlco2/ecologits/blob/7b8bc036376d4b4dd08596323383c78ae1e116d7/ecologits/data/electricity_mixes.json" target="_blank" rel="noopener noreferrer" style={{ "fontSize": "14px", "wordBreak": "break-all" }}>github.com/mlco2/ecologits/blob/7b8bc036376d4b4dd08596323383c78ae1e116d7/ecologits/data/electricity_mixes.json</a></div></div>
               <div className="mth-ref" id="src-8" style={{ background: source(8) }}>
                 <span className="mth-scn" style={{ "background": "#EEF1E8", "color": "#1F5A2E" }}>8</span>
                 <div style={{ "display": "flex", "flexDirection": "column", "gap": "2px", "minWidth": "0" }}>

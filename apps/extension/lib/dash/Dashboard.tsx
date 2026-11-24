@@ -4,7 +4,7 @@ import { Icon, LivingGaugeMark, PUBLIC_WEBSITE, type IconName } from "@footprint
 import { formatInteger } from "@footprint/ui/formatters";
 import { createDashboardClient, runtimePermissionRequest, runtimeTransport, type PermissionRequest, type Transport } from "../dashboard/client";
 import type { Dashboard as DashboardData } from "../dashboard/types";
-import { organizationName, organizationSharing, syncedText } from "../dashboard/organization";
+import { connectionEndedText, organizationName, organizationSharing, syncedText } from "../dashboard/organization";
 import type { BundledNotices } from "../dashboard/about-notices";
 import { Credit, ScenarioChip, Segmented, SITE_LABELS } from "../ui/components";
 import { dashWindow, decodePeriod, encodePeriod, todayIn, type DashPeriod } from "../ui/dash-periods";
@@ -179,7 +179,7 @@ export default function Dashboard({
     if (route === "tracking") return <Tracking ctx={ctx} />;
     if (route === "licences") return <Licences notices={notices} />;
     if (scope === "org" && figurePage) {
-      if (!connected) return <ConnectPage onConnect={() => setConnecting(true)} pending={dashboard.pending} client={client} reload={reload} now={now} />;
+      if (!connected) return <ConnectPage onConnect={() => setConnecting(true)} pending={dashboard.pending} ended={connectionEndedText(dashboard.company)} client={client} reload={reload} now={now} />;
       if (route === "models") return <Models ctx={ctx} org />;
       if (route === "recap") return <Recap ctx={ctx} month={month} org />;
       return <OrgOverview ctx={ctx} />;

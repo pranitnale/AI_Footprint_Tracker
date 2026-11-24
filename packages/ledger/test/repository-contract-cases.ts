@@ -9,6 +9,7 @@ import {
   HistoryPageSchema,
   UNAVAILABLE_ADMISSION_METHOD_ID,
   historyNumericPayloadHash,
+  providerMeasurement,
   type HistoryMessage,
 } from "@footprint/contracts";
 import type {
@@ -2531,5 +2532,298 @@ export function repositoryContract(label: string, create: ContractFactory) {
     // Past the hour limit and one sweep, its page can no longer end it.
     await capture(r, company, sent(66));
     assert.equal(await r.recoverInterrupted(company), 1);
+  });
+  test(`${label}: an exact row retires the text row it names, and a later text read does not bring it back`, async (t) => {
+    // 18 Nov 2026: a Claude chat's session reports Claude's own counts for turns the chat's
+    // saved copy was counted for by text. The exact rows replace those text rows, once.
+    const { repository: r } = await create(t);
+    await initialize(r, company);
+    const pair = records();
+    const known = pair[1].tokens.answer_output;
+    const chat = "e".repeat(64),
+      session = "f".repeat(64);
+    const message = (
+      key: string,
+      conversation: string,
+      role: "prompt" | "response",
+      prompt: string | null,
+      observedAt = new Date().toISOString(),
+    ) =>
+      HistoryMessageSchema.parse({
+        schema_version: "3.0.0",
+        kind: "history_message",
+        timing: null,
+        key_version: "1",
+        site: "claude",
+        message_key: key.repeat(64),
+        conversation_key: conversation,
+        role,
+        parent_key: prompt,
+        prompt_key: prompt,
+        provider_request_key: null,
+        provider_attempt_key: null,
+        occurred_at: pair[0].dispatched_at,
+        date_basis: "message_created",
+        observed_at: observedAt,
+        model_id: null,
+        proposed_method_id: methods.original.method_id,
+        company_dedup_key: null,
+        proposed_method_hash: methods.original.method_hash,
+        tokens: known,
+        inline_file_text: null,
+        parts: role === "response" ? historyResponseParts(known) : null,
+        generation: emptyGeneration(),
+        text_complete: true,
+        coverage_reasons: ["history_only"],
+      });
+    const textPrompt = message("1", chat, "prompt", null),
+      textReply = message("2", chat, "response", textPrompt.message_key),
+      exactPrompt = message("3", session, "prompt", null),
+      exactReply = message("4", session, "response", exactPrompt.message_key);
+    const commit = async (
+      messages: HistoryMessage[],
+      replaced?: Record<string, string[]>,
+    ) => {
+      const publication = await r.publicationSnapshot(company.namespace);
+      await r.commitHistory(
+        company,
+        HistoryPageSchema.parse({
+          schema_version: "3.0.0",
+          site: "claude",
+          conversation_key: messages[0]!.conversation_key,
+          observed_at: messages[0]!.observed_at,
+          deletion_epoch: 0,
+          branch_scope: "loaded_messages",
+          selected_leaf_key: null,
+          branch_message_keys: null,
+          root_message_key: null,
+          first_request_verified: false,
+          has_earlier: null,
+          has_later: null,
+          messages,
+        }),
+        {
+          authority: historyAuthority(publication),
+          erasureVersion: publication.erasureVersion,
+          estimates: Object.fromEntries(
+            messages.map((m) => [m.message_key, estimateHistoricalText(m)]),
+          ),
+          ...(replaced ? { replaced } : {}),
+        },
+        () => true,
+      );
+    };
+    const saved = async () =>
+      (
+        await Promise.all(
+          [textPrompt, textReply, exactPrompt, exactReply].map((m) =>
+            r.findHistoryMessage(company, m.message_key),
+          ),
+        )
+      ).map((row) => !!row);
+    const acknowledge = async () => {
+      const pending = await r.pendingHistory(company);
+      await r.acknowledgeHistory(
+        company,
+        pending.map((row) => ({
+          message_key: row.record.message_key,
+          payload_hash: row.hash,
+          status: "applied" as const,
+        })),
+      );
+      return pending.map((row) => [row.record.message_key, row.replaces ?? null]);
+    };
+    const names = [textPrompt.message_key, textReply.message_key];
+    await commit([textPrompt, textReply]);
+    assert.deepEqual(await saved(), [true, true, false, false]);
+    // A message of the page names one row, its own text copy, and never a message of the page.
+    for (const bad of [
+      { [exactPrompt.message_key]: names },
+      { [exactPrompt.message_key]: [exactReply.message_key] },
+      { [exactPrompt.message_key]: [] },
+      { [exactPrompt.message_key]: ["not-a-key"] },
+      { ["9".repeat(64)]: [names[0]!] },
+    ])
+      await assert.rejects(commit([exactPrompt, exactReply], bad), /payload_rejected/);
+    assert.deepEqual(await saved(), [true, true, false, false]);
+    // A read is saved in batches, and the read can end between two of them (a navigation, a
+    // policy change, a crash). The batch with the exact prompt retires the text prompt only,
+    // so the reply stays counted, by text, until the batch with the exact reply is saved.
+    await commit([exactPrompt], { [exactPrompt.message_key]: [names[0]!] });
+    assert.deepEqual(await saved(), [false, true, true, false]);
+    // Each text row leaves with the commit that saves its exact row, also from the upload
+    // queue, and the exact row keeps its name for its own upload.
+    await commit([exactReply], { [exactReply.message_key]: [names[1]!] });
+    assert.deepEqual(await saved(), [false, false, true, true]);
+    assert.deepEqual((await acknowledge()).sort(), [
+      [exactPrompt.message_key, [names[0]!]],
+      [exactReply.message_key, [names[1]!]],
+    ]);
+    // The chat's saved copy read again later: the replaced rows stay out.
+    const later = new Date(Date.now() + 1000).toISOString();
+    await commit([
+      message("1", chat, "prompt", null, later),
+      message("2", chat, "response", textPrompt.message_key, later),
+    ]);
+    assert.deepEqual(await saved(), [false, false, true, true]);
+    // The replacement repeats safely: nothing changes and nothing is uploaded again.
+    await commit([exactPrompt, exactReply], {
+      [exactPrompt.message_key]: [names[0]!],
+      [exactReply.message_key]: [names[1]!],
+    });
+    assert.deepEqual(await saved(), [false, false, true, true]);
+    assert.deepEqual(await r.pendingHistory(company), []);
+    // A prompt saved before its text rows were named: unchanged, it is queued once more
+    // with their names.
+    const earlier = message("6", session, "prompt", null);
+    await commit([earlier]);
+    assert.deepEqual(await acknowledge(), [[earlier.message_key, null]]);
+    await commit([earlier], { [earlier.message_key]: ["7".repeat(64)] });
+    assert.deepEqual(await acknowledge(), [
+      [earlier.message_key, ["7".repeat(64)]],
+    ]);
+  });
+  test(`${label}: Claude's exact input for a reply's turn is kept beside its row, on this device`, async (t) => {
+    // Owner decision of 23 Nov 2026: the bar's input for a chat with exact figures is what
+    // Claude processed. The three counts are local facts beside the row; the saved message,
+    // and so the upload, stays as it was.
+    const { repository: r } = await create(t);
+    await initialize(r, company);
+    const pair = records();
+    const known = pair[1].tokens.answer_output;
+    const session = "f".repeat(64);
+    const message = (
+      key: string,
+      role: "prompt" | "response",
+      tokens: HistoryMessage["tokens"],
+      prompt: string | null,
+    ) =>
+      HistoryMessageSchema.parse({
+        schema_version: "3.0.0",
+        kind: "history_message",
+        timing: null,
+        key_version: "1",
+        site: "claude",
+        message_key: key.repeat(64),
+        conversation_key: session,
+        role,
+        parent_key: prompt,
+        prompt_key: prompt,
+        provider_request_key: null,
+        provider_attempt_key: null,
+        occurred_at: pair[0].dispatched_at,
+        date_basis: "message_created",
+        observed_at: new Date().toISOString(),
+        model_id: null,
+        proposed_method_id: methods.original.method_id,
+        company_dedup_key: null,
+        proposed_method_hash: methods.original.method_hash,
+        tokens,
+        inline_file_text: null,
+        parts: role === "response" ? historyResponseParts(known) : null,
+        generation: emptyGeneration(),
+        text_complete: true,
+        coverage_reasons: ["history_only"],
+      });
+    const prompt = message("1", "prompt", known, null),
+      reply = message("2", "response", providerMeasurement(247), prompt.message_key),
+      text = message("3", "response", known, prompt.message_key);
+    const input = { fresh: 150, cacheWrite: 4000, cacheRead: 90500 };
+    const commit = async (
+      messages: HistoryMessage[],
+      extra: { exactInputs?: unknown; cowork?: unknown } = {},
+    ) => {
+      const publication = await r.publicationSnapshot(company.namespace);
+      await r.commitHistory(
+        company,
+        HistoryPageSchema.parse({
+          schema_version: "3.0.0",
+          site: "claude",
+          conversation_key: session,
+          observed_at: messages[0]!.observed_at,
+          deletion_epoch: 0,
+          branch_scope: "loaded_messages",
+          selected_leaf_key: null,
+          branch_message_keys: null,
+          root_message_key: null,
+          first_request_verified: false,
+          has_earlier: null,
+          has_later: null,
+          messages,
+        }),
+        {
+          authority: historyAuthority(publication),
+          erasureVersion: publication.erasureVersion,
+          estimates: Object.fromEntries(
+            messages.map((m) => [m.message_key, estimateHistoricalText(m)]),
+          ),
+          ...(extra as any),
+        },
+        () => true,
+      );
+    };
+    const saved = async (m: HistoryMessage) =>
+      (await r.findHistoryMessage(company, m.message_key))!;
+    // Only a reply of the page with Claude's own output count takes the three counts.
+    for (const bad of [
+      { [prompt.message_key]: input },
+      { [text.message_key]: input },
+      { ["9".repeat(64)]: input },
+      { [reply.message_key]: { ...input, extra: 1 } },
+      { [reply.message_key]: { fresh: 150, cacheWrite: 4000 } },
+      { [reply.message_key]: { ...input, cacheRead: -1 } },
+      { [reply.message_key]: { ...input, fresh: 1.5 } },
+      { [reply.message_key]: null },
+    ])
+      await assert.rejects(
+        commit([prompt, reply, text], { exactInputs: bad }),
+        /payload_rejected/,
+      );
+    assert.equal(await r.findHistoryMessage(company, reply.message_key), undefined);
+    await commit([prompt, reply, text], {
+      exactInputs: { [reply.message_key]: input },
+    });
+    assert.deepEqual((await saved(reply)).exactInput, input);
+    assert.equal((await saved(prompt)).exactInput, undefined);
+    assert.equal((await saved(text)).exactInput, undefined);
+    // The saved message is the one that was handed in: nothing was added to it.
+    assert.deepEqual((await saved(reply)).record, reply);
+    // The same reply read again without the counts keeps them.
+    await commit([reply]);
+    assert.deepEqual((await saved(reply)).exactInput, input);
+    // A reply saved without the counts and read again unchanged is not written again, so
+    // its turn keeps the text input it had and no figure moves behind a published total.
+    const earlier = message("4", "response", providerMeasurement(90), null);
+    await commit([earlier]);
+    assert.equal((await saved(earlier)).exactInput, undefined);
+    await commit([earlier], { exactInputs: { [earlier.message_key]: input } });
+    assert.equal((await saved(earlier)).exactInput, undefined);
+    // The session's checkpoint keeps the counters the next turn is measured from. One saved
+    // before this decision has none and stays valid.
+    const checkpoint = {
+      sequence: 5,
+      models: [{ model: "claude-sonnet-5-5", output: 247, reasoning: null }],
+      apiMs: 5000,
+    };
+    const later = message("5", "response", providerMeasurement(12), null);
+    for (const inputs of [
+      null,
+      { fresh: 150, cacheWrite: 4000 },
+      { ...input, extra: 1 },
+      { ...input, cacheWrite: -1 },
+    ])
+      await assert.rejects(
+        commit([later], {
+          cowork: { base: null, next: { ...checkpoint, inputs } },
+        }),
+        /payload_rejected/,
+      );
+    await commit([later], { cowork: { base: null, next: checkpoint } });
+    assert.deepEqual(await r.coworkCheckpoint(company, session), checkpoint);
+    const next = { ...checkpoint, sequence: 9, inputs: input };
+    await commit([message("6", "response", providerMeasurement(13), null)], {
+      cowork: { base: 5, next },
+    });
+    assert.deepEqual(await r.coworkCheckpoint(company, session), next);
   });
 }

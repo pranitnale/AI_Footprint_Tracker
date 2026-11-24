@@ -20,6 +20,10 @@ def restore_pre_0007_schema(connection, schema_version):
         "historical_tombstones",
         # The website's contact requests arrive with migration 0013.
         "contact_requests",
+        # Replaced Claude text rows arrive with migration 0015.
+        "historical_replacements",
+        # Claude's exact input counts arrive with migration 0016.
+        "historical_exact_inputs",
     ):
         assert connection.exec_driver_sql(f"SELECT count(*) FROM {table}").scalar_one() == 0
         connection.exec_driver_sql(f"DROP TABLE {table}")

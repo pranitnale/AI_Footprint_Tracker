@@ -10,6 +10,7 @@ import * as adapters from "@footprint/adapters";
 import * as formatters from "@footprint/ui/formatters";
 import * as fileTextPresentation from "@footprint/ui/file-text";
 import * as watchdog from "../lib/capture-watchdog";
+import * as claudeSessionLinks from "../lib/claude-session-links";
 import * as bar from "../lib/conversation-bar";
 import * as displayScenario from "../lib/display-scenario";
 import * as computerFileDetails from "../lib/computer-file-details";
@@ -76,12 +77,18 @@ async function contentHarness(
     /** "Load full chat history" for the asked switch; on when absent. */
     respondOwnReadSetting?: (message: any) => unknown | Promise<unknown>;
     respondTip?: (message: any) => unknown | Promise<unknown>;
+    /** The background's answer when it keeps a Claude session link; kept when absent. */
+    respondClaudeLink?: (message: any) => unknown | Promise<unknown>;
+    /** The own-read scheduler's clock, so a test can pass its waits. */
+    ownReadNow?: () => number;
     /** Whether the person agreed to tracking; unanswered (as before the step) when absent. */
     respondTrackingState?: (message: any) => unknown | Promise<unknown>;
     historyLifecycleMs?: number;
     html?: string;
     watchdogModule?: typeof watchdog;
     captureGraceTimers?: boolean;
+    /** The checks of a merged-app Claude turn's stop control are run by the test. */
+    captureTurnTimers?: boolean;
     captureScanTimer?: boolean;
     /**
      * The waits before a capture frame is sent again (lib/capture-delivery.ts). Tests that do
@@ -147,6 +154,24 @@ async function contentHarness(
         typeof handler === "function"
       ) {
         graceTimers.push(() => handler(...args));
+        return --fakeId;
+      }
+      return nativeSetTimeout(handler, timeout, ...args);
+    };
+  }
+  // The checks for a Claude turn's stop control (every 1.1 s while a turn of the merged app
+  // is open) are run by the test (fireTurnTimers).
+  const turnTimers: Array<() => void> = [];
+  if (route?.captureTurnTimers) {
+    const nativeSetTimeout = dom.window.setTimeout.bind(dom.window);
+    let fakeId = -3000000;
+    (dom.window as any).setTimeout = (
+      handler: TimerHandler,
+      timeout?: number,
+      ...args: unknown[]
+    ) => {
+      if (timeout === 1100 && typeof handler === "function") {
+        turnTimers.push(() => handler(...args));
         return --fakeId;
       }
       return nativeSetTimeout(handler, timeout, ...args);
@@ -312,6 +337,11 @@ async function contentHarness(
               : { on: true };
           if (message?.target === "long-chat-tip" && route?.respondTip)
             return route.respondTip(message);
+          // The background keeps a proven session link of the open Claude chat.
+          if (message?.target === "claude-session-link")
+            return route?.respondClaudeLink
+              ? route.respondClaudeLink(message)
+              : { kept: true };
           if (message?.target === "tracking-state" && route?.respondTrackingState)
             return route.respondTrackingState(message);
           if (message?.target === "chat-comparison")
@@ -343,6 +373,7 @@ async function contentHarness(
     "@footprint/ui/formatters": formatters,
     "@footprint/ui/file-text": fileTextPresentation,
     "../lib/capture-watchdog": route?.watchdogModule ?? watchdog,
+    "../lib/claude-session-links": claudeSessionLinks,
     "../lib/conversation-bar": bar,
     "../lib/display-scenario": displayScenario,
     "../lib/computer-file-details": computerFileDetails,
@@ -368,7 +399,12 @@ async function contentHarness(
       ...ownReadModule,
       createOwnReadScheduler: (
         env: Parameters<typeof ownReadModule.createOwnReadScheduler>[0],
-      ) => ownReadModule.createOwnReadScheduler({ ...env, delay: () => 0 }),
+      ) =>
+        ownReadModule.createOwnReadScheduler({
+          ...env,
+          delay: () => 0,
+          ...(route?.ownReadNow ? { now: route.ownReadNow } : {}),
+        }),
     },
     "../lib/chatgpt-read-progress": chatgptReadProgress,
     "../lib/own-read-pause": ownReadPause,
@@ -624,6 +660,9 @@ async function contentHarness(
     },
     fireGraceTimers() {
       for (const callback of graceTimers.splice(0)) callback();
+    },
+    fireTurnTimers() {
+      for (const callback of turnTimers.splice(0)) callback();
     },
     /** Waits before a capture frame is sent again that have not run yet (needs captureRetryDelays). */
     pendingRetryTimers() {
@@ -2320,6 +2359,212 @@ test("conductor: a Cowork send counts as observed for the capture watchdog (W5)"
   }
 });
 
+/**
+ * What the Cowork event reader posts for one result of a Claude session: its prompt and
+ * its reply with the session's counters (`sequence`, and `output` tokens so far).
+ */
+function claudeSessionPage(
+  of: string,
+  observationId: string,
+  sequence = 3,
+  output = 247,
+) {
+  const messageId = (n: number) =>
+    `00000000-0000-4000-8000-${(0xc200 + n).toString(16).padStart(12, "0")}`;
+  const promptId = messageId(sequence);
+  const responseId = messageId(sequence + 0x80);
+  const observedAt = "2026-11-18T12:00:00.000Z";
+  const start = {
+    channel: historyCapture.HISTORY_CAPTURE_CHANNEL,
+    event: "start",
+    id: observationId,
+    site: "claude",
+    conversationId: of,
+    observedAt,
+    page: null,
+  };
+  return {
+    start,
+    page: {
+      ...start,
+      event: "page",
+      page: {
+        site: "claude",
+        conversationId: of,
+        observedAt,
+        messages: [
+          {
+            timing: null,
+            sourceId: promptId,
+            role: "prompt",
+            promptSourceId: promptId,
+            parentSourceId: null,
+            parentRole: null,
+            requestId: null,
+            liveAttemptId: null,
+            occurredAt: "2026-11-18T11:00:00.000Z",
+            dateBasis: "message_created",
+            modelId: null,
+            text: "synthetic prompt",
+            complete: true,
+            inlineFiles: null,
+          },
+          {
+            timing: null,
+            sourceId: responseId,
+            role: "response",
+            promptSourceId: promptId,
+            parentSourceId: promptId,
+            parentRole: "prompt",
+            requestId: null,
+            liveAttemptId: null,
+            occurredAt: "2026-11-18T11:00:05.000Z",
+            dateBasis: "message_created",
+            modelId: "claude-sonnet-5-5",
+            text: "synthetic answer",
+            complete: true,
+            inlineFiles: null,
+            cumulative: {
+              sequence,
+              models: [{ model: "claude-sonnet-5-5", output, reasoning: 0 }],
+              apiMs: 2924,
+            },
+          },
+        ],
+        firstRequestVerified: true,
+        rootSourceId: promptId,
+        selectedLeafId: null,
+        branchSourceIds: null,
+        branchScope: "loaded_messages",
+        hasEarlier: false,
+        hasLater: null,
+        status: "partial",
+      },
+    },
+  };
+}
+// Since 18 Nov 2026 claude.ai shows a session at its chat's address. Its pages are relayed
+// only once the page's own answers proved the link, and they name the chat they are shown at.
+test("conductor: a session's page is relayed with its chat's address once the page proved the link", async () => {
+  const chat = "00000000-0000-4000-8000-000000000c11";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const other = "cse_ZYXWVUTSRQPONMLKjihgfedc";
+  const totals = { output: 581, input: 12, cacheRead: 150000, cacheWrite: 3000 };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(historicalView(historicalSummary({ status: "empty" }))),
+    respondHistory: () => ({ accepted: true }),
+  });
+  const sessionPage = claudeSessionPage;
+  const relayed = () =>
+    harness.calls.filter((call) => call.target === "history-observation");
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 10));
+  try {
+    await harness.loadRoute();
+    const nonce = harness.probeNonce();
+    // Before any proof a session's page is not this chat's.
+    const early = sessionPage(session, "00000000-0000-4000-8000-000000000c31");
+    assert.ok(
+      historyCapture.validateHistoryCapture(early.page, "claude.ai"),
+      "the synthetic page has the Cowork reader's shape",
+    );
+    harness.postHistorical(early.start);
+    harness.postHistorical(early.page);
+    await settle();
+    assert.equal(relayed().length, 0);
+    // Facts without the content script's nonce, or of another shape, prove nothing.
+    const facts = {
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce,
+      links: [{ chat, session }],
+      totals: { session, ...totals },
+    };
+    harness.postFileMessage({ ...facts, nonce: "x".repeat(36) });
+    harness.postFileMessage({ ...facts, title: "a chat title" });
+    await settle();
+    assert.ok(harness.calls.every((call) => call.target !== "claude-session-link"));
+    harness.postFileMessage(facts);
+    await settle();
+    // Copied, because the content script's objects come from its own realm.
+    assert.deepEqual(
+      structuredClone(
+        harness.calls.filter((call) => call.target === "claude-session-link"),
+      ),
+      [{ target: "claude-session-link", chat, session, totals }],
+    );
+    // The same facts again are not reported twice.
+    harness.postFileMessage(facts);
+    await settle();
+    assert.equal(
+      harness.calls.filter((call) => call.target === "claude-session-link").length,
+      1,
+    );
+    const linked = sessionPage(session, "00000000-0000-4000-8000-000000000c32");
+    harness.postHistorical(linked.start);
+    harness.postHistorical(linked.page);
+    await settle();
+    assert.deepEqual(
+      relayed().map((call) => [
+        call.message.event,
+        call.message.conversationId,
+        call.linkedRoute,
+      ]),
+      [
+        ["start", session, chat],
+        ["page", session, chat],
+      ],
+    );
+    // Another session stays out, and the chat's own pages name no linked route.
+    const foreign = sessionPage(other, "00000000-0000-4000-8000-000000000c33");
+    harness.postHistorical(foreign.start);
+    harness.postHistorical(foreign.page);
+    await settle();
+    assert.equal(relayed().length, 2);
+  } finally {
+    harness.close();
+  }
+});
+
+// A full erase or a change between personal and organization use empties the background's
+// kept links. The page does not prove the link again without a reload, so the content script
+// reports the open chat's link once more; otherwise every page of the session is refused.
+test("conductor: after a scope change the open chat's session link is reported again", async () => {
+  const chat = "00000000-0000-4000-8000-000000000c41";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const totals = { output: 581, input: 12, cacheRead: 150000, cacheWrite: 3000 };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(historicalView(historicalSummary({ status: "empty" }))),
+    respondHistory: () => ({ accepted: true }),
+  });
+  const reported = () =>
+    structuredClone(
+      harness.calls.filter((call) => call.target === "claude-session-link"),
+    );
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 10));
+  const link = { target: "claude-session-link", chat, session, totals };
+  try {
+    await harness.loadRoute();
+    harness.postFileMessage({
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce: harness.probeNonce(),
+      links: [{ chat, session }],
+      totals: { session, ...totals },
+    });
+    await settle();
+    assert.deepEqual(reported(), [link]);
+    harness.deliver({ target: "footprint-scope-changed" });
+    await settle();
+    assert.deepEqual(reported(), [link, link]);
+  } finally {
+    harness.close();
+  }
+});
+
 test("conductor: Details on a Cowork page name the provider's usage report and Cowork's own limits (W5)", async () => {
   const session = "cse_0123456789ABCDEFghijklmn";
   const harness = await contentHarness(false, {
@@ -3089,6 +3334,90 @@ test("conductor: a new ChatGPT chat's waiting reply stays current across the loc
   }
 });
 
+// Gemini's session channel can move to the chat before any display names it (live,
+// 3 Nov 2026). The route read can then hold only the first frame's figures.
+for (const start of ["/app", "/u/1/app"]) {
+  test(`conductor: a new Gemini chat from ${start} shows the reply once its identity is the chat`, async () => {
+    const chat = "00000000000000a1";
+    const firstFrame = new SummaryAccumulator().result();
+    firstFrame.requests = 1;
+    firstFrame.tokens.input.value = "20";
+    firstFrame.tokens.output.value = "2";
+    const harness = await contentHarness(false, {
+      url: `https://gemini.google.com${start}`,
+      html: '<main><form><rich-textarea><div contenteditable="true"></div></rich-textarea></form></main>',
+      respond: () => ({ ...historicalRouteDisplay(null), summary: firstFrame }),
+    });
+    try {
+      const shadow = harness.render(null, { requestCount: 1, state: "generating" });
+      const binding = harness.currentCaptureBinding();
+      assert.ok(binding);
+      await harness.navigate(`${start}/${chat}`);
+      assert.ok(harness.calls.some((call) =>
+        call.target === "conversation-summary" && call.conversationId === `c_${chat}`,
+      ));
+      harness.deliverDisplay(binding, null, "5");
+      assert.doesNotMatch(shadow.querySelector("[data-metrics]")!.textContent!, /Req 5/);
+      harness.deliverDisplay(binding, { site: "gemini", conversationId: `c_${chat}` }, "7", { output: "129" });
+      const metrics = shadow.querySelector("[data-metrics]")!.textContent!;
+      assert.match(metrics, /Req 7/);
+      assert.match(metrics, /129/);
+    } finally {
+      harness.close();
+    }
+  });
+
+  test(`conductor: a new Gemini chat from ${start} never shows a reply proven in another chat`, async () => {
+    const chat = "00000000000000a2";
+    const harness = await contentHarness(false, {
+      url: `https://gemini.google.com${start}`,
+      html: '<main><form><rich-textarea><div contenteditable="true"></div></rich-textarea></form></main>',
+      respond: () => ({ error: "Recorded conversation totals are unavailable." }),
+    });
+    try {
+      const shadow = harness.render(null, { requestCount: 1, state: "generating" });
+      const binding = harness.currentCaptureBinding();
+      assert.ok(binding);
+      await harness.navigate(`${start}/${chat}`);
+      harness.deliverDisplay(binding, { site: "gemini", conversationId: "c_00000000000000a3" }, "8");
+      harness.deliverDisplay(binding, { site: "gemini", conversationId: `c_${chat}` }, "9");
+      assert.doesNotMatch(shadow.querySelector("[data-metrics]")!.textContent!, /Req [89]/);
+    } finally {
+      harness.close();
+    }
+  });
+
+  test(`conductor: a new Gemini chat's waiting reply stays current across the move from ${start}, and only for that chat`, async () => {
+    const chat = "00000000000000a4";
+    const harness = await contentHarness(false, {
+      url: `https://gemini.google.com${start}`,
+      html: '<main><form><rich-textarea><div contenteditable="true"></div></rich-textarea></form></main>',
+      respond: () => ({ error: "Recorded conversation totals are unavailable." }),
+    });
+    try {
+      harness.render(null, { requestCount: 1, state: "generating" });
+      const binding = harness.currentCaptureBinding();
+      assert.ok(binding);
+      const current = async (conversationId: string | null, captureBinding: unknown = binding) =>
+        ((await harness.deliver({
+          target: "footprint-capture-current",
+          binding: captureBinding,
+          conversationId,
+          path: start,
+          site: "gemini",
+        }, { id: "content-test-extension" })) as { current: boolean }).current;
+      // pushState sends no event, so the background's check must trigger the early scan.
+      harness.document.defaultView!.history.pushState({}, "", `${start}/${chat}`);
+      assert.equal(await current(null), true);
+      assert.equal(await current(`c_${chat}`), true);
+      assert.equal(await current("c_00000000000000a5"), false);
+      assert.equal(await current(null, { ...binding, captureId: crypto.randomUUID() }), false);
+    } finally {
+      harness.close();
+    }
+  });
+}
+
 // A new Perplexity thread opens at its first answer's id, and the background can prove
 // the answer is in it only after that (owner, 5 Oct 2026).
 for (const provisional of [true, false])
@@ -3124,6 +3453,48 @@ for (const provisional of [true, false])
       harness.close();
     }
   });
+
+// Since November 2026 a new thread moves from / to /search/new/<local id> and then to
+// /session/<thread id> while its first reply streams (seen live 23 Nov 2026). The bar fell
+// back to "Waiting for your request" there, because /session/ was no thread route.
+test("conductor: a new Perplexity thread at /session/<id> shows its reply and asks for it while it waits", async () => {
+  const thread = "00000000-0000-4000-8000-000000000043";
+  const harness = await contentHarness(false, {
+    url: "https://www.perplexity.ai/",
+    respond: () => ({ error: "Recorded conversation totals are unavailable." }),
+  });
+  try {
+    const shadow = harness.render(null, { requestCount: 1 });
+    const binding = harness.currentCaptureBinding();
+    assert.ok(binding);
+    await harness.navigate("/search/new/00000000-0000-4000-8000-000000000044");
+    await harness.navigate(`/session/${thread}`);
+    const current = async (conversationId: string | null) =>
+      (
+        (await harness.deliver(
+          {
+            target: "footprint-capture-current",
+            binding,
+            conversationId,
+            path: `/session/${thread}`,
+            site: "perplexity",
+          },
+          { id: "content-test-extension" },
+        )) as { current: boolean }
+      ).current;
+    assert.equal(await current(null), true);
+    assert.equal(await current(thread), true);
+    assert.equal(await current("00000000-0000-4000-8000-000000000045"), false);
+    harness.deliverDisplay(
+      binding,
+      { site: "perplexity", conversationId: thread },
+      "6",
+    );
+    assert.match(shadow.querySelector("[data-metrics]")!.textContent!, /Req 6/);
+  } finally {
+    harness.close();
+  }
+});
 
 test("conductor: a new Perplexity thread never shows a reply proven in another thread", async () => {
   const thread = "00000000-0000-4000-8000-000000000039";
@@ -4726,6 +5097,158 @@ test("capture failures remain visible over saved history even when their storage
   }
 });
 
+test("conductor: Claude Details has a How this was counted drop-down from the evidence of its replies, other sites have none (22 Nov 2026)", async () => {
+  const conversationId = "00000000-0000-4000-8000-0000000000d1";
+  const tokens = (evidence: string, known: string, value: string) => ({
+    role: "response",
+    part: "total",
+    profile_id: null,
+    evidence,
+    value,
+    known_message_count: known,
+    unknown_message_count: "0",
+  });
+  const detailsAt = async (
+    url: string,
+    replies: ReturnType<typeof tokens>[],
+    view: Record<string, unknown> = {},
+  ) => {
+    const history = historicalView(historicalSummary({ tokens: replies }), view);
+    const harness = await contentHarness(false, {
+      url,
+      // Claude's composer is found by its ProseMirror editor, which the default page lacks.
+      ...(url.includes("claude.ai")
+        ? { html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>' }
+        : {}),
+      respond: () => historicalRouteDisplay(history),
+      respondCapture: () => ({ ok: true }),
+    });
+    try {
+      const shadow = await harness.loadRoute();
+      (shadow.querySelector("[data-open]") as HTMLElement).click();
+      return shadow.querySelector("[data-body]")!.textContent!;
+    } finally {
+      harness.close();
+    }
+  };
+  const claude = `https://claude.ai/chat/${conversationId}`;
+  const text = await detailsAt(claude, [tokens("heuristic_estimate", "2", "120")]);
+  assert.match(text, /How this was counted/);
+  assert.match(text, /Estimated from text/);
+  assert.match(text, /Claude gives no token counts for this chat/);
+  const mixed = await detailsAt(claude, [tokens("provider_reported", "3", "4000"), tokens("heuristic_estimate", "1", "50")]);
+  assert.match(mixed, /Part exact, part estimated/);
+  assert.match(mixed, /3 replies use Claude's own token counts\. 1 reply was counted from its text, because Claude has no counts for it/);
+  const none = await detailsAt(claude, [tokens("unknown", "1", "0")]);
+  assert.doesNotMatch(none, /How this was counted/, "nothing counted, no drop-down");
+  assert.doesNotMatch(await detailsAt(`https://chatgpt.com/c/${conversationId}`, [tokens("heuristic_estimate", "2", "120")]), /How this was counted/);
+  // Exact input of the saved replies (23 Nov 2026): In is everything Claude processed.
+  const exactInput = { new: 310, cache_write: 1500, cache_read: 60_000_000, replies: 3 };
+  const withInput = await detailsAt(claude, [tokens("provider_reported", "3", "4000")], { exact_input: exactInput });
+  assert.match(withInput, /In is everything Claude processed for this chat: 310 new input tokens, 1,500 tokens written to its cache and 60,000,000 tokens read from it\./);
+  assert.doesNotMatch(withInput, /Input is your prompts and tool results/);
+  const mixedInput = await detailsAt(
+    claude,
+    [tokens("provider_reported", "3", "4000"), tokens("heuristic_estimate", "1", "50")],
+    { exact_input: exactInput },
+  );
+  assert.match(mixedInput, /for 3 replies: 310 new input tokens.* The other reply is counted from the text of your prompts and tool results/);
+  assert.match(await detailsAt(claude, [tokens("provider_reported", "3", "4000")]), /Input is your prompts and tool results, counted on your computer/);
+});
+
+// Live pass of 23 Nov 2026: a Claude chat counted from Claude's own counts said its reasoning is a
+// summary and listed a match count of 0 against recorded live activity, which a session import
+// never has. Each chat now says what is true for its own replies.
+test("conductor: a Claude chat's Details match its replies, exact or from text (23 Nov 2026)", async () => {
+  const conversationId = "00000000-0000-4000-8000-0000000000d2";
+  const tokens = (evidence: string, known: string, value: string) => ({
+    role: "response",
+    part: "total",
+    profile_id: null,
+    evidence,
+    value,
+    known_message_count: known,
+    unknown_message_count: "0",
+  });
+  const detailsAt = async (replies: ReturnType<typeof tokens>[]) => {
+    const harness = await contentHarness(false, {
+      url: `https://claude.ai/chat/${conversationId}`,
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () => historicalRouteDisplay(historicalView(historicalSummary({ tokens: replies }))),
+      respondCapture: () => ({ ok: true }),
+    });
+    try {
+      const shadow = await harness.loadRoute();
+      (shadow.querySelector("[data-open]") as HTMLElement).click();
+      return shadow.querySelector("[data-body]")!.textContent!;
+    } finally {
+      harness.close();
+    }
+  };
+  const exact = await detailsAt([tokens("provider_reported", "3", "4000")]);
+  assert.match(exact, /Reasoning\s*from Claude's own counts/);
+  assert.doesNotMatch(exact, /summary only|Reasoning is counted from the summary/);
+  assert.doesNotMatch(exact, /Messages matched to recorded live activity/, "a session import has no live activity to match");
+  const text = await detailsAt([tokens("heuristic_estimate", "2", "120")]);
+  assert.match(text, /Reasoning\s*summary only/);
+  assert.match(text, /Reasoning is counted from the summary the site shows/);
+  assert.match(text, /Messages matched to recorded live activity/);
+  const mixed = await detailsAt([tokens("provider_reported", "3", "4000"), tokens("heuristic_estimate", "1", "50")]);
+  assert.match(mixed, /exact in 3 replies, summary only in 1 reply/);
+  assert.match(mixed, /in the replies counted from text/);
+  assert.match(mixed, /Messages matched to recorded live activity/, "a chat with text replies keeps the row");
+});
+
+// Side calls and hidden input follow the same per-chat rule (23 Nov 2026): Claude's own counts and
+// its exact input include them, so only text-counted replies leave them out.
+test("conductor: a Claude chat's Details say per kind of reply whether side calls and hidden input are counted", async () => {
+  const conversationId = "00000000-0000-4000-8000-0000000000d3";
+  const tokens = (evidence: string, known: string, value: string) => ({
+    role: "response",
+    part: "total",
+    profile_id: null,
+    evidence,
+    value,
+    known_message_count: known,
+    unknown_message_count: "0",
+  });
+  const detailsAt = async (replies: ReturnType<typeof tokens>[], view: Record<string, unknown> = {}) => {
+    const harness = await contentHarness(false, {
+      url: `https://claude.ai/chat/${conversationId}`,
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () => historicalRouteDisplay(historicalView(historicalSummary({ tokens: replies }), view)),
+      respondCapture: () => ({ ok: true }),
+    });
+    try {
+      const shadow = await harness.loadRoute();
+      (shadow.querySelector("[data-open]") as HTMLElement).click();
+      return shadow.querySelector("[data-body]")!.textContent!;
+    } finally {
+      harness.close();
+    }
+  };
+  const exactInput = (replies: number) => ({ exact_input: { new: 310, cache_write: 1500, cache_read: 60_000_000, replies } });
+  const exact = await detailsAt([tokens("provider_reported", "3", "4000")], exactInput(3));
+  assert.match(exact, /Side calls: titles, suggestions\s*inside Claude's own counts/);
+  assert.doesNotMatch(exact, /not shown by Claude|Side calls such as titles, suggestions and safety checks are not counted/);
+  assert.match(exact, /Claude's own input count includes what the site does not show, such as system prompts/);
+  assert.doesNotMatch(exact, /Hidden input such as system prompts/);
+  // Exact replies read before the exact input existed keep the hidden input note.
+  const oldInput = await detailsAt([tokens("provider_reported", "3", "4000")]);
+  assert.match(oldInput, /Hidden input such as system prompts, memory, project knowledge and retrieved sources is not shown by the site and is not counted\./);
+  const text = await detailsAt([tokens("heuristic_estimate", "2", "120")]);
+  assert.match(text, /Side calls: titles, safety checks\s*not shown by Claude/);
+  assert.match(text, /Side calls such as titles, suggestions and safety checks are not counted\./);
+  assert.match(text, /Hidden input such as system prompts/);
+  const mixed = await detailsAt(
+    [tokens("provider_reported", "3", "4000"), tokens("heuristic_estimate", "1", "50")],
+    exactInput(3),
+  );
+  assert.match(mixed, /inside Claude's counts in 3 replies, not counted in 1 reply/);
+  assert.match(mixed, /are not counted in the replies counted from text\./);
+  assert.match(mixed, /is not counted in the reply whose input is counted from text\. Claude's own input count includes it in the others\./);
+});
+
 test("conductor: unverified capture coverage and real page failures survive history-only presentation independently", async () => {
   const conversationId = "00000000-0000-4000-8000-000000000247";
   const history = historicalView(historicalSummary());
@@ -5923,6 +6446,681 @@ test("conductor: a cached Claude chat with no page read gets one own read after 
   }
 });
 
+// A Claude chat with a session is counted from the session's events, which hold Claude's own
+// token counts. The page loads the session object itself, again after each reply; the tracker
+// reads the events when Claude's total is not counted yet, and never the chat's saved copy.
+test("conductor: a Claude chat with a session reads the session's events when Claude's total moved, and never the chat's saved copy", async () => {
+  const chat = "00000000-0000-4000-8000-000000000d11";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  // What the background has counted of the session, as its answer to a kept link says.
+  const counted = { after: null as number | null, counted: null as number | null };
+  const state = { imported: false, now: Date.now() };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(
+          state.imported
+            ? historicalSummary({ first_request_verified: true })
+            : historicalSummary({
+                status: "empty",
+                prompt_count: "0",
+                response_count: "0",
+                tokens: [],
+                resources: [],
+              }),
+        ),
+      ),
+    respondHistory: (request) => {
+      if (request.message.event === "page") state.imported = true;
+      return { accepted: true };
+    },
+    respondClaudeLink: () => ({ kept: true, ...counted }),
+    ownReadNow: () => state.now,
+    captureGraceTimers: true,
+  });
+  const facts = (output: number) => ({
+    channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+    nonce: harness.probeNonce(),
+    links: [{ chat, session }],
+    totals: { session, output, input: 12, cacheRead: 150000, cacheWrite: 3000 },
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  const relayed = () =>
+    harness.calls.filter((call) => call.target === "history-observation");
+  const read = { channel: ownReadModule.OWN_READ_CHANNEL, site: "claude", conversationId: session };
+  /** The page world hands the session's page to the history reader, then answers the read. */
+  const answer = async (index: number, sequence: number, output: number) => {
+    const page = claudeSessionPage(session, crypto.randomUUID(), sequence, output);
+    const before = relayed().length;
+    harness.postHistorical(page.start);
+    harness.postHistorical(page.page);
+    counted.after = sequence;
+    counted.counted = output;
+    harness.ownReadRequests()[index]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    for (let i = 0; i < 40 && relayed().length < before + 2; i++) await settleOwnRead(1);
+    assert.equal(relayed().length, before + 2, "the session's page is relayed");
+    await settleOwnRead(6);
+  };
+  /** Waits until the content script asked the page world for `count` reads. */
+  const asked = async (count: number) => {
+    for (let i = 0; i < 40 && requests().length < count; i++) await settleOwnRead(1);
+  };
+  harness.setVisibility("visible");
+  try {
+    const shadow = await harness.loadRoute();
+    // The page's own session object proves the link and gives Claude's total.
+    harness.postFileMessage(facts(23));
+    await asked(1);
+    // Nothing of the session is counted yet: its events are read from the first one.
+    assert.deepEqual(requests(), [read]);
+    // The grace period ends: the chat's saved copy is still not asked for.
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.deepEqual(requests(), [read]);
+    assert.doesNotMatch(barState(shadow), /History not loaded/);
+    await answer(0, 3, 23);
+    // Claude's total is counted now, so the same total asks for nothing.
+    harness.postFileMessage(facts(23));
+    await settleOwnRead(6);
+    assert.deepEqual(requests(), [read]);
+    // After the next reply the page loads the session object again, with a higher total. The
+    // read continues after the counted result.
+    state.now += ownReadModule.OWN_READ_TURN_SPACING_MS;
+    harness.postFileMessage(facts(579));
+    await asked(2);
+    assert.deepEqual(requests(), [read, { ...read, resume: 3 }]);
+    await answer(1, 9, 579);
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.deepEqual(requests(), [read, { ...read, resume: 3 }]);
+    assert.doesNotMatch(barState(shadow), /History not loaded|History update problem/);
+  } finally {
+    harness.close();
+  }
+});
+
+// A chat Claude moved into a session later: once its session is counted, the background says
+// that the chat's saved copy holds earlier turns, and that copy is read by text once.
+test("conductor: a chat moved into a session later gets one text read of its saved copy after its session is counted", async () => {
+  const chat = "00000000-0000-4000-8000-000000000d31";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const counted = {
+    after: null as number | null,
+    counted: null as number | null,
+    text: false,
+  };
+  const state = { imported: false };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(
+          state.imported
+            ? historicalSummary({ first_request_verified: true })
+            : historicalSummary({
+                status: "empty",
+                prompt_count: "0",
+                response_count: "0",
+                tokens: [],
+                resources: [],
+              }),
+        ),
+      ),
+    respondHistory: (request) => {
+      if (request.message.event !== "start") state.imported = true;
+      return { accepted: true };
+    },
+    respondClaudeLink: () => ({ kept: true, ...counted }),
+    captureGraceTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  const asked = async (count: number) => {
+    for (let i = 0; i < 40 && requests().length < count; i++) await settleOwnRead(1);
+  };
+  const read = { channel: ownReadModule.OWN_READ_CHANNEL, site: "claude" };
+  harness.setVisibility("visible");
+  try {
+    await harness.loadRoute();
+    harness.postFileMessage({
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce: harness.probeNonce(),
+      links: [{ chat, session }],
+      totals: { session, output: 843, input: 8, cacheRead: 0, cacheWrite: 0 },
+    });
+    await asked(1);
+    assert.deepEqual(requests(), [{ ...read, conversationId: session }]);
+    // The grace period ends after the link is known, so the session's read comes first.
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.deepEqual(requests(), [{ ...read, conversationId: session }]);
+    // The session's page is saved; its first request is not the chat's first message.
+    const page = claudeSessionPage(session, crypto.randomUUID(), 8, 843);
+    harness.postHistorical(page.start);
+    harness.postHistorical(page.page);
+    Object.assign(counted, { after: 8, counted: 843, text: true });
+    harness.ownReadRequests()[0]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    await asked(2);
+    assert.deepEqual(requests(), [
+      { ...read, conversationId: session },
+      { ...read, conversationId: chat },
+    ]);
+    // The saved copy arrives and is imported; nothing more is asked for.
+    const saved = await postClaudeImport(harness, chat, 3360);
+    saved.start();
+    assert.deepEqual(await saved.send("batch"), { accepted: true });
+    counted.text = false;
+    harness.ownReadRequests()[1]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    assert.deepEqual(await saved.send("finish"), { accepted: true });
+    await settleOwnRead(8);
+    harness.fireGraceTimers();
+    await settleOwnRead(8);
+    assert.equal(requests().length, 2);
+  } finally {
+    harness.close();
+  }
+});
+
+// A reload proves nothing again, and an old Cowork session's address is proven only when it
+// is opened from the list. When the page loads a session's totals at a chat with no proven
+// link, the content script asks the background whether it kept that link; only its yes links
+// the two, and then the session's events are read.
+for (const kept of [true, false])
+  test(`conductor: a session's totals at an unlinked Claude chat ask for the kept link, which ${kept ? "links them" : "is not there"}`, async () => {
+    const chat = "8ee80eda-0000-8000-8000-000000000d71";
+    const session = "cse_0123456789ABCDEFghijklmn";
+    const totals = { output: 843, input: 8, cacheRead: 0, cacheWrite: 0 };
+    const harness = await contentHarness(false, {
+      url: `https://claude.ai/chat/${chat}`,
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () =>
+        historicalRouteDisplay(
+          historicalView(
+            historicalSummary({
+              status: "empty",
+              prompt_count: "0",
+              response_count: "0",
+              tokens: [],
+              resources: [],
+            }),
+          ),
+        ),
+      respondHistory: () => ({ accepted: true }),
+      respondClaudeLink: () =>
+        kept ? { kept: true, after: null, counted: null, text: false } : { kept: false },
+      captureGraceTimers: true,
+    });
+    const reported = () =>
+      structuredClone(
+        harness.calls.filter((call) => call.target === "claude-session-link"),
+      );
+    harness.setVisibility("visible");
+    try {
+      await harness.loadRoute();
+      const facts = {
+        channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+        nonce: harness.probeNonce(),
+        links: [],
+        totals: { session, ...totals },
+      };
+      harness.postFileMessage(facts);
+      await settleOwnRead(6);
+      const asked = { target: "claude-session-link", chat, session, totals: null, proven: false };
+      if (kept) {
+        // The confirmed link is then reported like a proven one, with Claude's totals.
+        assert.deepEqual(reported(), [
+          asked,
+          { target: "claude-session-link", chat, session, totals },
+        ]);
+        for (let i = 0; i < 40 && harness.ownReadRequests().length < 1; i++)
+          await settleOwnRead(1);
+        assert.equal(
+          (harness.ownReadRequests()[0]!.message as any).conversationId,
+          session,
+        );
+      } else {
+        // Asked once; the same totals again ask nothing more, and nothing is read.
+        harness.postFileMessage(facts);
+        await settleOwnRead(6);
+        assert.deepEqual(reported(), [asked]);
+        assert.equal(harness.ownReadRequests().length, 0);
+      }
+    } finally {
+      harness.close();
+    }
+  });
+
+// A linked chat never waits without an end. When the background does not answer the link,
+// the chat is not loaded and says so; when the session is counted up to Claude's own total and
+// nothing is saved, its records were erased here and reloading would bring nothing back.
+for (const [name, answer, expected] of [
+  ["the background did not answer its link", null, "not loaded"],
+  [
+    "its counted session has nothing saved",
+    { kept: true, after: 8, counted: 843, text: false },
+    "erased",
+  ],
+] as const)
+  test(`conductor: a linked Claude chat shows a defined state when ${name}`, async () => {
+    const chat = "00000000-0000-4000-8000-000000000d61";
+    const session = "cse_0123456789ABCDEFghijklmn";
+    const harness = await contentHarness(false, {
+      url: `https://claude.ai/chat/${chat}`,
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () =>
+        historicalRouteDisplay(
+          historicalView(
+            historicalSummary({
+              status: "empty",
+              prompt_count: "0",
+              response_count: "0",
+              tokens: [],
+              resources: [],
+            }),
+          ),
+        ),
+      respondHistory: () => ({ accepted: true }),
+      respondClaudeLink: () => answer,
+      captureGraceTimers: true,
+    });
+    harness.setVisibility("visible");
+    try {
+      const shadow = await harness.loadRoute();
+      harness.postFileMessage({
+        channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+        nonce: harness.probeNonce(),
+        links: [{ chat, session }],
+        totals: { session, output: 843, input: 8, cacheRead: 0, cacheWrite: 0 },
+      });
+      await settleOwnRead(6);
+      harness.fireGraceTimers();
+      await settleOwnRead(6);
+      assert.equal(harness.ownReadRequests().length, 0);
+      if (expected === "erased") {
+        assert.match(detailsOnly(shadow), /Earlier messages erased/);
+        assert.doesNotMatch(barState(shadow), /History not loaded|Loading earlier/);
+      } else assert.match(barState(shadow), /History not loaded/);
+    } finally {
+      harness.close();
+    }
+  });
+
+// Live check of 23 Nov 2026: a chat started at claude.ai/new gets its address after the send,
+// and the page proves its session while the first reply is written or shortly after. Once
+// the background kept the link, the session's events are read. A link it does not keep
+// leaves the chat not loaded, with its entry in Details, never on No figures yet alone.
+for (const kept of [true, false])
+  test(`conductor: a Claude chat started at /new ${kept ? "reads its session's events once its link is kept" : "is History not loaded when its link is not kept"}`, async () => {
+    const chat = "00000000-0000-4000-8000-000000000d71";
+    const session = "cse_0123456789ABCDEFghijklmn";
+    const harness = await contentHarness(false, {
+      url: "https://claude.ai/new",
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () =>
+        historicalRouteDisplay(
+          historicalView(
+            historicalSummary({
+              status: "empty",
+              prompt_count: "0",
+              response_count: "0",
+              tokens: [],
+              resources: [],
+            }),
+          ),
+        ),
+      respondHistory: () => ({ accepted: true }),
+      respondClaudeLink: () =>
+        kept ? { kept: true, after: null, counted: null, text: false } : null,
+      captureGraceTimers: true,
+      captureTurnTimers: true,
+    });
+    const requests = () =>
+      harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+    const links = () =>
+      harness.calls.filter((call) => call.target === "claude-session-link");
+    const clock = harness.window.Date;
+    const realNow = clock.now;
+    harness.setVisibility("visible");
+    try {
+      const shadow = await harness.loadRoute();
+      const metrics = () => shadow.querySelector("[data-metrics]")!.textContent!;
+      // The app's own send at /new; the chat then gets its address.
+      harness.postFileMessage({
+        channel: watchdog.COWORK_SENT_CHANNEL,
+        nonce: harness.probeNonce(),
+        at: new Date().toISOString(),
+      });
+      await settleOwnRead(4);
+      await harness.navigate(`/chat/${chat}`);
+      await settleOwnRead(4);
+      assert.equal(metrics(), bar.BAR_PROCESSING);
+      const stop = harness.document.createElement("button");
+      stop.setAttribute("data-testid", "chat-input-stop");
+      harness.document.querySelector("form")!.append(stop);
+      harness.fireTurnTimers();
+      await settleOwnRead(4);
+      assert.equal(links().length, 0);
+      // The page's own request for the new session names the chat.
+      const sessionObject = () =>
+        harness.postFileMessage({
+          channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+          nonce: harness.probeNonce(),
+          links: [{ chat, session }],
+          totals: { session, output: 19, input: 8, cacheRead: 0, cacheWrite: 0 },
+        });
+      sessionObject();
+      await settleOwnRead(6);
+      assert.deepEqual(
+        links().map((call: any) => [call.chat, call.session, call.proven]),
+        [[chat, session, undefined]],
+      );
+      // The reply ends, and the wait for Claude's own total after it passes.
+      stop.remove();
+      harness.fireTurnTimers();
+      harness.fireTurnTimers();
+      harness.fireGraceTimers();
+      await settleOwnRead(6);
+      const later = realNow.call(clock) + 60_000;
+      clock.now = () => later;
+      // The page loads the session object once more, as it does a few seconds after a
+      // reply, and the bar is drawn again.
+      sessionObject();
+      await settleOwnRead(6);
+      if (kept) {
+        assert.deepEqual(requests(), [
+          {
+            channel: ownReadModule.OWN_READ_CHANNEL,
+            site: "claude",
+            conversationId: session,
+          },
+        ]);
+        assert.equal(metrics(), bar.BAR_PROCESSING);
+      } else {
+        assert.equal(requests().length, 0);
+        assert.equal(metrics(), bar.BAR_NO_FIGURES);
+        assert.match(barState(shadow), /History not loaded/);
+        assert.doesNotMatch(barState(shadow), /Loading earlier/);
+      }
+    } finally {
+      clock.now = realNow;
+      harness.close();
+    }
+  });
+
+// Live check of 23 Nov 2026: live counting worked only for the chat the page was loaded on.
+// The content script follows the address: a chat opened from the sidebar reports its own
+// link, and a reply sent there is read from its own session, where the count continues.
+test("conductor: a Claude chat opened from the sidebar reports its own link and reads its own session after a reply", async () => {
+  const loaded = "00000000-0000-4000-8000-000000000d81";
+  const opened = "00000000-0000-4000-8000-000000000d82";
+  const loadedSession = "cse_0123456789ABCDEFghijklmn";
+  const openedSession = "cse_ABCDEFghijklmn0123456789";
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${loaded}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(historicalSummary({ first_request_verified: true })),
+      ),
+    respondHistory: () => ({ accepted: true }),
+    // Each session is counted up to its result 8, 70 output tokens.
+    respondClaudeLink: () => ({ kept: true, after: 8, counted: 70, text: false }),
+    captureGraceTimers: true,
+    captureTurnTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  const links = () =>
+    harness.calls
+      .filter((call) => call.target === "claude-session-link")
+      .map((call: any) => [call.chat, call.session]);
+  const totals = (session: string, output: number) => ({
+    session,
+    output,
+    input: 8,
+    cacheRead: 0,
+    cacheWrite: 0,
+  });
+  const facts = (
+    rows: Array<{ chat: string; session: string }>,
+    total: ReturnType<typeof totals>,
+  ) =>
+    harness.postFileMessage({
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce: harness.probeNonce(),
+      links: rows,
+      totals: total,
+    });
+  harness.setVisibility("visible");
+  try {
+    await harness.loadRoute();
+    // The chat list names both chats' sessions, and the page loaded both totals. Both are
+    // counted, so nothing is read.
+    facts(
+      [
+        { chat: loaded, session: loadedSession },
+        { chat: opened, session: openedSession },
+      ],
+      totals(loadedSession, 70),
+    );
+    facts([], totals(openedSession, 70));
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.deepEqual(links(), [[loaded, loadedSession]]);
+    assert.equal(requests().length, 0);
+    // The other chat is opened from the sidebar: the address changes without a page load.
+    await harness.navigate(`/chat/${opened}`);
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.deepEqual(links(), [
+      [loaded, loadedSession],
+      [opened, openedSession],
+    ]);
+    assert.equal(requests().length, 0);
+    // A reply is sent and written there; then the page loads Claude's new total.
+    harness.postFileMessage({
+      channel: watchdog.COWORK_SENT_CHANNEL,
+      nonce: harness.probeNonce(),
+      at: new Date().toISOString(),
+    });
+    await settleOwnRead(4);
+    const stop = harness.document.createElement("button");
+    stop.setAttribute("data-testid", "chat-input-stop");
+    harness.document.querySelector("form")!.append(stop);
+    harness.fireTurnTimers();
+    await settleOwnRead(4);
+    stop.remove();
+    harness.fireTurnTimers();
+    harness.fireTurnTimers();
+    await settleOwnRead(4);
+    facts([], totals(openedSession, 662));
+    for (let i = 0; i < 40 && requests().length < 1; i++) await settleOwnRead(1);
+    assert.deepEqual(requests(), [
+      {
+        channel: ownReadModule.OWN_READ_CHANNEL,
+        site: "claude",
+        conversationId: openedSession,
+        resume: 8,
+      },
+    ]);
+  } finally {
+    harness.close();
+  }
+});
+
+// Live check of 23 Nov 2026: a chat with a Research report, opened on a fresh store, had its
+// session's events read and its saved copy marked due, but the copy was never read, so the
+// report was not counted. Claude's own total rested above the count (a side call), and the
+// bar kept asking for the session's events instead. The copy is read once those settled.
+test("conductor: a linked chat's due saved copy is read after its session's events, also while Claude's total differs from the count", async () => {
+  const chat = "00000000-0000-4000-8000-000000000d86";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const state = { now: Date.now() };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(historicalSummary({ first_request_verified: true })),
+      ),
+    respondHistory: () => ({ accepted: true }),
+    // Counted up to result 179; a counted Research launch left the chat's saved copy due.
+    respondClaudeLink: () => ({ kept: true, after: 179, counted: 5426, text: true }),
+    ownReadNow: () => state.now,
+    captureGraceTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  const asked = async (count: number) => {
+    for (let i = 0; i < 40 && requests().length < count; i++) await settleOwnRead(1);
+  };
+  const sessionObject = () =>
+    harness.postFileMessage({
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce: harness.probeNonce(),
+      links: [{ chat, session }],
+      totals: { session, output: 5438, input: 8, cacheRead: 0, cacheWrite: 0 },
+    });
+  const events = {
+    channel: ownReadModule.OWN_READ_CHANNEL,
+    site: "claude",
+    conversationId: session,
+    resume: 179,
+  };
+  harness.setVisibility("visible");
+  try {
+    await harness.loadRoute();
+    harness.fireGraceTimers();
+    sessionObject();
+    await asked(1);
+    assert.deepEqual(requests(), [events]);
+    harness.ownReadRequests()[0]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    await settleOwnRead(6);
+    // While the events' import may still start, the saved copy waits.
+    assert.deepEqual(requests(), [events]);
+    state.now += ownReadModule.OWN_READ_IMPORT_START_MS;
+    sessionObject();
+    await asked(2);
+    assert.deepEqual(requests(), [
+      events,
+      { channel: ownReadModule.OWN_READ_CHANNEL, site: "claude", conversationId: chat },
+    ]);
+    // One read of each per visit: the same total again asks for nothing more.
+    harness.ownReadRequests()[1]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    await settleOwnRead(6);
+    state.now += ownReadModule.OWN_READ_IMPORT_START_MS;
+    sessionObject();
+    await settleOwnRead(6);
+    assert.equal(requests().length, 2);
+  } finally {
+    harness.close();
+  }
+});
+
+// claude.ai's merged app (18 Nov 2026) sends through its own call and writes no completion
+// stream. The page world reports that send; the bar stays on Processing until the stop control
+// has gone, and a chat without a session is then read again by text.
+test("conductor: a merged-app send keeps Processing through the turn, and a Claude chat without a session is read again when it ended", async () => {
+  const conversationId = "00000000-0000-4000-8000-000000000d51";
+  const state = { imported: false };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${conversationId}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(
+          state.imported
+            ? historicalSummary({ first_request_verified: true })
+            : historicalSummary({
+                status: "empty",
+                prompt_count: "0",
+                response_count: "0",
+                tokens: [],
+                resources: [],
+              }),
+        ),
+      ),
+    respondHistory: (request) => {
+      if (request.message.event === "finish") state.imported = true;
+      return { accepted: true };
+    },
+    captureGraceTimers: true,
+    captureTurnTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  const asked = async (count: number) => {
+    for (let i = 0; i < 40 && requests().length < count; i++) await settleOwnRead(1);
+  };
+  const read = {
+    channel: ownReadModule.OWN_READ_CHANNEL,
+    site: "claude",
+    conversationId,
+  };
+  harness.setVisibility("visible");
+  try {
+    const shadow = await harness.loadRoute();
+    const metrics = () => shadow.querySelector("[data-metrics]")!.textContent!;
+    // The chat opens without figures; the read of its saved copy does not reach Claude.
+    harness.fireGraceTimers();
+    await asked(1);
+    harness.ownReadRequests()[0]!.ports[0]!.postMessage({ outcome: { kind: "network" } });
+    for (let i = 0; i < 40 && metrics() === bar.BAR_PROCESSING; i++) await settleOwnRead(1);
+    assert.notEqual(metrics(), bar.BAR_PROCESSING);
+    // The page world saw the app's own send.
+    harness.postFileMessage({
+      channel: watchdog.COWORK_SENT_CHANNEL,
+      nonce: harness.probeNonce(),
+      at: new Date().toISOString(),
+    });
+    await settleOwnRead(4);
+    assert.equal(metrics(), bar.BAR_PROCESSING);
+    // The reply is being written: the stop control shows, and nothing is asked for.
+    const form = harness.document.querySelector("form")!;
+    const stop = harness.document.createElement("button");
+    stop.setAttribute("data-testid", "chat-input-stop");
+    stop.setAttribute("aria-label", "Stop response");
+    form.append(stop);
+    harness.fireTurnTimers();
+    harness.fireTurnTimers();
+    await settleOwnRead(4);
+    assert.equal(metrics(), bar.BAR_PROCESSING);
+    assert.deepEqual(requests(), [read]);
+    // The stop control goes. One check alone does not end the turn.
+    stop.remove();
+    harness.fireTurnTimers();
+    await settleOwnRead(4);
+    assert.deepEqual(requests(), [read]);
+    harness.fireTurnTimers();
+    await asked(2);
+    assert.deepEqual(requests(), [read, read]);
+    assert.equal(metrics(), bar.BAR_PROCESSING);
+    // The saved copy arrives and is counted.
+    const saved = await postClaudeImport(harness, conversationId, 3380);
+    saved.start();
+    assert.deepEqual(await saved.send("batch"), { accepted: true });
+    harness.ownReadRequests()[1]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    assert.deepEqual(await saved.send("finish"), { accepted: true });
+    for (let i = 0; i < 40 && !/Req 2/.test(metrics()); i++) await settleOwnRead(1);
+    assert.match(metrics(), /Req 2 · In\/Out tokens/);
+    assert.match(
+      shadow.querySelector("[data-body]")!.textContent!,
+      /gives no token counts for this text/,
+    );
+    // The turn is over: further checks ask for nothing.
+    harness.fireTurnTimers();
+    harness.fireGraceTimers();
+    await settleOwnRead(6);
+    assert.equal(requests().length, 2);
+  } finally {
+    harness.close();
+  }
+});
+
 test("conductor: a Claude chat the page reads within the grace period gets no own read", async () => {
   const conversationId = "00000000-0000-4000-8000-000000000511";
   const { harness } = await claudeOwnReadHarness(conversationId);
@@ -5999,6 +7197,43 @@ for (const [label, outcome, reason] of [
       harness.close();
     }
   });
+
+// Live check of 23 Nov 2026: a Cowork session from before the merge is shown at a chat address
+// (a version 8 id) and has no saved chat, so the tracker's read of it answers 404. Until the
+// page proves which session it is, reloading reads nothing. The bar and Details say so and
+// name what links it, instead of advising a reload.
+test("conductor: an unlinked Cowork session at a chat address says how it gets linked, not to reload", async () => {
+  const conversationId = "00000000-0000-8000-8000-000000000d95";
+  const { harness, historyEvents } = await claudeOwnReadHarness(conversationId);
+  try {
+    const shadow = await harness.loadRoute();
+    harness.fireGraceTimers();
+    await settleOwnRead();
+    const requests = harness.ownReadRequests();
+    assert.equal(requests.length, 1);
+    requests[0]!.ports[0]!.postMessage({
+      outcome: { kind: "http", status: 404, shouldRetry: false },
+    });
+    await settleOwnRead(5);
+    assert.equal(
+      shadow.querySelector("[data-metrics]")!.textContent!,
+      bar.BAR_NO_FIGURES,
+    );
+    assert.doesNotMatch(barState(shadow), /History not loaded|reload page/);
+    assert.match(detailsOnly(shadow), /Cowork session not linked/);
+    const body = shadow.querySelector("[data-body]")!.textContent!;
+    assert.match(body, /Cowork session not linked/);
+    assert.match(body, /has not told the tracker which session it is/);
+    assert.match(body, /Open the session once from where Claude lists its Cowork sessions/);
+    assert.doesNotMatch(
+      body,
+      /Reload the page to count earlier messages|did not find the chat|No request counted/,
+    );
+    assert.deepEqual(historyEvents, []);
+  } finally {
+    harness.close();
+  }
+});
 
 // A 429 or 5xx pause is shared with the site's other tabs through the background (14 Oct 2026,
 // lib/own-read-pause.ts): the tab asks for the site's pause and reports its own.
@@ -9216,6 +10451,34 @@ test("the bar and Details follow claude.ai and Perplexity theme changes without 
   }
 });
 
+test("the bar is opaque in the colour the page draws behind it and follows a theme change (22 November 2026)", async () => {
+  // Chat text scrolled behind the transparent bar made both unreadable on the merged Claude app.
+  const harness = await contentHarness();
+  try {
+    const shadow = harness.render(null, { requestCount: 1 });
+    const host = shadow.host as HTMLElement;
+    const { documentElement: html, body } = harness.document;
+    const surface = () => host.style.getPropertyValue("--aft-bar-surface");
+    const sheet = shadow.querySelector("style")!.textContent!;
+    assert.match(sheet, /\.bar\{[^}]*background:var\(--aft-bar-surface,Canvas\)/, "the bar paints the page colour, Canvas when the page names none");
+    assert.match(sheet, /\.bar\{[^}]*padding:6px 4px/, "the bar does not grow");
+    assert.doesNotMatch(sheet, /\.bar\{[^}]*(border|box-shadow)/, "no border or shadow");
+    const change = async (mode: string, color: string) => {
+      body.style.backgroundColor = color;
+      html.setAttribute("data-mode", mode);
+      await new Promise((resolve) => setImmediate(resolve));
+    };
+    await change("dark", "rgb(38, 38, 36)");
+    assert.equal(surface(), "rgb(38, 38, 36)");
+    await change("light", "rgb(250, 249, 245)");
+    assert.equal(surface(), "rgb(250, 249, 245)");
+    await change("dark", "");
+    assert.equal(surface(), "", "a page with no colour leaves the property unset so Canvas applies");
+  } finally {
+    harness.close();
+  }
+});
+
 // Capture delivery retries (16 Oct 2026). The waits are fired by the test, so a frame's
 // tries are counted exactly.
 const RETRY_DELAYS = [1111, 3333];
@@ -10226,6 +11489,203 @@ test("bar while not paused: an opened chat still shows Processing while its hist
     harness.fireGraceTimers();
     await settle();
     assert.equal(metrics(), bar.BAR_NO_FIGURES);
+  } finally {
+    harness.close();
+  }
+});
+
+// Claude Research in a chat with a session: the report is written into the chat's saved reply
+// while the stop control shows, long after the session's result. The saved copy that the
+// background says is due is therefore read by text when the running turn ends, not before.
+test("conductor: a linked Claude chat's due saved copy is read by text when the running turn ends, not before", async () => {
+  const chat = "00000000-0000-4000-8000-000000000d81";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(historicalSummary({ first_request_verified: true })),
+      ),
+    respondHistory: () => ({ accepted: true }),
+    // The session is counted up to Claude's own total, and a Research launch was counted.
+    respondClaudeLink: () => ({ kept: true, after: 8, counted: 843, text: true }),
+    captureGraceTimers: true,
+    captureTurnTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  harness.setVisibility("visible");
+  try {
+    await harness.loadRoute();
+    harness.fireGraceTimers();
+    // The page world saw the app's own send; the reply is being written.
+    harness.postFileMessage({
+      channel: watchdog.COWORK_SENT_CHANNEL,
+      nonce: harness.probeNonce(),
+      at: new Date().toISOString(),
+    });
+    const stop = harness.document.createElement("button");
+    stop.setAttribute("data-testid", "chat-input-stop");
+    stop.setAttribute("aria-label", "Stop response");
+    harness.document.querySelector("form")!.append(stop);
+    await settleOwnRead(4);
+    harness.postFileMessage({
+      channel: claudeSessionLinks.CLAUDE_LINK_CHANNEL,
+      nonce: harness.probeNonce(),
+      links: [{ chat, session }],
+      totals: { session, output: 843, input: 8, cacheRead: 0, cacheWrite: 0 },
+    });
+    harness.fireTurnTimers();
+    harness.fireTurnTimers();
+    await settleOwnRead(8);
+    assert.equal(requests().length, 0, "nothing is read while the reply is being written");
+    // The stop control goes: the turn ended, and the chat's saved copy is read once.
+    stop.remove();
+    harness.fireTurnTimers();
+    harness.fireTurnTimers();
+    for (let i = 0; i < 40 && requests().length < 1; i++) await settleOwnRead(1);
+    assert.deepEqual(requests(), [
+      { channel: ownReadModule.OWN_READ_CHANNEL, site: "claude", conversationId: chat },
+    ]);
+    harness.ownReadRequests()[0]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    harness.fireTurnTimers();
+    harness.fireGraceTimers();
+    await settleOwnRead(8);
+    assert.equal(requests().length, 1);
+  } finally {
+    harness.close();
+  }
+});
+
+// The other ways a turn of the merged app ends: no stop control appears within 20 s of the
+// send, the turn runs past its 30-minute cap, or the person leaves the chat while it runs.
+for (const ending of ["no stop control", "the cap", "a navigation"] as const)
+  test(`conductor: a merged-app turn ended by ${ending} is ${ending === "a navigation" ? "dropped without a read" : "read once"}`, async () => {
+    const chat = "00000000-0000-4000-8000-000000000d91";
+    const other = "00000000-0000-4000-8000-000000000d92";
+    const harness = await contentHarness(false, {
+      url: `https://claude.ai/chat/${chat}`,
+      html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+      respond: () =>
+        historicalRouteDisplay(
+          historicalView(historicalSummary({ first_request_verified: true })),
+        ),
+      respondHistory: () => ({ accepted: true }),
+      captureGraceTimers: true,
+      captureTurnTimers: true,
+    });
+    const requests = () =>
+      harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+    const clock = harness.window.Date;
+    const realNow = clock.now;
+    const ahead = (ms: number) => {
+      const later = realNow.call(clock) + ms;
+      clock.now = () => later;
+    };
+    harness.setVisibility("visible");
+    try {
+      await harness.loadRoute();
+      harness.fireGraceTimers();
+      await settleOwnRead(4);
+      assert.equal(requests().length, 0, "the chat has figures; nothing is read on opening");
+      harness.postFileMessage({
+        channel: watchdog.COWORK_SENT_CHANNEL,
+        nonce: harness.probeNonce(),
+        at: new Date().toISOString(),
+      });
+      await settleOwnRead(4);
+      const stop = harness.document.createElement("button");
+      stop.setAttribute("data-testid", "chat-input-stop");
+      if (ending !== "no stop control")
+        harness.document.querySelector("form")!.append(stop);
+      harness.fireTurnTimers();
+      await settleOwnRead(4);
+      assert.equal(requests().length, 0, "the turn is still open");
+      if (ending === "a navigation") {
+        await harness.navigate(`/chat/${other}`);
+        harness.fireGraceTimers();
+        stop.remove();
+        harness.fireTurnTimers();
+        harness.fireTurnTimers();
+        await settleOwnRead(8);
+        assert.equal(requests().length, 0);
+        return;
+      }
+      ahead(ending === "the cap" ? 31 * 60_000 : 21_000);
+      harness.fireTurnTimers();
+      for (let i = 0; i < 40 && requests().length < 1; i++) await settleOwnRead(1);
+      assert.deepEqual(requests(), [
+        { channel: ownReadModule.OWN_READ_CHANNEL, site: "claude", conversationId: chat },
+      ]);
+    } finally {
+      clock.now = realNow;
+      harness.close();
+    }
+  });
+
+// A chat opened again reads nothing when nothing is missing. A reply sent there within five
+// minutes of a read made in an earlier navigation is still read when its turn ends.
+test("conductor: a reply sent after reopening a Claude chat within five minutes of its last read is read", async () => {
+  const chat = "00000000-0000-4000-8000-000000000da1";
+  const other = "00000000-0000-4000-8000-000000000da2";
+  const state = { now: Date.now() };
+  const harness = await contentHarness(false, {
+    url: `https://claude.ai/chat/${chat}`,
+    html: '<main><form><div class="ProseMirror" contenteditable="true" role="textbox"></div></form></main>',
+    respond: () =>
+      historicalRouteDisplay(
+        historicalView(historicalSummary({ first_request_verified: true })),
+      ),
+    respondHistory: () => ({ accepted: true }),
+    ownReadNow: () => state.now,
+    captureGraceTimers: true,
+    captureTurnTimers: true,
+  });
+  const requests = () =>
+    harness.ownReadRequests().map((request: any) => structuredClone(request.message));
+  /** A whole turn: the send, the stop control showing, and the stop control gone. */
+  const turn = async () => {
+    harness.postFileMessage({
+      channel: watchdog.COWORK_SENT_CHANNEL,
+      nonce: harness.probeNonce(),
+      at: new Date().toISOString(),
+    });
+    await settleOwnRead(4);
+    const stop = harness.document.createElement("button");
+    stop.setAttribute("data-testid", "chat-input-stop");
+    harness.document.querySelector("form")!.append(stop);
+    harness.fireTurnTimers();
+    stop.remove();
+    harness.fireTurnTimers();
+    harness.fireTurnTimers();
+  };
+  const asked = async (count: number) => {
+    for (let i = 0; i < 40 && requests().length < count; i++) await settleOwnRead(1);
+  };
+  harness.setVisibility("visible");
+  try {
+    await harness.loadRoute();
+    harness.fireGraceTimers();
+    await turn();
+    await asked(1);
+    assert.equal(requests().length, 1);
+    harness.ownReadRequests()[0]!.ports[0]!.postMessage({ outcome: { kind: "read" } });
+    await settleOwnRead(6);
+    // Away and back: the chat has its figures, so opening it asks for nothing.
+    await harness.navigate(`/chat/${other}`);
+    harness.fireGraceTimers();
+    await settleOwnRead(4);
+    await harness.navigate(`/chat/${chat}`);
+    harness.fireGraceTimers();
+    await settleOwnRead(4);
+    assert.equal(requests().length, 1);
+    // Ten seconds after the last read, well inside the five minutes.
+    state.now += ownReadModule.OWN_READ_TURN_SPACING_MS;
+    await turn();
+    await asked(2);
+    assert.equal(requests().length, 2);
+    assert.equal(requests()[1]!.conversationId, chat);
   } finally {
     harness.close();
   }

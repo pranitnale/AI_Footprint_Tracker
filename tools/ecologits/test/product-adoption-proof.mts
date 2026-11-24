@@ -195,17 +195,21 @@ try {
       "utf8",
     ),
   );
-  assert.equal(adoptedLock.release_kind, kind);
+  // The accepted case re-adopts the lock's own release or qualified combination unchanged.
+  assert.equal(
+    adoptedLock.release_kind,
+    qualified ? "qualified_combination" : release.kind,
+  );
   assert.equal(
     adoptedLock.catalog_commit,
-    qualified ? "b".repeat(40) : adoptedLock.core_commit,
+    qualified ? "b".repeat(40) : release.catalogCommit,
   );
   assert.equal(adoptedLock.core_commit, release.commit);
   assert.equal(
     adoptedLock.snapshot_directory,
     qualified
       ? `ecologits-${release.version}-qualified-product-adoption-proof`
-      : `ecologits-${release.version}`,
+      : release.snapshotDirectory,
   );
 
   const after = await runtime(afterRoot);

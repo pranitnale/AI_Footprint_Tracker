@@ -165,3 +165,110 @@ test("cowork own read page: a hidden tab is declined", async () => {
   assert.deepEqual(await hidden.ask(), { kind: "declined" });
   assert.equal(hidden.fetches.length, 0);
 });
+
+// Since 18 Nov 2026 a Claude chat's session is read again after each reply. The read then
+// starts after the last counted event (probe of 22 Nov 2026: a cursor is the sequence number
+// already seen, and an empty page is the answer when nothing is new).
+test("cowork own read: a resumed read starts after the last counted event", async () => {
+  const provider = claudeOwnRead({ origin: ORIGIN, cookie: () => "" });
+  const run = recordingContext(SESSION, `/cowork/${SESSION}`, (url) =>
+    json(url.searchParams.get("cursor") === "37" ? events(38, 41) : events(1, 3)),
+  );
+  assert.deepEqual(await provider.run({ ...run.context, resume: 37 }), { kind: "read" });
+  assert.deepEqual(run.urls, [laterUrl(37)]);
+  const idle = recordingContext(SESSION, `/cowork/${SESSION}`, () =>
+    json(JSON.stringify({ data: [], resume_cursor: "41" })),
+  );
+  assert.deepEqual(await provider.run({ ...idle.context, resume: 41 }), { kind: "read" });
+  assert.deepEqual(idle.urls, [laterUrl(41)]);
+  // Only a whole event number is a place to resume.
+  assert.equal(provider.resume!(37), true);
+  for (const value of [0, -1, 1.5, "37", null, {}])
+    assert.equal(provider.resume!(value), false, JSON.stringify(value));
+});
+
+// A prompt queued while the turn before it was still running lies before the place a resumed
+// read starts from. Its result would then name a prompt the reader never saw, and the saved
+// chat messages of that turn would stay counted by text beside the exact count.
+test("cowork own read: a resumed read that meets a prompt it has not seen reads from the first event once", async () => {
+  const provider = claudeOwnRead({ origin: ORIGIN, cookie: () => "", pageDelay: () => 0 });
+  const queued = "00000000-0000-4000-8000-0000000000a1";
+  const later = "00000000-0000-4000-8000-0000000000a2";
+  const user = (sequence: number, uuid: string) => ({
+    ...envelope(sequence),
+    payload: { type: "user", uuid, message: { role: "user", content: "synthetic" } },
+  });
+  const result = (sequence: number, prompt: string, usage: object) => ({
+    ...envelope(sequence),
+    payload: {
+      type: "result",
+      uuid: crypto.randomUUID(),
+      user_message_uuids: [prompt],
+      modelUsage: usage,
+    },
+  });
+  const counted = { "claude-sonnet-5-5": { outputTokens: 5 } };
+  const page = (data: unknown[]) => json(JSON.stringify({ data }));
+  const missed = recordingContext(SESSION, `/cowork/${SESSION}`, (url) =>
+    url.searchParams.get("cursor") === "37"
+      ? page([envelope(38), result(39, queued, counted)])
+      : page([user(30, queued), envelope(37), envelope(38), result(39, queued, counted)]),
+  );
+  assert.deepEqual(await provider.run({ ...missed.context, resume: 37 }), { kind: "read" });
+  assert.deepEqual(missed.urls, [laterUrl(37), firstUrl]);
+  // A prompt on the resumed pages, and a result that ran no model, start nothing over.
+  const seen = recordingContext(SESSION, `/cowork/${SESSION}`, () =>
+    page([result(38, queued, {}), user(39, later), result(40, later, counted)]),
+  );
+  assert.deepEqual(await provider.run({ ...seen.context, resume: 37 }), { kind: "read" });
+  assert.deepEqual(seen.urls, [laterUrl(37)]);
+});
+
+test("cowork own read: a session is read at the address of the chat that shows it, and at no other", async () => {
+  const chat = "00000000-0000-4000-8000-000000000c11";
+  const other = "00000000-0000-4000-8000-000000000c12";
+  const world = pageWorld(
+    claudeOwnRead({ origin: ORIGIN, cookie: () => "", pageDelay: () => 0 }),
+    SESSION,
+    `/chat/${chat}`,
+    {
+      responses: () => json(events(38, 41)),
+      // As the page world's link facts say: the session backs this chat only.
+      shows: (pathname, id) => pathname === `/chat/${chat}` && id === SESSION,
+    },
+  );
+  assert.deepEqual(await world.ask(SESSION, { resume: 37 }), { kind: "read" });
+  assert.deepEqual(
+    world.fetches.map((fetch) => fetch.input),
+    [laterUrl(37)],
+  );
+  assert.equal(world.observed.length, 1, "the page goes to the Cowork event reader");
+  world.state.pathname = `/chat/${other}`;
+  assert.deepEqual(await world.ask(SESSION, { resume: 41 }), { kind: "declined" });
+  assert.equal(world.fetches.length, 1);
+  // Without a link the session is shown only at its own address.
+  const plain = pageWorld(
+    claudeOwnRead({ origin: ORIGIN, cookie: () => "", pageDelay: () => 0 }),
+    SESSION,
+    `/chat/${chat}`,
+    { responses: () => json(events(1, 3)) },
+  );
+  assert.deepEqual(await plain.ask(), { kind: "declined" });
+  assert.equal(plain.fetches.length, 0);
+  // After a reload the page world holds no proof. The content script's request names the
+  // session whose link the background kept, and that word is taken before the check.
+  const vouched: string[][] = [];
+  const reloaded = pageWorld(
+    claudeOwnRead({ origin: ORIGIN, cookie: () => "", pageDelay: () => 0 }),
+    SESSION,
+    `/chat/${chat}`,
+    {
+      responses: () => json(events(1, 3)),
+      vouched: (pathname, id) => vouched.push([pathname, id]),
+      shows: (pathname, id) =>
+        vouched.some(([path, session]) => path === pathname && session === id),
+    },
+  );
+  assert.deepEqual(await reloaded.ask(), { kind: "read" });
+  assert.deepEqual(vouched, [[`/chat/${chat}`, SESSION]]);
+});

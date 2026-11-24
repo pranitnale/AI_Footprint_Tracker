@@ -10,6 +10,7 @@ import {
 } from "./common";
 import type {
   CoworkCumulative,
+  CoworkInputCounts,
   CoworkModelCount,
   HistoryTextMessage,
   HistoryTextPage,
@@ -86,9 +87,19 @@ function sequenceOf(value: unknown): number | null {
 export function validCoworkCumulative(
   value: unknown,
 ): value is CoworkCumulative {
+  const inputs = record(value) ? value.inputs : undefined;
   if (
     !record(value) ||
-    Object.keys(value).sort().join(",") !== "apiMs,models,sequence" ||
+    Object.keys(value).sort().join(",") !==
+      (Object.hasOwn(value, "inputs")
+        ? "apiMs,inputs,models,sequence"
+        : "apiMs,models,sequence") ||
+    (Object.hasOwn(value, "inputs") &&
+      (!record(inputs) ||
+        Object.keys(inputs).sort().join(",") !== "cacheRead,cacheWrite,fresh" ||
+        [inputs.fresh, inputs.cacheWrite, inputs.cacheRead].some(
+          (entry) => count(entry) === null,
+        ))) ||
     count(value.sequence) === null ||
     (value.apiMs !== null && count(value.apiMs) === null) ||
     !Array.isArray(value.models) ||
@@ -149,6 +160,27 @@ function modelCounts(
   return [...models.values()];
 }
 
+/**
+ * The three input counters of a result, added over its models, or null when an entry lacks
+ * one or holds something that is not a count. The input is then unknown: a sum over only
+ * the models that reported it would look exact and be too low.
+ */
+function inputCounts(value: Record<string, unknown>): CoworkInputCounts | null {
+  const sum = { fresh: 0, cacheWrite: 0, cacheRead: 0 };
+  for (const usage of Object.values(value)) {
+    if (!record(usage)) return null;
+    const fresh = count(usage.inputTokens),
+      cacheWrite = count(usage.cacheCreationInputTokens),
+      cacheRead = count(usage.cacheReadInputTokens);
+    if (fresh === null || cacheWrite === null || cacheRead === null)
+      return null;
+    sum.fresh += fresh;
+    sum.cacheWrite += cacheWrite;
+    sum.cacheRead += cacheRead;
+  }
+  return Object.values(sum).every((entry) => entry <= COUNT_LIMIT) ? sum : null;
+}
+
 type CoworkResult = {
   id: string;
   sequence: number;
@@ -176,6 +208,8 @@ type CoworkPrompt = {
   occurredAt: string | null;
   text: string | null;
   images: number | null;
+  /** The saved chat messages this turn stands for, when the event names both. */
+  chat: { prompt: string; reply: string } | null;
 };
 
 /**
@@ -209,9 +243,15 @@ function toolResultText(content: unknown): string | null | undefined {
 /**
  * The text and inline image count of a user message, as far as its shape is known, or
  * null when it carries neither (tool results arrive as user messages too).
+ *
+ * `chatTurn`: the message is a turn of a Claude chat. The app then puts a reminder element
+ * with the time zone and send time before the typed prompt (probe of 22 Nov 2026: one
+ * `<system-reminder>` block, the prompt is the last text block). It is not the person's text
+ * and the chat's saved copy does not hold it, so it is left out; the last block always stays.
  */
 function userContent(
   content: unknown,
+  chatTurn = false,
 ): { text: string | null; images: number | null } | null {
   if (typeof content === "string")
     return { text: boundedText(content) ? content : null, images: 0 };
@@ -220,7 +260,15 @@ function userContent(
   const typed =
     blocks.length === content.length &&
     blocks.every((block) => typeof block.type === "string");
-  const texts = blocks.filter((block) => block.type === "text");
+  const texts = blocks
+    .filter((block) => block.type === "text")
+    .filter(
+      (block, index, all) =>
+        !chatTurn ||
+        index === all.length - 1 ||
+        typeof block.text !== "string" ||
+        !/^<system-reminder>[\s\S]*<\/system-reminder>\s*$/.test(block.text),
+    );
   const images = blocks.filter((block) => block.type === "image").length;
   if (typed && !texts.length && !images) return null;
   const text = texts.every((block) => typeof block.text === "string")
@@ -231,6 +279,11 @@ function userContent(
     images: typed ? images : null,
   };
 }
+
+/** The tool Claude Research calls to launch its task; a connector prefix may precede it. */
+const RESEARCH_TOOL = "launch_extended_search_task";
+const KEPT_RESEARCH = 64;
+const KEPT_COUNTED = 4096;
 
 /**
  * Facts of Cowork events: results with their cumulative counters, the user messages that
@@ -269,6 +322,18 @@ export class CoworkEvents {
   private startLost = false;
   /** The newest position read before the earliest event skipped unread. */
   private earliestGap = Infinity;
+  /** Ids of the messages a turn handoff carried (`handoff`); they are no later requests. */
+  private handed = new Set<string>();
+  /**
+   * The prompts of turns a handoff carried that no user event of their own named: the turn
+   * in which Claude converted a chat. Kept for the reader's life, so a result read on a
+   * later page of the same list is still known as that turn.
+   */
+  private handoffPrompts = new Set<string>();
+  /** Positions of main-loop replies that launched a Research task. */
+  private research: number[] = [];
+  /** Positions of the counted results read so far, so a turn is the same when read again. */
+  private counted = new Set<number>();
 
   /**
    * Reads one event envelope. Returns whether it has the known envelope shape, so a reader
@@ -300,6 +365,9 @@ export class CoworkEvents {
     this.mark(sequence, { kind: "other" });
     if (payload.type === "result") this.result(payload, sequence, occurredAt);
     else if (payload.type === "user") this.user(payload, sequence, occurredAt);
+    else if (payload.type === "control_request")
+      this.handoff(payload, sequence, occurredAt);
+    else if (payload.type === "assistant") this.assistant(payload, sequence);
     else if (payload.type === "system" && payload.subtype === "init") {
       const model = historyModelLabel(payload.model);
       if (model) {
@@ -343,7 +411,13 @@ export class CoworkEvents {
         for (const id of event.prompts.length ? event.prompts : prompts)
           if (prompts.includes(id)) idle.add(id);
       } else if (event.kind === "counted") {
-        const named = new Set(event.prompts);
+        // Messages a handoff carried besides its prompt (tool results of the turn so far)
+        // were read with it; they are not requests the reader missed.
+        const named = new Set(
+          event.prompts.filter(
+            (id) => prompts.includes(id) || !this.handed.has(id),
+          ),
+        );
         const first = prompts.findIndex((id) => named.has(id));
         // A prompt a counted result names, even one read on another page or after R, was
         // a request of its own.
@@ -437,8 +511,14 @@ export class CoworkEvents {
       this.unreadable = true;
       return;
     }
+    // The models were read, so the counters are a record. Input counters that cannot be
+    // read leave the turn's input unknown; its output stays exact.
+    const inputs = inputCounts(usage as Record<string, unknown>);
     if (named)
       this.mark(sequence, { kind: "counted", id: payload.uuid, prompts: named });
+    this.counted.add(sequence);
+    if (this.counted.size > KEPT_COUNTED)
+      this.counted.delete(this.counted.values().next().value!);
     const answer = payload.result;
     this.results.set(payload.uuid, {
       id: payload.uuid,
@@ -457,6 +537,7 @@ export class CoworkEvents {
         sequence,
         models,
         apiMs: apiMs === undefined ? null : count(apiMs),
+        ...(inputs ? { inputs } : {}),
       },
     });
   }
@@ -478,23 +559,110 @@ export class CoworkEvents {
     }
     // Messages to sub-agents are model-written tool traffic, not the user's prompts.
     if (payload.parent_tool_use_id) return;
+    // A turn with a user event of its own is a turn of the session, handed over or not.
+    if (historyUUID(payload.uuid)) this.handoffPrompts.delete(payload.uuid);
     // A user message without an id or readable content may still be a request.
+    // A turn of a Claude chat names the chat's saved prompt and reply (probe of 22 Nov
+    // 2026: both ids equal the saved copy's). Without both, the turn stands for none.
+    const chat =
+      historyUUID(payload.bard_message_id) &&
+      historyUUID(payload.bard_assistant_message_id) &&
+      payload.bard_message_id !== payload.bard_assistant_message_id
+        ? {
+            prompt: payload.bard_message_id as string,
+            reply: payload.bard_assistant_message_id as string,
+          }
+        : null;
     const content = historyUUID(payload.uuid)
-      ? userContent(payload.message.content)
+      ? userContent(payload.message.content, chat !== null)
       : null;
     if (!content) {
       this.mark(sequence, { kind: "unknown" });
       return;
     }
-    const prompt = { id: payload.uuid, sequence, occurredAt, ...content };
-    this.prompts.delete(payload.uuid);
-    this.prompts.set(payload.uuid, prompt);
-    if (sequence <= START_EVENTS) {
-      this.mark(sequence, { kind: "prompt", id: prompt.id });
+    this.prompt({ id: payload.uuid, sequence, occurredAt, ...content, chat });
+  }
+
+  private prompt(prompt: CoworkPrompt) {
+    this.prompts.delete(prompt.id);
+    this.prompts.set(prompt.id, prompt);
+    if (prompt.sequence <= START_EVENTS) {
+      this.mark(prompt.sequence, { kind: "prompt", id: prompt.id });
       this.keepStartPrompt(prompt);
     }
     while (this.prompts.size > KEPT_PROMPTS)
       this.prompts.delete(this.prompts.keys().next().value!);
+  }
+
+  /**
+   * A chat that Claude moves into a session in the middle of a turn hands the turn over in a
+   * control request (seen 23 Nov 2026): `request.messages` holds the turn so far, its first
+   * message is the prompt, and the first counted result names that message's id. No user
+   * event exists for the turn, so its prompt is taken from here. It names no saved chat
+   * message. Any other control request is left alone.
+   */
+  private handoff(
+    payload: Record<string, any>,
+    sequence: number,
+    occurredAt: string | null,
+  ) {
+    const request = payload.request;
+    if (!record(request) || request.subtype !== "turn_handoff") return;
+    const messages = Array.isArray(request.messages) ? request.messages : [];
+    const first = messages[0];
+    // The handed turn is the converting one whether or not its prompt can be read.
+    if (record(first) && historyUUID(first.uuid)) {
+      this.handoffPrompts.add(first.uuid);
+      if (this.handoffPrompts.size > KEPT_PROMPTS)
+        this.handoffPrompts.delete(this.handoffPrompts.values().next().value!);
+    }
+    const inner = record(first) && record(first.message) ? first.message : first;
+    const content =
+      record(first) &&
+      record(inner) &&
+      historyUUID(first.uuid) &&
+      [first.type, inner.role].includes("user")
+        ? userContent(inner.content, true)
+        : null;
+    // A handoff whose prompt cannot be read may hide a request: the start stays unproven.
+    if (!content || messages.length > PROMPTS_PER_RESULT) {
+      this.mark(sequence, { kind: "unknown" });
+      return;
+    }
+    for (const message of messages)
+      if (record(message) && historyUUID(message.uuid))
+        this.handed.add(message.uuid);
+    this.prompt({
+      id: first.uuid,
+      sequence,
+      occurredAt,
+      ...content,
+      chat: null,
+    });
+  }
+
+  /**
+   * A reply of the session's own model that launches a Claude Research task (probe of 22 Nov
+   * 2026). The task runs outside the session: no later event and no result covers it, and its
+   * report is written into the chat's saved reply. Only the tool's name is read. A sub-agent's
+   * reply is model-written tool traffic and launches nothing here.
+   */
+  private assistant(payload: Record<string, any>, sequence: number) {
+    if (payload.parent_tool_use_id) return;
+    const content = record(payload.message) ? payload.message.content : null;
+    if (
+      !Array.isArray(content) ||
+      !content.some(
+        (block) =>
+          record(block) &&
+          block.type === "tool_use" &&
+          typeof block.name === "string" &&
+          block.name.endsWith(RESEARCH_TOOL),
+      )
+    )
+      return;
+    this.research.push(sequence);
+    if (this.research.length > KEPT_RESEARCH) this.research.shift();
   }
 
   private keepStartPrompt(prompt: CoworkPrompt) {
@@ -578,7 +746,13 @@ export class CoworkEvents {
         : null;
     const named = new Set<string>();
     const messages: Array<[number, HistoryTextMessage]> = [];
+    // The counted result before each result, found in one walk: both lists are in order.
+    const counted = [...this.counted].sort((a, b) => a - b);
+    let next = 0;
+    let previous = -1;
     for (const result of results) {
+      while (next < counted.length && counted[next]! < result.sequence)
+        previous = counted[next++]!;
       const message = historyMessage(result.id, "response");
       // The reply links to its first prompt even when the page did not load it.
       const promptId = result.prompts[0] ?? null;
@@ -607,6 +781,28 @@ export class CoworkEvents {
         result.sequence,
       );
       if (tools !== undefined) message.toolOutput = tools;
+      // The reply stands for the saved reply of its first prompt's turn.
+      const turn = promptId
+        ? (this.prompts.get(promptId) ?? (promptId === root?.id ? root : null))
+        : null;
+      // A turn that launched a Research task, one whose launch lies between the counted
+      // result before this one and this one: its report exists only in the chat's saved
+      // reply. That reply is not named, so it stays counted by its text beside this exact
+      // count of the launch.
+      const before = previous;
+      // The turn in which Claude converted the chat (owner decision of 23 Nov 2026): its
+      // result counts only the part after the handoff, while the chat's saved reply holds
+      // the whole reply, so that reply is counted once, by its text. Known only when this
+      // reader read the handoff event; after a gap the result keeps its exact count.
+      if (result.prompts.some((id) => this.handoffPrompts.has(id)))
+        message.handoff = true;
+      else if (
+        this.research.some(
+          (sequence) => sequence > before && sequence < result.sequence,
+        )
+      )
+        message.research = true;
+      else if (turn?.chat) message.chat = turn.chat;
       messages.push([result.sequence, message]);
       for (const id of result.prompts) {
         // The first prompt is reported even when later prompts pushed it out.
@@ -623,6 +819,7 @@ export class CoworkEvents {
             { length: Math.min(prompt.images, 32) },
             () => ({ width: null, height: null }),
           );
+        if (prompt.chat) promptMessage.chat = prompt.chat;
         messages.push([prompt.sequence, promptMessage]);
         this.prompts.delete(id);
       }

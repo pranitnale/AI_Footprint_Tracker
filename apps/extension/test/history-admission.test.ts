@@ -262,14 +262,15 @@ test("invalidation during the ownership snapshot cannot repopulate a late start"
   db.close();
 });
 
-test("actual background reserves only two history lifecycles before startup and permission awaits", async () => {
-  let listener: any,
-    release!: () => void,
-    received = 0,
-    permissionChecks = 0;
-  const startup = new Promise<void>((resolve) => {
-    release = resolve;
-  });
+/** Runs the real background entry point against a mock coordinator; returns its listener. */
+function actualBackground(
+  MockCoordinator: unknown,
+  open: () => Promise<unknown>,
+  contains: () => Promise<boolean> = async () => true,
+  /** The address a tab shows now, as the browser reports it. */
+  tabAddress: (tabId: number) => string | undefined = () => undefined,
+) {
+  let listener: any;
   const browser: any = {
     runtime: {
       id: "extension",
@@ -285,50 +286,17 @@ test("actual background reserves only two history lifecycles before startup and 
       onRemoved: { addListener() {} },
       query: async () => [],
       sendMessage: async () => {},
+      get: async (id: number) => ({ id, url: tabAddress(id) }),
     },
-    permissions: {
-      onRemoved: { addListener() {} },
-      contains: async () => {
-        permissionChecks++;
-        return true;
-      },
-    },
+    permissions: { onRemoved: { addListener() {} }, contains },
     alarms: { onAlarm: { addListener() {} } },
   };
-  const application = {};
-  class MockCoordinator {
-    constructor(repository: unknown, dependencies: { counting: unknown }) {
-      assert.equal(repository, application);
-      assert.equal(dependencies.counting, PACKAGED_COUNTING_RUNTIME);
-    }
-    threads = {
-      receive: async () => {
-        received++;
-        return { observed: false };
-      },
-      invalidate() {},
-      invalidateAll() {},
-    };
-    async whenReady() {}
-    currentScope() {
-      return {};
-    }
-  }
   const modules: Record<string, unknown> = {
     "wxt/utils/define-background": {
       defineBackground: (run: () => void) => run(),
     },
     "wxt/browser": { browser },
-    "@footprint/ledger": {
-      Ledger: {
-        open: () =>
-          startup.then(() => ({
-            application,
-            onRoutingChange: () => () => {},
-            onHealthFailure() {},
-          })),
-      },
-    },
+    "@footprint/ledger": { Ledger: { open } },
     "../lib/coordinator": { Coordinator: MockCoordinator },
     "../lib/counting-config": { PACKAGED_COUNTING_RUNTIME },
     "../lib/history-admission": { HistoryAdmission },
@@ -366,6 +334,48 @@ test("actual background reserves only two history lifecycles before startup and 
     assert.ok(Object.hasOwn(modules, name), name);
     return modules[name];
   }, {});
+  return (message: unknown, sender: unknown) => listener(message, sender);
+}
+
+test("actual background reserves only two history lifecycles before startup and permission awaits", async () => {
+  let release!: () => void,
+    received = 0,
+    permissionChecks = 0;
+  const startup = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const application = {};
+  class MockCoordinator {
+    constructor(repository: unknown, dependencies: { counting: unknown }) {
+      assert.equal(repository, application);
+      assert.equal(dependencies.counting, PACKAGED_COUNTING_RUNTIME);
+    }
+    threads = {
+      receive: async () => {
+        received++;
+        return { observed: false };
+      },
+      invalidate() {},
+      invalidateAll() {},
+    };
+    async whenReady() {}
+    currentScope() {
+      return {};
+    }
+  }
+  const listener = actualBackground(
+    MockCoordinator,
+    () =>
+      startup.then(() => ({
+        application,
+        onRoutingChange: () => () => {},
+        onHealthFailure() {},
+      })),
+    async () => {
+      permissionChecks++;
+      return true;
+    },
+  );
   const doc = binding(),
     sender = {
       id: "extension",
@@ -396,4 +406,130 @@ test("actual background reserves only two history lifecycles before startup and 
   );
   assert.equal(received, 0);
   assert.equal(permissionChecks, 0);
+});
+
+// The background trusts nothing a page could forge: a session link is taken only from the top
+// frame of a claude.ai tab that shows the chat the link names, and a session's page shown at a
+// chat's address only in the shape the content script sends (18 Nov 2026 merged app).
+test("actual background refuses forged Claude session links and linked session pages", async () => {
+  const chat = "00000000-0000-4000-8000-0000000000c1";
+  const session = "cse_0123456789ABCDEFghijklmn";
+  const links: unknown[][] = [];
+  let pages = 0;
+  class MockCoordinator {
+    threads = { receive: async () => ({ observed: false }), invalidate() {}, invalidateAll() {} };
+    history = {
+      receive: async () => {
+        pages++;
+        return { accepted: true };
+      },
+      receiveStream: async () => {
+        pages++;
+        return { accepted: true };
+      },
+      invalidate() {},
+    };
+    async whenReady() {}
+    currentScope() {
+      return {};
+    }
+    async claudeSessionLink(...link: unknown[]) {
+      links.push(link);
+      return { kept: true, after: null, counted: null, text: false };
+    }
+  }
+  const shown = `https://claude.ai/chat/${chat}`;
+  // The address the tab shows now. The sender's address is the page's first one.
+  let address: string | undefined = shown;
+  const listener = actualBackground(
+    MockCoordinator,
+    async () => ({
+      application: {},
+      onRoutingChange: () => () => {},
+      onHealthFailure() {},
+    }),
+    undefined,
+    () => address,
+  );
+  const sender = {
+    id: "extension",
+    tab: { id: 1 },
+    frameId: 0,
+    documentId: "doc",
+    url: shown,
+  };
+  const link = { target: "claude-session-link", chat, session, totals: null };
+  for (const [message, from, tab] of [
+    [link, { ...sender, id: "another-extension" }, shown],
+    [link, { ...sender, frameId: 1 }, shown],
+    [link, { ...sender, url: `http://claude.ai/chat/${chat}` }, shown],
+    [link, { ...sender, url: `https://claude.ai:8443/chat/${chat}` }, shown],
+    [link, { ...sender, url: `https://user@claude.ai/chat/${chat}` }, shown],
+    [link, { ...sender, url: `https://chatgpt.com/c/${chat}` }, shown],
+    // The tab shows another chat, no chat, another site, or its address cannot be read.
+    [link, sender, "https://claude.ai/chat/00000000-0000-4000-8000-0000000000c2"],
+    [link, sender, "https://claude.ai/new"],
+    [link, sender, `https://chatgpt.com/c/${chat}`],
+    [link, sender, undefined],
+    [{ ...link, title: "a chat title" }, sender, shown],
+    [{ target: "claude-session-link", chat, session }, sender, shown],
+    // Only `proven: false` is a confirmation; a proven link carries no such key.
+    [{ ...link, proven: true }, sender, shown],
+    [{ ...link, proven: "false" }, sender, shown],
+  ] as const) {
+    address = tab;
+    await listener(message, from);
+    await tick();
+    assert.equal(links.length, 0, JSON.stringify([message, from, tab]));
+  }
+  address = shown;
+  assert.deepEqual(await listener(link, sender), {
+    kept: true,
+    after: null,
+    counted: null,
+    text: false,
+  });
+  assert.deepEqual(links, [[chat, session, null, true]]);
+  await listener({ ...link, proven: false }, sender);
+  assert.deepEqual(links[1], [chat, session, null, false]);
+  // Live check of 23 Nov 2026: Chrome keeps the sender's first loaded address after in-page
+  // navigation. A chat started at /new, or opened from the sidebar of another chat, is the
+  // chat the tab shows now, so its link is kept.
+  for (const first of [
+    "https://claude.ai/new",
+    "https://claude.ai/chat/00000000-0000-4000-8000-0000000000c2",
+  ]) {
+    links.length = 0;
+    assert.deepEqual(await listener(link, { ...sender, url: first }), {
+      kept: true,
+      after: null,
+      counted: null,
+      text: false,
+    });
+    assert.deepEqual(links, [[chat, session, null, true]], first);
+  }
+
+  const page = {
+    target: "history-observation",
+    binding: binding(),
+    message: { site: "claude", conversationId: session, event: "start" },
+    linkedRoute: chat,
+  };
+  for (const [message, from] of [
+    [page, { ...sender, id: "another-extension" }],
+    [page, { ...sender, frameId: 1 }],
+    [{ ...page, text: "hello" }, sender],
+    // Only a Claude session's page names a chat it is shown at, and that chat is no session.
+    [{ ...page, message: { ...page.message, site: "chatgpt" } }, sender],
+    [{ ...page, message: { ...page.message, conversationId: chat } }, sender],
+    [{ ...page, linkedRoute: session }, sender],
+    [{ ...page, linkedRoute: "not-a-chat" }, sender],
+    [{ ...page, linkedRoute: null }, sender],
+  ] as const)
+    assert.deepEqual(
+      await listener(message, from),
+      { accepted: false, error: "payload_rejected" },
+      JSON.stringify(message),
+    );
+  assert.equal(pages, 0);
 });

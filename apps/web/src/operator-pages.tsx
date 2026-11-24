@@ -2656,7 +2656,9 @@ export function OperatorHealth({ api }: { api: ApiClient }) {
                   <p>
                     {health.data.mail_adapter === "fake"
                       ? "Test sender. No mail leaves the server."
-                      : `${planName(health.data.mail_adapter)} sends sign-in codes.`}
+                      : health.data.mail_adapter === "smtp"
+                        ? "The configured mail server sends sign-in codes over an encrypted SMTP connection."
+                        : `${planName(health.data.mail_adapter)} sends sign-in codes.`}
                   </p>
                 </div>
               </div>

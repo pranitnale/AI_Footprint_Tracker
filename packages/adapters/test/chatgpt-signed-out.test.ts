@@ -436,7 +436,8 @@ test("signed-out ChatGPT: the stop request names the chat it stops", () => {
 // data-conversation-stream-protocol="2"): every line has `version: 2`, with the same types,
 // control kinds and content fields as version 1. `markdown` is the text: revision 1 replaces,
 // each later revision appends to the one it names. `dil` is the page's rendering program (code
-// and constants) and `dil.fallbackMarkdown` the text so far; neither is read. Lengths as seen
+// and constants) and `dil.fallbackMarkdown` the text so far. Since 3 Nov 2026 the longer text
+// representation counts once, and the rendering program is still ignored. Lengths as seen
 // (the answer 3 + 49 + 45 characters, page markup 94, 196, 810 and 5,097, the chat state 156);
 // the text is synthetic.
 const fill = (length: number, letter = "x") => letter.repeat(length);
@@ -571,7 +572,7 @@ test("21 Oct 2026: a version 2 signed-out reply is read from its markdown and co
   // repeated text in fallbackMarkdown, the page markup, the chat state or the tokens.
   assert.equal(snapshot.text, V2_TEXT);
   assert.equal(snapshot.text.length, 97);
-  assert.equal(reader.retainedBytes(), 97 * 2);
+  assert.equal(reader.retainedBytes(), (97 + 97) * 2);
   assert.equal(snapshot.thinking, "");
   assert.equal(snapshot.toolInput, "");
   assert.equal(snapshot.intermediate, "");
@@ -581,9 +582,7 @@ test("21 Oct 2026: a version 2 signed-out reply is read from its markdown and co
   assert.ok(!snapshot.limitations.includes("unknown_event_observed"));
 });
 
-test("21 Oct 2026: a version 2 reply's fallbackMarkdown is not read, even when it leads or trails the markdown", () => {
-  // Live, fallbackMarkdown matched the text so far (1, 57, 149 and 3, 52, 97); a page that
-  // renders ahead or behind must not change the count.
+test("3 Nov 2026: a version 2 reply counts the longer of fallbackMarkdown and joined markdown once", () => {
   for (const fallbacks of [
     [V2_PIECES[0]!, V2_TEXT.slice(0, 40), V2_TEXT + " extra"],
     ["", "", ""],
@@ -592,7 +591,9 @@ test("21 Oct 2026: a version 2 reply's fallbackMarkdown is not read, even when i
     for (const line of v2Reply(V2_PIECES, fallbacks)) reader.line(line);
     const snapshot = reader.snapshot();
     assert.equal(snapshot.state, "completed");
-    assert.equal(snapshot.text, V2_TEXT);
+    const fallback = fallbacks.at(-1)!;
+    assert.equal(snapshot.text, fallback.length > V2_TEXT.length ? fallback : V2_TEXT);
+    assert.equal(reader.retainedBytes(), (V2_TEXT.length + fallback.length) * 2);
     assert.ok(!snapshot.limitations.includes("unknown_event_observed"));
   }
 });
@@ -649,22 +650,22 @@ test("21 Oct 2026: a version 2 line not seen live leaves the reply partly measur
   const SEARCH_LINE = {
     status: null,
     activity: {
-      records: [{ sourceId: SEARCH, kind: "activity", text: "Searching the web" }],
+      records: [{ sourceId: SEARCH, kind: "thought", text: "Synthetic thought" }],
       active: false,
     },
   };
   const odd: [string, (line: any) => any[]][] = [
     ["an unknown control kind", (line) => [line, v2Control("new-control-kind")]],
     [
-      "a stream type other than initial",
+      "a stream type other than initial or followup",
       (line) =>
         line.detail?.kind === "resume-token"
           ? [{ ...line, detail: { ...line.detail, streamType: "resume" } }]
           : [line],
     ],
     ["an unknown line type", (line) => [line, { version: 2, type: "new-kind", value: 1 }]],
-    // Version 1 search status lines were seen; their version 2 shape was not.
-    ["a reasoning line", (line) => [line, { version: 2, type: "reasoning", ...SEARCH_LINE }]],
+    // Search status is known on version 2 since 3 Nov 2026; other shapes remain unknown.
+    ["an unknown reasoning shape", (line) => [line, { version: 2, type: "reasoning", ...SEARCH_LINE }]],
     [
       "a content line with a field not seen",
       (line) =>
@@ -707,6 +708,94 @@ test("21 Oct 2026: a version 2 append that does not follow, an unknown mode or a
   reader = session();
   reader.line(control("started"));
   assert.throws(() => reader.line(v2First("Abc")), /unsupported_schema/);
+});
+
+for (const streamType of ["initial", "followup"])
+  test(`3 Nov 2026: a version 2 ${streamType} reply keeps cumulative fallback text across lines without dil`, () => {
+    const reader = session();
+    const answer = "Synthetic answer with a source.";
+    const lines = [
+      v2Control("started"),
+      v2Control("conversation-id", { conversationId: CHAT }),
+      v2First("", "Synthetic"),
+      v2Append(2, "", "Synthetic answer"),
+      { ...content(3, "", { approvedUrls: ["https://example.com/source"] }), version: 2 },
+      v2Append(4, "", answer),
+      {
+        ...v2Complete(5),
+        references: [{ modelDilV2: { fallbackMarkdown: answer + " [synthetic citation markup]" } }],
+      },
+      v2Control("turn-latency", { turnLatency: { tags: { plan: "synthetic" }, elapsed: 12 } }),
+      v2State({}),
+      v2Control("terminal-received", { terminalKind: "complete" }),
+      { version: 2, type: "end" },
+    ];
+    for (const line of lines) {
+      reader.line("detail" in line ? { ...line, detail: { ...line.detail, streamType } } : line);
+      if ("revision" in line && line.revision === 3)
+        assert.equal(reader.snapshot().text, "Synthetic answer", "a middle line keeps the fallback");
+    }
+    const snapshot = reader.snapshot();
+    assert.equal(snapshot.text, answer);
+    assert.equal(snapshot.state, "completed");
+    assert.ok(!snapshot.limitations.includes("unknown_event_observed"));
+    assert.equal(reader.retainedBytes(), answer.length * 2);
+  });
+
+test("3 Nov 2026: version 2 search status is known and counts no output", () => {
+  const reader = session();
+  reader.line(v2Control("started"));
+  for (const line of searchLines) reader.line({ ...line, version: 2 });
+  assert.equal(reader.snapshot().text, null);
+  assert.equal(reader.retainedBytes(), 0);
+  for (const line of v2Reply(["Synthetic answer."])) reader.line(line);
+  const snapshot = reader.snapshot();
+  assert.equal(snapshot.text, "Synthetic answer.");
+  assert.equal(snapshot.state, "completed");
+  for (const part of ["thinking", "toolInput", "intermediate", "toolOutput"])
+    assert.equal(snapshot[part], "");
+  assert.ok(!snapshot.limitations.includes("unknown_event_observed"));
+});
+
+test("3 Nov 2026: version 2 keeps fallbacks per message and replaces or clears them with that message", () => {
+  const reader = session();
+  reader.line(v2First("", "Synthetic first answer"));
+  reader.line({ ...v2First("Second markdown", "short"), messageId: USER });
+  assert.equal(reader.snapshot().text, "Synthetic first answer\n\nSecond markdown");
+  reader.line({ ...v2Append(2, "", ""), dil: { fallbackMarkdown: 12 } });
+  assert.equal(reader.snapshot().text, "Synthetic first answer\n\nSecond markdown");
+  reader.line(v2Append(3, "", "New"));
+  assert.equal(reader.snapshot().text, "New\n\nSecond markdown", "latest fallback can be shorter");
+  for (const dil of [undefined, {}, { fallbackMarkdown: 12 }]) {
+    reader.line(v2First("", "Obsolete fallback"));
+    reader.line({ ...v2First("Replacement"), dil });
+    assert.equal(reader.snapshot().text, "Replacement\n\nSecond markdown");
+    assert.equal(reader.retainedBytes(), ("Replacement".length + "Second markdown".length + "short".length) * 2);
+  }
+});
+
+test("3 Nov 2026: a completed signed-out reply with no answer is visibly partly measured", () => {
+  for (const version of [1, 2]) {
+    for (const messages of [0, 1, 2]) {
+      const reader = session();
+      reader.line({ ...control("started"), version });
+      for (let index = 0; index < messages; index++)
+        reader.line({ ...content(1, "", { messageId: `synthetic-${index}`, status: "complete" }), version });
+      assert.ok(!reader.snapshot().limitations.includes("unknown_event_observed"));
+      reader.line({ ...control("terminal-received", { terminalKind: "complete" }), version });
+      assert.equal(reader.snapshot().state, "completed");
+      assert.ok(reader.snapshot().limitations.includes("unknown_event_observed"));
+    }
+  }
+});
+
+test("3 Nov 2026: version 1 still ignores fallbackMarkdown", () => {
+  const reader = session();
+  for (const line of reply(["Synthetic answer."]))
+    reader.line(line.type === "content" ? { ...line, dil: { fallbackMarkdown: "Uncounted fallback longer than the answer." } } : line);
+  assert.equal(reader.snapshot().text, "Synthetic answer.");
+  assert.equal(reader.retainedBytes(), "Synthetic answer.".length * 2);
+  assert.ok(!reader.snapshot().limitations.includes("unknown_event_observed"));
 });
 
 test("signed-out ChatGPT: version 1 lines keep their rules after version 2 was added", () => {

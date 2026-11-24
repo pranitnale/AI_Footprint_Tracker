@@ -183,6 +183,13 @@ export function createCoworkHistory(
     spacingMs?: number;
     listHoldMs?: number;
   } = {},
+  /**
+   * Whether the page shows a session. Since 18 Nov 2026 claude.ai shows sessions at chat
+   * addresses, so the caller can pass the check that also accepts a chat's proven session
+   * link (`claude-session-links.ts`); by default only the session's own address counts.
+   */
+  shown: (id: string) => boolean = (id) =>
+    parseConversationRoute("claude", location.pathname)?.conversationId === id,
 ) {
   const timing = {
     routeWaitMs: timings.routeWaitMs ?? COWORK_ROUTE_WAIT_MS,
@@ -194,8 +201,6 @@ export function createCoworkHistory(
   const streams = new Set<() => void>();
   // Reads still waiting for the address bar to show their session; navigation stops them.
   const waits = new Set<{ id: string; stop: () => void }>();
-  const shown = (id: string) =>
-    parseConversationRoute("claude", location.pathname)?.conversationId === id;
 
   const stopSession = () => {
     if (!session) return;

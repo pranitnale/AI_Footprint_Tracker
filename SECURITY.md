@@ -2,14 +2,15 @@
 
 ## Supported versions
 
-There is no verified production release at this time.
+The extension is published in the Chrome Web Store, which Chrome and Microsoft Edge both install from. It is not in the Microsoft Edge Add-ons store or in the Firefox store. Corrections go into a later version; older versions are not corrected.
 
-| Version                       | Security status                                                                               |
-| ----------------------------- | --------------------------------------------------------------------------------------------- |
-| 0.1.0 candidate               | Unsigned and unreleased; reviewed reports are accepted, but production support is not claimed |
-| Published production releases | None                                                                                          |
+| Version                                                  | Security status                                                                   |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Newest version in the Chrome Web Store (Chrome and Edge) | Published; reviewed reports are accepted, but production support is not claimed   |
+| Packages from the website (Chrome, Edge, Firefox)        | Unsigned test packages; reviewed reports are accepted, with no support commitment |
+| Older versions                                           | Not corrected; update to the newest version                                       |
 
-The absence of a supported production release does not make a vulnerability report unimportant.
+The absence of a support commitment does not make a vulnerability report unimportant.
 
 ## Report privately
 
@@ -17,7 +18,7 @@ Email the maintainer, Pranit Jagannath Nale, at [pranitnale42@gmail.com](mailto:
 
 Provide only:
 
-- the affected version, commit or unsigned candidate;
+- the affected version, commit or package;
 - browser and operating-system versions when relevant;
 - the affected supported site or self-host component;
 - a synthetic, minimal reproduction;

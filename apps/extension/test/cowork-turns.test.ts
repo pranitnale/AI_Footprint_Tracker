@@ -5,7 +5,12 @@ import type {
   HistoryTextMessage,
   HistoryTextPage,
 } from "@footprint/adapters";
-import { coworkCheckpointAfter, coworkTurns } from "../lib/cowork-turns";
+import {
+  coworkCheckpointAfter,
+  coworkCounted,
+  coworkHandedOver,
+  coworkTurns,
+} from "../lib/cowork-turns";
 import { validHistoryTextPage } from "../lib/history-capture";
 
 const SESSION = "cse_0123456789ABCDEFghijklmn";
@@ -157,21 +162,74 @@ test("results at or before the checkpoint are already counted and leave the page
   assert.equal(turn.timing!.duration_seconds, "1.739");
 });
 
-test("counters that went down mean the session restarted, so the turn counts from zero", () => {
+// Live check of 23 Nov 2026: a result in which no model ran (after a Research report note)
+// repeated the session's counters with a lower API time. It was taken for a restart and
+// counted from zero, which added the whole session a second time (Out 10,459 for 5,235).
+// A session's counters never restart, so nothing is counted from zero once a checkpoint exists.
+test("a result in which no model wrote since the checkpoint adds no row, and nothing is ever counted from zero again", () => {
   const saved = counters(9, [433, 80], [10, null], 7261);
-  for (const restarted of [
-    counters(12, [50, 5], [10, null], 9000),
-    counters(12, [500, 5], [10, null], 9000),
-    counters(12, [500, 90], null, 9000),
-    counters(12, [500, 90], [10, null], 1000),
-  ]) {
-    const [turn] = coworkTurns(page([reply(12, restarted)]), saved).messages;
-    assert.equal(turn!.usage!.output, restarted.models[0]!.output);
-    assert.equal(
-      turn!.timing!.duration_seconds,
-      String(restarted.apiMs! / 1000),
-    );
-  }
+  const idle = counters(12, [433, 80], [10, null], 0);
+  // The result and the prompt it names add nothing, and the checkpoint stays.
+  const alone = coworkTurns(page([prompt(11), reply(12, idle)]), saved);
+  assert.deepEqual(alone.messages, []);
+  assert.equal(coworkCheckpointAfter(alone.messages), null);
+  // The same within one read, after the result it repeats.
+  const first = counters(4, [200, 30], [10, null], 2924);
+  const whole = coworkTurns(
+    page([prompt(3), reply(4, first), prompt(11), reply(12, { ...first, sequence: 12, apiMs: 0 })]),
+    null,
+  );
+  assert.deepEqual(
+    whole.messages.map((m) => [m.role, m.sourceId]),
+    [
+      ["prompt", id(3)],
+      ["response", id(4)],
+    ],
+  );
+  assert.deepEqual(coworkCheckpointAfter(whole.messages), first);
+  // The result after it is measured from the checkpoint, as if the idle one were not there.
+  const next = counters(14, [500, 90], [25, null], 9000);
+  const after = coworkTurns(
+    page([prompt(11), reply(12, idle), prompt(13), reply(14, next)]),
+    saved,
+  );
+  assert.deepEqual(
+    after.messages.map((m) => [m.role, m.sourceId]),
+    [
+      ["prompt", id(13)],
+      ["response", id(14)],
+    ],
+  );
+  assert.equal(after.messages[1]!.usage!.output, 67);
+  assert.equal(after.messages[1]!.usage!.reasoning, 10);
+  assert.equal(after.messages[1]!.timing!.duration_seconds, "1.739");
+  assert.deepEqual(coworkCheckpointAfter(after.messages), next);
+  // A prompt that a counted reply also names stays.
+  const shared = coworkTurns(
+    page([prompt(11), reply(12, idle), { ...reply(14, next), promptSourceId: id(11) }]),
+    saved,
+  );
+  assert.deepEqual(
+    shared.messages.map((m) => [m.role, m.sourceId]),
+    [
+      ["prompt", id(11)],
+      ["response", id(14)],
+    ],
+  );
+  // Counters below the checkpoint's were never seen. They add nothing where they are lower,
+  // never the session again, and what cannot be a count stays unknown.
+  const turn = (current: CoworkCumulative) =>
+    coworkTurns(page([prompt(11), reply(12, current)]), saved).messages[1];
+  assert.equal(turn(counters(12, [50, 5], [10, null], 9000)), undefined);
+  const lessThinking = turn(counters(12, [500, 5], [10, null], 9000))!;
+  assert.equal(lessThinking.usage!.output, 67);
+  assert.equal(lessThinking.usage!.reasoning, null);
+  const modelGone = turn(counters(12, [500, 90], null, 9000))!;
+  assert.equal(modelGone.usage!.output, 67);
+  assert.deepEqual(modelGone.components, []);
+  const lessTime = turn(counters(12, [500, 90], [10, null], 1000))!;
+  assert.equal(lessTime.usage!.output, 67);
+  assert.equal(lessTime.timing, null);
 });
 
 test("the main model is the session's model, matched without date suffixes, else the largest writer", () => {
@@ -222,10 +280,10 @@ test("thinking stays unknown where either counter lacks it, and timing needs bot
   // No new API time means no timing.
   const same = counters(9, [150, 20], null, 5000);
   const [still] = coworkTurns(
-    page([reply(10, { ...same, sequence: 10 })]),
+    page([reply(10, counters(10, [160, 20], null, 5000))]),
     same,
   ).messages;
-  assert.equal(still!.usage!.output, 0);
+  assert.equal(still!.usage!.output, 10);
   assert.equal(still!.timing, null);
 });
 
@@ -292,4 +350,103 @@ test("more than 16 other models are counted as far as listed and the rest is not
   // The largest side calls are kept.
   assert.equal(turn!.components![0]!.outputTokens, 18);
   assert.deepEqual(turn!.coverageReasons, ["side_calls_unobserved"]);
+});
+
+// Owner decision of 23 Nov 2026: a turn's input is everything Claude processed in it, the
+// difference of the session's three input counters between two results.
+test("a turn's exact input is the difference of the three input counters, or unknown", () => {
+  const withInputs = (
+    cumulative: CoworkCumulative,
+    fresh: number,
+    cacheWrite: number,
+    cacheRead: number,
+  ): CoworkCumulative => ({
+    ...cumulative,
+    inputs: { fresh, cacheWrite, cacheRead },
+  });
+  const first = withInputs(counters(4, [200, 30], null, 2924), 100, 2000, 0);
+  const second = withInputs(
+    counters(9, [433, 80], null, 7261),
+    130,
+    2500,
+    4000,
+  );
+  const exact = (message: HistoryTextMessage | undefined) => [
+    message!.usage!.input,
+    message!.usage!.cacheWrite,
+    message!.usage!.cacheRead,
+  ];
+  const turn = (current: CoworkCumulative, saved: CoworkCumulative | null) =>
+    coworkTurns(page([prompt(8), reply(9, current)]), saved).messages[1];
+  const out = coworkTurns(
+    page([prompt(3), reply(4, first), prompt(8), reply(9, second)]),
+    null,
+  );
+  assert.equal(validHistoryTextPage(out), true);
+  // Without a checkpoint the first turn carries everything before it, as its output does.
+  assert.deepEqual(exact(out.messages[1]), [100, 2000, 0]);
+  assert.deepEqual(exact(out.messages[3]), [30, 500, 4000]);
+  assert.deepEqual(coworkCheckpointAfter(out.messages), second);
+  // From a saved checkpoint that holds the counters: the difference to it.
+  assert.deepEqual(exact(turn(second, first)), [30, 500, 4000]);
+  // A checkpoint saved before 23 Nov 2026 has no input counters. That turn's input stays
+  // unknown and its output is exact as before.
+  const old = counters(4, [200, 30], null, 2924);
+  assert.deepEqual(exact(turn(second, old)), [null, null, null]);
+  assert.equal(turn(second, old)!.usage!.output, 233);
+  // A result without the counters leaves its turn's input unknown.
+  assert.deepEqual(
+    exact(turn(counters(9, [433, 80], null, 7261), first)),
+    [null, null, null],
+  );
+  // A counter below the checkpoint's, in a session that did not restart, is no count.
+  assert.deepEqual(
+    exact(
+      turn(withInputs(counters(9, [433, 80], null, 7261), 130, 1999, 4000), first),
+    ),
+    [null, null, null],
+  );
+  // The same counters again, as a result in which no model ran reports them, add no row.
+  assert.equal(turn({ ...first, sequence: 9, apiMs: 0 }, first), undefined);
+});
+
+// Live probe of 23 Nov 2026: a turn that creates an artifact in an old chat moves the chat
+// into a session mid-turn. Its result counts only the part after the handoff, while the
+// chat's saved reply holds the whole reply and is counted by its text (owner decision of
+// 23 Nov 2026: count that reply once, by text).
+test("the converting turn adds no reply and no request, and the next turn counts only its own output", () => {
+  const handed = { ...reply(4, counters(4, [300, 40], [10, null], 3000)), handoff: true as const };
+  const next = reply(9, counters(9, [433, 80], [10, null], 7261));
+  const input = page([prompt(3), handed, prompt(8), next]);
+  // The adapter proved the session's start from the handed prompt.
+  input.firstRequestVerified = true;
+  input.rootSourceId = id(3);
+  input.hasEarlier = false;
+  const out = coworkTurns(input, null);
+  assert.equal(validHistoryTextPage(out), true);
+  assert.deepEqual(
+    out.messages.map((m) => [m.role, m.sourceId]),
+    [
+      ["prompt", id(8)],
+      ["response", id(9)],
+    ],
+  );
+  assert.equal(out.messages[1]!.usage!.output, 133);
+  assert.equal(out.messages[1]!.usage!.reasoning, 40);
+  // The handed prompt is no row, so it cannot prove the start; the saved chat proves it.
+  assert.equal(out.firstRequestVerified, false);
+  assert.equal(out.rootSourceId, null);
+  // The checkpoint moves past the converting turn even when nothing else is saved.
+  const alone = coworkTurns(page([prompt(3), handed]), null);
+  assert.deepEqual(alone.messages, []);
+  assert.equal(validHistoryTextPage(alone), true);
+  assert.deepEqual(coworkHandedOver(input, null), handed.cumulative);
+  assert.equal(coworkHandedOver(input, handed.cumulative!), null);
+  // Read again after it was saved, it stays out and is not queued as a counted reply.
+  const again = coworkTurns(input, next.cumulative!);
+  assert.deepEqual(
+    again.messages.map((m) => [m.role, m.sourceId]),
+    [["prompt", id(8)]],
+  );
+  assert.deepEqual(coworkCounted(input, next.cumulative!), [id(9)]);
 });

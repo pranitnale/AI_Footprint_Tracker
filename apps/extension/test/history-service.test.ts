@@ -1315,6 +1315,124 @@ async function handOutCompanyKey(
   await f.db.policyTransaction([{ ...credentials, company_dedup_key: key }]);
 }
 
+// 18 Nov 2026: a Claude chat's session reports Claude's own counts. Its exact rows replace
+// the text rows of the chat's saved copy, and the upload that brings them names those rows.
+test("a session page names the text rows it replaces to the company, and its rows carry the saved messages' company keys", async () => {
+  const f = await setup();
+  try {
+    const scope = await connect(f);
+    const server = historyServer(f);
+    await handOutCompanyKey(f, W11_KEY);
+    const text = historyPage();
+    // As the chat's text reader makes it: a saved reply names itself as its live attempt.
+    text.messages = text.messages.map((message) =>
+      message.role === "response"
+        ? { ...message, liveAttemptId: message.sourceId }
+        : message,
+    );
+    await receive(f.c, text);
+    await settleScheduledUpload(f);
+    assert.equal(server.submitted.length, 1);
+    const SESSION = "cse_0123456789ABCDEFghijklmn";
+    await f.c.claudeSessionLink(historyConversation, SESSION, null);
+    const turn = {
+      prompt: text.messages[0]!.sourceId,
+      reply: text.messages[1]!.sourceId,
+    };
+    const exact = historyPage();
+    exact.conversationId = SESSION;
+    exact.selectedLeafId = null;
+    exact.branchSourceIds = null;
+    exact.branchScope = "loaded_messages";
+    exact.hasLater = null;
+    exact.messages = exact.messages.map((message, index) => ({
+      ...message,
+      sourceId: "00000000-0000-4000-8000-" + (index + 0x51).toString(16).padStart(12, "0"),
+      promptSourceId: "00000000-0000-4000-8000-000000000051",
+      parentSourceId: index ? "00000000-0000-4000-8000-000000000051" : null,
+      chat: turn,
+      ...(index
+        ? {
+            modelId: "claude-sonnet-5-5",
+            cumulative: {
+              sequence: 3,
+              models: [{ model: "claude-sonnet-5-5", output: 247, reasoning: 0 }],
+              apiMs: 2924,
+              inputs: { fresh: 40, cacheWrite: 300, cacheRead: 1200 },
+            },
+          }
+        : {}),
+    }));
+    exact.rootSourceId = exact.messages[0]!.sourceId;
+    const binding = historyBinding();
+    const common: Omit<HistoryCaptureMessage, "event" | "page"> = {
+      channel: HISTORY_CAPTURE_CHANNEL,
+      id: crypto.randomUUID(),
+      site: "claude",
+      conversationId: SESSION,
+      observedAt: exact.observedAt,
+    };
+    for (const message of [
+      { ...common, event: "start" as const, page: null },
+      { ...common, event: "page" as const, page: exact },
+    ])
+      assert.deepEqual(
+        await f.c.history.receive(
+          message,
+          binding,
+          historySender,
+          undefined,
+          historyConversation,
+        ),
+        { accepted: true },
+      );
+    await settleScheduledUpload(f);
+    assert.equal(server.submitted.length, 2);
+    const [first, second] = server.submitted as [HistoryPage, HistoryPage];
+    assert.deepEqual(
+      [...second.replaced_message_keys!].sort(),
+      first.messages.map((message) => message.message_key).sort(),
+    );
+    // Each exact row has the company key of the saved message it replaces. The key depends
+    // only on the company's key and the message's id, so a coworker on the same provider
+    // account who still holds the text copy uploads the same key, and the company counts the
+    // reply once.
+    const byRole = (page: HistoryPage) =>
+      Object.fromEntries(
+        page.messages.map((message) => [
+          message.role,
+          page.company_dedup_keys!.find(
+            (entry) => entry.message_key === message.message_key,
+          )!.company_dedup_key,
+        ]),
+      );
+    assert.deepEqual(byRole(second), byRole(first));
+    // The exact reply's input travels beside it, as Claude's three counts (package EC); the
+    // text page before it had none.
+    const exactReply = second.messages.find((message) => message.role === "response")!;
+    assert.deepEqual(second.exact_inputs, [
+      {
+        message_key: exactReply.message_key,
+        new: "40",
+        cache_write: "300",
+        cache_read: "1200",
+      },
+    ]);
+    assert.equal(Object.hasOwn(first, "exact_inputs"), false);
+    // Here the text rows are gone and the exact rows are saved.
+    assert.deepEqual(
+      (await f.db.historyPage(scope, undefined))
+        .map((row) => row.record.message_key)
+        .sort(),
+      second.messages.map((message) => message.message_key).sort(),
+    );
+  } finally {
+    f.c.history.invalidate();
+    f.c.engines.dispose();
+    f.db.close();
+  }
+});
+
 test("W11 saved keys go only to a server that currently hands out a company key", async () => {
   const f = await setup();
   try {
@@ -1451,6 +1569,147 @@ test("Details compares the open chat with the other chats through the dashboard 
     assert.equal(other.chats, 1);
     await assert.rejects(f.c.chatComparison("claude", "../not-a-chat"), /payload_rejected/);
   } finally {
+    f.db.close();
+  }
+});
+
+// Owner decision of 23 Nov 2026: the input of a Claude chat with exact figures is everything
+// Claude processed. The three counts stay on this device, beside the saved reply.
+test("a session reply's exact input stands for its turn's input in the totals, and the upload carries it beside the reply", async () => {
+  const f = await setup(countByTextLength);
+  try {
+    const scope = await connect(f);
+    const server = historyServer(f);
+    const SESSION = "cse_0123456789ABCDEFghijklmn";
+    await f.c.claudeSessionLink(historyConversation, SESSION, null);
+    const page = historyPage(4);
+    page.conversationId = SESSION;
+    page.selectedLeafId = null;
+    page.branchSourceIds = null;
+    page.branchScope = "loaded_messages";
+    page.hasLater = null;
+    const counters = (sequence: number, output: number) => ({
+      sequence,
+      models: [{ model: "claude-sonnet-5-5", output, reasoning: 0 }],
+      apiMs: sequence * 1000,
+    });
+    // Two turns. The first result reports the three input counters, the second does not.
+    page.messages = page.messages.map((message, index) => ({
+      ...message,
+      ...(index === 2 ? { parentSourceId: null, parentRole: null } : {}),
+      ...(index === 1
+        ? {
+            modelId: "claude-sonnet-5-5",
+            toolOutput: "synthetic tool result",
+            cumulative: {
+              ...counters(3, 247),
+              inputs: { fresh: 150, cacheWrite: 4000, cacheRead: 90500 },
+            },
+          }
+        : {}),
+      ...(index === 3
+        ? { modelId: "claude-sonnet-5-5", cumulative: counters(7, 300) }
+        : {}),
+    }));
+    const binding = historyBinding();
+    const common: Omit<HistoryCaptureMessage, "event" | "page"> = {
+      channel: HISTORY_CAPTURE_CHANNEL,
+      id: crypto.randomUUID(),
+      site: "claude",
+      conversationId: SESSION,
+      observedAt: page.observedAt,
+    };
+    for (const message of [
+      { ...common, event: "start" as const, page: null },
+      { ...common, event: "page" as const, page },
+    ])
+      assert.deepEqual(
+        await f.c.history.receive(
+          message,
+          binding,
+          historySender,
+          undefined,
+          historyConversation,
+        ),
+        { accepted: true },
+      );
+    await settleScheduledUpload(f);
+    const rows = await f.db.historyPage(scope, undefined);
+    const reply = (output: string) =>
+      rows.find(
+        (row) =>
+          row.record.role === "response" && row.record.tokens.value === output,
+      )!;
+    assert.deepEqual(reply("247").exactInput, {
+      fresh: 150,
+      cacheWrite: 4000,
+      cacheRead: 90500,
+    });
+    assert.equal(reply("53").exactInput, undefined);
+    assert.equal(
+      rows.some((row) => row.record.role === "prompt" && row.exactInput),
+      false,
+    );
+    const view = await f.c.history.localView(scope);
+    // The bar's In adds the prompt rows and the tool results. The first turn adds Claude's
+    // own count there and nothing else; the second turn keeps its prompt's text count.
+    const input = view.local.tokens.filter(
+      (row) =>
+        row.value !== null &&
+        (row.role === "prompt" || row.part === "tool_output"),
+    );
+    assert.deepEqual(
+      input
+        .map((row) => [row.role, row.part, row.evidence, row.known_message_count])
+        .sort(),
+      [
+        ["prompt", "total", "heuristic_estimate", "1"],
+        ["prompt", "total", "provider_reported", "1"],
+      ],
+    );
+    assert.equal(
+      input.find((row) => row.evidence === "provider_reported")!.value,
+      "94650",
+    );
+    // Out is what it was: both replies' own counts.
+    assert.deepEqual(
+      view.local.tokens
+        .filter((row) => row.role === "response" && row.part === "total")
+        .map((row) => row.value),
+      ["300"],
+    );
+    // Details gets the three numbers apart.
+    assert.deepEqual(view.exact_input, {
+      new: 150,
+      cache_write: 4000,
+      cache_read: 90500,
+      replies: 1,
+    });
+    // The company gets the saved messages as before, and the input counts beside the exact
+    // reply only (package EC), never inside a message.
+    assert.equal(server.submitted.length, 1);
+    const uploaded = server.submitted[0]! as HistoryPage;
+    assert.equal(uploaded.messages.length, 4);
+    assert.doesNotMatch(
+      JSON.stringify(uploaded.messages),
+      /exactInput|exact_input|cacheRead|cacheWrite|fresh/,
+    );
+    const [entry, ...more] = uploaded.exact_inputs!;
+    assert.deepEqual(more, []);
+    assert.deepEqual(
+      { ...entry!, message_key: undefined },
+      { message_key: undefined, new: "150", cache_write: "4000", cache_read: "90500" },
+    );
+    const exactReply = uploaded.messages.find(
+      (message) => message.message_key === entry!.message_key,
+    )!;
+    assert.deepEqual(
+      [exactReply.role, exactReply.tokens.evidence],
+      ["response", "provider_reported"],
+    );
+  } finally {
+    f.c.history.invalidate();
+    f.c.engines.dispose();
     f.db.close();
   }
 });

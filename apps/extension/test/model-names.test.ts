@@ -14,6 +14,7 @@ test("a family's unlisted id reads as the family with an unlisted version", () =
   assert.equal(modelName("claude-unlisted"), "Claude model not yet listed");
   assert.equal(modelName("perplexity-unlisted-google"), "Gemini model on Perplexity, not yet listed");
   assert.equal(modelName("claude-haiku-4-5"), "Claude Haiku 4.5");
+  assert.equal(modelName("claude-fable-5-2"), "Claude Fable 5.2");
 });
 
 test("a variant's unlisted id reads as the variant with an unlisted version", () => {

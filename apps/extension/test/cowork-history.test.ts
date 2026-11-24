@@ -757,6 +757,57 @@ test("Cowork turns import with exact counts, side calls and timing, and a reopen
   assert.equal(await f.firstVerified(), true);
 });
 
+// The turn in which Claude converts an old chat (23 Nov 2026) adds no row: the chat's saved
+// reply counts it by its text. The session's checkpoint still moves past it and is saved
+// on its own, so a later page measures the next turn from it, also after a reload.
+test("a converting turn saves no row but moves the checkpoint, so the next turn counts only its own output", async (t) => {
+  const f = await imported(t);
+  const handoff = envelope(2, {
+    type: "control_request",
+    request_id: "synthetic",
+    request: {
+      subtype: "turn_handoff",
+      messages: [
+        {
+          type: "user",
+          uuid: id(2),
+          message: { role: "user", content: [{ type: "text", text: "synthetic handed prompt" }] },
+        },
+      ],
+    },
+  });
+  f.observer.observe(
+    listUrl(),
+    "GET",
+    Promise.resolve(new Response(list(init(1), handoff, result(3, 2, [300, 40], 10, 3000)))),
+    Date.now(),
+  );
+  assert.deepEqual(await f.settle(1), [{ accepted: true }]);
+  assert.deepEqual(await f.db.all<any>("history_records"), []);
+  const checkpoints = await f.db.all<any>("cowork_checkpoints");
+  assert.equal(checkpoints.length, 1);
+  assert.equal(checkpoints[0].checkpoint.sequence, 3);
+  // A later page holds only the next turn, as a further page of the list would.
+  f.observer.observe(
+    listUrl(),
+    "GET",
+    Promise.resolve(new Response(list(user(4), result(5, 4, [433, 80], 10, 7261)))),
+    Date.now(),
+  );
+  await f.settle(2);
+  const replies = await f.replies();
+  assert.deepEqual(
+    replies.map((r) => [r.tokens.value, r.parts.reported_reasoning.value]),
+    [["133", "40"]],
+  );
+  assert.deepEqual(
+    (await f.db.all<any>("history_records"))
+      .filter((row) => row.record.role === "prompt")
+      .length,
+    1,
+  );
+});
+
 /** A company enrolment with a new era and device, as after connecting or reconnecting. */
 async function connectCompany(db: Ledger, namespace?: string): Promise<Scope> {
   namespace ??= `company:${crypto.randomUUID()}:${crypto.randomUUID()}`;

@@ -59,7 +59,7 @@ export default defineConfig({
     name: "AI Footprint Tracker",
     description:
       "Local, scoped estimates of AI conversation tokens, electricity, carbon and water.",
-    version: "0.1.0",
+    version: "0.1.1",
     // The public website; extension stores and the browser's extension page link to it.
     homepage_url: "https://aifootprinttracker.com",
     permissions:

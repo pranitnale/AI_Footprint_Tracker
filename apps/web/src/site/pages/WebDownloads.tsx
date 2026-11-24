@@ -11,7 +11,7 @@ const LOOK = {
 } as const;
 const STEPS = [
   ["Open the store page", "Open AI Footprint Tracker in the Chrome Web Store."],
-  ["Add it to Chrome", "Choose Add to Chrome and confirm."],
+  ["Add it to your browser", "Choose Add to Chrome and confirm. The button has the same name in Microsoft Edge."],
   ["Agree on the welcome page", "A welcome page opens. Nothing is counted until you choose Agree and start."],
   ["Pin the icon", "Pin AI Footprint Tracker to the toolbar, then open any supported AI chat."],
 ] as const;
@@ -28,9 +28,13 @@ export function WebDownloadsPage({ navigate }: { navigate: Navigate }) {
           <div key={b.id} className="card bc">
             <span className="bi" style={{ background: b.bg, color: b.fg }} aria-hidden="true">{b.mark}</span>
             <b className="dsp" style={{ "fontSize": "24px" }}>{b.name}</b>
-            <span style={{ "fontSize": "15px", "color": "#4A5A4E" }}>{b.id === "chrome" ? "From the Chrome Web Store" : "Not in its browser store yet"}</span>
+            <span style={{ "fontSize": "15px", "color": "#4A5A4E" }}>{b.id === "firefox" ? "Not in its browser store yet" : "From the Chrome Web Store"}</span>
+            {/* Edge installs extensions from the Chrome Web Store, so it gets the same package and
+                the same updates as Chrome (owner decision of 23 Nov 2026). */}
             {b.id === "chrome" ? (
               <a className="btn pri" href={CHROME_WEB_STORE_URL} target="_blank" rel="noopener noreferrer">Add to Chrome</a>
+            ) : b.id === "edge" ? (
+              <a className="btn pri" href={CHROME_WEB_STORE_URL} target="_blank" rel="noopener noreferrer">Add to Edge</a>
             ) : (
               <button type="button" className="btn sec" disabled>Coming soon</button>
             )}
@@ -39,7 +43,7 @@ export function WebDownloadsPage({ navigate }: { navigate: Navigate }) {
       <section className="wrap" style={{ "paddingBottom": "24px" }}>
         <div style={{ "display": "flex", "gap": "14px", "alignItems": "flex-start", "padding": "16px 20px", "borderRadius": "18px", "background": "#FFF6DB", "border": "1px solid #F0D58A", "color": "#4F3300" }}>
           <svg className="i" viewBox="0 0 24 24" style={{ "width": "22px", "height": "22px", "color": "#6E4700", "marginTop": "1px" }}><path d="M12 3 2 20h20L12 3z" /><path d="M12 10v4M12 17h.01" /></svg>
-          <span style={{ "fontSize": "15px", "lineHeight": "23px" }}>Install from the Chrome Web Store. Edge and Firefox versions are coming to their browser stores soon.</span></div></section>
+          <span style={{ "fontSize": "15px", "lineHeight": "23px" }}>Install from the Chrome Web Store, in Chrome or in Microsoft Edge. In Edge, allow extensions from other stores when Edge asks, then choose Add to Chrome on the store page. A Firefox version is coming to its browser store soon.</span></div></section>
       <section className="wrap" style={{ "paddingBottom": "72px", "display": "flex", "flexWrap": "wrap", "gap": "24px", "alignItems": "flex-start" }}>
         <div className="card" style={{ "flex": "1 1 560px", "padding": "26px", "display": "flex", "flexDirection": "column", "gap": "12px" }}>
           <h2 className="dsp" style={{ "margin": "0", "fontSize": "26px", "fontWeight": "700" }}>Install in four steps</h2>

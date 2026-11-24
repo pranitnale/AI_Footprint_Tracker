@@ -8,9 +8,10 @@ from uuid import uuid4
 
 from conftest import confirmed, connect, create_connection, login, register
 from fastapi.testclient import TestClient
+from sqlalchemy import delete
 from test_analytics import observations, upload
 
-from aift.db import TABLES, get, put, rows
+from aift.db import TABLES, Base, get, put, rows
 from aift.security import digest, token
 
 EXTENSION = "chrome-extension://test-extension"
@@ -507,3 +508,46 @@ def test_self_hosted_server_works_end_to_end_at_its_own_host(self_hosted):
     # The registration origin of a self-hosted server is not a shared tenant address.
     registration = TestClient(app, base_url=settings.registration_origin)
     assert registration.get("/v1/me/summary", headers=bearer(member)).status_code == 404
+
+
+def test_a_browser_whose_link_the_server_lost_connects_again_with_the_same_email(setup):
+    """
+    The 29 Oct 2026 reset removed every browser of an organization by hand and kept its members.
+    A browser that still holds its old link must be told so (401 on its tokens, its deletion
+    receipt refused) and must connect again with the same work email as a new browser, also when
+    it offers its old device id to resume.
+    """
+    app, _, company, _, _, settings = setup
+    _, extension = service_clients(app, settings)
+    old, _ = connect(app, extension, "member@example.org")
+    # As the reset did by hand: every row that belongs to the browser goes, children first.
+    devices = TABLES["device"].__table__
+    with app.state.db.transaction() as session:
+        for table in reversed(Base.metadata.sorted_tables):
+            for key in table.foreign_key_constraints:
+                if key.referred_table is devices:
+                    column = next(c for c in key.columns if c.name in {"device", "device_id"})
+                    session.execute(delete(table).where(table.c.tenant == company.id, column == old["device_id"]))
+        receipt = get(session, "deletion_receipt", old["device_id"], company.id)
+        if receipt:
+            session.delete(receipt)
+        session.execute(delete(devices).where(devices.c.tenant == company.id, devices.c.id == old["device_id"]))
+        session.flush()
+        session.expunge_all()
+    config = extension.get("/v1/config", headers={"Authorization": f"Bearer {old['access_token']}"})
+    assert config.status_code == 401, config.text
+    renewed = extension.post(
+        "/v1/auth/refresh", json={"refresh_token": old["refresh_token"], "operation_id": str(uuid4())}
+    )
+    assert renewed.status_code == 401, renewed.text
+    receipt = extension.post(
+        "/v1/deletions/status",
+        json={"device_id": old["device_id"], "credential": old["deletion_receipt_credential"], "last_epoch": 0},
+    )
+    assert receipt.status_code == 403 and receipt.json()["error"]["code"] == "deletion_receipt_denied"
+    again, _ = connect(app, extension, "member@example.org", resume=old)
+    assert again["company_id"] == company.id
+    assert again["user_id"] == old["user_id"]
+    assert again["device_id"] != old["device_id"]
+    ok = extension.get("/v1/config", headers={"Authorization": f"Bearer {again['access_token']}"})
+    assert ok.status_code == 200, ok.text

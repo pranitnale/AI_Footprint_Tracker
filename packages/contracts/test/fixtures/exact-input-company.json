@@ -1,0 +1,976 @@
+{
+  "about": "Package EC (owner decision of 23 Nov 2026): three uploads of one Claude chat, in order. Page 1 is the chat's saved copy counted by text. Page 2 is its session's exact rows: they replace the chat's second turn, and reply X1 carries Claude's exact input. Page 3 brings X1 again with later numbers, which win, and reply X2, whose prompt E2 came on page 2. Text counts carry the packaged Claude token factor 1.56. `expected` is the company summary of the three uploads, input side: rows with role prompt, and the tool_output and image_input_tokens rows of replies.",
+  "pages": [
+    {
+      "schema_version": "3.0.0",
+      "site": "claude",
+      "conversation_key": "00000000000000000000000000000000000000000000000000000000000000c1",
+      "observed_at": "2026-11-23T11:00:00.000Z",
+      "deletion_epoch": 0,
+      "messages": [
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "00000000000000000000000000000000000000000000000000000000000000c1",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000001",
+          "role": "prompt",
+          "parent_key": null,
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000001",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:00:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "100",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "00000000000000000000000000000000000000000000000000000000000000c1",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000002",
+          "role": "response",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000001",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000001",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:01:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": "50",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": "25",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "50",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "00000000000000000000000000000000000000000000000000000000000000c1",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000003",
+          "role": "prompt",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000002",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000003",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:02:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "100",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "00000000000000000000000000000000000000000000000000000000000000c1",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000004",
+          "role": "response",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000003",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000003",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:03:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": "50",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "50",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        }
+      ],
+      "branch_scope": "loaded_messages",
+      "selected_leaf_key": null,
+      "branch_message_keys": null,
+      "root_message_key": null,
+      "first_request_verified": false,
+      "has_earlier": null,
+      "has_later": null
+    },
+    {
+      "schema_version": "3.0.0",
+      "site": "claude",
+      "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+      "observed_at": "2026-11-23T11:00:00.000Z",
+      "deletion_epoch": 0,
+      "messages": [
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "role": "prompt",
+          "parent_key": null,
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:05:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "100",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000012",
+          "role": "response",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:06:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": "247",
+              "evidence": "provider_reported",
+              "scope": "provider_request",
+              "completeness": "complete_for_scope",
+              "profile_id": null,
+              "reason": null
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": "25",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "247",
+            "evidence": "provider_reported",
+            "scope": "provider_request",
+            "completeness": "complete_for_scope",
+            "profile_id": null,
+            "reason": null
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000013",
+          "role": "prompt",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000012",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000013",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:07:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "100",
+            "evidence": "heuristic_estimate",
+            "scope": "observed_text",
+            "completeness": "complete_for_scope",
+            "profile_id": "o200k-base-4.0.0-reference",
+            "reason": "tokenizer_mapping_unverified"
+          }
+        }
+      ],
+      "branch_scope": "loaded_messages",
+      "selected_leaf_key": null,
+      "branch_message_keys": null,
+      "root_message_key": null,
+      "first_request_verified": false,
+      "has_earlier": null,
+      "has_later": null,
+      "replaced_message_keys": [
+        "0000000000000000000000000000000000000000000000000000000000000003",
+        "0000000000000000000000000000000000000000000000000000000000000004"
+      ],
+      "exact_inputs": [
+        {
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000012",
+          "new": "40",
+          "cache_write": "300",
+          "cache_read": "1200"
+        }
+      ]
+    },
+    {
+      "schema_version": "3.0.0",
+      "site": "claude",
+      "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+      "observed_at": "2026-11-23T11:00:00.000Z",
+      "deletion_epoch": 0,
+      "messages": [
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000012",
+          "role": "response",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000011",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:06:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": "247",
+              "evidence": "provider_reported",
+              "scope": "provider_request",
+              "completeness": "complete_for_scope",
+              "profile_id": null,
+              "reason": null
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": "25",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "247",
+            "evidence": "provider_reported",
+            "scope": "provider_request",
+            "completeness": "complete_for_scope",
+            "profile_id": null,
+            "reason": null
+          }
+        },
+        {
+          "schema_version": "3.0.0",
+          "kind": "history_message",
+          "timing": null,
+          "site": "claude",
+          "key_version": "1",
+          "conversation_key": "000000000000000000000000000000000000000000000000000000000000005e",
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000014",
+          "role": "response",
+          "parent_key": "0000000000000000000000000000000000000000000000000000000000000013",
+          "prompt_key": "0000000000000000000000000000000000000000000000000000000000000013",
+          "provider_request_key": null,
+          "provider_attempt_key": null,
+          "occurred_at": "2026-11-23T10:08:00.000Z",
+          "date_basis": "message_created",
+          "observed_at": "2026-11-23T11:00:00.000Z",
+          "proposed_method_id": "fixture-method-v1",
+          "company_dedup_key": null,
+          "proposed_method_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "model_id": null,
+          "text_complete": true,
+          "inline_file_text": null,
+          "parts": {
+            "answer_output": {
+              "value": "300",
+              "evidence": "provider_reported",
+              "scope": "provider_request",
+              "completeness": "complete_for_scope",
+              "profile_id": null,
+              "reason": null
+            },
+            "visible_thinking": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_input": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "intermediate_output": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "reported_reasoning": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            },
+            "tool_output": {
+              "value": "25",
+              "evidence": "heuristic_estimate",
+              "scope": "observed_text",
+              "completeness": "complete_for_scope",
+              "profile_id": "o200k-base-4.0.0-reference",
+              "reason": "tokenizer_mapping_unverified"
+            },
+            "image_input_tokens": {
+              "value": null,
+              "evidence": "not_applicable",
+              "scope": "observed_text",
+              "completeness": "unknown",
+              "profile_id": null,
+              "reason": "not_applicable"
+            }
+          },
+          "generation": {
+            "text_components": [],
+            "media": []
+          },
+          "coverage_reasons": [
+            "history_only"
+          ],
+          "tokens": {
+            "value": "300",
+            "evidence": "provider_reported",
+            "scope": "provider_request",
+            "completeness": "complete_for_scope",
+            "profile_id": null,
+            "reason": null
+          }
+        }
+      ],
+      "branch_scope": "loaded_messages",
+      "selected_leaf_key": null,
+      "branch_message_keys": null,
+      "root_message_key": null,
+      "first_request_verified": false,
+      "has_earlier": null,
+      "has_later": null,
+      "exact_inputs": [
+        {
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000012",
+          "new": "50",
+          "cache_write": "300",
+          "cache_read": "1300"
+        },
+        {
+          "message_key": "0000000000000000000000000000000000000000000000000000000000000014",
+          "new": "10",
+          "cache_write": "0",
+          "cache_read": "2000"
+        }
+      ]
+    }
+  ],
+  "expected": {
+    "prompt_count": "3",
+    "response_count": "3",
+    "input_rows": [
+      {
+        "role": "prompt",
+        "part": "total",
+        "profile_id": null,
+        "evidence": "provider_reported",
+        "value": "3660",
+        "known_message_count": "2",
+        "unknown_message_count": "0"
+      },
+      {
+        "role": "prompt",
+        "part": "total",
+        "profile_id": "o200k-base-4.0.0-reference",
+        "evidence": "heuristic_estimate",
+        "value": "156",
+        "known_message_count": "1",
+        "unknown_message_count": "0"
+      },
+      {
+        "role": "response",
+        "part": "tool_output",
+        "profile_id": "o200k-base-4.0.0-reference",
+        "evidence": "heuristic_estimate",
+        "value": "39",
+        "known_message_count": "1",
+        "unknown_message_count": "0"
+      }
+    ]
+  }
+}

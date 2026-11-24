@@ -7,12 +7,15 @@ import type { Dashboard } from "../dashboard/types";
 export function ConnectPage({
   onConnect,
   pending,
+  ended = null,
   client,
   reload,
   now,
 }: {
   onConnect: () => void;
   pending: Dashboard["pending"];
+  /** Why a saved connection no longer shares (connectionEndedText), so the page does not say only "Not connected". */
+  ended?: string | null;
   client: DashboardClient;
   reload: () => Promise<void>;
   now: Date;
@@ -25,15 +28,15 @@ export function ConnectPage({
     <>
       <section className="dh-hero dc-hero" aria-labelledby="dc-title">
         <div className="dc-text">
-          <span className="dc-status">{waiting ? (waiting.state === "verified" ? "Waiting for you to confirm" : "Waiting for your code") : "Not connected"}</span>
+          <span className="dc-status">{waiting ? (waiting.state === "verified" ? "Waiting for you to confirm" : "Waiting for your code") : ended ? "Disconnected" : "Not connected"}</span>
           <h2 id="dc-title" className="lg-display">
             See your organization's AI footprint together
           </h2>
-          <p>Connect this browser to your organization with your work email.</p>
+          <p>{!waiting && ended ? ended : "Connect this browser to your organization with your work email."}</p>
           <div className="dc-actions">
             <button type="button" className="lg-btn lg-btn-lime" onClick={onConnect}>
               <Icon name="building" size={16} />
-              {waiting ? "Continue connecting" : "Connect your organization"}
+              {waiting ? "Continue connecting" : ended ? "Connect again" : "Connect your organization"}
             </button>
             <button type="button" className="lg-btn lg-btn-ghost-dark" onClick={() => shared.current?.focus()}>
               What is shared

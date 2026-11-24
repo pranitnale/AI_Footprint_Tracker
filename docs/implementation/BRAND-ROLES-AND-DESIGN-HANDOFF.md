@@ -59,7 +59,7 @@ The **platform-owner/developer panel** is a separate service-operator authority 
 
 **Updated 13 October 2026 (owner decision):** the hosted service has one address, `https://aifootprinttracker.com`. The organization is found from the verified work email domain. Only administrators sign in on the website; members connect only in the extension with an email code. There are no per-organization subdomains and no member web pages. The [product/enrollment specification](PRODUCT-AND-ENROLLMENT-SPEC.md) has the full flow.
 
-- Both organization admins and users authenticate with email OTP delivered through Brevo: admins on the website, users in the extension's Connect dialog. **No additional password, authenticator or mandatory second factor for organization login.** This supersedes the earlier product-admin MFA requirement; it does not change security recommendations for the operator's separate Brevo vendor account.
+- Both organization admins and users authenticate with email OTP delivered through the configured mail service (SMTP or Brevo): admins on the website, users in the extension's Connect dialog. **No additional password, authenticator or mandatory second factor for organization login.** This supersedes the earlier product-admin MFA requirement; it does not change security recommendations for the operator's separate mail-service account.
 - After valid website OTP verification, the backend checks the role in the organization selected by the email domain. An active admin lands on `/admin`. Anyone else is told that only administrators sign in on the website and that members connect from the extension; no session or member is created.
 - Never use a client-selected role, the requested URL or the email domain alone to grant admin access. Restrict redirects to `/admin` and enforce authorization on the destination APIs.
 - Store verified work email linked to stable internal user identity and tenant membership. Re-verifying the same account for the same organization in another supported browser connects the new installation to that existing identity. Prevent duplicate membership creation under concurrent enrollment. Do not merge identities across organizations automatically.
@@ -116,7 +116,7 @@ Desktop is the main review canvas. Include narrow/responsive versions for public
 | AR04 | Last admin cannot be demoted, suspended or removed; concurrent attempts preserve at least one active admin |
 | AR05 | Self-demotion succeeds only with another active admin and exits privileged UI; failure leaves accurate role display |
 | AR06 | Role changes confirmed and atomically audited; stale version and lost-response retry handled without duplicate changes |
-| AR07 | Brevo OTP-only website login sends current admins to `/admin` and refuses users with `admin_required` (13 October 2026); invalid/expired codes and redirect tampering fail safely |
+| AR07 | Email OTP-only website login sends current admins to `/admin` and refuses users with `admin_required` (13 October 2026); invalid/expired codes and redirect tampering fail safely |
 | AR08 | Same verified tenant account connects Chrome/Edge/Firefox installations to one identity without shared device credentials |
 | DS01 | Screen inventory and state coverage reviewed; fixtures labeled; prototype has no live authentication/collection/billing side effects |
 | DS02 | Approved screens linked to design tokens, behaviors and requirements; implementation fidelity tested separately |

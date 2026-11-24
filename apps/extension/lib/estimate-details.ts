@@ -313,7 +313,23 @@ export function coverageNotes(
   site: string | null,
   reasons: Readonly<Record<string, number>> = {},
   roles: readonly EstimateLine["role"][] = [],
+  /**
+   * A Claude chat's replies by how they were counted: from Claude's own counts, from text, and
+   * how many carry Claude's exact input. Claude's own counts include hidden thinking and side
+   * calls, and its exact input includes what the site does not show.
+   */
+  claudeReplies?: { exact: number; text: number; exactInput?: number } | null,
 ): string[] {
+  const exactReasoning = site === "claude" && !!claudeReplies && claudeReplies.exact > 0;
+  // Replies whose input is counted from text, when some reply carries exact input; else null.
+  const exactInput = site === "claude" ? (claudeReplies?.exactInput ?? 0) : 0;
+  const textInput = exactInput > 0 ? Math.max(0, claudeReplies!.exact + claudeReplies!.text - exactInput) : null;
+  const hiddenInput =
+    textInput === null
+      ? HIDDEN_INPUT
+      : textInput === 0
+        ? "Claude's own input count includes what the site does not show, such as system prompts, memory, project knowledge and cached context. Reading input adds no energy in the EcoLogits method."
+        : `Hidden input such as system prompts, memory, project knowledge and retrieved sources is not shown by the site and is not counted in the ${textInput === 1 ? "reply" : `${textInput} replies`} whose input is counted from text. Claude's own input count includes it in the others. Reading input adds no energy in the EcoLogits method.`;
   if (site === "cowork")
     return [
       HIDDEN_INPUT,
@@ -324,16 +340,26 @@ export function coverageNotes(
       OUTSIDE_SCOPE,
     ];
   const notes = [
-    site === "notebooklm"
-      ? "Reasoning: only reasoning the site shows is counted, and NotebookLM usually shows none."
+    ...(site === "notebooklm"
+      ? ["Reasoning: only reasoning the site shows is counted, and NotebookLM usually shows none."]
       : site === "perplexity"
-        ? "Reasoning: only reasoning the site shows is counted, and Perplexity usually shows none."
-        : "Reasoning is counted from the summary the site shows. The provider bills the full reasoning, which is longer.",
-    HIDDEN_INPUT,
-    // Only exact provider reports name side calls (Cowork); chat sites never show them.
-    roles.includes("side_calls")
-      ? "Side calls such as titles and suggestions are counted where the provider reports them, as listed above."
-      : "Side calls such as titles, suggestions and safety checks are not counted.",
+        ? ["Reasoning: only reasoning the site shows is counted, and Perplexity usually shows none."]
+        : exactReasoning
+          ? // Exact replies count the thinking Claude hides, so only the text-counted ones are short.
+            claudeReplies!.text > 0
+            ? ["Reasoning is counted from the summary the site shows in the replies counted from text. The provider bills the full reasoning, which is longer."]
+            : []
+          : ["Reasoning is counted from the summary the site shows. The provider bills the full reasoning, which is longer."]),
+    hiddenInput,
+    // Only exact provider reports name side calls (Cowork); chat sites never show them. A Claude
+    // chat's own counts include them, so only its text-counted replies leave them out.
+    ...(roles.includes("side_calls")
+      ? ["Side calls such as titles and suggestions are counted where the provider reports them, as listed above."]
+      : exactReasoning
+        ? claudeReplies!.text > 0
+          ? ["Side calls such as titles, suggestions and safety checks are not counted in the replies counted from text."]
+          : []
+        : ["Side calls such as titles, suggestions and safety checks are not counted."]),
   ];
   if (site === "perplexity")
     notes.push(

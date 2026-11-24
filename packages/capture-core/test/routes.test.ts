@@ -190,6 +190,25 @@ test("A Perplexity Computer task is a thread at /computer/tasks/<id> (14 Oct 202
   assert.equal(parseConversationRoute("chatgpt", `/computer/tasks/${chat}`), null);
 });
 
+test("A Perplexity thread at /session/<id> is the same thread as at /search/<id> (23 Nov 2026)", () => {
+  assert.deepEqual(parseConversationRoute("perplexity", `/session/${chat}`), {
+    site: "perplexity",
+    conversationId: chat,
+  });
+  for (const path of [
+    "/session",
+    "/session/",
+    `/session/new/${chat}`,
+    `/session/${chat}/files`,
+    `/session/${chat.toUpperCase()}`,
+    "/session/some-slug-abc",
+  ])
+    assert.equal(parseConversationRoute("perplexity", path), null, path);
+  // Only Perplexity shows threads at /session/.
+  for (const site of ["chatgpt", "claude", "gemini", "notebooklm"] as const)
+    assert.equal(parseConversationRoute(site, `/session/${chat}`), null, site);
+});
+
 test("a new ChatGPT chat's local address is provisional and no conversation route", async () => {
   const { isProvisionalChatgptRoute } = await import("../src/index");
   for (const path of [
@@ -237,4 +256,32 @@ test("a signed-out ChatGPT chat at /uc/<id> is an unsaved conversation route", a
   // Only ChatGPT has unsaved chats.
   assert.equal(parseConversationRoute("claude", `/uc/${chat}`), null);
   assert.equal(parseConversationRoute("perplexity", `/uc/${chat}`), null);
+});
+
+// Since 18 Nov 2026 claude.ai shows a session at its chat's address. The route keeps the
+// chat's id; a proven link lets the session's pages count as shown there.
+test("a linked session is shown at its chat route, another session is not", async () => {
+  const { routeShows } = await import("../src/index");
+  const other = "cse_ZYXWVUTSRQPONMLKjihgfedc";
+  // A route always shows its own conversation, with or without a link.
+  assert.equal(routeShows("claude", `/chat/${chat}`, chat), true);
+  assert.equal(routeShows("claude", `/chat/${chat}`, chat, session), true);
+  assert.equal(routeShows("claude", `/cowork/${session}`, session), true);
+  assert.equal(routeShows("chatgpt", `/c/${chat}`, chat), true);
+  // The linked session, and only it.
+  assert.equal(routeShows("claude", `/chat/${chat}`, session, session), true);
+  assert.equal(routeShows("claude", `/chat/${chat}`, session), false);
+  assert.equal(routeShows("claude", `/chat/${chat}`, session, null), false);
+  assert.equal(routeShows("claude", `/chat/${chat}`, other, session), false);
+  // A link never makes another chat, a Cowork address or another site show the session.
+  assert.equal(
+    routeShows("claude", `/chat/${chat}`, "11111111-2222-4333-8444-555555555555", session),
+    false,
+  );
+  assert.equal(routeShows("claude", `/cowork/${session}`, other, other), false);
+  assert.equal(routeShows("chatgpt", `/c/${chat}`, session, session), false);
+  // No conversation route, or no id, shows nothing.
+  assert.equal(routeShows("claude", "/new", session, session), false);
+  assert.equal(routeShows("claude", `/chat/${chat}`, undefined, session), false);
+  assert.equal(routeShows("claude", `/chat/${chat}`, null), false);
 });

@@ -8,6 +8,7 @@ on production: each saved message was still matched with several queries of its 
 split read its rows again (test_history_bulk_matching compares the bulk reads that replaced them).
 """
 
+import re
 import time
 from contextlib import contextmanager
 
@@ -112,8 +113,16 @@ def unoptimised(monkeypatch):
 @contextmanager
 def counted(monkeypatch, engine):
     """Counts bundle checks per bundle, method_bundles reads, estimates, envelope checks and
-    database statements."""
-    counts = {"bundle_checks": {}, "bundle_reads": 0, "estimates": 0, "envelope_checks": 0, "statements": 0}
+    database statements, the last also per table read, which names the read that grew when a
+    limit fails."""
+    counts = {
+        "bundle_checks": {},
+        "bundle_reads": 0,
+        "estimates": 0,
+        "envelope_checks": 0,
+        "statements": 0,
+        "tables": {},
+    }
 
     def wrap(module, name, record):
         original = getattr(module, name)
@@ -138,6 +147,9 @@ def counted(monkeypatch, engine):
         counts["statements"] += 1
         if "FROM method_bundles" in sql:
             counts["bundle_reads"] += 1
+        table = re.search(r"\bFROM (\w+)", sql)
+        table = table.group(1) if table else sql.split(None, 1)[0]
+        counts["tables"][table] = counts["tables"].get(table, 0) + 1
 
     with monkeypatch.context() as patch:
         wrap(estimation_contracts, "validate_method_definition", bundle_check)
@@ -201,9 +213,15 @@ def test_production_size_summary_is_fast_and_worker_ticks_repeat_no_work(setup, 
     assert list(counts["bundle_checks"].values()) == [1], counts
     assert counts["bundle_reads"] == 1 and counts["estimates"] == 0, counts
 
-    # The worker's sweeps page through about 170 live attempts and the rollups 100 at a time.
-    for _ in range(3):
+    # The worker's sweeps page through about 170 live attempts and the rollups 100 at a time. Its
+    # own job calculates every record once with the packaged method, 100 a tick
+    # (MethodHistory.keep_current), and is given the ticks to finish that first.
+    methods, company = app.state.service.analytics.methods, setup[2]
+    for _ in range(40):
         run(app.state.service)
+        with app.state.db.transaction(readonly=True) as session:
+            if methods.served(session, company, eco()["method_id"]):
+                break
     with counted(monkeypatch, app.state.db.engine) as counts:
         started = time.perf_counter()
         for _ in range(3):
@@ -215,3 +233,82 @@ def test_production_size_summary_is_fast_and_worker_ticks_repeat_no_work(setup, 
     # Before the fix each tick took 6 to 10 s on a laptop under a profiler; now about 1 s. As
     # above, the counts are the guard and the time bound only catches a hang.
     assert elapsed < 3 * HANG_SECONDS, elapsed
+
+
+def current_requests(app, company, admin, people):
+    """The summaries in the server's method (calculation_view=current), once the worker's own job
+    has calculated every record with that method, 100 a tick (MethodHistory.keep_current)."""
+    owner, owner_credentials = people[0]
+    member, member_credentials = people[2]
+    current = {**MONTH, "calculation_view": "current"}
+    for _ in range(40):
+        run(app.state.service)
+        with app.state.db.transaction(readonly=True) as session:
+            if app.state.service.analytics.methods.served(session, company, eco()["method_id"]):
+                break
+    return {
+        "admin, 30 days": (admin, "/v1/admin/summary", current, None),
+        "admin, activity": (admin, "/v1/admin/activity", current, None),
+        "member, organization": (member, "/v1/company/summary", current, member_credentials),
+        "member, own": (owner, "/v1/me/summary", current, owner_credentials),
+    }
+
+
+def test_the_server_method_view_is_identical_to_the_unoptimised_path(setup, monkeypatch):
+    # The day, tool and model parts take their records from one read of the period
+    # (Analytics.period_records); without a read memo each part reads its own.
+    admin, people = build(setup, live_per_member=16, conversations_per_member=4, messages=12)
+    # The same figures asked for by naming the method, as the administrator website does.
+    named = {**MONTH, "calculation_view": "recalculated", "method_id": eco()["method_id"]}
+    calls = {
+        **current_requests(setup[0], setup[2], admin, people),
+        "admin, named method": (admin, "/v1/admin/summary", named, None),
+        "admin, activity, named method": (admin, "/v1/admin/activity", named, None),
+    }
+    with unoptimised(monkeypatch):
+        expected = {name: fetch(*call) for name, call in calls.items()}
+    whole = expected["admin, 30 days"]
+    assert whole["calculation_view"] == "recalculated" and whole["method_id"] == eco()["method_id"]
+    assert whole["attempt_count"] != "0" and whole["resources"]
+    assert whole["history"]["status"] == "available"
+    assert int(whole["history"]["matched_live_message_count"]) > 0
+    assert len(whole["days"]) > 10 and len(whole["sites"]) == 4 and whole["models"]
+    assert expected["admin, named method"] == whole
+    for attempt in ("cold", "warm"):
+        if attempt == "cold":
+            forget()
+        for name, call in calls.items():
+            assert fetch(*call) == expected[name], (attempt, name)
+
+
+def test_the_organization_view_in_the_server_method_stays_within_the_limits(setup, monkeypatch):
+    """calculation_view=current reads every record's stored estimate instead of the daily
+    rollups, once for the whole summary and its day, tool and model parts."""
+    app = setup[0]
+    admin, people = build(setup)
+    calls = current_requests(app, setup[2], admin, people)
+    forget()
+    statements, tables = {}, {}
+    for name, call in calls.items():
+        with counted(monkeypatch, app.state.db.engine) as counts:
+            started = time.perf_counter()
+            answer = fetch(*call)
+            elapsed = time.perf_counter() - started
+        assert answer["calculation_view"] == "recalculated", name
+        assert answer["method_id"] == eco()["method_id"], name
+        assert counts["estimates"] == 0, (name, counts)
+        assert elapsed < HANG_SECONDS, (name, elapsed)
+        statements[name] = counts["statements"]
+        tables[name] = counts["tables"]
+    whole = fetch(*calls["admin, 30 days"])
+    assert len(whole["days"]) > 20 and len(whole["sites"]) == 4 and whole["models"]
+    print("current view statements:", statements, tables)
+    # On 23 November 2026 the three organization requests took 301 statements each: every part
+    # read the period's records again and asked for the server's job again. With one read for
+    # all parts they took 221, most of them for one linked saved reply at a time
+    # (history_matching.prefetch_linked reads those together).
+    assert all(count < STATEMENTS for count in statements.values()), (statements, tables)
+    # The worker's job has calculated every record, so a further tick calculates nothing.
+    with counted(monkeypatch, app.state.db.engine) as counts:
+        run(app.state.service)
+    assert counts["estimates"] == 0, counts

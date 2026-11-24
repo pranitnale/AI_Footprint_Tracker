@@ -24,7 +24,11 @@ export interface StoredSettings {
    * messages from the site. Absent before 17 October 2026: on.
    */
   ownRead?: boolean;
-  /** The same per site (chatgpt, claude, cowork, gemini, perplexity, notebooklm); absent: on. */
+  /**
+   * The same per site (chatgpt, claude, gemini, perplexity, notebooklm); absent: on. `cowork`
+   * is the separate Cowork switch saved before 22 November 2026. It is read once, into
+   * `claude`, and the next save drops it.
+   */
   ownReadSites?: Partial<
     Record<"chatgpt" | "claude" | "cowork" | "gemini" | "perplexity" | "notebooklm", boolean>
   >;

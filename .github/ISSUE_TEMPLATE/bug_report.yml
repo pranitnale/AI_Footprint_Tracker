@@ -11,7 +11,7 @@ body:
     id: version
     attributes:
       label: Version or commit
-      placeholder: 0.1.0 candidate or commit ID
+      placeholder: 0.1.1 or commit ID
     validations:
       required: true
   - type: dropdown

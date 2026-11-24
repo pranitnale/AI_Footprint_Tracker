@@ -66,6 +66,8 @@ export const OWN_READ_IMPORT_START_MS = 10_000;
  * it is shown again.
  */
 export const OWN_READ_RETRY_MS = 60_000;
+/** A read after a turn follows the last read of the same session by at least this long. */
+export const OWN_READ_TURN_SPACING_MS = 10_000;
 
 export type OwnReadSite =
   | "claude"
@@ -146,14 +148,6 @@ export function ownReadConversation(
   // A signed-out ChatGPT chat is never saved, so there is nothing to read (20 Oct 2026).
   if (site === "chatgpt" && isUnsavedChatgptRoute(pathname)) return null;
   return parseConversationRoute(site, pathname)?.conversationId ?? null;
-}
-
-/** The switch in Settings that governs a read of this chat: a Cowork session has its own. */
-export function ownReadSettingKey(
-  site: OwnReadSite,
-  conversationId: string,
-): OwnReadSettingKey {
-  return site === "claude" && isCoworkSessionId(conversationId) ? "cowork" : site;
 }
 
 export function isOwnReadSite(site: unknown): site is OwnReadSite {
@@ -290,19 +284,53 @@ export function ownReadNote(outcome: NoteOutcome, site: OwnReadSite): string | n
   }
 }
 
+/** The Details line after the events of a Claude chat's session were read (18 Nov 2026). */
+export const SESSION_READ_NOTE =
+  "Claude keeps its own token counts for this chat. The tracker read them from Claude to count the latest replies. The text stays on this device.";
+/**
+ * The Details line after a chat's saved copy was read by text when a reply ended: a chat
+ * without a session, or the part of a chat with one that only its saved copy holds (a
+ * Research report).
+ */
+export const TURN_READ_NOTE =
+  "Claude gives no token counts for this text, so the tracker read the chat from Claude after the reply to count it. The text stays on this device.";
+
 /**
  * Why the content script asks for the read: "missing", no read of the chat arrived;
  * "after_import", only part of it loaded; "rejected", the history reader refused the page's
- * read; "lost_reply", a live reply's frames never reached the background. Details uses it to
- * say what works instead while "Load full chat history" is off.
+ * read; "lost_reply", a live reply's frames never reached the background; "after_turn",
+ * Claude's own total for the chat's session moved past what is counted (18 Nov 2026), so the
+ * session's new events are read. Details uses it to say what works instead while "Load full
+ * chat history" is off.
  */
-export type OwnReadMode = "missing" | "after_import" | "rejected" | "lost_reply";
+export type OwnReadMode =
+  | "missing"
+  | "after_import"
+  | "rejected"
+  | "lost_reply"
+  | "after_turn";
 
 export interface OwnReadRequest {
   /** The content script's navigation nonce; one read at most per value. */
   navigation: string;
   pathname: string;
   mode?: OwnReadMode;
+  /**
+   * The session to read when the address names its chat: the one a proven link gives a
+   * Claude chat (`claude-session-links.ts`). The caller has checked the link.
+   */
+  session?: string;
+  /**
+   * What an "after_turn" read is for: Claude's running total at the time. A navigation makes
+   * one read per value, so a later turn in the same navigation is read too.
+   */
+  turn?: string;
+  /**
+   * An "after_turn" read for a reply the person sent in this navigation. Such a reply is new
+   * whatever was read before, so the five minutes after a read do not hold it; it only
+   * follows the last read by the short spacing.
+   */
+  sent?: boolean;
   /**
    * The page's own read of this chat reached the history reader, which refused it. The page
    * world then reads even though the page just did, unless its request would be the same.
@@ -400,6 +428,9 @@ export function createOwnReadScheduler(env: {
   let pausedUntil = 0;
   let attempt: Attempt | null = null;
   let stopped = false;
+  // The total the latest read after a turn was made for. One total is read for once per
+  // navigation, also when a read of another kind replaced that attempt meanwhile.
+  let turnRead: { navigation: string; turn: string | undefined } | null = null;
   // A pause another tab of this site started. A stored time is trusted only up to the longest
   // pause a provider can ask for, so a wrong value cannot stop reads for longer. The latest
   // question is kept: a read goes out right after the grace period, so `send` waits for its
@@ -435,8 +466,7 @@ export function createOwnReadScheduler(env: {
     return on;
   };
   if (env.allowed)
-    for (const key of env.site === "claude" ? (["claude", "cowork"] as const) : [env.site])
-      void check(key);
+    void check(env.site);
   // The private port to the page world, handed over once (`isOwnReadConnect`). Requests go
   // only over it, each with its own answer port, so page scripts never see them.
   let link: MessagePort | null = null;
@@ -713,7 +743,24 @@ export function createOwnReadScheduler(env: {
       // pause held is made once when the pause has passed, and a read "Load full chat history" held
       // once the switch is on again.
       if (
+        request.mode === "after_turn" &&
+        turnRead?.navigation === request.navigation &&
+        turnRead.turn === request.turn &&
         attempt?.navigation === request.navigation &&
+        attempt.request.mode !== "after_turn"
+      )
+        return pending(attempt);
+      if (
+        attempt?.navigation === request.navigation &&
+        // A later turn of a Claude chat with a session is read once the read before it
+        // settled, and a read of another kind (the chat's saved copy) may follow a settled
+        // session read and be followed by one.
+        !(
+          (request.mode === "after_turn" ||
+            attempt.request.mode === "after_turn") &&
+          attempt.phase === "settled" &&
+          attempt.request.turn !== request.turn
+        ) &&
         attempt.outcome?.kind !== "superseded" &&
         !(
           request.rejected &&
@@ -724,15 +771,28 @@ export function createOwnReadScheduler(env: {
         !(attempt.outcome?.kind === "off" && known.get(attempt.key) === true)
       )
         return pending(attempt);
-      const conversationId = ownReadConversation(env.site, request.pathname);
+      const shown = ownReadConversation(env.site, request.pathname);
+      const conversationId =
+        request.session === undefined
+          ? shown
+          : env.site === "claude" && shown && isCoworkSessionId(request.session)
+            ? request.session
+            : null;
       if (!conversationId) return false;
+      // Whether this navigation already tried a read, or the read is for a reply sent in it.
+      // A chat opened again tries none when nothing is missing, so without the second part a
+      // reply sent there within five minutes of an earlier navigation's read was not read.
+      const laterRead =
+        attempt?.navigation === request.navigation || request.sent === true;
+      if (request.mode === "after_turn")
+        turnRead = { navigation: request.navigation, turn: request.turn };
       if (attempt) clear(attempt, true);
       const at = now();
       for (const [id, entry] of blocked) if (entry.until <= at) blocked.delete(id);
       const current: Attempt = {
         navigation: request.navigation,
         conversationId,
-        key: ownReadSettingKey(env.site, conversationId),
+        key: env.site,
         request,
         phase: "settled",
         outcome: null,
@@ -756,9 +816,27 @@ export function createOwnReadScheduler(env: {
         return false;
       }
       const cooldown = blocked.get(conversationId);
-      if (cooldown) {
+      // The five minutes after a read hold the first read of a navigation, also one after a
+      // turn, so a chat opened again and again is not read each time (Claude's own total
+      // rests a few tokens above the count after a side call). A read after a reply sent in
+      // this navigation, or after an earlier read tried in it, only follows the last read by
+      // a short spacing. Every other block and pause holds it.
+      const afterRead =
+        laterRead && request.mode === "after_turn" && cooldown?.reason === "read";
+      if (cooldown && !afterRead) {
         current.outcome = { kind: "cooldown", reason: cooldown.reason };
         return false;
+      }
+      const spacing = afterRead
+        ? cooldown!.until - OWN_READ_COOLDOWN_MS + OWN_READ_TURN_SPACING_MS - at
+        : 0;
+      if (spacing > 0) {
+        current.phase = "waiting";
+        current.timer = env.window.setTimeout(() => {
+          current.timer = null;
+          if (attempt === current && !stopped) waitVisible(current);
+        }, spacing);
+        return true;
       }
       waitVisible(current);
       return true;
@@ -768,7 +846,13 @@ export function createOwnReadScheduler(env: {
       if (attempt?.navigation !== navigation || attempt.phase !== "settled")
         return null;
       const outcome = attempt.outcome;
-      const text = outcome ? ownReadNote(outcome, env.site) : null;
+      const text = !outcome
+        ? null
+        : attempt.request.mode === "after_turn" && outcome.kind === "read"
+          ? attempt.request.session
+            ? SESSION_READ_NOTE
+            : TURN_READ_NOTE
+          : ownReadNote(outcome, env.site);
       return text
         ? {
             text:
@@ -805,16 +889,13 @@ export function createOwnReadScheduler(env: {
      */
     settingChanged() {
       if (stopped || !env.allowed) return;
-      const keys: OwnReadSettingKey[] =
-        env.site === "claude" ? ["claude", "cowork"] : [env.site];
-      for (const key of keys)
-        void check(key).then((on) => {
-          const current = attempt;
-          if (!current || stopped || current.key !== key) return;
-          if (on === false) switchedOff(current);
-          else if (on === true && current.outcome?.kind === "off")
-            current.request.changed();
-        });
+      void check(env.site).then((on) => {
+        const current = attempt;
+        if (!current || stopped) return;
+        if (on === false) switchedOff(current);
+        else if (on === true && current.outcome?.kind === "off")
+          current.request.changed();
+      });
     },
     /** The progress line for Details while the request runs: sending, then receiving. */
     progress(navigation: string): string | null {

@@ -162,7 +162,10 @@ export function scheduler(
   const request = (
     navigation: string,
     conversationId: string,
-    extra: Pick<OwnReadRequest, "resume" | "resumed" | "mode"> = {},
+    extra: Pick<
+      OwnReadRequest,
+      "resume" | "resumed" | "mode" | "session" | "turn" | "sent"
+    > = {},
   ) =>
     read.request({
       navigation,
@@ -270,6 +273,8 @@ export function pageWorld(
     visible?: boolean;
     now?: () => number;
     byteLimit?: number;
+    shows?: (pathname: string, conversationId: string) => boolean;
+    vouched?: (pathname: string, conversationId: string) => void;
   } = {},
 ) {
   const site = provider.site;
@@ -314,6 +319,8 @@ export function pageWorld(
     enabled: () => state.enabled,
     now: options.now,
     byteLimit: options.byteLimit,
+    shows: options.shows,
+    vouched: options.vouched,
   });
   const ask = (id = conversationId, extra: Record<string, unknown> = {}) => {
     const ports = channel();

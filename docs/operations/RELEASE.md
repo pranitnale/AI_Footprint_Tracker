@@ -16,7 +16,7 @@ pnpm check
 
 `pnpm check` runs every workspace TypeScript check and `.test.ts`/`.test.tsx` suite from its package directory, independent verification tests, documentation checks, Ruff, the full Python suite, JavaScript and Python production dependency audits, all three browser/default builds, deterministic archives, a clean extracted-source rebuild of all three variants, and the website production build. It does not mask audit or test failures.
 
-PostgreSQL transaction races, the one-million and ten-million record benchmarks, real Brevo no-tracking mail, production TLS/routing, browser-store signing, a production backup restore and cross-browser installation remain external gates until their dedicated evidence is recorded. Use the server benchmark and restore tools only with their explicit isolated/offline confirmations.
+PostgreSQL transaction races, the one-million and ten-million record benchmarks, a delivered code email without tracking through the configured mail service (SMTP or Brevo), production TLS/routing, browser-store signing, a production backup restore and cross-browser installation remain external gates until their dedicated evidence is recorded. Use the server benchmark and restore tools only with their explicit isolated/offline confirmations.
 
 The local reference-test checkpoint used the existing Python 3.13.12 environment with frozen dependencies. The explicit 3.13.15 setup above must be recorded as a separate execution checkpoint; it does not change that earlier evidence.
 

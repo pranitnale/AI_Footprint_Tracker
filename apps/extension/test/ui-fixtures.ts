@@ -171,7 +171,9 @@ export type DashboardOverrides = {
   health?: { code: string; state?: "unresolved" | "resolved" | "inactive"; lastAt?: number; resolvedAt?: number; count?: number }[];
   queueCount?: number;
   /** A saved connection the server refused, which leaves the browser in personal mode. */
-  ended?: "revoked" | "reconnect_needed";
+  ended?: "revoked" | "reconnect_needed" | "permission_missing";
+  /** The saved connection's server; the hosted address by default. */
+  companyOrigin?: string;
   /** The organization's sharing policy; "threshold" (on) by default, null leaves it out of the policy. */
   companySharing?: "disabled" | "threshold" | null;
   /** Further saved settings, such as the long-chat tip fields. */
@@ -213,9 +215,11 @@ export function dashboard(o: DashboardOverrides = {}) {
     company:
       o.mode === "company" || o.ended
         ? {
-            origin: "https://aifootprinttracker.com",
+            origin: o.companyOrigin ?? "https://aifootprinttracker.com",
             company_name: "Example Consulting",
-            enrollment_state: o.mode === "company" ? "active" : o.ended,
+            // A connection the server still holds, while the browser no longer lets the extension
+            // reach its server, is active but leaves the browser in personal mode.
+            enrollment_state: o.mode === "company" || o.ended === "permission_missing" ? "active" : o.ended,
             policy: {
               pause_mode: "user_controlled",
               policy_version: "1.0.0",
@@ -438,6 +442,12 @@ export function fakeTransport(scenario: Scenario = {}): Transport {
         return { ok: true };
       }
       case "connect":
+        // As the background answers once the dialog allowed the server again for a connection it
+        // still holds: nothing to send, the connection works again.
+        if (scenario.dashboard?.ended === "permission_missing" && !state.connected) {
+          state.connected = true;
+          return { ok: true, restored: true };
+        }
         state.pending = "code_sent";
         return { ok: true };
       // runtimeTransport turns the background's refusal (ok false, code, words) into this error.

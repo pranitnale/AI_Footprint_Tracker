@@ -34,6 +34,7 @@ import * as ownReadSettings from "../lib/own-read-settings";
 import * as trackingConsent from "../lib/tracking-consent";
 import * as longChatTip from "../lib/long-chat-tip";
 import * as captureDelivery from "../lib/capture-delivery";
+import * as claudeSessionLinks from "../lib/claude-session-links";
 import * as fileGrantBroker from "../lib/file-grant-broker";
 import { SummaryAccumulator } from "../lib/summary-scan";
 const relation = JSON.parse(
@@ -757,6 +758,7 @@ test("actual Gemini content route reopening only queries saved usage and discard
     "../lib/tracking-consent": trackingConsent,
     "../lib/long-chat-tip": longChatTip,
     "../lib/capture-delivery": captureDelivery,
+    "../lib/claude-session-links": claudeSessionLinks,
   };
   const compiled = ts.transpileModule(
     readFileSync(

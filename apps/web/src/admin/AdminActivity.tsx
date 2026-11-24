@@ -15,6 +15,7 @@ import {
   modelName,
   peopleOf,
   periodQuery,
+  CURRENT_VIEW,
   type AdminSummary,
   type DashWindow,
   type UsageFigures,
@@ -24,7 +25,7 @@ import { cachedSince, useAdminView, useFigures } from "./state";
 
 /** The organization's activity for a period: the admin summary with its day and model splits. */
 export function useActivity(api: ApiClient, window: { startDate?: string; endDate?: string } | null) {
-  const path = window ? "/v1/admin/activity" + queryString(periodQuery(window)) : null;
+  const path = window ? "/v1/admin/activity" + queryString({ ...periodQuery(window), ...CURRENT_VIEW }) : null;
   return useFigures<AdminSummary>(api, path, () => api.get<AdminSummary>(path!));
 }
 

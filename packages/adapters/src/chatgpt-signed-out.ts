@@ -27,9 +27,12 @@ import { fitGeneratedText } from "./generated-text";
  *
  * Since 21 Oct 2026 (live, two replies) every line has `version: 2` and the page's <html>
  * carries data-conversation-stream-protocol="2". The lines seen have the same types, control
- * kinds and content fields as version 1. Only what was seen is read as known: a version 2
- * `reasoning` line (none was seen), a content field not seen, or a control line whose
- * `streamType` is not "initial" leaves the reply partly measured.
+ * kinds and content fields as version 1. Since 3 Nov 2026, `markdown` can stay empty while
+ * `dil.fallbackMarkdown` carries the whole answer so far. Appends without a fallback keep
+ * the last one; replacements without one clear it. The longer of fallback and joined
+ * markdown counts once per message. Search status
+ * `reasoning`, `turn-latency` and stream types "initial" and "followup" were also seen.
+ * Other reasoning shapes, content fields or stream types leave the reply partly measured.
  */
 export const CHATGPT_SIGNED_OUT_SEND_PATH = "/unauth-mweb/conversation/updates";
 export const CHATGPT_SIGNED_OUT_STOP_PATH = "/unauth-mweb/stop_conversation";
@@ -110,15 +113,17 @@ const QUIET_CONTROLS: ReadonlySet<string> = new Set([
   "resume-token",
   "assistant-content-started",
   "terminal-received",
+  "turn-latency",
 ]);
 
 /** The stream versions this reader knows; another may give the fields other meanings. */
 const VERSIONS: ReadonlySet<unknown> = new Set([1, 2]);
 
 /**
- * The fields of a version 2 content line seen live (21 Oct 2026). Only `markdown` is text:
- * `dil` is the page's rendering program with its constants and `dil.fallbackMarkdown` repeats
- * the text so far, so neither is read. A field not listed may hold text this reader misses.
+ * The fields of a version 2 content line seen live (21 Oct and 3 Nov 2026). Text is in
+ * `markdown` or `dil.fallbackMarkdown`; the rest of `dil` is the page's rendering program.
+ * `references` can repeat that program with citation markup and is never counted. A field
+ * not listed may hold text this reader misses.
  */
 const V2_CONTENT_FIELDS: ReadonlySet<string> = new Set([
   "version",
@@ -173,7 +178,7 @@ export class ChatgptSignedOutSession implements ProtocolSession {
   /** Each answer message's text so far and the revision it reached, in arrival order. */
   private messages = new Map<
     string,
-    { text: string; revision: number; complete: boolean }
+    { text: string; fallback: string; revision: number; complete: boolean }
   >();
   /** ChatGPT took the turn: its stream started. */
   private accepted = false;
@@ -205,8 +210,8 @@ export class ChatgptSignedOutSession implements ProtocolSession {
       case "state":
         return;
       case "reasoning":
-        // Web search status lines were seen only in version 1 (20 Oct 2026).
-        if (this.version !== 1 || !searchStatus(v)) this.unknown = true;
+        // The same search status shape was seen on version 2 on 3 Nov 2026.
+        if (!searchStatus(v)) this.unknown = true;
         return;
       case "end":
         this.ended = true;
@@ -225,9 +230,13 @@ export class ChatgptSignedOutSession implements ProtocolSession {
       this.unknown = true;
       return;
     }
-    // Version 2 was seen only with the reply's own stream ("initial"); another, such as a
-    // resumed stream, may repeat or skip text.
-    if (this.version === 2 && detail.streamType !== "initial") this.unknown = true;
+    // Follow-ups use "followup" (live, 3 Nov 2026); an unseen stream may repeat or skip text.
+    if (
+      this.version === 2 &&
+      detail.streamType !== "initial" &&
+      detail.streamType !== "followup"
+    )
+      this.unknown = true;
     if (detail.kind === "started") this.accepted = true;
     if (detail.kind === "terminal-received") {
       this.terminal = typeof detail.terminalKind === "string" ? detail.terminalKind : null;
@@ -253,8 +262,17 @@ export class ChatgptSignedOutSession implements ProtocolSession {
     else throw new CaptureError("unsupported_schema");
     if (!known && this.messages.size >= MESSAGES)
       throw new CaptureError("buffer_overflow");
+    // On 3 Nov 2026 only fallbackMarkdown held text, and intermediate and final appends
+    // often had no dil. It is cumulative, not another piece to append.
+    const fallback =
+      this.version === 2 && typeof v.dil?.fallbackMarkdown === "string"
+        ? v.dil.fallbackMarkdown
+        : v.mode === "replace"
+          ? ""
+          : (known?.fallback ?? "");
     this.messages.set(messageId, {
       text: boundedText(text),
+      fallback: boundedText(fallback),
       revision: v.revision,
       complete: v.status === "complete",
     });
@@ -267,7 +285,8 @@ export class ChatgptSignedOutSession implements ProtocolSession {
   /** Only the answer text is kept; every line's metadata is dropped once read. */
   retainedBytes(): number {
     let characters = 0;
-    for (const message of this.messages.values()) characters += message.text.length;
+    for (const message of this.messages.values())
+      characters += message.text.length + message.fallback.length;
     // A UTF-16 code unit takes two bytes in memory.
     return characters * 2;
   }
@@ -295,7 +314,14 @@ export class ChatgptSignedOutSession implements ProtocolSession {
           ? "completed"
           : this.state.state;
     const started = this.state.started || finished;
-    const answer = messages.map(([, message]) => message.text).join("\n\n");
+    const answer = messages
+      .map(([, message]) =>
+        message.fallback.length > message.text.length ? message.fallback : message.text,
+      )
+      .join("\n\n");
+    // Empty messages add separators, but no answer (3 Nov 2026: completed replies showed Out 0).
+    const emptyCompletedAnswer =
+      finished && messages.every(([, message]) => !message.text && !message.fallback);
     return {
       ...this.state,
       state,
@@ -312,7 +338,7 @@ export class ChatgptSignedOutSession implements ProtocolSession {
       model: null,
       limitations: [
         ...this.state.limitations,
-        ...(this.unknown || (this.ended && !this.terminal)
+        ...(this.unknown || (this.ended && !this.terminal) || emptyCompletedAnswer
           ? ["unknown_event_observed"]
           : []),
       ],

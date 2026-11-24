@@ -196,6 +196,7 @@ test("the newly supported consumer models use direct EcoLogits profiles", async 
     ["chatgpt", "chatgpt-gpt-5-6-luna", "gpt-5.6-luna"],
     ["claude", "claude-fable-5", "claude-fable-5"],
     ["claude", "claude-fable-5-1", "claude-fable-5-1"],
+    ["claude", "claude-fable-5-2", "claude-fable-5-2"],
     ["claude", "claude-opus-5", "claude-opus-5"],
     ["claude", "claude-sonnet-5", "claude-sonnet-5"],
     ["gemini", "gemini-3-6-flash", "gemini-3.6-flash"],
@@ -478,7 +479,9 @@ test("C4 GLM through Perplexity keeps the GLM record but uses US grid, PUE and W
     assert.notEqual(JSON.stringify(mistralFactors.usage?.energy), JSON.stringify(expected.usage?.energy));
     assert.notEqual(JSON.stringify(mistralFactors.wcf), JSON.stringify(expected.wcf));
   }
-  // Both GLM versions use modelled serving speed: neither record carries Mistral's measured one.
+  // Both GLM versions carry the speed EcoLogits measured on Mistral's platform (catalog of
+  // 19 November 2026, owner decision of 22 November 2026 to use it).
+  const measuredTps = { "zai-glm-5-2": 90, "zai-glm-5-3": 100 };
   for (const record of Object.values(records)) {
     const entry = core.catalog.models.find(
       (item) => item.provider === "mistralai" && item.name === record,
@@ -487,7 +490,7 @@ test("C4 GLM through Perplexity keeps the GLM record but uses US grid, PUE and W
       parameters: { active: 40, total: 744 },
       type: "moe",
     });
-    assert.equal(entry.deployment?.tps ?? null, null);
+    assert.equal(entry.deployment?.tps ?? null, measuredTps[record as keyof typeof measuredTps]);
   }
   // Other Perplexity records keep their provider's own grid.
   const other = await executor.estimate(live("perplexity", "perplexity-gpt-5-5"), {

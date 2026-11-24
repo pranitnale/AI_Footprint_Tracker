@@ -115,6 +115,113 @@ def test_refresh_retry_and_reuse_revokes_family(setup):
     assert result.status_code == 403
 
 
+def test_a_refresh_answer_lost_on_the_way_is_answered_again_later(setup):
+    """
+    A browser whose refresh answer never arrived (its 20-second timeout fired while the server
+    waited, or the laptop slept) still holds the old token and repeats the same operation, often
+    minutes later. Treating that as reuse revoked the family and ended the connection (production,
+    11 Nov 2026). The repeat gets the same answer while the token it handed out is still unused.
+    """
+    app, client, _, _, now, _ = setup
+    login(app, client)
+    credentials, _ = connect(app, client)
+    payload = {"refresh_token": credentials["refresh_token"], "operation_id": str(uuid4())}
+    lost = client.post("/v1/auth/refresh", json=payload)
+    assert lost.status_code == 200
+    now[0] += timedelta(minutes=30)
+    again = client.post("/v1/auth/refresh", json=payload)
+    assert again.status_code == 200, again.text
+    # The same answer, so no second rotation happened.
+    assert again.json() == lost.json()
+    renewed = client.post(
+        "/v1/auth/refresh", json={"refresh_token": again.json()["refresh_token"], "operation_id": str(uuid4())}
+    )
+    assert renewed.status_code == 200, renewed.text
+    # Once the browser used the token it was handed, the old one repeated is a reuse again.
+    replay = client.post("/v1/auth/refresh", json=payload)
+    assert replay.status_code == 403 and replay.json()["error"]["code"] == "refresh_reuse_detected"
+    # The whole family is revoked, also the token the browser renewed with.
+    newest = client.get("/v1/config", headers={"Authorization": "Bearer " + renewed.json()["access_token"]})
+    assert newest.status_code == 403
+
+
+def test_a_repeat_after_the_handed_out_token_was_used_is_a_reuse(setup):
+    # The check that keeps the lost-answer rule from serving a captured request: once the browser
+    # used the token it was handed, the same operation repeated later revokes the family.
+    app, client, _, _, now, _ = setup
+    login(app, client)
+    credentials, _ = connect(app, client)
+    payload = {"refresh_token": credentials["refresh_token"], "operation_id": str(uuid4())}
+    rotated = client.post("/v1/auth/refresh", json=payload)
+    assert rotated.status_code == 200
+    renewed = client.post(
+        "/v1/auth/refresh", json={"refresh_token": rotated.json()["refresh_token"], "operation_id": str(uuid4())}
+    )
+    assert renewed.status_code == 200
+    now[0] += timedelta(seconds=121)
+    replay = client.post("/v1/auth/refresh", json=payload)
+    assert replay.status_code == 403 and replay.json()["error"]["code"] == "refresh_reuse_detected"
+    newest = client.get("/v1/config", headers={"Authorization": "Bearer " + renewed.json()["access_token"]})
+    assert newest.status_code == 403
+
+
+def test_a_lost_refresh_answer_is_answered_again_only_within_a_day(setup):
+    app, client, _, _, now, _ = setup
+    login(app, client)
+    credentials, _ = connect(app, client)
+    payload = {"refresh_token": credentials["refresh_token"], "operation_id": str(uuid4())}
+    first = client.post("/v1/auth/refresh", json=payload)
+    assert first.status_code == 200
+    # The repeat's answer can be lost too, so every repeat within the day gets the same answer.
+    for minutes in (30, 300):
+        now[0] += timedelta(minutes=minutes)
+        again = client.post("/v1/auth/refresh", json=payload)
+        assert again.status_code == 200 and again.json() == first.json()
+
+    later, _ = connect(app, client)
+    payload = {"refresh_token": later["refresh_token"], "operation_id": str(uuid4())}
+    assert client.post("/v1/auth/refresh", json=payload).status_code == 200
+    now[0] += timedelta(hours=25)
+    late = client.post("/v1/auth/refresh", json=payload)
+    assert late.status_code == 403 and late.json()["error"]["code"] == "refresh_reuse_detected"
+
+    # A used token with another operation id is a reuse at any time, also while the token it
+    # handed out is unused and within the day.
+    third, _ = connect(app, client)
+    payload = {"refresh_token": third["refresh_token"], "operation_id": str(uuid4())}
+    assert client.post("/v1/auth/refresh", json=payload).status_code == 200
+    now[0] += timedelta(minutes=30)
+    other = client.post("/v1/auth/refresh", json={**payload, "operation_id": str(uuid4())})
+    assert other.status_code == 403 and other.json()["error"]["code"] == "refresh_reuse_detected"
+
+
+def test_a_family_revoked_for_reuse_keeps_saying_so_and_a_removal_stays_a_removal(setup):
+    # A browser that also missed the refresh_reuse_detected answer must not read as removed by an
+    # administrator on its next call; a browser an administrator did remove still reads so.
+    app, client, company, _, _, _ = setup
+    login(app, client)
+    credentials, _ = connect(app, client)
+    payload = {"refresh_token": credentials["refresh_token"], "operation_id": str(uuid4())}
+    rotated = client.post("/v1/auth/refresh", json=payload)
+    assert rotated.status_code == 200
+    reused = client.post("/v1/auth/refresh", json={**payload, "operation_id": str(uuid4())})
+    assert reused.json()["error"]["code"] == "refresh_reuse_detected"
+    renew = client.post(
+        "/v1/auth/refresh", json={"refresh_token": rotated.json()["refresh_token"], "operation_id": str(uuid4())}
+    )
+    assert renew.status_code == 403 and renew.json()["error"]["code"] == "refresh_reuse_detected"
+    call = client.get("/v1/config", headers={"Authorization": "Bearer " + rotated.json()["access_token"]})
+    assert call.status_code == 403 and call.json()["error"]["code"] == "refresh_reuse_detected"
+
+    with app.state.db.transaction() as session:
+        device = get(session, "device", credentials["device_id"], company.id)
+        device.data = {**device.data, "status": "revoked"}
+    removed = client.post(
+        "/v1/auth/refresh", json={"refresh_token": rotated.json()["refresh_token"], "operation_id": str(uuid4())}
+    )
+    assert removed.status_code == 403 and removed.json()["error"]["code"] == "enrollment_revoked"
+
+
 def test_csrf_sibling_tenant_and_cookie_ambiguity(setup):
     app, client, company, *_ = setup
     login(app, client)

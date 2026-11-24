@@ -73,6 +73,11 @@ export function streamPromptId(
  * use their own id with the saved kinds. Cowork results are counted from each browser's
  * own checkpoint, so two members' rows of one result are different measurements and get
  * no key: each copy counts, as before.
+ *
+ * A turn of a Claude chat's session (`chat`, 18 Nov 2026) is the exception. Its rows take the
+ * keys the chat's saved prompt and reply have, so the company counts the turn once when one
+ * member holds the exact rows and another, on the same provider account, still holds the
+ * text copy.
  */
 export function savedCompanyId(
   site: string,
@@ -82,9 +87,17 @@ export function savedCompanyId(
     sourceId: string;
     requestId: string | null;
     liveAttemptId: string | null;
+    chat?: { prompt: string; reply: string };
   },
 ): { kind: CompanyKeyKind; id: string } | null {
-  if (cowork) return null;
+  if (cowork)
+    return !message.chat
+      ? null
+      : message.role === "response"
+        ? // The chat's text reader names every saved reply as its own live attempt
+          // (`liveAttemptId` is the reply's uuid), so its key is of this kind.
+          { kind: "company-attempt", id: message.chat.reply }
+        : { kind: "company-request", id: message.chat.prompt };
   // A NotebookLM Studio reply names no live attempt; its saved chat replies do.
   if (message.role === "response")
     return message.liveAttemptId

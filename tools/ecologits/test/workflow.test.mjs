@@ -17,15 +17,16 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
   copyTree,
-  extractTarGz,
   hashTree,
   jsonBytes,
   readJson,
 } from "../lib/common.mjs";
 import {
   acceptedRelease,
+  acceptedSelection,
   archiveDirectory,
   copyCore,
+  extractAcceptedSource,
   runNode,
 } from "./helpers.mjs";
 
@@ -69,16 +70,13 @@ async function stageOfficial({ root, name, repository }) {
   const update = runNode(workspace, updateScript, [
     "--version",
     version,
-    "--commit",
-    commit,
+    ...acceptedSelection(release),
     "--stage",
     stage,
     "--repository-root",
     repository,
     "--python-project",
     oracle,
-    "--source-archive",
-    release.sourceArchive,
     "--package-archive",
     release.packageArchive,
   ]);
@@ -197,7 +195,7 @@ test(
     try {
       const repository = await fixtureRepository(root, "repository");
       const officialSource = join(root, "official-source");
-      await extractTarGz(release.sourceArchive, officialSource);
+      await extractAcceptedSource(release, officialSource);
 
       const unchangedStage = await stageOfficial({
         root,
@@ -784,7 +782,7 @@ test(
       const adoptedLock = await readJson(
         join(adoptedTarget, "packages/ecologits-core/upstream/lock.json"),
       );
-      assert.equal(adoptedLock.release_kind, "release_candidate");
+      assert.equal(adoptedLock.release_kind, release.kind);
       assert.equal(adoptedLock.official_release_claim, false);
       const rolledBack = runNode(workspace, adoptScript, [
         "--rollback",

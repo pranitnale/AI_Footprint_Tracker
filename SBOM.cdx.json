@@ -2155,7 +2155,7 @@
     "component": {
       "name": "AI Footprint Tracker",
       "type": "application",
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   },
   "serialNumber": "urn:uuid:07e9aea7-fcab-5c9e-a65b-f21e2100b68d",

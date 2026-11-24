@@ -62,7 +62,8 @@ export function sharingText(policy: { company_sharing?: unknown } | null | undef
 }
 
 /**
- * Why a saved connection no longer shares, or null while it is active or absent. When the server
+ * Why a saved connection no longer shares, or null without one; asked only outside organization
+ * mode, where an active connection means the browser removed the permission. When the server
  * says this browser lost access (an administrator removed it or suspended the member), the
  * extension keeps the connection marked and returns to personal mode. Without this, the person
  * would see only "Not connected" and never learn that the connection ended. An organization that
@@ -80,5 +81,9 @@ export function connectionEndedText(
     return `This browser was removed from ${name}, so it no longer shares usage. Your records stay in this browser and tracking continues in personal mode. Ask your administrator if this is unexpected.`;
   if (company?.enrollment_state === "reconnect_needed")
     return `The connection to ${name} has ended, so this browser no longer shares usage. Your records stay in this browser and tracking continues in personal mode. Connect again to resume sharing.`;
+  // Callers ask only outside organization mode. A connection that is still active there is held
+  // back by the browser alone: the permission to reach the server was removed.
+  if (company && (!company.enrollment_state || company.enrollment_state === "active"))
+    return `This browser no longer lets the extension reach the server of ${name}, so it does not share usage. Your records stay in this browser and tracking continues in personal mode. Connect again to allow it.`;
   return null;
 }

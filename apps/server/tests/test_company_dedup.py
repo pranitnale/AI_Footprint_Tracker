@@ -778,7 +778,7 @@ def test_readiness_names_the_schema_the_migrations_leave(world):
     client = TestClient(world.app, base_url=world.company.data["origin"])
     ready = client.get("/health/ready")
     assert ready.status_code == 200, ready.text
-    assert ready.json() == {"status": "ready", "schema_version": 14}
+    assert ready.json() == {"status": "ready", "schema_version": 16}
 
 
 def test_every_member_receives_the_same_company_key_at_enrolment_and_refresh(world):
@@ -864,7 +864,7 @@ def test_postgresql_migrations_add_and_remove_the_company_columns(tmp_path):
         indexes = {i["name"] for i in inspect(migrated).get_indexes("historical_observations")}
         assert "ix_history_company_key" in indexes
         with migrated.connect() as connection:
-            assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 14
+            assert connection.execute(text("SELECT schema_version FROM transaction_guard")).scalar_one() == 16
         alembic("downgrade", "0011")
         columns = {c["name"] for c in inspect(migrated).get_columns("historical_observations")}
         assert "company_key" not in columns and "company_shared" not in columns

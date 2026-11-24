@@ -2,6 +2,8 @@
 
 Decision confirmed by the project owner: **8 September 2026**. Project: **AI Footprint Tracker**, `aifootprinttracker.com`.
 
+Update of 24 November 2026 (owner decision): Brevo is no longer the only way. The server can also send codes through any standard mail server over SMTP; see [SMTP mail setup](SMTP-MAIL-SETUP.md). The hosted service sends from its own mail server and keeps Brevo as a fallback, and self-hosters choose either. This page stays the setup and release contract for the Brevo adapter.
+
 Status: approved provider and implementation requirements; **not a completed deployment or legal certification**. This guide uses Brevo documentation and read-only account observations from 7 September 2026. Recheck controls and API behavior during setup and before release. Do not assume a successful save, email delivery or deletion without evidence.
 
 ## 1. Decision and boundaries
@@ -13,7 +15,7 @@ Status: approved provider and implementation requirements; **not a completed dep
 - The organization authentication service handles work email addresses; numerical AI usage records remain associated with internal user/company IDs. An address linked to an ID is still identifiable data, not anonymous data.
 - Send Brevo only the recipient address and minimal authentication message required for delivery. Do not send employee names, organization usage, IP analytics, prompts, answers, document data or AI conversation identifiers in messages, tags or metadata.
 - Do not create marketing contacts/lists as part of OTP delivery. Do not subscribe employees to marketing or reuse their addresses for another purpose.
-- Brevo selection applies to the project's managed service. Self-hosters configure their own Brevo account and secret; never distribute the project's shared key in the MIT repository or force self-hosted mail through the project's account. Additional mail-provider adapters are outside this decision.
+- Brevo selection applies to the project's managed service. Self-hosters configure their own Brevo account and secret; never distribute the project's shared key in the MIT repository or force self-hosted mail through the project's account. The SMTP adapter added on 24 November 2026 is covered by its own page.
 - Brevo retention covers its email records, not AI usage history. Hosted free-tier usage is kept until an administrator deletes it (owner decision of 11 October 2026, replacing the earlier six months), or for the shorter period the organization chooses; do not tie it to Brevo's one-month log retention. Since 18 October 2026 the service collects no connection IP addresses, so there is no IP analytics that could reach Brevo.
 
 ## 2. What was actually observed
@@ -74,7 +76,7 @@ The separate [Transactional emails > Tracking page](https://app.brevo.com/transa
 - Prefer Brevo's transactional HTTP API for this integration so tracking behavior can be explicit per recipient. Selection of Brevo does not require using the SMTP transport.
 - Brevo's published guidance documents `contactPixelTrackingConsent: false` on transactional API recipient objects. The implementer must verify the exact request schema and behavior against the pinned API/SDK at integration time; do not silently omit an unsupported field or assume a successful HTTP response means it was honored.
 - Enforce no tracking on every authentication-message path, including resend, enrollment and recovery. A recipient's existing marketing-consent status must not cause an OTP to become tracked.
-- Do not substitute SMTP unless equivalent per-message no-tracking behavior is documented and passes the same tests.
+- Do not substitute Brevo's SMTP relay unless equivalent per-message no-tracking behavior is documented and passes the same tests.
 - Send a controlled test to an approved test mailbox, inspect the delivered raw MIME/HTML, and verify no Brevo open pixel and no Brevo-rewritten tracking links. Include an ordinary test link so the test actually exercises click rewriting. Inspect ordinary production OTP content as well.
 - Test unknown recipients and, in an isolated test setup, an existing contact with tracking consent. The per-message false setting must prevent tracking in both cases. Never alter a real employee's consent to create a test fixture.
 - If the field is unsupported, settings cannot be saved, or tracking remains present, block production OTP release and raise a visible configuration error. Seek a documented Brevo solution; do not quietly settle for anonymous tracking.

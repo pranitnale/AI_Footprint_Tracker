@@ -14,7 +14,7 @@ Security and conduct reports use their private channels until disclosure is safe
 
 ## Releases
 
-The maintainer decides when a version is released. A release record must identify its source, hashes, schema/migration state, notices, signing/publication state and unverified external gates. The current 0.1.0 packages are unsigned candidates and are not a published production release.
+The maintainer decides when a version is released. A release record must identify its source, hashes, schema/migration state, notices, signing/publication state and unverified external gates. Version 0.1.0 for Chrome was published in the Chrome Web Store on 29 October 2026. Microsoft Edge installs it from the same store. It is not published in the Microsoft Edge Add-ons store or in the Firefox store, and the packages on the website are unsigned test packages.
 
 ## Conflicts of interest
 

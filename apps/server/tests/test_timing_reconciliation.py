@@ -552,6 +552,7 @@ def test_history_mutation_invalidates_snapshots_from_former_canonical_aliases(se
 
     from aift.engine_history import persist
     from aift.historical_usage import numeric_payload_hash
+    from aift.method_registry import packaged_identity
     from tools.verify_restore import verify_restored
 
     app, client, company, member, now, _ = setup
@@ -626,16 +627,26 @@ def test_history_mutation_invalidates_snapshots_from_former_canonical_aliases(se
         response = send(client, credentials, {**body, "messages": [refined]})
         assert response.json()["results"][0]["status"] == "applied", response.text
     with app.state.db.transaction(readonly=True) as session:
-        assert (
-            list(
-                session.scalars(
-                    select(EngineEstimate).where(
-                        EngineEstimate.family == "live", EngineEstimate.view == "recalculated"
-                    )
+        remaining = list(
+            session.scalars(
+                select(EngineEstimate).where(
+                    EngineEstimate.family == "live", EngineEstimate.view == "recalculated"
                 )
             )
-            == []
         )
+        # Nothing bound to the former saved message is left, and nothing of the member's method.
+        assert all(row.history_hash != numeric_payload_hash(history) for row in remaining)
+        assert [row for row in remaining if row.method_id == BASELINE_METHOD_ID] == []
+        if mutation == "erase":
+            assert remaining == []
+        else:
+            # The upload of the refined message calculates the reply it names again with the
+            # server's method (MethodHistory.keep_current), bound to the refined message.
+            (kept,) = remaining
+            assert kept.method_id == packaged_identity()[1]["method_id"]
+            assert kept.record_key == promoted["attempt_id"]
+            assert kept.history_payload == refined
+            assert kept.history_hash == numeric_payload_hash(refined)
         retained = {
             row.record_key: canonical_json(row.estimate)
             for row in session.scalars(
@@ -652,7 +663,11 @@ def test_history_mutation_invalidates_snapshots_from_former_canonical_aliases(se
             assert all(row.history_payload is None and row.history_hash == "" for row in overlays)
             assert all("history_binding" not in row.estimate.get("source", {}) for row in overlays)
         else:
-            current = [row for row in overlays if row.family == "live" and row.view == "recalculated"]
+            current = [
+                row
+                for row in overlays
+                if row.family == "live" and row.view == "recalculated" and row.method_id == BASELINE_METHOD_ID
+            ]
             assert len(current) == 1 and current[0].record_key == promoted["attempt_id"]
             assert current[0].history_payload == refined
             assert current[0].history_hash == numeric_payload_hash(refined) != numeric_payload_hash(history)

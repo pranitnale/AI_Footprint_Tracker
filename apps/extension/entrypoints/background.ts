@@ -34,7 +34,7 @@ import {
   HealthReporter,
   failureCode as safeCode,
   failureMessage as safeMessage,
-  technicalDetail,
+  failureReply,
 } from "../lib/health";
 import { transitionOwnership, ownershipAt } from "../lib/ownership";
 import { createOwnReadPauses } from "../lib/own-read-pause";
@@ -57,8 +57,11 @@ import {
 } from "../lib/tracking-consent";
 import {
   siteForHost,
+  isCoworkSessionId,
   isDisplayBinding,
   isConversationIdentity,
+  isRouteConversationId,
+  parseConversationRoute,
 } from "@footprint/capture-core";
 
 /**
@@ -669,10 +672,20 @@ export default defineBackground(() => {
         sender.frameId !== 0 ||
         sender.tab?.id == null ||
         !isDisplayBinding(message.binding, null) ||
-        Object.keys(message).sort().join(",") !==
-          (message.target === "history-observation"
+        ![
+          message.target === "history-observation"
             ? "binding,message,target"
-            : "binding,target")
+            : "binding,target",
+          // A Claude session's page shown at its chat's address names that chat.
+          ...(message.target === "history-observation"
+            ? ["binding,linkedRoute,message,target"]
+            : []),
+        ].includes(Object.keys(message).sort().join(",")) ||
+        (Object.hasOwn(message, "linkedRoute") &&
+          (message.message?.site !== "claude" ||
+            !isCoworkSessionId(message.message?.conversationId) ||
+            !isRouteConversationId("claude", message.linkedRoute) ||
+            isCoworkSessionId(message.linkedRoute)))
       )
         return Promise.resolve({ accepted: false, error: "payload_rejected" });
       return ready
@@ -688,7 +701,9 @@ export default defineBackground(() => {
             sender,
             message.binding,
             message.message?.site,
-            message.message?.conversationId,
+            // The tab's address is checked against the chat it shows; the history service
+            // checks the session against the link kept for that chat.
+            message.linkedRoute ?? message.message?.conversationId,
             (guard, currentSender) =>
               message.message?.event === "batch" ||
               message.message?.event === "progress" ||
@@ -705,6 +720,7 @@ export default defineBackground(() => {
                     message.binding,
                     currentSender,
                     guard,
+                    message.linkedRoute,
                   ),
           );
         })
@@ -939,6 +955,62 @@ export default defineBackground(() => {
         .then((c) => c.chatgptReadProgress(message.conversationId, message.progress))
         .catch(() => null);
     }
+    // Which session backs a Claude chat (18 Nov 2026, lib/claude-session-links.ts): ids and
+    // Claude's own running totals, from the top frame of a claude.ai page. Checked again by
+    // the coordinator; a page of the session is admitted only at the chat this names.
+    if (
+      message?.target === "claude-session-link" &&
+      sender.tab?.id != null &&
+      sender.frameId === 0
+    ) {
+      const tabId = sender.tab.id;
+      let origin: string;
+      try {
+        const url = new URL(sender.url ?? "");
+        origin = url.origin;
+        if (
+          sender.id !== browser.runtime.id ||
+          url.protocol !== "https:" ||
+          url.username ||
+          url.password ||
+          url.port ||
+          siteForHost(url.hostname) !== "claude" ||
+          // `proven: false` asks only whether the link is kept (a reload proves nothing).
+          ![
+            "chat,session,target,totals",
+            "chat,proven,session,target,totals",
+          ].includes(Object.keys(message).sort().join(",")) ||
+          (Object.hasOwn(message, "proven") && message.proven !== false)
+        )
+          return;
+      } catch {
+        return;
+      }
+      // A tab reports the link of the chat it shows, and of no other. Chrome keeps the
+      // sender's first loaded address after in-page navigation, so a chat started at /new or
+      // opened from the sidebar was refused by that address and stayed uncounted until a
+      // reload (live check of 23 Nov 2026). The tab's own address says what it shows now.
+      return browser.tabs
+        .get(tabId)
+        .then((tab) => {
+          const shown = new URL(tab.url ?? "invalid:");
+          if (
+            shown.origin !== origin ||
+            parseConversationRoute("claude", shown.pathname)?.conversationId !==
+              message.chat
+          )
+            return { kept: false };
+          return ready.then((c) =>
+            c.claudeSessionLink(
+              message.chat,
+              message.session,
+              message.totals,
+              message.proven !== false,
+            ),
+          );
+        })
+        .catch(() => ({ kept: false }));
+    }
     // Whether the person closed or snoozed the long-chat tip of the open chat (16 Oct 2026).
     // The site comes from the sender's address, never from the message; ids are checked again
     // by the coordinator.
@@ -1164,6 +1236,12 @@ export default defineBackground(() => {
               throw new Error(
                 "Company origin or data-sharing permission was not granted.",
               );
+            // The dialog asked for the permission first. When the browser had only lost the
+            // permission for a connection the server still holds, that connection works again.
+            if (await c.connectionRestored(origin)) {
+              void c.company.sync().catch(() => {});
+              return { ok: true, restored: true };
+            }
             const capabilities = await getRuntimeCapabilities();
             if (!capabilities.ed25519 || !capabilities.tokenizerHostAvailable)
               throw new Error(
@@ -1234,24 +1312,6 @@ export default defineBackground(() => {
             throw new Error("Unknown extension action.");
         }
       })
-      .catch((error) => {
-        if (
-          error instanceof Error &&
-          ["recalculation_pending", "method_unsupported"].includes(
-            error.message,
-          )
-        )
-          return {
-            code: error.message,
-            error:
-              error.message === "recalculation_pending"
-                ? "The selected recalculation is not ready. No current recalculated totals are available."
-                : "The selected method is not installed for this connection.",
-            health: health.list(),
-          };
-        const code = safeCode(error);
-        failure(error);
-        return { code, error: safeMessage(code), detail: technicalDetail(error), health: health.list() };
-      });
+      .catch((error) => failureReply(error, health));
   });
 });

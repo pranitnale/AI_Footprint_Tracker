@@ -20,6 +20,11 @@ INVENTORY_PATH = ROOT / "THIRD-PARTY-INVENTORY.json"
 SBOM_PATH = ROOT / "SBOM.cdx.json"
 NOTICES_PATH = ROOT / "THIRD-PARTY-NOTICES.md"
 SCHEMA_VERSION = "1.1.0"
+# The product's own version, read where the packaging tool reads it, so a release never leaves
+# the SBOM naming an older one.
+PRODUCT_VERSION = json.loads(
+    (ROOT / "apps/extension/package.json").read_text(encoding="utf-8")
+)["version"]
 SPDX_IDS = {
     "Apache-2.0",
     "BSD-2-Clause",
@@ -135,7 +140,7 @@ def sbom_document(inventory: dict) -> dict:
         "version": 1,
         "serialNumber": "urn:uuid:" + str(uuid.uuid5(uuid.NAMESPACE_URL, fingerprint)),
         "metadata": {
-            "component": {"type": "application", "name": "AI Footprint Tracker", "version": "0.1.0"}
+            "component": {"type": "application", "name": "AI Footprint Tracker", "version": PRODUCT_VERSION}
         },
         "components": components,
     }

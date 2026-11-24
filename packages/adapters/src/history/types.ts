@@ -80,6 +80,26 @@ export interface HistoryTextMessage extends GeneratedText {
    */
   cumulative?: CoworkCumulative;
   /**
+   * The saved chat messages a turn of a Claude chat's session stands for (18 Nov 2026): the
+   * ids the chat's saved copy gives this turn's prompt and reply. The background replaces
+   * their text estimate with the turn's exact count, once. Only Cowork event pages set it.
+   */
+  chat?: { prompt: string; reply: string };
+  /**
+   * The reply launched a Claude Research task (22 Nov 2026). The task runs outside the
+   * session, so the session's count covers the launch only, and the report is counted from
+   * the chat's saved reply, which this reply therefore does not replace (`chat` is absent).
+   * Only Cowork event pages set it.
+   */
+  research?: true;
+  /**
+   * The turn in which Claude moved a chat into a session (23 Nov 2026). Its result counts
+   * only the part after the handoff, so the background adds no reply and no request for it
+   * and only moves the session's checkpoint past it; the chat's saved reply is counted by
+   * its text. Only Cowork event pages set it.
+   */
+  handoff?: true;
+  /**
    * Files Perplexity Computer created in this reply (owner decision of 14 Oct 2026). Text
    * and code files count as output of the reply's model; no other site sets this field.
    */
@@ -123,6 +143,18 @@ export interface CoworkCumulative {
   sequence: number;
   models: CoworkModelCount[];
   apiMs: number | null;
+  /** There only when every model of the result reported all three counters. */
+  inputs?: CoworkInputCounts;
+}
+/**
+ * The three cumulative input counters of a Cowork result, added over its models (owner
+ * decision of 23 Nov 2026): new input, input written to the cache and input read from it.
+ * Together they are everything Claude processed, side calls and sub-agents included.
+ */
+export interface CoworkInputCounts {
+  fresh: number;
+  cacheWrite: number;
+  cacheRead: number;
 }
 /** Provider identities and text are transient inputs, never durable telemetry. */
 export interface HistoryTextPage {

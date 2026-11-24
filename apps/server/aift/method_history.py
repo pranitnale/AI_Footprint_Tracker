@@ -25,6 +25,18 @@ from .db import Base, Observation, State, get, put
 from .security import Problem, canonical, digest, instant, parse_time
 
 PAGE_SIZE = 100
+# The actor of the job the server keeps for an organization by itself (MethodHistory.keep_current).
+# The audit log names the worker the same way.
+SYSTEM_ACTOR = "system"
+# The only requests that take calculation_view=current (MethodHistory.current_view). The
+# dispatcher lets exactly these take the organization's lock when they must write.
+CURRENT_VIEW_PATHS = frozenset(
+    {"/v1/me/summary", "/v1/company/summary", "/v1/admin/summary", "/v1/admin/activity"}
+)
+
+
+def current_job_id(company_id, method_id):
+    return digest(canonical([company_id, "current-method", method_id]))
 
 
 class HistoricalEstimate(Base):
@@ -122,9 +134,10 @@ def select_records(session, records, method_id=None):
 
 
 def _with_estimates(session, records, method_id, size=200):
-    """records unchanged and in order; inside a read memo, each batch's recalculated estimates are
-    read in one query before its records are resolved."""
-    from .history_matching import remembering
+    """records unchanged and in order; inside a read memo, each batch's recalculated estimates,
+    and the saved replies its attempts are linked to, are read together before its records are
+    resolved."""
+    from .history_matching import prefetch_linked, remembering
 
     if not remembering(session):
         yield from records
@@ -132,6 +145,7 @@ def _with_estimates(session, records, method_id, size=200):
 
     def read(batch):
         attempts = [r for r in batch if r.kind == "attempt"]
+        prefetch_linked(session, attempts)
         engine_history.prefetch_estimates(session, attempts, method_id, "recalculated")
         return batch
 
@@ -244,7 +258,15 @@ class MethodHistory:
             query = query.where(parent.occurred_at >= cutoff)
         return query
 
-    def missing(self, session, company, method_id, owner=None):
+    def missing(self, session, company, method_id, owner=None, resolvable_only=False):
+        """
+        The current live attempts that lack their recalculation with the method. With
+        resolvable_only (the server's own job) an attempt whose original method this server cannot
+        resolve is left out. A recalculation names the original method's hash, which a live
+        attempt does not carry, so such an attempt cannot be recalculated until the server knows
+        its method. It reads as a pending estimate meanwhile and must not keep a whole
+        organization's figures waiting.
+        """
         method_registry.resolve(session, method_id)
         parent = aliased(Observation)
         present = (
@@ -270,9 +292,16 @@ class MethodHistory:
             )
             .exists()
         )
-        return self.eligible(session, company, owner).where(~present)
+        query = self.eligible(session, company, owner).where(~present)
+        if resolvable_only:
+            from .engine_adapter import MISSING_ADMISSION_METHOD_ID
 
-    def incomplete(self, session, company, method_id, owner=None):
+            proposed = Observation.payload["proposed_method_id"].as_string()
+            known = method_registry.known_method_ids(session) | {MISSING_ADMISSION_METHOD_ID}
+            query = query.where(proposed.is_(None) | proposed.in_(sorted(known)))
+        return query
+
+    def incomplete(self, session, company, method_id, owner=None, resolvable_only=False):
         """
         Whether a current live or saved record of the owner (or organization) still lacks its
         recalculation with the method. Each check reads every such record, and a person's own
@@ -283,8 +312,11 @@ class MethodHistory:
 
         return remembered(
             session,
-            ("recalculation incomplete", company.id, method_id, owner),
-            lambda: session.scalar(self.missing(session, company, method_id, owner).limit(1)) is not None
+            ("recalculation incomplete", company.id, method_id, owner, resolvable_only),
+            lambda: session.scalar(
+                self.missing(session, company, method_id, owner, resolvable_only).limit(1)
+            )
+            is not None
             or session.scalar(
                 engine_history.history_missing(self.analytics, session, company, method_id, owner).limit(1)
             )
@@ -368,7 +400,7 @@ class MethodHistory:
             if error.code in {"method_unsupported", "engine_unavailable"}:
                 return "pending", error.code
             raise
-        if self.incomplete(session, company, row.method_id, row.owner):
+        if self.incomplete(session, company, row.method_id, row.owner, row.actor == SYSTEM_ACTOR):
             if row.data.get("status") == "failed":
                 return "failed", row.data["error_code"]
             return "pending", "recalculation_pending"
@@ -445,7 +477,143 @@ class MethodHistory:
         self.analytics.contribution_delta(session, company, owner, after, 1)
         return result
 
-    def advance(self, session, company, row, budget=PAGE_SIZE):
+    def has_current_records(self, session, company):
+        """Whether the organization has a live attempt or a saved message that counts today."""
+        h = engine_history.HistoryObservation
+        return (
+            session.scalar(self.eligible(session, company).limit(1)) is not None
+            or session.scalar(
+                select(h.message_key)
+                .where(h.tenant == company.id, h.status == "current", self.analytics.history.visible(company))
+                .limit(1)
+            )
+            is not None
+        )
+
+    def keep_current(self, session, company, owner=None, create=False):
+        """
+        Keeps the organization's records calculated with the server's packaged method, so its
+        totals in that method never depend on which version each member's browser runs. The work
+        is an ordinary organization job that belongs to the server (SYSTEM_ACTOR). The worker (no
+        owner) starts it for every organization that has current records, moves it to each new
+        packaged method and advances it on every tick, so the figures are ready before anyone
+        asks. An upload (owner) calculates the uploading member's new records at once. A request
+        for the figures (create) starts the job when the worker has not yet, as right after an
+        erasure. Estimates of earlier packaged methods stay stored. Returns the job, or None when
+        the organization has none.
+        """
+        method_id = method_registry.packaged_identity()[1]["method_id"]
+        job = session.get(RecalculationJob, current_job_id(company.id, method_id))
+        if owner is None and not self.analytics.deletions.in_progress(session, company):
+            earlier = []
+            if job is None:
+                earlier = list(
+                    session.scalars(
+                        select(RecalculationJob).where(
+                            RecalculationJob.tenant == company.id, RecalculationJob.actor == SYSTEM_ACTOR
+                        )
+                    )
+                )
+            if job is None and (create or earlier or self.has_current_records(session, company)):
+                if create:
+                    method_registry.retain_packaged_definition(session, method_id, self.service.now())
+                elif session.get(method_registry.MethodBundle, method_id) is None:
+                    # The worker archives a new packaged method before anything else in its run.
+                    # Estimates stored under a method that is not archived could not be resolved
+                    # after the next release.
+                    return None
+                for row in earlier:
+                    session.delete(row)
+                job = RecalculationJob(
+                    id=current_job_id(company.id, method_id),
+                    tenant=company.id,
+                    owner=None,
+                    actor=SYSTEM_ACTOR,
+                    method_id=method_id,
+                    data={},
+                )
+                session.add(job)
+            if job is not None and job.data.get("deletion_epoch") != company.data["epoch"]:
+                # A new job, or one a restored backup brought back from before an erasure.
+                job.data = {
+                    "status": "pending",
+                    "created_at": instant(self.service.now()),
+                    "processed": 0,
+                    "completed_at": None,
+                    "error_code": None,
+                    "deletion_epoch": company.data["epoch"],
+                    "admin_requested": False,
+                }
+                session.flush()
+        if job is None:
+            return None
+        if owner is not None:
+            try:
+                with session.begin_nested():
+                    self.advance(session, company, job, owner=owner)
+            except Exception:
+                # Nothing here may fail an upload. The record stays without its estimate, the
+                # figures stay unavailable instead of incomplete, and the worker's next tick
+                # calculates it again and reports a failure on the job.
+                pass
+            return job
+        try:
+            with session.begin_nested():
+                job.data = {**job.data, "status": "pending", "error_code": None}
+                self.advance(session, company, job)
+        except (Problem, ValueError, ArithmeticError, RuntimeError) as error:
+            job.data = {
+                **job.data,
+                "status": "failed",
+                "error_code": error.code if isinstance(error, Problem) else "calculation_failed",
+            }
+        return job
+
+    def served(self, session, company, method_id):
+        """The server's own job for the method, once it has completed in the current deletion epoch."""
+        job = session.get(RecalculationJob, current_job_id(company.id, method_id))
+        if (
+            job
+            and job.data.get("status") == "completed"
+            and job.data.get("deletion_epoch") == company.data["epoch"]
+        ):
+            return job
+        return None
+
+    def current_view(self, session, company, query):
+        """
+        calculation_view=current asks for the organization's figures in the server's packaged
+        method, whatever each member's browser calculated with. Returns the query that answers
+        it: the recalculated view of that method, or the original view while an erasure or a
+        rebuild runs, which answers "being updated" (an erasure deletes every job).
+
+        The worker starts the job that keeps the figures (keep_current). A request that comes
+        before it has, as right after an erasure, starts the job itself and runs one page of it.
+        When that page did not finish the figures, the returned error answer is sent after the
+        transaction commits, so the job is kept; a raised refusal would undo it.
+        """
+        if "method_id" in query:
+            raise Problem("unsupported_filter", 422)
+        rest = {key: value for key, value in query.items() if key != "calculation_view"}
+        if (
+            self.analytics.deletions.in_progress(session, company)
+            or company.data.get("aggregate_status") == "rebuilding"
+        ):
+            return rest
+        method_id = method_registry.packaged_identity()[1]["method_id"]
+        job = session.get(RecalculationJob, current_job_id(company.id, method_id))
+        if job is None or job.data.get("deletion_epoch") != company.data["epoch"]:
+            self.keep_current(session, company, create=True)
+            if self.served(session, company, method_id) is None:
+                return {"_error": "recalculation_pending", "_status": 409, "_retryable": True}
+        return {**rest, "calculation_view": "recalculated", "method_id": method_id}
+
+    def advance(self, session, company, row, budget=PAGE_SIZE, owner=None):
+        """
+        One bounded page of a job's work. With owner, only that member's missing records of the
+        job are calculated and the job's cursor and status are left to the worker: an upload uses
+        this for the records it just stored (keep_current).
+        """
         if not 1 <= budget <= PAGE_SIZE:
             raise ValueError("invalid_work_budget")
         from .engine_selection import selection_is_current
@@ -469,10 +637,11 @@ class MethodHistory:
                 raise
             row.data = {**row.data, "status": "pending", "error_code": error.code}
             return
-        query = self.missing(session, company, row.method_id, row.owner)
-        after = tuple(row.data.get("after", ["", ""]))
+        scope = owner or row.owner
+        query = self.missing(session, company, row.method_id, scope, row.actor == SYSTEM_ACTOR)
+        after = ("", "") if owner else tuple(row.data.get("after", ["", ""]))
         history_query = engine_history.history_missing(
-            self.analytics, session, company, row.method_id, row.owner
+            self.analytics, session, company, row.method_id, scope
         ).order_by(engine_history.HistoryObservation.owner, engine_history.HistoryObservation.message_key)
         # Missing live originals still consume work. Alternate priority so neither family can starve.
         history_first = row.data.get("next_family") == "history"
@@ -533,6 +702,10 @@ class MethodHistory:
             )
             engine_history.persist(session, record, row.method_id, result, "recalculated")
             processed += 1
+        if owner:
+            if processed:
+                row.data = {**row.data, "processed": row.data["processed"] + processed}
+            return
         status, error = self.state(session, company, row)
         row.data = {
             **row.data,
@@ -553,7 +726,11 @@ class MethodHistory:
         if self.analytics.deletions.in_progress(session, company):
             return
         engine_history.recover_history(self.analytics, session, company)
+        # The server's own job first and on every tick, so members' jobs cannot delay it.
+        current = self.keep_current(session, company)
         for job in cursor_page(session, "recalculation", company.id, limit=5):
+            if current is not None and job.id == current.id:
+                continue
             try:
                 with session.begin_nested():
                     job.data = {**job.data, "status": "pending", "error_code": None}
@@ -624,9 +801,18 @@ class MethodHistory:
             .order_by(RecalculationJob.id)
             .limit(1)
         )
-        job = session.scalar(jobs)
+        # The server's own job answers for its method once it has completed. It leaves out attempts
+        # whose original method the server cannot resolve yet (missing). A summary asks once for
+        # itself and once for each split, and the session holds rows weakly, so a read memo keeps
+        # the job for the request.
+        from .history_matching import remembered
+
+        own = remembered(
+            session, ("served job", company.id, method_id), lambda: self.served(session, company, method_id)
+        )
+        job = own or session.scalar(jobs)
         # Readiness belongs to the requested owner population, not an unrelated larger job's missing rows.
-        if not job or self.incomplete(session, company, method_id, owner):
+        if not job or self.incomplete(session, company, method_id, owner, own is not None):
             raise Problem("recalculation_pending", 409, True)
         return {
             "calculation_view": "recalculated",

@@ -196,6 +196,15 @@ def resolve_identity(session, method_id):
     return bundle, method
 
 
+def known_method_ids(session):
+    """The method ids resolve() answers for: the baseline, the packaged method and the archived ones."""
+    return {
+        BASELINE_METHOD_ID,
+        packaged_identity()[1]["method_id"],
+        *session.scalars(select(MethodBundle.method_id).limit(MAX_METHODS)),
+    }
+
+
 def engine_inventory(definition, installed_at=None):
     from .engine_adapter import identity, require_native
 

@@ -1,6 +1,6 @@
 # Organization server
 
-FastAPI service, strict Pydantic authentication DTOs, shared JSON Schema numerical observations, SQLAlchemy transactions, PostgreSQL deployment migrations, Brevo adapter and durable numerical rollups. Personal mode does not require or contact this service.
+FastAPI service, strict Pydantic authentication DTOs, shared JSON Schema numerical observations, SQLAlchemy transactions, PostgreSQL deployment migrations, SMTP and Brevo mail adapters and durable numerical rollups. Personal mode does not require or contact this service.
 
 ## Local checks
 
@@ -10,7 +10,7 @@ Python imports require `packages/contracts/python` and `packages/estimator/pytho
 
 ## Configuration and production start
 
-Set `AIFT_SETTINGS_FILE` to a protected JSON file outside the repository. `aift.config.Settings` is the complete validated configuration schema. Required values include a PostgreSQL SQLAlchemy URL, exact HTTPS registration/operator origins, hosted domain or a single self-host origin, approved extension origins, independent authentication encryption and lookup keys, Ed25519 deletion signing seed, protected deletion-journal path, approved Brevo key/sender and verified routing/privacy setup.
+Set `AIFT_SETTINGS_FILE` to a protected JSON file outside the repository. `aift.config.Settings` is the complete validated configuration schema. Required values include a PostgreSQL SQLAlchemy URL, exact HTTPS registration/operator origins, hosted domain or a single self-host origin, approved extension origins, independent authentication encryption and lookup keys, Ed25519 deletion signing seed, protected deletion-journal path, a mail sender (`mail_sender`) with either an SMTP mail server (`mail_adapter` `"smtp"` and `smtp_host`) or a Brevo key (`"brevo"`, the default for older settings files), and verified routing/privacy setup.
 
 Use a Fernet key for `encryption_key` and an independent cryptographic 256-bit random `lookup_key` secret. Two operator settings, `person_analytics_enabled` and `ip_collection_enabled`, both `false` by default, decide whether administrators get per-person views and whether connection addresses are collected; see `docs/operations/SELF-HOSTING.md` and `docs/implementation/CONTRACTS.md` section 8, including what must be done before switching either on. With IP collection off, `ip_key`, `ip_keys`, `active_ip_key_version`, `ip_restore_required_until` and `ip_retention_days` are not required, a settings file that still contains them keeps starting because the keys are accepted and ignored, and `/v1/config` sends `ip_retention_days: 0` so that older extensions keep working; with it on they are required and validated as before. `deletion_signing_key` is a base64url-encoded 32-byte Ed25519 seed. Keys must be protected and backed up separately from the database. Never print secrets in terminal transcripts, checked-in examples or application logs. Production requires `environment: "production"`, `mail_adapter: "brevo"`, `policy_confirmed: true`, `routing_verified: true`, `mail_privacy_verified: true`, and `restore_journal_verified: true`. These switches record externally completed checks, not substitutes for those checks. Missing essentials stop startup with `configuration_required`.
 
@@ -22,9 +22,11 @@ Run `uv run alembic upgrade head` from this directory with `AIFT_SETTINGS_FILE` 
 
 ## Mail privacy release gate
 
-The official [Brevo 21 July 2026 clarification](https://developers.brevo.com/changelog/2026/7/21) states that `contactPixelTrackingConsent: false` anonymizes open events and is ignored when the feature is disabled. It does not establish removal of tracking pixels. Therefore production OTP is blocked until a separately verified Brevo configuration passes the project's no-pixel/no-rewritten-link delivered-MIME tests. This implementation sends only a minimal plain-text code message and `contactPixelTrackingConsent: false`; it does not claim that those fields alone satisfy the gate. No real mail was sent during implementation. `FakeMail` is available only in explicit test/development, never production.
+Production OTP is blocked until a delivered code email from the configured mail service passes the project's no-pixel/no-rewritten-link delivered-MIME check and `mail_privacy_verified` is set. The SMTP adapter writes the whole message itself: fixed text and the code, an HTML version only after `mail_html_verified`, and no header beyond From, To, Subject, Date, Message-ID, `Auto-Submitted`, `X-Auto-Response-Suppress` and the MIME content headers. Its connection is always encrypted with a checked certificate (STARTTLS or implicit TLS). A refusal or a failed connection before the message data reports `email_service_unavailable`; a connection that breaks after the message data started reports the delivery as unknown. A relay or mail server can still add its own headers or rewrite links, which is why the delivered message is checked, not the one sent.
 
-Dispatch records and encrypted transient payloads commit before contacting Brevo. The worker claims each dispatch before sending; interrupted or timed-out delivery is unknown, never automatically retried with a fresh redeemable code. Explicit resend observes cooldown and invalidates the preceding code. OTP API acceptance is labeled accepted, not delivered.
+For the Brevo adapter, the official [Brevo 21 July 2026 clarification](https://developers.brevo.com/changelog/2026/7/21) states that `contactPixelTrackingConsent: false` anonymizes open events and is ignored when the feature is disabled. It does not establish removal of tracking pixels. Therefore production OTP is blocked until a separately verified Brevo configuration passes the project's no-pixel/no-rewritten-link delivered-MIME tests. This implementation sends only a minimal plain-text code message and `contactPixelTrackingConsent: false`; it does not claim that those fields alone satisfy the gate. No real mail was sent during implementation. `FakeMail` is available only in explicit test/development, never production.
+
+Dispatch records and encrypted transient payloads commit before contacting the mail service. The worker claims each dispatch before sending; interrupted or timed-out delivery is unknown, never automatically retried with a fresh redeemable code. Explicit resend observes cooldown and invalidates the preceding code. OTP API acceptance is labeled accepted, not delivered.
 
 ## Transactions and aggregation
 
@@ -40,7 +42,7 @@ Run `uv run python -m aift.maintenance serve` continuously; use `run` for a sing
 
 Before a backup restore is available to users, restore protected keys and the independently retained deletion/expiry journal plus its authenticated `.head` checkpoint. With API traffic stopped, run migrations for the restored binary's compatible schema, then `uv run python -m aift.maintenance replay-journal`. Missing, truncated or undecryptable journal entries fail rather than being treated as empty; the chained head detects removal of trailing entries. Verify restored deletion epochs, expired-family exclusion, revoked users, export invalidation and aggregate state before enabling ingress. Keep `restore_journal_verified` false until the process is completed. The journal is encrypted and fsynced before erasure, must survive the normal database rollback window, and must be included in independent operational backup monitoring.
 
-Keep database backups encrypted with a separately enforced disclosed expiry (proposed 30 days). Backup expiry, primary usage retention and Brevo mail-log retention are separate. Connected-device receipt coverage is reported independently from active-database erasure; offline profiles and already downloaded exports cannot be remotely guaranteed wiped.
+Keep database backups encrypted with a separately enforced disclosed expiry (proposed 30 days). Backup expiry, primary usage retention and the mail service's delivery-log retention are separate. Connected-device receipt coverage is reported independently from active-database erasure; offline profiles and already downloaded exports cannot be remotely guaranteed wiped.
 
 ## Stored connection addresses
 
@@ -48,7 +50,7 @@ With `ip_collection_enabled` off no new rows are written, and connection address
 
 ## Evidence limits
 
-Executed local tests establish the specifically tested boundary/revision/privacy behavior. Real Brevo delivery/no-tracking, operator identity approval, TLS/routing, migrations under PostgreSQL, process-crash tests under PostgreSQL, sustained production load, production backup restore, deployment and cross-browser installation proofs are not established by SQLite tests. No live infrastructure or paid service was changed. See `API-INTEGRATION.md` for actual web/extension DTOs.
+Executed local tests establish the specifically tested boundary/revision/privacy behavior. Real SMTP or Brevo delivery/no-tracking, operator identity approval, TLS/routing, migrations under PostgreSQL, process-crash tests under PostgreSQL, sustained production load, production backup restore, deployment and cross-browser installation proofs are not established by SQLite tests. No live infrastructure or paid service was changed. See `API-INTEGRATION.md` for actual web/extension DTOs.
 
 
 ## Migration, maintenance and restore release gates

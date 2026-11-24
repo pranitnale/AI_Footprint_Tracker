@@ -8,6 +8,7 @@ import {
   isUnsavedChatgptRoute,
   matchesDisplayContext,
   parseConversationRoute,
+  routeShows,
   siteForHost,
   type DisplayBinding,
   type ConversationIdentity,
@@ -35,6 +36,12 @@ import {
   validateCaptureReady,
   validateCoworkSent,
 } from "../lib/capture-watchdog";
+import {
+  CLAUDE_LINKS_KEPT,
+  CLAUDE_TOTALS_KEPT,
+  validateClaudeLinkFacts,
+  type ClaudeLinkFacts,
+} from "../lib/claude-session-links";
 import {
   formatDateTime,
   formatInteger,
@@ -74,6 +81,8 @@ import {
   presentHistoryView,
   combinedUsage,
   methodReleasesNote,
+  COWORK_SESSION_NOT_LINKED,
+  coworkSessionNotLinkedNote,
   noFiguresNote,
   notebookChatProblemNote,
   notebookChatRead,
@@ -111,6 +120,7 @@ import {
   isComposerSendButton,
   placeFootprintHosts,
   resolveComposer,
+  surfaceBehind,
 } from "../lib/content-placement";
 import {
   hasPendingConversation,
@@ -130,9 +140,12 @@ import {
   smallerModelCard,
   smallerModelNodes,
   countedDots,
+  countedHow,
   countedNodes,
   countedParts,
   countedSummary,
+  replyKinds,
+  exactFromStart,
   DETAILS_STYLES,
   detailsModels,
   detailsStatusGroups,
@@ -254,6 +267,64 @@ export default defineContentScript({
     // follows.
     let composerSent: { at: number; navigation: string } | null = null;
     const SEND_WAIT_MS = 15000;
+    // A turn of claude.ai's merged app (18 Nov 2026), from the page's own send until its stop
+    // control has gone. Its reply is counted from saved history afterwards, so the bar stays
+    // on Processing meanwhile, and a chat without a session is read again when the turn ended.
+    // The stop control is looked for on a timer, because the page may not change again after
+    // removing it. Without a stop control the turn counts as ended CLAUDE_TURN_NO_STOP_MS
+    // after the send.
+    let claudeTurn: {
+      navigation: string;
+      sentAt: number;
+      stopSeen: boolean;
+      /** Checks in a row that found no stop control after one was seen. */
+      gone: number;
+      endedAt: number | null;
+    } | null = null;
+    let claudeTurnTimer: ReturnType<typeof setTimeout> | null = null;
+    const CLAUDE_STOP_CONTROL =
+      'button[data-testid="chat-input-stop"],button[aria-label="Stop response"]';
+    const CLAUDE_TURN_CHECK_MS = 1100;
+    const CLAUDE_TURN_NO_STOP_MS = 20000;
+    const CLAUDE_TURN_LIMIT_MS = 30 * 60000;
+    // The page loads Claude's own total 2 to 3 s after the stop control goes (probe of 22 Nov
+    // 2026); the bar keeps Processing that long, so it does not show No figures yet between.
+    const CLAUDE_TURN_SETTLE_MS = 8000;
+    const checkClaudeTurn = () => {
+      claudeTurnTimer = null;
+      const turn = claudeTurn;
+      if (!turn || turn.endedAt !== null || extensionStopped) return;
+      if (turn.navigation !== navigationNonce) {
+        claudeTurn = null;
+        return;
+      }
+      const now = Date.now();
+      // Only whether the control exists is read, never the reply.
+      if (document.querySelector(CLAUDE_STOP_CONTROL)) {
+        turn.stopSeen = true;
+        turn.gone = 0;
+      } else if (
+        turn.stopSeen
+          ? ++turn.gone >= 2
+          : now - turn.sentAt >= CLAUDE_TURN_NO_STOP_MS
+      )
+        turn.endedAt = now;
+      if (turn.endedAt === null && now - turn.sentAt >= CLAUDE_TURN_LIMIT_MS)
+        turn.endedAt = now;
+      if (turn.endedAt !== null) render();
+      else claudeTurnTimer = setTimeout(checkClaudeTurn, CLAUDE_TURN_CHECK_MS);
+    };
+    const startClaudeTurn = () => {
+      claudeTurn = {
+        navigation: navigationNonce,
+        sentAt: Date.now(),
+        stopSeen: false,
+        gone: 0,
+        endedAt: null,
+      };
+      if (claudeTurnTimer) clearTimeout(claudeTurnTimer);
+      claudeTurnTimer = setTimeout(checkClaudeTurn, CLAUDE_TURN_CHECK_MS);
+    };
     // NotebookLM guides of the open notebook still being written or counted, by capture: until
     // when each waits, CAPTURE_SILENT_MS after its last frame and DISPLAY_WAIT_MS after its end,
     // when the saved totals are read again with it. The bar shows Processing meanwhile, so
@@ -595,8 +666,14 @@ export default defineContentScript({
     // of the chat loaded (ChatGPT's newest turns, a notebook's Studio items), so the read
     // waits for the page's own import to end; "rejected", the history reader refused the
     // page's read (owner decision of 14 Oct 2026); "lost_reply", a live reply's frames could not
-    // be delivered to the background (16 Oct 2026), so only the saved chat can count it.
-    const requestOwnRead = (mode: OwnReadMode = "missing") => {
+    // be delivered to the background (16 Oct 2026), so only the saved chat can count it;
+    // "after_turn", a turn's counts are not saved yet (`linked`): the events of the chat's
+    // session hold them (claudeSessionRead), or, for a chat without a session, its saved copy
+    // does once a turn of the merged app ended (`session` null).
+    const requestOwnRead = (
+      mode: OwnReadMode = "missing",
+      linked: { session: string | null; turn: string } | null = null,
+    ) => {
       if (!ownRead || extensionStopped || !siteAccess) return false;
       // A signed-out ChatGPT chat is never saved, so there is nothing to read.
       if (unsavedChatgptRoute(location.pathname)) return false;
@@ -615,12 +692,32 @@ export default defineContentScript({
               resumed: (value: unknown) => chatgptReadReported(nonce, value),
             }
           : {}),
+        ...(linked ? { turn: linked.turn } : {}),
+        // A reply sent in this navigation is read even when the chat was read within the
+        // last five minutes, in an earlier navigation.
+        ...(mode === "after_turn" && claudeTurn?.navigation === nonce
+          ? { sent: true }
+          : {}),
+        ...(linked?.session
+          ? {
+              session: linked.session,
+              // The read continues after the last counted result.
+              resume: () => claudeCounted.get(linked.session!)?.after ?? null,
+            }
+          : {}),
         stillNeeded: () =>
           nonce === navigationNonce &&
           (mode === "missing"
             ? earlierImport === "none"
             : mode === "after_import"
               ? earlierImport !== "running"
+              : mode === "after_turn"
+                ? linked?.session
+                  ? linkedSession() === linked.session
+                  : // The saved copy: of a chat without a session, or of a linked chat while
+                    // the background says that copy is due.
+                    !linkedSession() ||
+                    claudeCounted.get(linkedSession()!)?.text === true
               : // For a lost reply, a page read of this chat meanwhile is noticed by the
                 // page world, which then skips or stops the read itself.
                 mode === "lost_reply" ||
@@ -645,6 +742,8 @@ export default defineContentScript({
       | "loading"
       | "not_loaded"
       | "unsaved"
+      | "erased"
+      | "unlinked"
       | null =>
       site === "notebooklm"
         ? null
@@ -658,10 +757,47 @@ export default defineContentScript({
             (earlierImport === "none" && earlierGraceTimer !== null)
           ? "loading"
           : earlierImport === "none"
-            ? requestOwnRead()
+            ? // A chat with a proven session is counted from the session's events, which
+              // render asks for before this; its saved copy is not read by text.
+              // While the background has not answered the link, the bar waits for it. An
+              // answer that is missing or refused leaves the chat not loaded, with its line
+              // in Details, so the bar never waits without an end.
+              (
+                linkedSession()
+                  ? ownReadAsked || claudeLinkAsked !== ""
+                  : requestOwnRead()
+              )
               ? "loading"
-              : "not_loaded"
+              : claudeErased()
+                ? "erased"
+                : coworkSessionUnlinked()
+                  ? "unlinked"
+                  : "not_loaded"
             : null;
+    // A Cowork session from before the merge is shown at a chat address with a version 8 id
+    // and has no saved chat (probe of 22 Nov 2026; live check of 23 Nov: its read answers
+    // 404). It is counted from its session's events once the page proves which session it
+    // is, which it does when the session is opened from the list. A reload proves nothing,
+    // so this state does not advise one.
+    const coworkSessionUnlinked = () => {
+      const id =
+        site === "claude"
+          ? parseConversationRoute(site, location.pathname)?.conversationId
+          : undefined;
+      return (
+        !!id && !isCoworkSessionId(id) && id[14] === "8" && !linkedSession()
+      );
+    };
+    // A linked chat with nothing saved although its session is counted up to Claude's own
+    // total: its records were erased in this browser. Reloading brings nothing back, so the
+    // bar does not advise it; replies sent from now on are counted.
+    const claudeErased = () => {
+      const session = linkedSession();
+      const counted = session ? claudeCounted.get(session) : undefined;
+      return (
+        !!counted && counted.after !== null && !counted.text && !claudeSessionRead()
+      );
+    };
     // A fallback in case the publication notice is missed: at most three reads per navigation.
     let calculationCheck: {
       nonce: string;
@@ -733,7 +869,7 @@ export default defineContentScript({
       display: any;
       scopeGeneration: number;
       expires: number;
-      /** Kept across ChatGPT's move from its provisional new-chat address to the chat. */
+      /** A new chat can open before its display names it, also on Gemini (3 Nov 2026). */
       awaitsNewChat?: true;
     } | null = null;
     // Since October 2026 a new ChatGPT chat opens at /c/local-chatgpt:<id> and moves to
@@ -808,6 +944,180 @@ export default defineContentScript({
     const physicalHistoricalCalls = new Set<object>();
     const historicalStarts: number[] = [];
     const historicalSeen = new Map<string, number>();
+    // Which session backs which Claude chat, as the page's own answers proved it (18 Nov
+    // 2026, lib/claude-session-links.ts). A session's pages count as shown at its chat.
+    const claudeSessions = new Map<string, string>();
+    const claudeTotals = new Map<string, NonNullable<ClaudeLinkFacts["totals"]>>();
+    let claudeLinkSent = "";
+    // The report the background has not answered yet.
+    let claudeLinkAsked = "";
+    // Settles once the background kept the link, so it is never asked to admit a session's
+    // page before it knows the link.
+    let claudeLinkKept: Promise<unknown> = Promise.resolve();
+    // What the background has counted of each linked session, from its answer when it kept
+    // the link: the position of the last counted result, where a read continues, and the
+    // output tokens counted up to it. Both are null while nothing is counted. `text`: the
+    // chat's saved copy holds turns the session does not (a chat Claude moved into a session
+    // later) and is not saved yet, so it is read by text once.
+    const claudeCounted = new Map<
+      string,
+      { after: number | null; counted: number | null; text: boolean }
+    >();
+    const linkedSession = (path = location.pathname) => {
+      const chat =
+        site === "claude"
+          ? parseConversationRoute(site, path)?.conversationId
+          : undefined;
+      return chat ? (claudeSessions.get(chat) ?? null) : null;
+    };
+    /** Whether the address shows the conversation: its own route, or its linked chat's. */
+    const showsConversation = (
+      conversationId: unknown,
+      path = location.pathname,
+    ) => routeShows(site!, path, conversationId, linkedSession(path));
+    /** Tells the background the link of the chat now shown, once per change. */
+    const reportClaudeLink = () => {
+      const session = linkedSession();
+      if (!session || !siteAccess || trackingOff || extensionStopped) return;
+      const chat = parseConversationRoute(site!, location.pathname)!.conversationId;
+      const known = claudeTotals.get(session);
+      const link = {
+        chat,
+        session,
+        totals: known
+          ? {
+              output: known.output,
+              input: known.input,
+              cacheRead: known.cacheRead,
+              cacheWrite: known.cacheWrite,
+            }
+          : null,
+      };
+      const key = JSON.stringify(link);
+      if (key === claudeLinkSent) return;
+      claudeLinkSent = key;
+      claudeLinkAsked = key;
+      claudeLinkKept = sendToBackground({
+        target: "claude-session-link",
+        ...link,
+      })
+        .catch(() => null)
+        .then((answer) => {
+          if (claudeLinkAsked === key) claudeLinkAsked = "";
+          const count = (value: unknown): value is number | null =>
+            value === null ||
+            (Number.isSafeInteger(value) && (value as number) >= 0);
+          if (
+            answer?.kept !== true ||
+            !count(answer.after) ||
+            !count(answer.counted)
+          ) {
+            // Not kept: the next proof of the link is reported again. Not kept or an answer
+            // that cannot be read: the bar stops waiting for this one.
+            if (answer?.kept !== true && claudeLinkSent === key) claudeLinkSent = "";
+            render();
+            return;
+          }
+          const before = claudeCounted.get(session);
+          const text = answer.text === true;
+          claudeCounted.delete(session);
+          claudeCounted.set(session, {
+            after: answer.after,
+            counted: answer.counted,
+            text,
+          });
+          while (claudeCounted.size > CLAUDE_TOTALS_KEPT)
+            claudeCounted.delete(claudeCounted.keys().next().value!);
+          // The bar asks for the session's events when something is not counted yet.
+          if (
+            !before ||
+            before.after !== answer.after ||
+            before.counted !== answer.counted ||
+            before.text !== text
+          )
+            render();
+        });
+    };
+    /**
+     * The read a Claude chat with a session needs now, if any (18 Nov 2026). The session's
+     * events hold Claude's own token counts. They are read when nothing of the session is
+     * counted yet, and again whenever Claude's own running total, which the page loads itself
+     * after each reply, differs from what is counted. `turn` names that total, so one total
+     * is read for once.
+     */
+    const claudeSessionRead = (): { session: string; turn: string } | null => {
+      const session = linkedSession();
+      const counted = session ? claudeCounted.get(session) : undefined;
+      if (!session || !counted) return null;
+      const total = claudeTotals.get(session)?.output ?? null;
+      if (counted.after !== null && total !== null && counted.counted === total)
+        return null;
+      return { session, turn: total === null ? "open" : String(total) };
+    };
+    const learnClaudeLinks = (facts: ClaudeLinkFacts) => {
+      for (const { chat, session } of facts.links) {
+        // A session backs one chat: the latest proof replaces another chat's link.
+        for (const [other, kept] of claudeSessions)
+          if (kept === session && other !== chat) claudeSessions.delete(other);
+        claudeSessions.delete(chat);
+        claudeSessions.set(chat, session);
+      }
+      while (claudeSessions.size > CLAUDE_LINKS_KEPT)
+        claudeSessions.delete(claudeSessions.keys().next().value!);
+      if (facts.totals) {
+        claudeTotals.delete(facts.totals.session);
+        claudeTotals.set(facts.totals.session, facts.totals);
+        while (claudeTotals.size > CLAUDE_TOTALS_KEPT)
+          claudeTotals.delete(claudeTotals.keys().next().value!);
+      }
+      reportClaudeLink();
+      if (facts.totals) confirmClaudeLink(facts.totals.session);
+      // A new total of the open chat's session may ask for a read of its events.
+      if (facts.totals && facts.totals.session === linkedSession()) render();
+    };
+    // A reload forgets what the page proved, and the address of a Cowork session from before
+    // the merge is proven only when the session is opened from the list (the page's
+    // ReadCoworkSession call). So when the page loads a session's totals at a chat with no
+    // proven link, the background is asked whether it kept that link from an earlier proof.
+    // Only its yes links the two. Asked once per pair.
+    let claudeLinkConfirmed = "";
+    const confirmClaudeLink = (session: string) => {
+      const chat = parseConversationRoute(site!, location.pathname)?.conversationId;
+      if (
+        !chat ||
+        isCoworkSessionId(chat) ||
+        claudeSessions.has(chat) ||
+        // The page proved this session to be another chat's.
+        [...claudeSessions.values()].includes(session) ||
+        !siteAccess ||
+        trackingOff ||
+        extensionStopped
+      )
+        return;
+      const key = `${chat} ${session}`;
+      if (key === claudeLinkConfirmed) return;
+      claudeLinkConfirmed = key;
+      const path = location.pathname;
+      void sendToBackground({
+        target: "claude-session-link",
+        chat,
+        session,
+        totals: null,
+        proven: false,
+      })
+        .catch(() => null)
+        .then((answer) => {
+          if (
+            answer?.kept !== true ||
+            location.pathname !== path ||
+            extensionStopped
+          )
+            return;
+          claudeSessions.set(chat, session);
+          reportClaudeLink();
+          render();
+        });
+    };
     const displayContext = () => ({
       documentNonce,
       navigationNonce,
@@ -1047,13 +1357,12 @@ export default defineContentScript({
     };
     const currentHistoricalCapture = (observed: HistoricalObservation) => {
       followChatAddress();
-      const route = parseConversationRoute(site!, location.pathname);
       return (
         observed.binding.documentNonce === documentNonce &&
         observed.binding.navigationNonce === navigationNonce &&
         observed.scopeGeneration === scopeGeneration &&
         observed.path === location.pathname &&
-        route?.conversationId === observed.conversationId
+        showsConversation(observed.conversationId)
       );
     };
     const liveHistoricalCapture = (
@@ -1074,11 +1383,22 @@ export default defineContentScript({
       return Promise.resolve()
         .then(() => {
           if (!liveHistoricalCapture(id, observed)) return null;
-          return sendToBackground({
-            target: "history-observation",
-            message,
-            binding: observed.binding,
-          });
+          // A session's page shown at its chat's address names that chat, so the background
+          // checks the address against the chat and the link against what it kept.
+          const route = parseConversationRoute(site!, location.pathname)
+            ?.conversationId;
+          const linkedRoute =
+            route !== undefined && route !== observed.conversationId
+              ? route
+              : null;
+          return (linkedRoute ? claudeLinkKept : Promise.resolve()).then(() =>
+            sendToBackground({
+              target: "history-observation",
+              message,
+              binding: observed.binding,
+              ...(linkedRoute ? { linkedRoute } : {}),
+            }),
+          );
         })
         .finally(() => physicalHistoricalCalls.delete(lease));
     };
@@ -1104,8 +1424,7 @@ export default defineContentScript({
     };
     const reportHistoricalDiagnostic = (message: HistoryDiagnostic) => {
       if (!siteAccess) return;
-      const route = parseConversationRoute(site!, location.pathname);
-      if (route?.conversationId !== message.conversationId) return;
+      if (!showsConversation(message.conversationId)) return;
       if (NOTEBOOKLM_CHAT_PROBLEMS.has(message.reason)) {
         notebookChatProblem = message.reason as NotebooklmChatProblem;
         render();
@@ -1129,8 +1448,7 @@ export default defineContentScript({
     const sendHistoricalCapture = (message: HistoryCaptureMessage) => {
       if (!siteAccess) return;
       const path = location.pathname;
-      const route = parseConversationRoute(site!, path);
-      if (route?.conversationId !== message.conversationId) return;
+      if (!showsConversation(message.conversationId, path)) return;
       if (message.event === "start") {
         // A provider can start loading the selected chat before our delayed DOM
         // scan. Bind to the new route now without canceling that same response.
@@ -1200,8 +1518,7 @@ export default defineContentScript({
         const current =
           siteAccess &&
           !extensionStopped &&
-          parseConversationRoute(site!, path)?.conversationId ===
-            message.conversationId;
+          showsConversation(message.conversationId, path);
         if (current && historicalSlotsBusy()) {
           if (attempt + 1 < HISTORICAL_SLOT_WAITS.length) {
             waitForHistoricalSlot(message, attempt + 1);
@@ -1293,6 +1610,12 @@ export default defineContentScript({
           if (!historyFailure) historyFailureReason = null;
           earlierImport = "done";
           earlierImportAt = Date.now();
+          // A saved page of a chat with a session moved what is counted of it; the
+          // background says how far, so the next read starts there.
+          if (site === "claude" && linkedSession()) {
+            claudeLinkSent = "";
+            reportClaudeLink();
+          }
           refreshRecordedRoute();
         })
         .catch(() => {
@@ -1406,6 +1729,11 @@ export default defineContentScript({
             if (observed.notebookChat) notebookChatProblem = null;
             earlierImport = "done";
             earlierImportAt = Date.now();
+            // The saved copy of a chat with a session was read: the background says so.
+            if (site === "claude" && linkedSession()) {
+              claudeLinkSent = "";
+              reportClaudeLink();
+            }
             refreshRecordedRoute();
           } else if (message.site === "perplexity" && message.event === "batch")
             noteComputerFiles(
@@ -1648,6 +1976,16 @@ export default defineContentScript({
       }
       if (fileOffers.handleWindowMessage(event)) return;
       if (
+        site === "claude" &&
+        event.source === window &&
+        event.origin === location.origin &&
+        event.ports.length === 0 &&
+        validateClaudeLinkFacts(event.data, probeNonce)
+      ) {
+        learnClaudeLinks(event.data);
+        return;
+      }
+      if (
         event.source === window &&
         event.origin === location.origin &&
         event.ports.length === 0 &&
@@ -1678,9 +2016,13 @@ export default defineContentScript({
         event.origin === location.origin &&
         validateCoworkSent(event.data, probeNonce, Date.now())
       ) {
-        // A Cowork send is observed like a dispatch; its reply arrives as saved history.
+        // A Cowork send, or a send of claude.ai's merged app, is observed like a dispatch;
+        // its reply arrives as saved history.
         const now = Date.now();
         watchdog.captured(Date.parse(event.data.at));
+        // A Cowork page follows its session's own event stream, so it needs no turn watch.
+        if (site === "claude" && !location.pathname.startsWith("/cowork/"))
+          startClaudeTurn();
         const status = watchdog.status(now);
         if (status.listener === "active" && !status.activityGap)
           recoverPageHealth(
@@ -2316,9 +2658,11 @@ export default defineContentScript({
       if (message?.target === "footprint-capture-current") {
         if (sender.id !== browser.runtime.id) return;
         // The browser can report the new address before this page has handled it; a new
-        // Perplexity thread's answer starts waiting for its proof only then.
+        // Perplexity thread's answer starts waiting for its proof only then. Gemini's
+        // session channel also moves before a display names the chat (live, 3 Nov 2026).
         if (
           (site === "perplexity" ||
+            site === "gemini" ||
             provisionalChatgptRoute(location.pathname) ||
             provisionalChatgptRoute(lastPath) ||
             unsavedChatgptRoute(location.pathname)) &&
@@ -2363,7 +2707,7 @@ export default defineContentScript({
                 message.conversationId === null &&
                 pending?.binding.captureId === binding.captureId &&
                 !pending.identity) ||
-              // The same wait for a new ChatGPT chat after its provisional address.
+              // The same wait for a new ChatGPT or Gemini chat (Gemini seen 3 Nov 2026).
               (!!route &&
                 message.conversationId === null &&
                 pending?.binding.captureId === binding.captureId &&
@@ -2671,6 +3015,12 @@ export default defineContentScript({
       computerFileFacts.clear();
       // Another scope, or an erase of this one, has its own closed tips.
       tipStates.clear();
+      // It also kept no session link and counted nothing of a session, so the open chat's
+      // link is reported again.
+      claudeLinkSent = "";
+      claudeLinkConfirmed = "";
+      claudeCounted.clear();
+      reportClaudeLink();
       clearOwnedDisplay();
       render();
       void loadRecordedRoute();
@@ -2884,7 +3234,7 @@ export default defineContentScript({
         anchor: current.anchor,
         insertionParent,
       };
-      const styles = `:host{color:var(--aft-ink);font-family:inherit;font-size:12px;line-height:1.45;text-align:start}*{box-sizing:border-box}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--aft-border);background:var(--aft-surface);border-radius:5px;min-height:30px;padding:4px 8px}button:focus-visible,a[data-open]:focus-visible,a[data-setup]:focus-visible{outline:2px solid var(--aft-ink);outline-offset:2px}.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 10px;padding:6px 4px;color:var(--aft-ink)}.bar [data-metrics]{grid-column:1;grid-row:1;min-width:0;overflow-wrap:anywhere}.bar [data-open],.bar [data-setup]{grid-column:2;grid-row:1;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.bar [hidden],.bar[hidden]{display:none}.notice{background:var(--aft-warning);color:var(--aft-warning-ink);padding:9px 10px;margin:6px 0;border-radius:6px;display:flex;gap:8px;align-items:center;font-size:13px}.notice span{flex:1}.notice [data-dismiss]{align-self:flex-start;border:0;background:transparent;min-width:24px;min-height:24px;padding:0 4px;margin:-4px -4px 0 0;font-size:16px;line-height:1}.panel{position:absolute;bottom:calc(100% + 6px);right:0;width:min(520px,calc(100vw - 28px));max-height:var(--aft-panel-max-height,460px);min-width:0;overflow:auto;background:var(--aft-surface);border:1px solid var(--aft-border);border-radius:10px;padding:18px;box-shadow:0 8px 30px #0003;font-size:13px;z-index:2}.panel[data-placement="below"]{top:calc(100% + 6px);bottom:auto}.panel[hidden],.notice[hidden]{display:none}h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:16px 0 6px}h4{font-size:13px;margin:12px 0 4px}p{margin:8px 0}dl{display:grid;grid-template-columns:1fr auto;gap:7px 12px;margin:10px 0}dt,dd{margin:0}.close{float:right}progress{width:100%;height:10px;accent-color:#8A5A16}.muted{opacity:.85}.state{border-top:1px solid var(--aft-border);padding-top:10px}a{color:inherit}summary{cursor:pointer}.panel [data-body],.panel dl,.panel dt,.panel dd,.panel p,.panel strong,.panel h2,.panel h3,.panel h4{min-width:0;max-width:100%;overflow-wrap:anywhere}.panel dl{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}`;
+      const styles = `:host{color:var(--aft-ink);font-family:inherit;font-size:12px;line-height:1.45;text-align:start}*{box-sizing:border-box}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--aft-border);background:var(--aft-surface);border-radius:5px;min-height:30px;padding:4px 8px}button:focus-visible,a[data-open]:focus-visible,a[data-setup]:focus-visible{outline:2px solid var(--aft-ink);outline-offset:2px}.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 10px;padding:6px 4px;color:var(--aft-ink);background:var(--aft-bar-surface,Canvas)}.bar [data-metrics]{grid-column:1;grid-row:1;min-width:0;overflow-wrap:anywhere}.bar [data-open],.bar [data-setup]{grid-column:2;grid-row:1;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.bar [hidden],.bar[hidden]{display:none}.notice{background:var(--aft-warning);color:var(--aft-warning-ink);padding:9px 10px;margin:6px 0;border-radius:6px;display:flex;gap:8px;align-items:center;font-size:13px}.notice span{flex:1}.notice [data-dismiss]{align-self:flex-start;border:0;background:transparent;min-width:24px;min-height:24px;padding:0 4px;margin:-4px -4px 0 0;font-size:16px;line-height:1}.panel{position:absolute;bottom:calc(100% + 6px);right:0;width:min(520px,calc(100vw - 28px));max-height:var(--aft-panel-max-height,460px);min-width:0;overflow:auto;background:var(--aft-surface);border:1px solid var(--aft-border);border-radius:10px;padding:18px;box-shadow:0 8px 30px #0003;font-size:13px;z-index:2}.panel[data-placement="below"]{top:calc(100% + 6px);bottom:auto}.panel[hidden],.notice[hidden]{display:none}h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:16px 0 6px}h4{font-size:13px;margin:12px 0 4px}p{margin:8px 0}dl{display:grid;grid-template-columns:1fr auto;gap:7px 12px;margin:10px 0}dt,dd{margin:0}.close{float:right}progress{width:100%;height:10px;accent-color:#8A5A16}.muted{opacity:.85}.state{border-top:1px solid var(--aft-border);padding-top:10px}a{color:inherit}summary{cursor:pointer}.panel [data-body],.panel dl,.panel dt,.panel dd,.panel p,.panel strong,.panel h2,.panel h3,.panel h4{min-width:0;max-width:100%;overflow-wrap:anywhere}.panel dl{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}`;
       const style = document.createElement("style");
       style.textContent = styles + DETAILS_STYLES;
       shadow.append(style);
@@ -3330,6 +3680,12 @@ export default defineContentScript({
             : "#ffffff"
           : surface,
       );
+      // The bar paints the colour the page draws where it sits, so chat text scrolled behind it
+      // is hidden (22 Nov 2026). With no colour from the page, the bar's CSS falls back to the
+      // canvas colour, which is what the page shows there.
+      const behind = surfaceBehind(root);
+      if (behind) root.style.setProperty("--aft-bar-surface", behind);
+      else root.style.removeProperty("--aft-bar-surface");
       root.style.setProperty("--aft-border", dark ? "#777777" : "#a5a5a5");
       root.style.setProperty("--aft-warning", dark ? "#4c3b19" : "#fff0c4");
       root.style.setProperty("--aft-warning-ink", dark ? "#fff0c4" : "#53380b");
@@ -3419,6 +3775,14 @@ export default defineContentScript({
       const sent = composerSent?.navigation === navigationNonce;
       const sending = sent && composerSent!.at + SEND_WAIT_MS > now;
       if (sending) scheduleBarRecheck(composerSent!.at + SEND_WAIT_MS - now);
+      // A turn of claude.ai's merged app is being written, or just ended and its counts are
+      // about to be read.
+      const turn = claudeTurn?.navigation === navigationNonce ? claudeTurn : null;
+      const turnOpen =
+        !!turn &&
+        (turn.endedAt === null || turn.endedAt + CLAUDE_TURN_SETTLE_MS > now);
+      if (turnOpen && turn!.endedAt !== null)
+        scheduleBarRecheck(turn!.endedAt + CLAUDE_TURN_SETTLE_MS - now);
       const importing =
         waitingHistorical.size > 0 ||
         [...historicalBindings.values()].some(currentHistoricalCapture) ||
@@ -3471,6 +3835,7 @@ export default defineContentScript({
         working:
           replying ||
           sending ||
+          turnOpen ||
           (importing && notebookKnown) ||
           awaitingRead ||
           (routeLoading && notebookKnown) ||
@@ -3565,6 +3930,49 @@ export default defineContentScript({
       // bar's Processing while that read runs.
       if (lostReplyNavigation === navigationNonce && !extensionStopped)
         requestOwnRead("lost_reply");
+      // A chat with a session: the session's events hold counts that are not saved yet.
+      const sessionRead = extensionStopped ? null : claudeSessionRead();
+      // A linked chat whose saved copy is due: a chat Claude moved into a session later
+      // holds its earlier turns only there, and a Research report is written only there.
+      // It is read by text once the session's read has settled, also when Claude's own total
+      // still differs from the count, as it does after a side call (live check of 23 Nov
+      // 2026: asked only while the totals matched, a report was never read on opening).
+      // While a reply is being written the copy is not complete, so the read waits for the
+      // turn's end and is then made for that turn.
+      if (sessionRead && requestOwnRead("after_turn", sessionRead)) {
+        // The session's events are being read.
+      } else if (
+        !extensionStopped &&
+        claudeCounted.get(linkedSession() ?? "")?.text === true
+      ) {
+        const turn =
+          claudeTurn?.navigation === navigationNonce ? claudeTurn : null;
+        if (turn && turn.endedAt !== null)
+          requestOwnRead("after_turn", {
+            session: null,
+            turn: `turn:${turn.sentAt}`,
+          });
+        else if (!turn && earlierImport !== "running" && earlierGraceTimer === null)
+          requestOwnRead("after_import");
+      }
+      // A chat without a session: Claude gives no counts for it, so its saved copy is read
+      // again by text when a turn of the merged app ended. Unchanged messages keep their
+      // counts.
+      else if (
+        !extensionStopped &&
+        site === "claude" &&
+        claudeTurn?.navigation === navigationNonce &&
+        claudeTurn.endedAt !== null &&
+        !linkedSession() &&
+        !!parseConversationRoute(site, location.pathname) &&
+        !isCoworkSessionId(
+          parseConversationRoute(site, location.pathname)!.conversationId,
+        )
+      )
+        requestOwnRead("after_turn", {
+          session: null,
+          turn: `turn:${claudeTurn.sentAt}`,
+        });
       const metrics = shadow.querySelector("[data-metrics]")!;
       let body = shadow.querySelector("[data-body]")!;
       const detailsRoot = body;
@@ -3576,6 +3984,13 @@ export default defineContentScript({
       syncRow?.replaceChildren();
       // The open chat's saved history, set once the figures are known, for noFiguresNote.
       let noFiguresHistory: any = null;
+      // How a Claude chat's saved replies were counted, and whether Claude's own total says the
+      // whole chat is counted, set once the figures are known; null on other sites.
+      let claudeKinds: ReturnType<typeof replyKinds> | null = null;
+      let claudeStartRead = false;
+      // The same replies for Details' lines on reasoning, side calls and hidden input, with how
+      // many carry Claude's exact input (kept on this device only).
+      let claudeReplies: { exact: number; text: number; exactInput: number } | null = null;
       // Replies of the open chat stopped before any answer was written, for stoppedRepliesStatus.
       let stoppedReplies = 0;
       const showStatuses = (before: Node | null = null, counted = "") => {
@@ -3584,6 +3999,13 @@ export default defineContentScript({
           label.dataset.actionable ?? "",
           label.dataset.details ?? "",
         );
+        // A chat that is all session has no saved text to prove its start, so its summary calls
+        // the start "not verified"; Claude's own total, equal to what is counted, says otherwise.
+        if (claudeStartRead) {
+          const read = (status: { chip: string }) => status.chip !== "Some earlier messages missing";
+          groups.bar = groups.bar.filter(read);
+          groups.notCounted = groups.notCounted.filter(read);
+        }
         // A read "Load full chat history" held: Details says what works instead and offers to turn
         // it on (owner decision of 17 Oct 2026). Like every status, it never reaches the bar.
         const off = ownReadWanted ? ownRead?.off(navigationNonce) : null;
@@ -3625,11 +4047,16 @@ export default defineContentScript({
           earlierImportAt !== null &&
           earlierImportAt >= ownReadSettled.at;
         if (ownReadNote?.failed && !answeredLater)
-          groups.notCounted.push({
-            chip: "Earlier messages not read",
-            text: ownReadNote.text,
-            tone: "warn",
-          });
+          groups.notCounted.push(
+            // The read of such an address cannot find a chat; the missing link is the reason.
+            coworkSessionUnlinked()
+              ? coworkSessionNotLinkedNote()
+              : {
+                  chip: "Earlier messages not read",
+                  text: ownReadNote.text,
+                  tone: "warn",
+                },
+          );
         const chatNote =
           site === "notebooklm" ? notebookChatProblemNote(notebookChatProblem) : null;
         if (chatNote) groups.notCounted.push(chatNote);
@@ -3960,6 +4387,20 @@ export default defineContentScript({
         ? selectedHistory(shown, latest.history)
         : null;
       noFiguresHistory = activeHistory;
+      claudeKinds =
+        site === "claude"
+          ? replyKinds(activeHistory?.status === "available" ? activeHistory.tokens : [])
+          : null;
+      const claudeLinked = site === "claude" ? linkedSession() : null;
+      claudeReplies = claudeKinds && {
+        exact: claudeKinds.exactReplies,
+        text: claudeKinds.textReplies,
+        exactInput:
+          activeHistory === latest.history?.local ? (latest.history?.exact_input?.replies ?? 0) : 0,
+      };
+      claudeStartRead =
+        !!claudeKinds &&
+        exactFromStart(claudeKinds, claudeLinked ? (claudeTotals.get(claudeLinked)?.output ?? null) : null);
       // While a calculation is pending an estimate may still arrive, so nothing is listed yet.
       stoppedReplies =
         latest.calculationPending === true
@@ -3985,6 +4426,10 @@ export default defineContentScript({
           ? earlierHistoryState()
           : null;
       if (earlier === "unsaved") compact = { text: "", status: UNSAVED_EARLIER };
+      else if (earlier === "erased")
+        compact = { text: "", status: "Earlier messages erased" };
+      else if (earlier === "unlinked")
+        compact = { text: "", status: COWORK_SESSION_NOT_LINKED };
       else if (earlier === "loading")
         compact = { text: "", status: "Loading earlier messages" };
       else if (earlier === "not_loaded")
@@ -4194,7 +4639,17 @@ export default defineContentScript({
                       : "Not verified",
                   ],
                 ]),
-            ...section.presentation.counts,
+            // A chat counted from Claude's own counts never meets live records, so its zero
+            // matches would only read as a fault.
+            ...section.presentation.counts.filter(
+              ([label, value]) =>
+                !(
+                  claudeKinds?.exactReplies &&
+                  !claudeKinds.textReplies &&
+                  label === "Messages matched to recorded live activity" &&
+                  value === "0"
+                ),
+            ),
             ...section.presentation.tokens.map((item) => [
               item.role,
               item.tokens,
@@ -4376,6 +4831,7 @@ export default defineContentScript({
         detailsInput.surface,
         siteName(),
         detailsInput.earlierLoaded,
+        claudeReplies,
       );
       const counted = section(
         "counted",
@@ -4402,6 +4858,28 @@ export default defineContentScript({
         const item = document.createElement("p");
         item.textContent = attached;
         counted.body.append(item);
+      }
+      // Where this chat's figures come from (22 Nov 2026). Claude's own totals are the ones the
+      // page loaded itself, so they are there with Load full chat history off as well.
+      const claudeSession = site === "claude" ? linkedSession() : null;
+      const how =
+        site === "claude"
+          ? countedHow({
+              ...claudeKinds!,
+              claude: claudeSession ? (claudeTotals.get(claudeSession) ?? null) : null,
+              switchOff: ownReadWanted && ownRead?.off(navigationNonce)?.key === "claude",
+              // On this device only: the company's figures keep the text count, so these
+              // numbers go with the device's own history and not with the company's.
+              exactInput: activeHistory === latest.history?.local ? latest.history?.exact_input : null,
+            })
+          : null;
+      if (how) {
+        const made = section("counted-how", "How this was counted", how.summary);
+        for (const line of how.lines) {
+          const item = document.createElement("p");
+          item.textContent = line;
+          made.body.append(item);
+        }
       }
       const estimated = section(
         "estimated",
@@ -4699,6 +5177,7 @@ export default defineContentScript({
               }) =>
                 line.role,
             ),
+            claudeReplies,
           ),
         );
         paragraph(countSourceNote(surface));
@@ -4819,6 +5298,8 @@ export default defineContentScript({
       scanTimer = null;
       if (followChatAddress()) render();
       if (location.pathname !== lastPath) {
+        // The chat now shown may be one whose session link is already known.
+        reportClaudeLink();
         recordedThreadInvalidationToken = null;
         const previousRoute = parseConversationRoute(site!, lastPath);
         const nextRoute = parseConversationRoute(site!, location.pathname);
@@ -4857,13 +5338,15 @@ export default defineContentScript({
         // and its identity can only be proven after that (the reply's id must be the
         // route's). Its capture waits, bounded, for a display whose identity is this
         // route. A new ChatGPT chat waits the same way after its provisional address.
-        // Other moves name the conversation before the route opens. A signed-out ChatGPT
-        // chat moves from / straight to /uc/<id> once its stream names it, often before a
-        // display does (live, 20 Oct 2026), so its reply waits the same way.
+        // A signed-out ChatGPT chat moves from / straight to /uc/<id> once its stream names
+        // it, often before a display does (live, 20 Oct 2026). Gemini's session channel also
+        // moves from /app (or /u/N/app) before a display names the chat (live, 3 Nov 2026).
+        // Both replies wait the same way, so a route read cannot strand the first figures.
         const awaitsNewChat =
           !!nextRoute &&
           !identity &&
-          (provisionalChatgptRoute(lastPath) ||
+          (site === "gemini" ||
+            provisionalChatgptRoute(lastPath) ||
             unsavedChatgptRoute(location.pathname));
         if (
           !previousRoute &&
@@ -4888,8 +5371,12 @@ export default defineContentScript({
         // So does a reply cut off by turning tracking off before the chat had its address.
         const carryWithdrawn =
           !previousRoute && withdrawnReply === navigationNonce;
+        // And so does the turn a new chat's send started.
+        const carryTurn =
+          !previousRoute && claudeTurn?.navigation === navigationNonce;
         navigationNonce = crypto.randomUUID();
         if (carrySend) composerSent!.navigation = navigationNonce;
+        if (carryTurn) claudeTurn!.navigation = navigationNonce;
         if (carryWithdrawn) withdrawnReply = navigationNonce;
         startEarlierGrace(4000);
         // Clear the prior conversation before cleanup or transport can fail.
@@ -5080,6 +5567,8 @@ export default defineContentScript({
       extensionStopped = true;
       siteAccess = false;
       clearEarlierGrace();
+      if (claudeTurnTimer) clearTimeout(claudeTurnTimer);
+      claudeTurnTimer = null;
       ownRead?.stop();
       if (calculationCheck?.timer) clearTimeout(calculationCheck.timer);
       calculationCheck = null;

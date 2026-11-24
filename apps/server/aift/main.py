@@ -13,7 +13,8 @@ from starlette.concurrency import run_in_threadpool
 from . import request_log
 from .config import Settings
 from .db import SCHEMA_VERSION, Database, Guard, WebSession, WriteNeeded, get
-from .mail import BrevoMail, FakeMail
+from .mail import FakeMail, mail_delivery
+from .method_history import CURRENT_VIEW_PATHS
 from .security import Problem, extension_origin_allowed
 from .service import ADMIN_SESSION_SECONDS, OPERATOR_SESSION_SECONDS, WEB_SESSION_SECONDS, Service
 
@@ -89,7 +90,7 @@ def create_app(settings=None, initialize=False, mail=None, clock=None):
     settings = settings or Settings.from_environment()
     settings.validate()
     database = Database(settings, initialize=initialize)
-    delivery = mail or (FakeMail() if settings.mail_adapter == "fake" else BrevoMail(settings))
+    delivery = mail or mail_delivery(settings)
     if isinstance(delivery, FakeMail) and settings.environment == "production":
         raise ValueError("configuration_required: fake mail prohibited")
     service = Service(settings, database, delivery, clock)
@@ -303,7 +304,13 @@ def create_app(settings=None, initialize=False, mail=None, clock=None):
             # The configuration reads write only when the policy changed or an installation is
             # offered a new version. They run first without the organization's lock, which the
             # worker holds for its whole tick, and take it only when they must write.
-            occasional_write = request.method == "GET" and path in {"/v1/config", "/v1/public/config"}
+            # So does a summary in the server's own method: the first one of an organization creates
+            # the job that keeps those figures (MethodHistory.current_view). Only its four paths
+            # qualify, so the parameter cannot change how any other request is run.
+            occasional_write = request.method == "GET" and (
+                path in {"/v1/config", "/v1/public/config"}
+                or (path in CURRENT_VIEW_PATHS and query.get("calculation_view") == "current")
+            )
             readonly = request.method == "GET" and not path.startswith("/auth/bootstrap/") and not occasional_write
             result = None
             if occasional_write:
@@ -334,7 +341,7 @@ def create_app(settings=None, initialize=False, mail=None, clock=None):
         if "_dispatch" in result:
             result = await run_in_threadpool(service.deliver, result["_dispatch"])
         if "_error" in result:
-            return error(result["_error"], result.get("_status", 400))
+            return error(result["_error"], result.get("_status", 400), result.get("_retryable", False))
         if "_export_stream" in result:
             correlation_id = str(uuid4())
             response = StreamingResponse(

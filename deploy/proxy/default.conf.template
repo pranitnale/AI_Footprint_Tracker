@@ -14,6 +14,13 @@ upstream aift_api {
   keepalive_timeout 60s;
 }
 
+# One address may send the API 20 requests a second on average, with bursts of up to 200.
+# This keeps a single source from flooding the API. An office behind one address stays far
+# below it: a connected browser sends a few requests a minute. A request above the limit gets
+# 429, which the extension answers by trying again later.
+limit_req_zone $binary_remote_addr zone=aift_api:10m rate=20r/s;
+limit_req_status 429;
+
 # Compression settings for the locations that turn it on. It stays off everywhere else, and in
 # particular for API answers that carry a session, CSRF value or token next to text a request can
 # choose (BREACH): see the summary location below and deploy/README.md.
@@ -51,6 +58,7 @@ server {
   # value or token, so compressing them cannot reveal a secret (BREACH). The website and the
   # extension wait 90 s for them, so nginx waits longer and the client's limit is the one that ends a slow summary.
   location ~ ^/v1/(?:(?:me|company|admin)/summary|me/(?:conversations|history|recorded-threads)/[^/]+/summary|admin/(?:breakdown|activity|requests)|methods)$ {
+    limit_req zone=aift_api burst=200 nodelay;
     proxy_pass http://aift_api;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
@@ -65,6 +73,7 @@ server {
   }
 
   location ~ ^/(?:v1|auth/bootstrap|health)(?:/|$) {
+    limit_req zone=aift_api burst=200 nodelay;
     proxy_pass http://aift_api;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
@@ -127,6 +136,7 @@ server {
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
   location ~ ^/(?:v1|health)(?:/|$) {
+    limit_req zone=aift_api burst=200 nodelay;
     proxy_pass http://aift_api;
     proxy_http_version 1.1;
     proxy_set_header Host $host;

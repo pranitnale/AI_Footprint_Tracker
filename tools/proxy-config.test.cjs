@@ -406,3 +406,20 @@ test("nginx keeps its connections to the API open between requests", () => {
     }
   }
 });
+
+test("every location that reaches the API limits requests per address", () => {
+  const root = nginxBlocks(template);
+  // One zone for all hosts, keyed on the caller's address (the real one behind a trusted front proxy).
+  const zones = root.directives.filter((d) => d.startsWith("limit_req_zone "));
+  assert.deepEqual(zones, ["limit_req_zone $binary_remote_addr zone=aift_api:10m rate=20r/s;"]);
+  // The extension tries again later after 429; nginx would answer 503 by default.
+  assert.ok(root.directives.includes("limit_req_status 429;"));
+  let limited = 0;
+  for (const { label, block } of servers()) {
+    for (const location of block.children.filter((c) => c.directives.includes("proxy_pass http://aift_api;"))) {
+      assert.ok(location.directives.includes("limit_req zone=aift_api burst=200 nodelay;"), `${label} ${location.head}`);
+      limited += 1;
+    }
+  }
+  assert.equal(limited, 5);
+});

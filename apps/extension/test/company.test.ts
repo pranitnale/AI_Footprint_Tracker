@@ -3102,6 +3102,12 @@ test("a refused connection step replies with the words, and with the technical d
     code: "otp_invalid_or_expired",
     error: "The code is wrong or has expired. Check the latest email, or send a new code.",
   });
+  const local = connectFailureReply(new Error("Disconnect this company before connecting another."));
+  assert.deepEqual(local, {
+    ok: false,
+    code: "connect_failed",
+    error: "Disconnect this company before connecting another.",
+  });
   const unreachable = connectFailureReply(new TypeError("Failed to fetch"));
   assert.equal(unreachable?.code, "connect_failed");
   assert.equal(unreachable?.detail, "TypeError: Failed to fetch");

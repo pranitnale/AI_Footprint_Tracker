@@ -16,6 +16,7 @@ server {
   # Summaries and the other large read-only answers: compressed (they hold no session, CSRF value
   # or token, so BREACH cannot reveal one) and allowed longer than the client's 90 s wait.
   location ~ ^/v1/(?:(?:me|company|admin)/summary|me/(?:conversations|history|recorded-threads)/[^/]+/summary|admin/(?:breakdown|activity|requests)|methods)$ {
+    limit_req zone=aift_api burst=200 nodelay;
     proxy_pass http://aift_api;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
@@ -30,6 +31,7 @@ server {
   }
 
   location ~ ^/(?:v1|auth/bootstrap|health)(?:/|$) {
+    limit_req zone=aift_api burst=200 nodelay;
     proxy_pass http://aift_api;
     proxy_http_version 1.1;
     proxy_set_header Host $host;

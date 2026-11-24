@@ -183,11 +183,13 @@ export function connectFailureReply(error: unknown) {
   const reason = connectFailureMessage(error);
   if (!reason) return null;
   const code = connectFailureCode(error);
+  // A local refusal is already worded for the person; its detail would repeat the same sentence.
+  const refusedLocally = error instanceof Error && CONNECT_REFUSALS.includes(error.message);
   return {
     ok: false as const,
     code,
     error: reason,
-    ...(code === "connect_failed" ? { detail: technicalDetail(error) } : {}),
+    ...(code === "connect_failed" && !refusedLocally ? { detail: technicalDetail(error) } : {}),
   };
 }
 /**
